@@ -1,0 +1,33 @@
+{
+	"name": "pa11y",
+	"version": "0.0.0",
+	"preferGlobal": true,
+
+	"description": "pa11y is your automated accessibility testing pal",
+	"keywords": [ "accessibility", "analysis", "cli", "report" ],
+	"contributors": [
+		"Rowan Manning (http://rowanmanning.co.uk/)"
+	],
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nature/pa11y.git"
+	},
+	"homepage": "https://github.com/nature/pa11y",
+	"bugs": "https://github.com/nature/pa11y/issues",
+
+	"dependencies": {
+		"async": "~0.2",
+		"colors": "~0.6",
+		"commander": "~1.1",
+		"phantom": "~0.4"
+	},
+	"devDependencies": {
+		"cucumber": "~0.3",
+		"express": "~3.0",
+		"jshint": "~1.0"
+	},
+
+	"main": "./lib/pa11y.js",
+	"bin": { "pa11y": "./bin/pa11y" }
+}
