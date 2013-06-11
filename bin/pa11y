@@ -15,20 +15,20 @@ var acceptableStandards = ['Section508', 'WCAG2A', 'WCAG2AA', 'WCAG2AAA'];
 program
 	.version(pkg.version)
 	.option(
-        '-r, --reporter <name>',
-        'specify a reporter to use, one of: console (default), csv, json',
-        'console'
-    )
+		'-r, --reporter <name>',
+		'specify a reporter to use, one of: console (default), csv, json',
+		'console'
+	)
 	.option(
-        '-s, --standard <name>',
-        'specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA',
-        'WCAG2AA'
-    )
-    .option(
-        '-t, --timeout <ms>',
-        'specify the number of milliseconds before a timeout error occurs. Default: 30000',
-        30000
-    )
+		'-s, --standard <name>',
+		'specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA',
+		'WCAG2AA'
+	)
+	.option(
+		'-t, --timeout <ms>',
+		'specify the number of milliseconds before a timeout error occurs. Default: 30000',
+		30000
+	)
 	.usage('[options] <url>');
 
 // Parse arguments
@@ -48,17 +48,17 @@ if (!url || program.args[1]) {
 // Get/sanitize the timeout
 var timeout = parseInt(program.timeout, 10);
 if (isNaN(timeout) || timeout === Infinity) {
-    program.help();
+	program.help();
 }
 
 // Run the program
 async.waterfall([
 	loadReporter.bind(null, program.reporter),
 	sniff.bind(null, {
-        url: url,
-        standard: program.standard,
-        timeout: timeout
-    })
+		url: url,
+		standard: program.standard,
+		timeout: timeout
+	})
 ], done);
 
 // All done!
