@@ -24,8 +24,8 @@
 	},
 	"devDependencies": {
 		"cucumber": "~0.3",
-		"express": "~3.0",
-		"jshint": "~1.0"
+		"express": "~3.2",
+		"jshint": "~2.1"
 	},
 
 	"main": "./lib/pa11y.js",
