@@ -29,6 +29,11 @@ program
 		'specify the number of milliseconds before a timeout error occurs. Default: 30000',
 		30000
 	)
+	.option(
+		'-d, --debug',
+		'output debug messages',
+		false
+	)
 	.usage('[options] <url>');
 
 // Parse arguments
@@ -57,7 +62,8 @@ async.waterfall([
 	sniff.bind(null, {
 		url: url,
 		standard: program.standard,
-		timeout: timeout
+		timeout: timeout,
+		debug: program.debug
 	})
 ], done);
 
