@@ -96,7 +96,7 @@ exports.handleResult(results) // Called when results are available
 exports.end() // (optional) Called once everything is done, just before the process exits
 ```
 
-For example reporters, take a look at the [built-in reporters](lib/reporters).
+For example reporters, take a look at the [built-in reporters](lib/reporters) or the [rainbows reporter][rainbows].
 
 
 Development
@@ -136,4 +136,5 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 [gpl]: http://www.gnu.org/licenses/gpl-3.0.html
 [node]: http://nodejs.org/
 [phantom]: http://phantomjs.org/
+[rainbows]: https://github.com/rowanmanning/pa11y-reporter-rainbows
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
