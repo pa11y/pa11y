@@ -69,10 +69,7 @@ Caveats
 
 pa11y can't catch *all* accessibility errors. It'll catch many of them, but you should do manual checking as well.
 
-Also: this is *Beta* software. We're aware of (and working on) a few issues:
-
-- The way we pass data to PhantomJS is awful. There's almost definitely a nicer way, but at the moment we're passing the 'standard' to use through in the querystring. This is by no means bullet-proof and means there's a lot of hacky code.
-- If the requested page redirects without retaining the query-string, pa11y will error. This is related to the way we pass data to the sniffer. We're [looking into this](https://github.com/nature/pa11y/issues/5)
+Also: this is *Beta* software. If you spot any problems, please let us know via the issue tracker.
 
 
 Custom Reporters
