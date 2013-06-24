@@ -15,7 +15,16 @@ lint:
 		lib/* test/* bin/pa11y
 
 # Run all tests
-test: test-feature
+test: test-unit test-feature
+
+# Run unit tests
+test-unit:
+	@echo "Running unit tests..."
+	@./node_modules/.bin/mocha \
+		--reporter spec \
+		--colors \
+		--recursive \
+		./test/unit
 
 # Run feature tests
 test-feature:
