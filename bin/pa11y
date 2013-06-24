@@ -2,7 +2,6 @@
 'use strict';
 
 // Dependencies
-var async = require('async');
 var loadReporter = require('../lib/reporter').load;
 var pkg = require('../package.json');
 var program = require('commander');
@@ -57,17 +56,18 @@ if (isNaN(timeout) || timeout === Infinity) {
 }
 
 // Run the program
-async.waterfall([
-	loadReporter.bind(null, program.reporter),
-	sniff.bind(null, {
+loadReporter(program.reporter, function (err, reporter) {
+	if (err) {
+		console.error('Error: Reporter ' + program.reporter + ' not found');
+		process.exit(1);
+	}
+	sniff({
 		url: url,
+		reporter: reporter,
 		standard: program.standard,
 		timeout: timeout,
 		debug: program.debug
-	})
-], done);
-
-// All done!
-function done (err) {
-	process.exit(err ? 1 : 0);
-}
+	}, function (err) {
+		process.exit(err ? 1 : 0);
+	});
+});

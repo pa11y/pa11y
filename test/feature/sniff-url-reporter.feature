@@ -14,5 +14,4 @@ Feature: Sniff a URL with a reporter specified
 	Scenario: Sniff a normal URL with an invalid reporter
 		When I sniff a normal URL using the foo reporter
 		Then the command should fail
-		And I should see "Cannot find module"
-		And I should see "pa11y-reporter-foo"
+		And I should see "Reporter foo not found"

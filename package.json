@@ -27,6 +27,7 @@
 		"express": "~3.2",
 		"jshint": "~2.1",
 		"mocha": "~1.11",
+		"mockery": "~1.4",
 		"proclaim": "~1.3"
 	},
 
