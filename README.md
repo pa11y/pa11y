@@ -75,22 +75,25 @@ Also: this is *Beta* software. If you spot any problems, please let us know via 
 Custom Reporters
 ----------------
 
-Writing your own reporter for pa11y is easy. When a reporter is specified, the program will look for node modules with the name `pa11y-reporter-<name>`. So if you use the following option:
+Writing your own reporter for pa11y is easy, and will allow you to customise the output. This can be useful for integrating with your CI, producing human-readable reports, graphing, etc.
+
+When a reporter is specified, the program will look for node modules with the name `pa11y-reporter-<name>`. So if you use the following option:
 
 ```sh
 $ pa11y -r rainbows nature.com
 ```
 
-then pa11y will attempt to load the module `pa11y-reporter-rainbows`.
+then pa11y will attempt to load the module [`pa11y-reporter-rainbows`][rainbows].
 
-Reporter modules must export the following functions:
+Reporter modules export the following functions, which will be used by pa11y when that reporter is selected. All functions are optional, but you'll need to implement at least `error` and `handleResult` for the reporter to be functional.
 
 ```js
-exports.begin() // (optional) Called before processing, used to output welcome messages or similar
-exports.log(str) // Called with logging information
-exports.error(str) // Called with error information
-exports.handleResult(results) // Called when results are available
-exports.end() // (optional) Called once everything is done, just before the process exits
+exports.begin()                // Called before processing, used to output welcome messages or similar
+exports.log(str)               // Called with logging information
+exports.debug(str)             // Called with debug information if pa11y is run with the `-d` debug flag
+exports.error(str)             // Called with error information
+exports.handleResult(results)  // Called when results are available
+exports.end()                  // Called once everything is done, just before the process exits
 ```
 
 For example reporters, take a look at the [built-in reporters](lib/reporters) or the [rainbows reporter][rainbows].
