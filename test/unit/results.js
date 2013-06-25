@@ -58,13 +58,12 @@ describe('results', function () {
 				{type: 1},
 				{type: 2},
 				{type: 2},
-				{type: 2},
-				{type: 3}
+				{type: 2}
 			]);
-			assert.strictEqual(res.count.total, 6);
+			assert.strictEqual(res.count.total, 5);
 			assert.strictEqual(res.count.error, 2);
 			assert.strictEqual(res.count.warning, 3);
-			assert.strictEqual(res.count.notice, 1);
+			assert.strictEqual(res.count.notice, 0);
 		});
 
 		it('should sanitize the messages', function () {
