@@ -4,7 +4,7 @@ pa11y
 pa11y is your automated accessibility testing pal.  
 It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
 
-**Current Version:** *1.0.0-beta.3*  
+**Current Version:** *1.0.0*  
 **Node Version Support:** *0.10*
 
 
@@ -70,8 +70,6 @@ Caveats
 pa11y can't catch *all* accessibility errors. It'll catch many of them, but you should do manual checking as well.
 
 Also, due to HTML CodeSniffer being a graphical tool which highlights elements in the DOM, pa11y is most useful to use as a rough benchmark of how many errors/warnings your site has. The messages themselves don't hold much value outside of the browser yet. We're working on this, and if you have any suggestions then we'd be happy to chat!
-
-Please note: this is *Beta* software. If you spot any problems, please let us know via the issue tracker.
 
 
 Custom Reporters
