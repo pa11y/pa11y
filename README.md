@@ -11,7 +11,7 @@ It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessi
 Installing
 ----------
 
-pa11y requires [Node.js][node] 0.8+ and [PhantomJS][phantom].
+pa11y requires [Node.js][node] 0.10+ and [PhantomJS][phantom].
 
 On a Mac, you can install these with [Homebrew][brew]:
 
@@ -22,7 +22,7 @@ $ brew install phantomjs
 
 If you're on Linux, you'll probably be able to work it out.
 
-Windows users, good luck. We'd love some bug reports if things don't work out.
+Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.10) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS).
 
 Once you've got these dependencies, you can install pa11y globally with:
 
