@@ -24,6 +24,11 @@ program
 		'WCAG2AA'
 	)
 	.option(
+		'-c, --htmlcs <url>',
+		'specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io',
+		'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js'
+	)
+	.option(
 		'-t, --timeout <ms>',
 		'specify the number of milliseconds before a timeout error occurs. Default: 30000',
 		30000
@@ -65,6 +70,7 @@ loadReporter(program.reporter, function (err, reporter) {
 		url: url,
 		reporter: reporter,
 		standard: program.standard,
+		htmlcs: program.htmlcs,
 		timeout: timeout,
 		debug: program.debug
 	}, function (err) {
