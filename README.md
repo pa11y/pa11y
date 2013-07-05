@@ -46,7 +46,9 @@ Once installed, the `pa11y` command should be available to you.
     -V, --version          output the version number
     -r, --reporter <name>  specify a reporter to use, one of: console (default), csv, json
     -s, --standard <name>  specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
+    -c, --htmlcs <url>     specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io
     -t, --timeout <ms>     specify the number of milliseconds before a timeout error occurs. Default: 30000
+    -d, --debug            output debug messages
 
 ```
 
