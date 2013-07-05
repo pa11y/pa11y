@@ -16,7 +16,7 @@ app.get('/redirecting', function (req, res) {
 	res.redirect('/normal?' + querystring.stringify(req.query));
 });
 app.get('/invalid', function (req, res) {
-	res.redirect('http://thishadbetternotbearealhost/');
+	res.redirect('http://localhost:12345678/thishadbetternotbearealurl');
 });
 
 app.listen(port, function (err) {
