@@ -13,6 +13,14 @@ var testUrls = [
 describe('url', function () {
 	var url = require('../../lib/url');
 
+	it('should be an object', function () {
+		assert.isObject(url);
+	});
+
+	it('should have a sanitize function', function () {
+		assert.isFunction(url.sanitize);
+	});
+
 	describe('.sanitize()', function () {
 
 		it('should transform URLs as expected', function () {

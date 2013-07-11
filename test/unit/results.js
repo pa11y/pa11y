@@ -8,6 +8,18 @@ var sinon = require('sinon');
 describe('results', function () {
 	var results = require('../../lib/results');
 
+	it('should be an object', function () {
+		assert.isObject(results);
+	});
+
+	it('should have a sanitizeMessages function', function () {
+		assert.isFunction(results.sanitizeMessages);
+	});
+
+	it('should have a build function', function () {
+		assert.isFunction(results.build);
+	});
+
 	describe('.sanitizeMessages()', function () {
 
 		it('should return an empty array when called with a non-array messages object', function () {

@@ -9,6 +9,18 @@ var sinon = require('sinon');
 describe('reporter', function () {
 	var reporter = require('../../lib/reporter');
 
+	it('should be an object', function () {
+		assert.isObject(reporter);
+	});
+
+	it('should have a sanitize function', function () {
+		assert.isFunction(reporter.sanitize);
+	});
+
+	it('should have a load function', function () {
+		assert.isFunction(reporter.load);
+	});
+
 	describe('.sanitize()', function () {
 
 		it('should default all reporter functions', function () {

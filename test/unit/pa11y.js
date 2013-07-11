@@ -8,7 +8,7 @@ describe('pa11y', function () {
 	var pa11y = require('../../lib/pa11y');
 
 	it('should be an object', function () {
-		assert.strictEqual(typeof pa11y, 'object');
+		assert.isObject(pa11y);
 	});
 
 });
