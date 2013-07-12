@@ -1,79 +1,48 @@
 #!/usr/bin/env node
 'use strict';
 
-// Dependencies
-var loadReporter = require('../lib/reporter').load;
+var _ = require('underscore');
 var pkg = require('../package.json');
 var program = require('commander');
-var sniff = require('../lib/pa11y').sniff;
+var pa11y = require('../lib/pa11y');
 
-// Acceptable standards
-var acceptableStandards = ['Section508', 'WCAG2A', 'WCAG2AA', 'WCAG2AAA'];
-
-// Initialise program
+// Configure command-line app
 program
 	.version(pkg.version)
 	.option(
 		'-r, --reporter <name>',
-		'specify a reporter to use, one of: console (default), csv, json',
-		'console'
+		'specify a reporter to use, one of: console (default), csv, json'
 	)
 	.option(
 		'-s, --standard <name>',
-		'specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA',
-		'WCAG2AA'
+		'specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA'
 	)
 	.option(
 		'-c, --htmlcs <url>',
-		'specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io',
-		'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js'
+		'specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io'
 	)
 	.option(
 		'-t, --timeout <ms>',
-		'specify the number of milliseconds before a timeout error occurs. Default: 30000',
-		30000
+		'specify the number of milliseconds before a timeout error occurs. Default: 30000'
 	)
 	.option(
 		'-d, --debug',
-		'output debug messages',
-		false
+		'output debug messages'
 	)
-	.usage('[options] <url>');
+	.usage('[options] <url>')
+	.parse(process.argv);
 
-// Parse arguments
-program.parse(process.argv);
-
-// Check for standard
-if (acceptableStandards.indexOf(program.standard) === -1) {
+// Get options
+var opts = _.pick(program, ['debug', 'htmlcs', 'reporter', 'standard', 'timeout']);
+opts.url = program.args[0];
+if (!opts.url || program.args[1]) {
 	program.help();
 }
 
-// Get the URL
-var url = program.args[0];
-if (!url || program.args[1]) {
-	program.help();
-}
-
-// Get/sanitize the timeout
-var timeout = parseInt(program.timeout, 10);
-if (isNaN(timeout) || timeout === Infinity) {
-	program.help();
-}
-
-// Run the program
-loadReporter(program.reporter, function (err, reporter) {
-	if (err) {
-		console.error('Error: Reporter ' + program.reporter + ' not found');
-		process.exit(1);
+// Run pa11y
+pa11y.sniff(opts, function (err) {
+	if (err && err.showHelp) {
+		program.help();
 	}
-	sniff({
-		url: url,
-		reporter: reporter,
-		standard: program.standard,
-		htmlcs: program.htmlcs,
-		timeout: timeout,
-		debug: program.debug
-	}, function (err) {
-		process.exit(err ? 1 : 0);
-	});
+	process.exit(err ? 1 : 0);
 });
