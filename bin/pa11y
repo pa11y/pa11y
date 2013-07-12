@@ -2,6 +2,7 @@
 'use strict';
 
 var _ = require('underscore');
+var OptionError = require('../lib/error/option-error');
 var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
@@ -41,7 +42,7 @@ if (!opts.url || program.args[1]) {
 
 // Run pa11y
 pa11y.sniff(opts, function (err) {
-	if (err && err.showHelp) {
+	if (err instanceof OptionError) {
 		program.help();
 	}
 	process.exit(err ? 1 : 0);
