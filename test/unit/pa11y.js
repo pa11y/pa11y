@@ -125,7 +125,15 @@ describe('pa11y', function () {
 		it('should call the reporter debug method when the debug options is true', function (done) {
 			opts.debug = true;
 			pa11y.sniff(opts, function () {
-				assert.isTrue(reporter.debug.called, 'log');
+				assert.isTrue(reporter.debug.called);
+				done();
+			});
+		});
+
+		it('should exit the browser once finished', function (done) {
+			opts.debug = true;
+			pa11y.sniff(opts, function () {
+				assert.isTrue(browser.exit.calledOnce);
 				done();
 			});
 		});
