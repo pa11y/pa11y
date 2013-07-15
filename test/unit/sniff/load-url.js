@@ -1,4 +1,4 @@
-/* jshint maxlen: 200 */
+/* jshint maxlen: 200, maxstatements: 20 */
 /* global afterEach, beforeEach, describe, it */
 'use strict';
 

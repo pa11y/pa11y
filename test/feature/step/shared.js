@@ -1,4 +1,4 @@
-/*jshint maxlen:160 */
+/* jshint maxlen: 200, maxstatements: 20 */
 'use strict';
 
 // Dependencies
