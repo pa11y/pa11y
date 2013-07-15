@@ -1,4 +1,4 @@
-/* jshint maxlen: 200 */
+/* jshint maxlen: 200, maxstatements: 20 */
 /* global describe, it */
 'use strict';
 
@@ -12,6 +12,14 @@ var testUrls = [
 
 describe('url', function () {
 	var url = require('../../lib/url');
+
+	it('should be an object', function () {
+		assert.isObject(url);
+	});
+
+	it('should have a sanitize function', function () {
+		assert.isFunction(url.sanitize);
+	});
 
 	describe('.sanitize()', function () {
 

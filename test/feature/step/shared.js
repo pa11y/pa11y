@@ -1,4 +1,4 @@
-/*jshint maxlen:160 */
+/* jshint maxlen: 200, maxstatements: 20 */
 'use strict';
 
 // Dependencies
@@ -16,7 +16,7 @@ module.exports = function () {
 	function sniff (url, opts, callback) {
 
 		// Resolve CLI opts
-		var cliOpts = '';
+		var cliOpts = '--debug ';
 		var opt;
 		for (opt in opts) {
 			if (opts.hasOwnProperty(opt)) {
