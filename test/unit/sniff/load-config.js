@@ -16,8 +16,8 @@ describe('sniff/load-config', function () {
 			warnOnReplace: false
 		});
 		exampleConfig = {foo: 'bar', ignore: []};
-		mockery.registerMock('./config/pa11y.json', exampleConfig);
-		mockery.registerMock('./pa11y', exampleConfig);
+		mockery.registerMock(process.cwd() + '/./config/pa11y.json', exampleConfig);
+		mockery.registerMock(process.cwd() + '/./pa11y', exampleConfig);
 	});
 
 	afterEach(function () {
