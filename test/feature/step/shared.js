@@ -93,6 +93,26 @@ module.exports = function () {
 		});
 	});
 
+	this.When(/^I sniff an? ([a-z]+) URL using a config file$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using an invalid config file$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		sniff(this.baseUrl + '/' + urlType, {config: 'invalidconfig.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
 	this.Then(/^the command should be successful$/i, function (callback) {
 		if (!this.result) {
 			return callback.fail(new Error('No command was executed'));
@@ -121,6 +141,18 @@ module.exports = function () {
 		var inStderr = (this.result.stderr.toLowerCase().indexOf(text.toLowerCase()) !== -1);
 		if (!inStdout && !inStderr) {
             return callback.fail(new Error('Text "' + text + '" not found in command output'));
+        }
+		callback();
+	});
+
+	this.Then(/^I should not see "([^"]*)"$/i, function (text, callback) {
+		if (!this.result) {
+			return callback.fail(new Error('No command was executed'));
+		}
+		var inStdout = (this.result.stdout.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+		var inStderr = (this.result.stderr.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+		if (inStdout || inStderr) {
+            return callback.fail(new Error('Text "' + text + '" was found in command output'));
         }
 		callback();
 	});
