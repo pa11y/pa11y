@@ -47,6 +47,7 @@ Once installed, the `pa11y` command should be available to you.
     -r, --reporter <name>  specify a reporter to use, one of: console (default), csv, json
     -s, --standard <name>  specify a standard to use, one of: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
     -c, --htmlcs <url>     specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io
+    -C, --config <file>    specify a JSON config file for ignoring rules
     -t, --timeout <ms>     specify the number of milliseconds before a timeout error occurs. Default: 30000
     -d, --debug            output debug messages
 
@@ -64,6 +65,28 @@ $ pa11y -r csv nature.com > report.csv
 # Run pa11y with the WCAG2AAA ruleset
 $ pa11y -s WCAG2AAA nature.com
 ```
+
+Configuration
+-------------
+
+pa11y can be configured via a JSON file, which allows you to specify rules that should be ignored in the report. To specify a JSON configuration file, use the `--config` command line flag:
+
+```sh
+$ pa11y --config ./config/pa11y.json nature.com
+```
+
+The config file should be formatted like this, where each of the items in the `ignore` array is the identifier of a rule you'd like to ignore:
+
+```json
+{
+	"ignore": [
+		"WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2",
+		"WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2"
+	]
+}
+```
+
+You can find the codes for each rule in the console output, so you can simply copy/paste these into your config file.
 
 
 Caveats
