@@ -46,6 +46,13 @@ describe('sniff/load-config', function () {
 		});
 	});
 
+	it('should error when the config file does not could not be loaded', function () {
+		loadConfig('./not-a-config-file', function (err) {
+			assert.isInstanceOf(err, Error);
+			assert.match(err.message, /not found/i);
+		});
+	});
+
 	it('should sanitize the loaded config', function (done) {
 		sinon.spy(loadConfig, 'sanitize');
 		loadConfig('./config/pa11y.json', function () {
