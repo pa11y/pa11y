@@ -96,7 +96,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a config file$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {config: 'test/feature/fixture/config.json'}, function (err, result) {
+		sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();

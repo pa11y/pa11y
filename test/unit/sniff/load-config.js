@@ -4,6 +4,7 @@
 
 var assert = require('proclaim');
 var mockery = require('mockery');
+var path = require('path');
 var sinon = require('sinon');
 
 describe('sniff/load-config', function () {
@@ -16,8 +17,8 @@ describe('sniff/load-config', function () {
 			warnOnReplace: false
 		});
 		exampleConfig = {foo: 'bar', ignore: []};
-		mockery.registerMock(process.cwd() + '/./config/pa11y.json', exampleConfig);
-		mockery.registerMock(process.cwd() + '/./pa11y', exampleConfig);
+		mockery.registerMock(path.resolve(process.cwd(), './config/pa11y.json'), exampleConfig);
+		mockery.registerMock(path.resolve(process.cwd(), './pa11y'), exampleConfig);
 	});
 
 	afterEach(function () {
