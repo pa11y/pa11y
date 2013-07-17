@@ -11,7 +11,25 @@ var port = 4117;
 
 // Routes
 app.get('/normal', function (req, res) {
-	res.send('<html><head><title>Title</title></head><body>Body</body></html>');
+	res.send(
+        '<html lang="en">' +
+            '<head><title>Title</title></head>' +
+            '<body>' +
+                'Body ' +
+                '<img src="" alt="my image"/>' +
+            '</body>' +
+        '</html>'
+    );
+});
+app.get('/failing', function (req, res) {
+    res.send(
+        '<html>' +
+            '<head><title>Title</title></head>' +
+            '<body>' +
+                'Body ' +
+            '</body>' +
+        '</html>'
+    );
 });
 app.get('/redirecting', function (req, res) {
 	res.redirect('/normal?' + querystring.stringify(req.query));

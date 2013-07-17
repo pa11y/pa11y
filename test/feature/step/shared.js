@@ -144,7 +144,7 @@ module.exports = function () {
 		if (!this.result) {
 			return callback.fail(new Error('No command was executed'));
 		}
-		if (this.result.stderr) {
+		if (this.result.err && this.result.err.code > 0) {
 			return callback.fail(new Error('Command failed: ' + this.result.stderr));
 		}
 		callback();
@@ -154,7 +154,7 @@ module.exports = function () {
 		if (!this.result) {
 			return callback.fail(new Error('No command was executed'));
 		}
-		if (!this.result.stderr) {
+		if (!this.result.err || this.result.err.code === 0) {
 			return callback.fail(new Error('Command did not fail'));
 		}
 		callback();
