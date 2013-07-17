@@ -1,4 +1,4 @@
-/* jshint maxlen: 200, maxstatements: 20 */
+/* jshint maxlen: 200, maxstatements: 50 */
 'use strict';
 
 // Dependencies
@@ -12,6 +12,9 @@ module.exports = function () {
 	// Paths
 	var binPath = __dirname + '/../../../bin/pa11y';
 
+	// CLI options
+	var execOpts = {};
+
 	// Run the sniffer
 	function sniff (url, opts, callback) {
 
@@ -24,7 +27,7 @@ module.exports = function () {
 			}
 		}
 
-		exec(binPath + ' ' + cliOpts + url, function (err, stdout, stderr) {
+		exec(binPath + ' ' + cliOpts + url, execOpts, function (err, stdout, stderr) {
 			callback(null, {
 				err: err,
 				stdout: stdout,
@@ -93,6 +96,50 @@ module.exports = function () {
 		});
 	});
 
+	this.When(/^I sniff an? ([a-z]+) URL using a config file with a relative path$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		execOpts = {cwd: __dirname + '/../fixture'};
+		sniff(this.baseUrl + '/' + urlType, {config: './config.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			execOpts = {};
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using a config file with an absolute path$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using a \.pa11yrc config file$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		execOpts = {cwd: __dirname + '/../fixture'};
+		sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
+			if (err) { callback.fail(err); }
+			execOpts = {};
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using an invalid config file$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		sniff(this.baseUrl + '/' + urlType, {config: 'invalidconfig.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
 	this.Then(/^the command should be successful$/i, function (callback) {
 		if (!this.result) {
 			return callback.fail(new Error('No command was executed'));
@@ -121,6 +168,18 @@ module.exports = function () {
 		var inStderr = (this.result.stderr.toLowerCase().indexOf(text.toLowerCase()) !== -1);
 		if (!inStdout && !inStderr) {
             return callback.fail(new Error('Text "' + text + '" not found in command output'));
+        }
+		callback();
+	});
+
+	this.Then(/^I should not see "([^"]*)"$/i, function (text, callback) {
+		if (!this.result) {
+			return callback.fail(new Error('No command was executed'));
+		}
+		var inStdout = (this.result.stdout.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+		var inStderr = (this.result.stderr.toLowerCase().indexOf(text.toLowerCase()) !== -1);
+		if (inStdout || inStderr) {
+            return callback.fail(new Error('Text "' + text + '" was found in command output'));
         }
 		callback();
 	});

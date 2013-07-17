@@ -1,4 +1,4 @@
-/* jshint maxlen: 200, maxstatements: 20 */
+/* jshint maxlen: 200, maxstatements: 50 */
 /* global afterEach, beforeEach, describe, it */
 'use strict';
 
@@ -18,8 +18,8 @@ describe('pa11y', function () {
 	});
 
 	describe('.sniff()', function () {
-		var opts, manageOptions, reporter, loadReporter, browser, page, loadUrl,
-			messages, runHtmlCodeSniffer, results, handleResult;
+		var opts, manageOptions, reporter, loadReporter, config, loadConfig,
+			browser, page, loadUrl, messages, runHtmlCodeSniffer, results, handleResult;
 
 		// Mock everything in the world ever.
 		beforeEach(function () {
@@ -32,7 +32,8 @@ describe('pa11y', function () {
 
 			opts = {
 				url: 'foo',
-				reporter: 'bar'
+				reporter: 'bar',
+				config: 'baz'
 			};
 			manageOptions = sinon.stub().callsArgWith(1, null, opts);
 			mockery.registerMock('./sniff/manage-options', manageOptions);
@@ -48,6 +49,13 @@ describe('pa11y', function () {
 			loadReporter = sinon.stub().callsArgWith(1, null, reporter);
 			mockery.registerMock('./sniff/load-reporter', loadReporter);
 
+			config = {
+				ignore: ['bar']
+			};
+			loadConfig = sinon.stub().callsArgWith(1, null, config);
+			loadConfig.sanitize = sinon.stub().returns(config);
+			mockery.registerMock('./sniff/load-config', loadConfig);
+
 			browser = {
 				exit: sinon.spy()
 			};
@@ -55,7 +63,10 @@ describe('pa11y', function () {
 			loadUrl = sinon.stub().callsArgWith(1, null, browser, page);
 			mockery.registerMock('./sniff/load-url', loadUrl);
 
-			messages = [];
+			messages = [
+				{code: 'foo'},
+				{code: 'bar'}
+			];
 			runHtmlCodeSniffer = sinon.stub().callsArgWith(2, null, messages);
 			mockery.registerMock('./sniff/run-html-codesniffer', runHtmlCodeSniffer);
 
@@ -84,6 +95,21 @@ describe('pa11y', function () {
 			});
 		});
 
+		it('should load the expected config file', function (done) {
+			pa11y.sniff(opts, function () {
+				assert.isTrue(loadConfig.withArgs(opts.config).calledOnce);
+				done();
+			});
+		});
+
+		it('should not load a config file if one is not specified', function (done) {
+			delete opts.config;
+			pa11y.sniff(opts, function () {
+				assert.isTrue(loadConfig.withArgs(opts.config).notCalled);
+				done();
+			});
+		});
+
 		it('should load the expected page', function (done) {
 			pa11y.sniff(opts, function () {
 				assert.isTrue(loadUrl.withArgs(opts.url).calledOnce);
@@ -100,7 +126,14 @@ describe('pa11y', function () {
 
 		it('should handle the HTML CodeSniffer results', function (done) {
 			pa11y.sniff(opts, function () {
-				assert.isTrue(handleResult.withArgs(messages).calledOnce);
+				assert.isTrue(handleResult.calledOnce);
+				done();
+			});
+		});
+
+		it('should filter the results based on the ignore configuration', function (done) {
+			pa11y.sniff(opts, function () {
+				assert.deepEqual(handleResult.getCall(0).args[0], [{code: 'foo'}]);
 				done();
 			});
 		});
