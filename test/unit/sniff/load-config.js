@@ -3,26 +3,30 @@
 'use strict';
 
 var assert = require('proclaim');
-var mockery = require('mockery');
+var fs = require('fs');
 var path = require('path');
 var sinon = require('sinon');
 
 describe('sniff/load-config', function () {
 	var loadConfig = require('../../../lib/sniff/load-config');
-	var exampleConfig;
+	var exampleConfig, exampleInvalidConfig, exampleConfigObject;
 
 	beforeEach(function () {
-		mockery.enable({
-			warnOnUnregistered: false,
-			warnOnReplace: false
-		});
-		exampleConfig = {foo: 'bar', ignore: []};
-		mockery.registerMock(path.resolve(process.cwd(), './config/pa11y.json'), exampleConfig);
-		mockery.registerMock(path.resolve(process.cwd(), './pa11y'), exampleConfig);
+		exampleConfig = '{"foo": "bar", "ignore": []}';
+		exampleInvalidConfig = '(function (lol) {} (lol));';
+		exampleConfigObject = JSON.parse(exampleConfig);
+		sinon.stub(fs, 'readFile');
+		fs.readFile.withArgs(path.resolve(process.cwd(), './config/pa11y.json'), 'utf8').callsArgWith(2, null, exampleConfig);
+		fs.readFile.withArgs(path.resolve(process.cwd(), './invalid-config-file'), 'utf8').callsArgWith(2, null, exampleInvalidConfig);
+		fs.readFile.withArgs(path.resolve(process.cwd(), './not-a-config-file'), 'utf8').callsArgWith(2, new Error(), null);
+		sinon.stub(JSON, 'parse');
+		JSON.parse.withArgs(exampleConfig).returns(exampleConfigObject);
+		JSON.parse.withArgs(exampleInvalidConfig).throws(new Error());
 	});
 
 	afterEach(function () {
-		mockery.disable();
+		fs.readFile.restore();
+		JSON.parse.restore();
 	});
 
 	it('should be a function', function () {
@@ -35,15 +39,17 @@ describe('sniff/load-config', function () {
 
 	it('should load json files', function (done) {
 		loadConfig('./config/pa11y.json', function (err, config) {
-			assert.deepEqual(config, exampleConfig);
+			assert.isTrue(fs.readFile.withArgs(path.resolve(process.cwd(), './config/pa11y.json'), 'utf8').calledOnce);
+			assert.isTrue(JSON.parse.withArgs(exampleConfig).calledOnce);
+			assert.deepEqual(config, exampleConfigObject);
 			done();
 		});
 	});
 
-	it('should load javascript files', function (done) {
-		loadConfig('./pa11y', function (err, config) {
-			assert.deepEqual(config, exampleConfig);
-			done();
+	it('should error when the config file is invalid JSON', function () {
+		loadConfig('./invalid-config-file', function (err) {
+			assert.isInstanceOf(err, Error);
+			assert.match(err.message, /is not valid/i);
 		});
 	});
 
@@ -57,7 +63,7 @@ describe('sniff/load-config', function () {
 	it('should sanitize the loaded config', function (done) {
 		sinon.spy(loadConfig, 'sanitize');
 		loadConfig('./config/pa11y.json', function () {
-			assert.isTrue(loadConfig.sanitize.withArgs(exampleConfig).calledOnce);
+			assert.isTrue(loadConfig.sanitize.withArgs(exampleConfigObject).calledOnce);
 			loadConfig.sanitize.restore();
 			done();
 		});
