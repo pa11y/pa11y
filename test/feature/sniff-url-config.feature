@@ -11,7 +11,7 @@ Feature: Sniff a URL with a config file specified
 		And I should see "Check that the title element"
 		And I should not see "The html element should have a lang"
 
-	Scenario: Sniff a normal URL with a relative config file
+	Scenario: Sniff a normal URL with an absolute config file
 		When I sniff a normal URL using a config file with an absolute path
 		Then the command should be successful
 		And I should see "Results (1)"
