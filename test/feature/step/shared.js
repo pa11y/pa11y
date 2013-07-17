@@ -1,4 +1,4 @@
-/* jshint maxlen: 200, maxstatements: 20 */
+/* jshint maxlen: 200, maxstatements: 50 */
 'use strict';
 
 // Dependencies
@@ -12,6 +12,9 @@ module.exports = function () {
 	// Paths
 	var binPath = __dirname + '/../../../bin/pa11y';
 
+	// CLI options
+	var execOpts = {};
+
 	// Run the sniffer
 	function sniff (url, opts, callback) {
 
@@ -24,7 +27,7 @@ module.exports = function () {
 			}
 		}
 
-		exec(binPath + ' ' + cliOpts + url, function (err, stdout, stderr) {
+		exec(binPath + ' ' + cliOpts + url, execOpts, function (err, stdout, stderr) {
 			callback(null, {
 				err: err,
 				stdout: stdout,
@@ -93,11 +96,35 @@ module.exports = function () {
 		});
 	});
 
-	this.When(/^I sniff an? ([a-z]+) URL using a config file$/i, function (urlType, callback) {
+	this.When(/^I sniff an? ([a-z]+) URL using a config file with a relative path$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		execOpts = {cwd: __dirname + '/../fixture'};
+		sniff(this.baseUrl + '/' + urlType, {config: './config.json'}, function (err, result) {
+			if (err) { callback.fail(err); }
+			execOpts = {};
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using a config file with an absolute path$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
 		sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using a \.pa11yrc config file$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		execOpts = {cwd: __dirname + '/../fixture'};
+		sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
+			if (err) { callback.fail(err); }
+			execOpts = {};
 			world.result = result;
 			callback();
 		});
