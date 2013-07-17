@@ -19,9 +19,19 @@ describe('sniff/load-config', function () {
 		fs.readFile.withArgs(path.resolve(process.cwd(), './config/pa11y.json'), 'utf8').callsArgWith(2, null, exampleConfig);
 		fs.readFile.withArgs(path.resolve(process.cwd(), './invalid-config-file'), 'utf8').callsArgWith(2, null, exampleInvalidConfig);
 		fs.readFile.withArgs(path.resolve(process.cwd(), './not-a-config-file'), 'utf8').callsArgWith(2, new Error(), null);
+
+		var parseError;
+
+		// ugly hack, but we want the actual exception here
+		try {
+			JSON.parse(exampleInvalidConfig);
+		} catch (err) {
+			parseError = err;
+		}
+
 		sinon.stub(JSON, 'parse');
 		JSON.parse.withArgs(exampleConfig).returns(exampleConfigObject);
-		JSON.parse.withArgs(exampleInvalidConfig).throws(new Error());
+		JSON.parse.withArgs(exampleInvalidConfig).throws(parseError);
 	});
 
 	afterEach(function () {
@@ -46,10 +56,25 @@ describe('sniff/load-config', function () {
 		});
 	});
 
-	it('should error when the config file is invalid JSON', function () {
+	it('should error when the config file is invalid JSON', function (done) {
 		loadConfig('./invalid-config-file', function (err) {
 			assert.isInstanceOf(err, Error);
-			assert.match(err.message, /is not valid/i);
+			done();
+		});
+	});
+
+	it('should provide the file path in a invalid config file', function (done) {
+		loadConfig('./invalid-config-file', function (err) {
+			assert.includes(err.message, 'invalid-config-file');
+			assert.includes(err.file, 'invalid-config-file');
+			done();
+		});
+	});
+
+	it('should extend upon JSON.parse error message', function (done) {
+		loadConfig('./invalid-config-file', function (err) {
+			assert.includes(err.message, 'Unexpected token (');
+			done();
 		});
 	});
 
