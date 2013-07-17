@@ -12,11 +12,8 @@ module.exports = function () {
 	// Paths
 	var binPath = __dirname + '/../../../bin/pa11y';
 
-	// CLI options
-	var execOpts = {};
-
 	// Run the sniffer
-	function sniff (url, opts, callback) {
+	function sniff (url, opts, callback, execOpts) {
 
 		// Resolve CLI opts
 		var cliOpts = '--debug ';
@@ -25,6 +22,10 @@ module.exports = function () {
 			if (opts.hasOwnProperty(opt)) {
 				cliOpts += '--' + opt + ' ' + opts[opt] + ' ';
 			}
+		}
+
+		if (!execOpts) {
+			execOpts = {};
 		}
 
 		exec(binPath + ' ' + cliOpts + url, execOpts, function (err, stdout, stderr) {
@@ -99,13 +100,11 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a config file with a relative path$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		execOpts = {cwd: __dirname + '/../fixture'};
 		sniff(this.baseUrl + '/' + urlType, {config: './config.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
-			execOpts = {};
 			world.result = result;
 			callback();
-		});
+		}, {cwd: __dirname + '/../fixture'});
 	});
 
 	this.When(/^I sniff an? ([a-z]+) URL using a config file with an absolute path$/i, function (urlType, callback) {
@@ -121,13 +120,11 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a \.pa11yrc config file$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		execOpts = {cwd: __dirname + '/../fixture'};
 		sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
 			if (err) { callback.fail(err); }
-			execOpts = {};
 			world.result = result;
 			callback();
-		});
+		}, {cwd: __dirname + '/../fixture'});
 	});
 
 	this.When(/^I sniff an? ([a-z]+) URL using an invalid config file$/i, function (urlType, callback) {
