@@ -19,19 +19,7 @@ describe('sniff/load-config', function () {
 		fs.readFile.withArgs(path.resolve(process.cwd(), './config/pa11y.json'), 'utf8').callsArgWith(2, null, exampleConfig);
 		fs.readFile.withArgs(path.resolve(process.cwd(), './invalid-config-file'), 'utf8').callsArgWith(2, null, exampleInvalidConfig);
 		fs.readFile.withArgs(path.resolve(process.cwd(), './not-a-config-file'), 'utf8').callsArgWith(2, new Error(), null);
-
-		var parseError;
-
-		// ugly hack, but we want the actual exception here
-		try {
-			JSON.parse(exampleInvalidConfig);
-		} catch (err) {
-			parseError = err;
-		}
-
-		sinon.stub(JSON, 'parse');
-		JSON.parse.withArgs(exampleConfig).returns(exampleConfigObject);
-		JSON.parse.withArgs(exampleInvalidConfig).throws(parseError);
+		sinon.spy(JSON, 'parse');
 	});
 
 	afterEach(function () {
