@@ -9,7 +9,7 @@ Feature: Sniff a URL with a reporter specified
 		Then the command should be successful
 		And the response should be valid JSON
 		And I should see "Check that the title element"
-		And I should see "The html element should have a lang"
+		And I should see "alt text serves the same purpose"
 
 	Scenario: Sniff a normal URL with an invalid reporter
 		When I sniff a normal URL using the foo reporter
