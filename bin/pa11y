@@ -55,9 +55,9 @@ if (!opts.config) {
 }
 
 // Run pa11y
-pa11y.sniff(opts, function (err) {
+pa11y.sniff(opts, function (err, results) {
 	if (err instanceof OptionError) {
 		program.help();
 	}
-	process.exit(err ? 1 : 0);
+	process.exit(err ? 1 : results.count.error);
 });
