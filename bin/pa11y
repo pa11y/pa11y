@@ -6,6 +6,8 @@ var OptionError = require('../lib/error/option-error');
 var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
+var fs = require('fs');
+var path = require('path');
 
 // Configure command-line app
 program
@@ -42,6 +44,14 @@ var opts = _.pick(program, ['config', 'debug', 'htmlcs', 'reporter', 'standard',
 opts.url = program.args[0];
 if (!opts.url || program.args[1]) {
 	program.help();
+}
+
+// when applicable, use the local `.pa11yrc` file if it exists
+if (!opts.config) {
+	var rc = path.join(process.cwd(), '.pa11yrc');
+	if (fs.existsSync(rc)) {
+		opts.config = rc;
+	}
 }
 
 // Run pa11y
