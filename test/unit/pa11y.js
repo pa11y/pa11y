@@ -47,6 +47,7 @@ describe('pa11y', function () {
 				end: sinon.spy()
 			};
 			loadReporter = sinon.stub().callsArgWith(1, null, reporter);
+			loadReporter.sanitize = sinon.stub().returns(reporter);
 			mockery.registerMock('./sniff/load-reporter', loadReporter);
 
 			config = {
@@ -95,9 +96,36 @@ describe('pa11y', function () {
 			});
 		});
 
+		it('should accept and sanitize a reporter object', function (done) {
+			opts.reporter = reporter;
+			pa11y.sniff(opts, function () {
+				assert.isTrue(loadReporter.withArgs(opts.reporter).notCalled);
+				assert.isTrue(loadReporter.sanitize.withArgs(opts.reporter).calledOnce);
+				done();
+			});
+		});
+
+		it('should not load a reporter if one is not specified', function (done) {
+			delete opts.reporter;
+			pa11y.sniff(opts, function () {
+				assert.isTrue(loadReporter.withArgs(opts.reporter).notCalled);
+				assert.isTrue(loadReporter.sanitize.withArgs({}).calledOnce);
+				done();
+			});
+		});
+
 		it('should load the expected config file', function (done) {
 			pa11y.sniff(opts, function () {
 				assert.isTrue(loadConfig.withArgs(opts.config).calledOnce);
+				done();
+			});
+		});
+
+		it('should accept and sanitize a config object', function (done) {
+			opts.config = config;
+			pa11y.sniff(opts, function () {
+				assert.isTrue(loadConfig.withArgs(opts.config).notCalled);
+				assert.isTrue(loadConfig.sanitize.withArgs(opts.config).calledOnce);
 				done();
 			});
 		});
@@ -106,6 +134,7 @@ describe('pa11y', function () {
 			delete opts.config;
 			pa11y.sniff(opts, function () {
 				assert.isTrue(loadConfig.withArgs(opts.config).notCalled);
+				assert.isTrue(loadConfig.sanitize.withArgs({}).calledOnce);
 				done();
 			});
 		});
