@@ -14,7 +14,8 @@ program
 	.version(pkg.version)
 	.option(
 		'-r, --reporter <name>',
-		'specify a reporter to use, one of: console (default), csv, json'
+		'specify a reporter to use, one of: console (default), csv, json',
+		'console'
 	)
 	.option(
 		'-s, --standard <name>',
