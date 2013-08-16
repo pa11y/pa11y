@@ -31,7 +31,7 @@ describe('sniff/manage-options', function () {
 	it('should callback with the expected object when all options are set', function (done) {
 		var allOpts = {
 			debug: true,
-			htmlcs: 'foo',
+			htmlcs: 'http://foo',
 			reporter: 'bar',
 			standard: 'baz',
 			timeout: 123
@@ -67,6 +67,19 @@ describe('sniff/manage-options', function () {
 		}, function (err, opts) {
 			assert.isTrue(url.sanitize.withArgs('foo').calledOnce);
 			assert.strictEqual(opts.url, 'bar');
+			url.sanitize.restore();
+			done();
+		});
+	});
+
+	it('should sanitize the HTMLCS URL option', function (done) {
+		var url = require('../../../lib/url');
+		sinon.stub(url, 'sanitize').withArgs('foo').returns('bar');
+		manageOptions({
+			htmlcs: 'foo'
+		}, function (err, opts) {
+			assert.isTrue(url.sanitize.withArgs('foo').calledOnce);
+			assert.strictEqual(opts.htmlcs, 'bar');
 			url.sanitize.restore();
 			done();
 		});
