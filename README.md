@@ -53,7 +53,7 @@ Once installed, the `pa11y` command should be available to you.
 
 ```
 
-Example:
+### Examples
 
 ```sh
 # Run pa11y with console reporting
@@ -67,16 +67,95 @@ $ pa11y -s WCAG2AAA nature.com
 ```
 
 
+JavaScript API
+--------------
+
+You can also use pa11y from JavaScript by requiring the module directly. This will give you access to the `pa11y.sniff` function. The sniff function accepts two arguments, the first is an options object, the second is a callback:
+
+```js
+var pa11y = require('pa11y');
+pa11y.sniff(options, callback);
+```
+
+### Available Options
+
+#### options.url
+*(string)* The URL to sniff. Required.
+
+#### options.reporter
+*(string,object)* The reporter to use. This can be a string (see [command-line usage](#command-line-usage)) or an object (see [custom reporters](#custom-reporters)). Default `null`.
+
+#### options.standard
+*(string)* The standard to use. One of `Section508`, `WCAG2A`, `WCAG2AA`, `WCAG2AAA`. Default `WCAG2AA`.
+
+#### options.htmlcs
+*(string)* The URL to source HTML_CodeSniffer from. Default `http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js`.
+
+#### options.config
+*(string,object)* The path to a JSON config file or a config object (see [configuration](#configuration)). Default `null`.
+
+#### options.timeout
+*(number)* The number of milliseconds before a timeout error occurs. Default `30000`.
+
+#### options.debug
+*(boolean)* Whether to report debug-level messages. Default: `false`.
+
+### Callback
+
+The callback function should accept two arguments. The first is an error object or `null`, the second is an object containing the results of the sniff.
+
+### Examples
+
+```js
+// Sniff a URL
+pa11y.sniff({
+    url: 'nature.com'
+}, function (err, results) {
+    console.log(results); // output results object to console
+});
+
+// Sniff a URL, specifying some options
+pa11y.sniff({
+    url: 'nature.com',
+    standard: 'WCAG2AAA',
+    timeout: 20000
+}, function (err, results) {
+    console.log(results); // output results object to console
+});
+
+// Sniff a nonexistent URL
+pa11y.sniff({
+    url: '$$$'
+}, function (err, results) {
+    console.log(err); // Error: URL could not be loaded
+});
+```
+
+
 Configuration
 -------------
 
-pa11y can be configured via a JSON file, which allows you to specify rules that should be ignored in the report. To specify a JSON configuration file, use the `--config` command line flag:
+pa11y can be configured via a JSON file or JavaScript object, which allows you to specify rules that should be ignored in the report.
+
+On the command line, specify a JSON configuration file with the `--config` flag:
 
 ```sh
 $ pa11y --config ./config/pa11y.json nature.com
 ```
 
-The config file should be formatted like this, where each of the items in the `ignore` array is the identifier of a rule you'd like to ignore:
+If you're using the JavaScript API, you can pass configurations in by either specifying a JSON file or passing in a config object directly:
+
+```js
+pa11y.sniff({
+    config: __dirname + '/config/pa11y.json'
+});
+
+pa11y.sniff({
+    config: {}
+});
+```
+
+The config file or object should be formatted like this, where each of the items in the `ignore` array is the identifier of a rule you'd like to ignore:
 
 ```json
 {
@@ -87,7 +166,7 @@ The config file should be formatted like this, where each of the items in the `i
 }
 ```
 
-You can find the codes for each rule in the console output, so you can simply copy/paste these into your config file. We also maintain a [list of all available rules][rules].
+You can find the codes for each rule in the console output, so you can simply copy/paste these into your config. We also maintain a [list of all available rules][rules].
 
 
 Caveats
