@@ -31,8 +31,8 @@ $ npm install -g pa11y
 ```
 
 
-Usage
------
+Command-Line Usage
+------------------
 
 Once installed, the `pa11y` command should be available to you.
 
@@ -66,6 +66,7 @@ $ pa11y -r csv nature.com > report.csv
 $ pa11y -s WCAG2AAA nature.com
 ```
 
+
 Configuration
 -------------
 
@@ -86,7 +87,7 @@ The config file should be formatted like this, where each of the items in the `i
 }
 ```
 
-You can find the codes for each rule in the console output, so you can simply copy/paste these into your config file.
+You can find the codes for each rule in the console output, so you can simply copy/paste these into your config file. We also maintain a [list of all available rules][rules].
 
 
 Caveats
@@ -162,4 +163,5 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 [node]: http://nodejs.org/
 [phantom]: http://phantomjs.org/
 [rainbows]: https://github.com/rowanmanning/pa11y-reporter-rainbows
+[rules]: https://github.com/nature/pa11y/wiki/HTML-CodeSniffer-Rules
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
