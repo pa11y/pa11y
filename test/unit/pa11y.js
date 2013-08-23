@@ -33,7 +33,8 @@ describe('pa11y', function () {
 			opts = {
 				url: 'foo',
 				reporter: 'bar',
-				config: 'baz'
+				config: 'baz',
+				useragent: 'qux'
 			};
 			manageOptions = sinon.stub().callsArgWith(1, null, opts);
 			mockery.registerMock('./sniff/manage-options', manageOptions);
@@ -61,7 +62,7 @@ describe('pa11y', function () {
 				exit: sinon.spy()
 			};
 			page = {};
-			loadUrl = sinon.stub().callsArgWith(1, null, browser, page);
+			loadUrl = sinon.stub().callsArgWith(2, null, browser, page);
 			mockery.registerMock('./sniff/load-url', loadUrl);
 
 			messages = [
@@ -139,9 +140,9 @@ describe('pa11y', function () {
 			});
 		});
 
-		it('should load the expected page', function (done) {
+		it('should load the expected page with the correct user agent', function (done) {
 			pa11y.sniff(opts, function () {
-				assert.isTrue(loadUrl.withArgs(opts.url).calledOnce);
+				assert.isTrue(loadUrl.withArgs(opts.url, opts.useragent).calledOnce);
 				done();
 			});
 		});

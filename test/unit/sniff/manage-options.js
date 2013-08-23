@@ -5,6 +5,7 @@
 var assert = require('proclaim');
 var OptionError = require('../../../lib/error/option-error');
 var sinon = require('sinon');
+var pkg = require('../../../package.json');
 
 describe('sniff/manage-options', function () {
 	var manageOptions = require('../../../lib/sniff/manage-options');
@@ -34,7 +35,8 @@ describe('sniff/manage-options', function () {
 			htmlcs: 'http://foo',
 			reporter: 'bar',
 			standard: 'baz',
-			timeout: 123
+			timeout: 123,
+			useragent: 'qux'
 		};
 		manageOptions(allOpts, function (err, opts) {
 			assert.deepEqual(opts, allOpts);
@@ -53,7 +55,8 @@ describe('sniff/manage-options', function () {
 				htmlcs: 'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js',
 				reporter: 'foo',
 				standard: 'WCAG2AA',
-				timeout: 123
+				timeout: 123,
+				useragent: 'pa11y/' + pkg.version
 			});
 			done();
 		});

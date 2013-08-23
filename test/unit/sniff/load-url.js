@@ -11,7 +11,10 @@ describe('sniff/load-url', function () {
 	var page, browser;
 
 	beforeEach(function () {
-		page = {open: sinon.stub()};
+		page = {
+			open: sinon.stub(),
+			set: sinon.spy()
+		};
 		page.open.withArgs('successfulpage').callsArgWith(1, 'success');
 		page.open.withArgs('failingpage').callsArgWith(1, 'fail');
 		browser = {
@@ -29,7 +32,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should create a phantom page and open the given URL', function (done) {
-		loadUrl('successfulpage', function () {
+		loadUrl('successfulpage', 'ua', function () {
 			assert.isTrue(phantom.create.calledOnce);
 			assert.isTrue(browser.createPage.calledOnce);
 			assert.isTrue(page.open.withArgs('successfulpage').calledOnce);
@@ -37,8 +40,15 @@ describe('sniff/load-url', function () {
 		});
 	});
 
+	it('should set the user agent string', function (done) {
+		loadUrl('successfulpage', 'ua', function () {
+			assert.isTrue(page.set.withArgs('settings.userAgent', 'ua').calledOnce);
+			done();
+		});
+	});
+
 	it('should callback with the phantom browser and page', function (done) {
-		loadUrl('successfulpage', function (err, br, pa) {
+		loadUrl('successfulpage', 'ua', function (err, br, pa) {
 			assert.strictEqual(br, browser);
 			assert.strictEqual(pa, page);
 			done();
@@ -46,7 +56,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should callback with an error if the page fails to load', function (done) {
-		loadUrl('failingpage', function (err) {
+		loadUrl('failingpage', 'ua', function (err) {
 			assert.isInstanceOf(err, Error);
 			done();
 		});
