@@ -49,6 +49,7 @@ Once installed, the `pa11y` command should be available to you.
     -c, --htmlcs <url>     specify a URL to source HTML_CodeSniffer from. Default: squizlabs.github.io
     -C, --config <file>    specify a JSON config file for ignoring rules
     -t, --timeout <ms>     specify the number of milliseconds before a timeout error occurs. Default: 30000
+    -u, --useragent <ua>   specify a useragent to use when loading your URL. Default: pa11y/<version>
     -d, --debug            output debug messages
 
 ```

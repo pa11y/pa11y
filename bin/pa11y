@@ -34,6 +34,10 @@ program
 		'specify the number of milliseconds before a timeout error occurs. Default: 30000'
 	)
 	.option(
+		'-u, --useragent <ua>',
+		'specify a useragent to use when loading your URL. Default: pa11y/<version>'
+	)
+	.option(
 		'-d, --debug',
 		'output debug messages'
 	)
@@ -41,7 +45,15 @@ program
 	.parse(process.argv);
 
 // Get options
-var opts = _.pick(program, ['config', 'debug', 'htmlcs', 'reporter', 'standard', 'timeout']);
+var opts = _.pick(program, [
+	'config',
+	'debug',
+	'htmlcs',
+	'reporter',
+	'standard',
+	'timeout',
+	'useragent'
+]);
 opts.url = program.args[0];
 if (!opts.url || program.args[1]) {
 	program.help();

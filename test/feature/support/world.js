@@ -9,6 +9,12 @@ var querystring = require('querystring');
 var app = express();
 var port = 4117;
 
+// Store request information
+app.use(function (req, res, next) {
+    app.set('lastUseragent', req.headers['user-agent']);
+    next();
+});
+
 // Routes
 app.get('/normal', function (req, res) {
 	res.send(

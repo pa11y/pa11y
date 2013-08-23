@@ -137,6 +137,16 @@ module.exports = function () {
 		});
 	});
 
+	this.When(/^I sniff an? ([a-z]+) URL using a useragent of "([^"]*)"$/i, function (urlType, useragent, callback) {
+		var world = this;
+		world.result = null;
+		sniff(this.baseUrl + '/' + urlType, {useragent: useragent}, function (err, result) {
+			if (err) { callback.fail(err); }
+			world.result = result;
+			callback();
+		});
+	});
+
 	this.Then(/^the command should be successful$/i, function (callback) {
 		if (!this.result) {
 			return callback.fail(new Error('No command was executed'));
@@ -211,6 +221,23 @@ module.exports = function () {
 			this.result.json = JSON.parse(this.result.stdout);
 		} catch (err) {
 			return callback.fail(new Error('Response is not valid JSON'));
+		}
+		callback();
+	});
+
+	this.Then(/^the user agent should be set to match the pa11y version number$/i, function (callback) {
+		var actualUseragent = this.app.get('lastUseragent');
+		var expectedUseragent = 'pa11y/' + pkg.version;
+		if (actualUseragent !== expectedUseragent) {
+			return callback.fail(new Error('User Agent "' + actualUseragent + '" does not match "' + expectedUseragent + '"'));
+		}
+		callback();
+	});
+
+	this.Then(/^the user agent should be set to "([^"]*)"$/i, function (expectedUseragent, callback) {
+		var actualUseragent = this.app.get('lastUseragent');
+		if (actualUseragent !== expectedUseragent) {
+			return callback.fail(new Error('User Agent "' + actualUseragent + '" does not match "' + expectedUseragent + '"'));
 		}
 		callback();
 	});
