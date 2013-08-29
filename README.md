@@ -50,6 +50,7 @@ Once installed, the `pa11y` command should be available to you.
     -C, --config <file>    specify a JSON config file for ignoring rules
     -t, --timeout <ms>     specify the number of milliseconds before a timeout error occurs. Default: 30000
     -u, --useragent <ua>   specify a useragent to use when loading your URL. Default: pa11y/<version>
+    -p, --port <ms>        specify the port to run the PhantomJS server on. Default: 12300
     -d, --debug            output debug messages
 
 ```
@@ -97,6 +98,12 @@ pa11y.sniff(options, callback);
 
 #### options.timeout
 *(number)* The number of milliseconds before a timeout error occurs. Default `30000`.
+
+#### options.useragent
+*(string)* The user-agent to send with the request. Default `pa11y/<version>`.
+
+#### options.port
+*(number)* The port the PhantomJS server should run on. Default `12300`.
 
 #### options.debug
 *(boolean)* Whether to report debug-level messages. Default: `false`.
