@@ -38,7 +38,7 @@ program
 		'specify a useragent to use when loading your URL. Default: pa11y/<version>'
 	)
 	.option(
-		'-p, --port <ms>',
+		'-p, --port <port>',
 		'specify the port to run the PhantomJS server on. Default: 12300'
 	)
 	.option(
