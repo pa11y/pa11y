@@ -3,6 +3,7 @@
 
 // Dependencies
 var exec = require('child_process').exec;
+var net = require('net');
 var pkg = require('../../../package');
 
 // Step definitions
@@ -28,7 +29,7 @@ module.exports = function () {
 			execOpts = {};
 		}
 
-		exec(binPath + ' ' + cliOpts + url, execOpts, function (err, stdout, stderr) {
+		return exec(binPath + ' ' + cliOpts + url, execOpts, function (err, stdout, stderr) {
 			callback(null, {
 				err: err,
 				stdout: stdout,
@@ -40,7 +41,7 @@ module.exports = function () {
 	this.When(/^I ask for help$/, function (callback) {
 		var world = this;
 		world.result = null;
-		sniff('', {help: ''}, function (err, result) {
+		world.lastProcess = sniff('', {help: ''}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -50,7 +51,7 @@ module.exports = function () {
 	this.When(/^I ask for the program version$/, function (callback) {
 		var world = this;
 		world.result = null;
-		sniff('', {version: ''}, function (err, result) {
+		world.lastProcess = sniff('', {version: ''}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -60,17 +61,26 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
 		});
 	});
 
+	this.When(/^I sniff an? ([a-z]+) URL \(and don't wait\)$/i, function (urlType, callback) {
+		var world = this;
+		world.result = null;
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {}, function () {});
+		setTimeout(function () {
+			callback();
+		}, 500);
+	});
+
 	this.When(/^I sniff an? ([a-z]+) URL using the ([a-z\-]+) reporter$/i, function (urlType, reporter, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {reporter: reporter}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {reporter: reporter}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -80,7 +90,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using the ([a-z0-9]+) standard$/i, function (urlType, standard, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {standard: standard}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {standard: standard}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -90,7 +100,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using an? ([a-z0-9]+)ms timeout$/i, function (urlType, timeout, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {timeout: timeout}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {timeout: timeout}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -100,7 +110,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a config file with a relative path$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {config: './config.json'}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {config: './config.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -110,7 +120,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a config file with an absolute path$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {config: __dirname + '/../fixture/config.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -120,7 +130,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a \.pa11yrc config file$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -130,7 +140,7 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using an invalid config file$/i, function (urlType, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {config: 'invalidconfig.json'}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {config: 'invalidconfig.json'}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
@@ -140,11 +150,20 @@ module.exports = function () {
 	this.When(/^I sniff an? ([a-z]+) URL using a useragent of "([^"]*)"$/i, function (urlType, useragent, callback) {
 		var world = this;
 		world.result = null;
-		sniff(this.baseUrl + '/' + urlType, {useragent: useragent}, function (err, result) {
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {useragent: useragent}, function (err, result) {
 			if (err) { callback.fail(err); }
 			world.result = result;
 			callback();
 		});
+	});
+
+	this.When(/^I sniff an? ([a-z]+) URL using a port of (\d+) \(and don't wait\)$/i, function (urlType, port, callback) {
+		var world = this;
+		world.result = null;
+		world.lastProcess = sniff(this.baseUrl + '/' + urlType, {port: port}, function () {});
+		setTimeout(function () {
+			callback();
+		}, 500);
 	});
 
 	this.Then(/^the command should be successful$/i, function (callback) {
@@ -240,6 +259,38 @@ module.exports = function () {
 			return callback.fail(new Error('User Agent "' + actualUseragent + '" does not match "' + expectedUseragent + '"'));
 		}
 		callback();
+	});
+
+	// Test whether a port is in use
+	function testPort (port, callback) {
+		var tester = net.createServer();
+		tester.once('error', function (err) {
+			if (err.code === 'EADDRINUSE') {
+				callback(null, true);
+			} else {
+				callback(err);
+			}
+		});
+		tester.once('listening', function() {
+			tester.once('close', function() {
+				callback(null, false);
+			});
+			tester.close();
+		});
+		tester.listen(port);
+	}
+
+	this.Then(/^port (\d+) should be in use$/i, function (port, callback) {
+		var world = this;
+		testPort(port, function (err, isPortTaken) {
+			if (!isPortTaken) {
+				return callback.fail(new Error('Port ' + port + ' is not in use'));
+			}
+			if (world.lastProcess) {
+				world.lastProcess.kill();
+			}
+			callback();
+		});
 	});
 
 };

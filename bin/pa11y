@@ -38,6 +38,10 @@ program
 		'specify a useragent to use when loading your URL. Default: pa11y/<version>'
 	)
 	.option(
+		'-p, --port <ms>',
+		'specify the port to run the PhantomJS server on. Default: 12300'
+	)
+	.option(
 		'-d, --debug',
 		'output debug messages'
 	)
@@ -49,6 +53,7 @@ var opts = _.pick(program, [
 	'config',
 	'debug',
 	'htmlcs',
+	'port',
 	'reporter',
 	'standard',
 	'timeout',

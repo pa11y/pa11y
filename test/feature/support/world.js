@@ -54,5 +54,6 @@ exports.World = function (callback) {
 	world.app = app;
 	world.baseUrl = 'http://localhost:' + port;
 	world.result = null;
+    world.lastProcess = null;
 	callback();
 };
