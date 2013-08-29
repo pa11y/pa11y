@@ -99,6 +99,15 @@ describe('sniff/manage-options', function () {
 		});
 	});
 
+	it('should convert the port option to an integer', function (done) {
+		manageOptions({
+			port: '123'
+		}, function (err, opts) {
+			assert.strictEqual(opts.port, 123);
+			done();
+		});
+	});
+
 	it('should not callback with an error when options are valid', function (done) {
 		manageOptions({
 			url: 'foo',
