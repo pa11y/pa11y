@@ -33,6 +33,7 @@ describe('sniff/manage-options', function () {
 		var allOpts = {
 			debug: true,
 			htmlcs: 'http://foo',
+			port: 12300,
 			reporter: 'bar',
 			standard: 'baz',
 			timeout: 123,
@@ -53,6 +54,7 @@ describe('sniff/manage-options', function () {
 			assert.deepEqual(opts, {
 				debug: true,
 				htmlcs: 'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js',
+				port: 12300,
 				reporter: 'foo',
 				standard: 'WCAG2AA',
 				timeout: 123,
