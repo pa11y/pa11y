@@ -79,12 +79,13 @@ describe('sniff/manage-options', function () {
 
 	it('should sanitize the HTMLCS URL option', function (done) {
 		var url = require('../../../lib/url');
-		sinon.stub(url, 'sanitize').withArgs('foo').returns('bar');
+		sinon.stub(url, 'sanitize').withArgs('bar').returns('baz');
 		manageOptions({
-			htmlcs: 'foo'
+			url: 'foo',
+			htmlcs: 'bar'
 		}, function (err, opts) {
-			assert.isTrue(url.sanitize.withArgs('foo').calledOnce);
-			assert.strictEqual(opts.htmlcs, 'bar');
+			assert.isTrue(url.sanitize.withArgs('bar').calledOnce);
+			assert.strictEqual(opts.htmlcs, 'baz');
 			url.sanitize.restore();
 			done();
 		});
@@ -92,6 +93,7 @@ describe('sniff/manage-options', function () {
 
 	it('should convert the timeout option to an integer', function (done) {
 		manageOptions({
+			url: 'foo',
 			timeout: '123'
 		}, function (err, opts) {
 			assert.strictEqual(opts.timeout, 123);
@@ -101,6 +103,7 @@ describe('sniff/manage-options', function () {
 
 	it('should convert the port option to an integer', function (done) {
 		manageOptions({
+			url: 'foo',
 			port: '123'
 		}, function (err, opts) {
 			assert.strictEqual(opts.port, 123);
