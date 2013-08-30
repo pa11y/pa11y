@@ -34,7 +34,7 @@
 
 	"main": "./lib/pa11y.js",
 	"scripts": {
-		"test": "make lint test"
+		"test": "make lint test-unit"
 	},
 	"bin": {
 		"pa11y": "./bin/pa11y"
