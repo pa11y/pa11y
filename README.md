@@ -5,6 +5,7 @@ pa11y is your automated accessibility testing pal.
 It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
 
 **Current Version:** *1.4.0*  
+**Build Status:** [![Build Status][travis-img]][travis]  
 **Node Version Support:** *0.10*
 
 
@@ -252,3 +253,5 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 [rainbows]: https://github.com/rowanmanning/pa11y-reporter-rainbows
 [rules]: https://github.com/nature/pa11y/wiki/HTML-CodeSniffer-Rules
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
+[travis]: https://travis-ci.org/nature/pa11y
+[travis-img]: https://travis-ci.org/nature/pa11y.png?branch=master
