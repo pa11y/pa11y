@@ -33,5 +33,10 @@
 	},
 
 	"main": "./lib/pa11y.js",
-	"bin": { "pa11y": "./bin/pa11y" }
+	"scripts": {
+		"test": "make lint test"
+	},
+	"bin": {
+		"pa11y": "./bin/pa11y"
+	}
 }
