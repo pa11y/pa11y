@@ -42,6 +42,26 @@ describe('sniff/load-url', function () {
 		});
 	});
 
+	it('should pass the cookies to the browser', function (done) {
+		loadUrl('successfulpage', 'ua', 1234, [
+			{
+				'name': 'foo',
+				'value': 'bar',
+				'domain': 'localhost'
+			},
+			{
+				'name': 'baz',
+				'value': 'qux',
+				'domain': 'localhost'
+			}
+		], function () {
+			assert.isTrue(browser.addCookie.calledTwice);
+			assert.isTrue(browser.addCookie.withArgs('foo', 'bar', 'localhost').calledOnce);
+			assert.isTrue(browser.addCookie.withArgs('baz', 'qux', 'localhost').calledOnce);
+			done();
+		});
+	});
+
 	it('should set the user agent string', function (done) {
 		loadUrl('successfulpage', 'ua', 1234, [], function () {
 			assert.isTrue(page.set.withArgs('settings.userAgent', 'ua').calledOnce);
