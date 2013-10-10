@@ -53,6 +53,11 @@ describe('pa11y', function () {
 			mockery.registerMock('./sniff/load-reporter', loadReporter);
 
 			config = {
+				cookies: [{
+					'name': 'Valid-Cookie-Name',
+					'value': 'Valid-Cookie-Value',
+					'domain': 'localhost',
+				}],
 				ignore: ['bar']
 			};
 			loadConfig = sinon.stub().callsArgWith(1, null, config);
@@ -63,7 +68,7 @@ describe('pa11y', function () {
 				exit: sinon.spy()
 			};
 			page = {};
-			loadUrl = sinon.stub().callsArgWith(3, null, browser, page);
+			loadUrl = sinon.stub().callsArgWith(4, null, browser, page);
 			mockery.registerMock('./sniff/load-url', loadUrl);
 
 			messages = [
@@ -141,9 +146,9 @@ describe('pa11y', function () {
 			});
 		});
 
-		it('should load the expected page with the correct user agent and port', function (done) {
+		it('should load the expected page with the correct user agent, port, and cookies', function (done) {
 			pa11y.sniff(opts, function () {
-				assert.isTrue(loadUrl.withArgs(opts.url, opts.useragent, opts.port).calledOnce);
+				assert.isTrue(loadUrl.withArgs(opts.url, opts.useragent, opts.port, config.cookies).calledOnce);
 				done();
 			});
 		});

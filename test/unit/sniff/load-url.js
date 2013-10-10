@@ -18,6 +18,7 @@ describe('sniff/load-url', function () {
 		page.open.withArgs('successfulpage').callsArgWithAsync(1, 'success');
 		page.open.withArgs('failingpage').callsArgWithAsync(1, 'fail');
 		browser = {
+			addCookie: sinon.stub(),
 			createPage: sinon.stub().callsArgWithAsync(0, page)
 		};
 		sinon.stub(phantom, 'create').callsArgWithAsync(1, browser);
@@ -32,23 +33,44 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should create a phantom page and open the given URL', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, function () {
+		loadUrl('successfulpage', 'ua', 1234, [], function () {
 			assert.isTrue(phantom.create.calledOnce);
+			assert.isFalse(browser.addCookie.called);
 			assert.isTrue(browser.createPage.calledOnce);
 			assert.isTrue(page.open.withArgs('successfulpage').calledOnce);
 			done();
 		});
 	});
 
+	it('should pass the cookies to the browser', function (done) {
+		loadUrl('successfulpage', 'ua', 1234, [
+			{
+				'name': 'foo',
+				'value': 'bar',
+				'domain': 'localhost'
+			},
+			{
+				'name': 'baz',
+				'value': 'qux',
+				'domain': 'localhost'
+			}
+		], function () {
+			assert.isTrue(browser.addCookie.calledTwice);
+			assert.isTrue(browser.addCookie.withArgs('foo', 'bar', 'localhost').calledOnce);
+			assert.isTrue(browser.addCookie.withArgs('baz', 'qux', 'localhost').calledOnce);
+			done();
+		});
+	});
+
 	it('should set the user agent string', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, function () {
+		loadUrl('successfulpage', 'ua', 1234, [], function () {
 			assert.isTrue(page.set.withArgs('settings.userAgent', 'ua').calledOnce);
 			done();
 		});
 	});
 
 	it('should set the port', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, function () {
+		loadUrl('successfulpage', 'ua', 1234, [], function () {
 			assert.isTrue(phantom.create.calledOnce);
 			assert.strictEqual(phantom.create.firstCall.args[0].port, 1234);
 			done();
@@ -56,7 +78,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should callback with the phantom browser and page', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, function (err, br, pa) {
+		loadUrl('successfulpage', 'ua', 1234, [], function (err, br, pa) {
 			assert.strictEqual(br, browser);
 			assert.strictEqual(pa, page);
 			done();
@@ -64,7 +86,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should callback with an error if the page fails to load', function (done) {
-		loadUrl('failingpage', 'ua', 1234, function (err) {
+		loadUrl('failingpage', 'ua', 1234, [], function (err) {
 			assert.isInstanceOf(err, Error);
 			done();
 		});
