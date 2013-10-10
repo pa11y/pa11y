@@ -144,7 +144,7 @@ pa11y.sniff({
 Configuration
 -------------
 
-pa11y can be configured via a JSON file or JavaScript object, which allows you to specify rules that should be ignored in the report.
+pa11y can be configured via a JSON file or JavaScript object.
 
 On the command line, specify a JSON configuration file with the `--config` flag:
 
@@ -164,10 +164,20 @@ pa11y.sniff({
 });
 ```
 
-The config file or object should be formatted like this, where each of the items in the `ignore` array is the identifier of a rule you'd like to ignore:
+The config file or object should be formatted like the example below, where
+
+- The `cookies` key is an array of maps containing only the required keys for [PhantomJS cookie objects][PhantomJS cookies].
+- The `ignore` key holds an array of rule names you'd like to ignore. You can find the codes for each rule in the console output, so you can simply copy/paste these into your config. We also maintain a [list of all available rules][rules].
 
 ```json
 {
+	"cookies": [
+		{
+			"name": "cookie-name",
+			"value": "cookie-value",
+			"domain": "localhost"
+		}
+	],
 	"ignore": [
 		"WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2",
 		"WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2"
@@ -175,7 +185,7 @@ The config file or object should be formatted like this, where each of the items
 }
 ```
 
-You can find the codes for each rule in the console output, so you can simply copy/paste these into your config. We also maintain a [list of all available rules][rules].
+All configuration options are optional.
 
 
 Caveats
@@ -251,6 +261,7 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 [node]: http://nodejs.org/
 [phantom]: http://phantomjs.org/
 [rainbows]: https://github.com/rowanmanning/pa11y-reporter-rainbows
+[PhantomJS cookies]:https://github.com/ariya/phantomjs/wiki/API-Reference#cookie-object
 [rules]: https://github.com/nature/pa11y/wiki/HTML-CodeSniffer-Rules
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [travis]: https://travis-ci.org/nature/pa11y

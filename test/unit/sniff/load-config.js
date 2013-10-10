@@ -12,7 +12,7 @@ describe('sniff/load-config', function () {
 	var exampleConfig, exampleInvalidConfig, exampleConfigObject;
 
 	beforeEach(function () {
-		exampleConfig = '{"foo": "bar", "ignore": []}';
+		exampleConfig = '{"foo": "bar", "cookies": [], "ignore": []}';
 		exampleInvalidConfig = '(function (lol) {} (lol));';
 		exampleConfigObject = JSON.parse(exampleConfig);
 		sinon.stub(fs, 'readFile');
