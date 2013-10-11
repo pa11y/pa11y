@@ -45,6 +45,10 @@ program
 		'-d, --debug',
 		'output debug messages'
 	)
+	.option(
+		'--strict',
+		'upgrade warnings to errors for exit status'
+	)
 	.usage('[options] <url>')
 	.parse(process.argv);
 
@@ -56,6 +60,7 @@ var opts = _.pick(program, [
 	'port',
 	'reporter',
 	'standard',
+	'strict',
 	'timeout',
 	'useragent'
 ]);
@@ -77,5 +82,8 @@ pa11y.sniff(opts, function (err, results) {
 	if (err instanceof OptionError) {
 		program.help();
 	}
-	process.exit(err ? 1 : results.count.error);
+	var exitStatus = err ? -1 :
+	opts.strict ? (results.count.warning + results.count.error) :
+	results.count.error;
+	process.exit(exitStatus);
 });

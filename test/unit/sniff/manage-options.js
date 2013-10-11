@@ -36,6 +36,7 @@ describe('sniff/manage-options', function () {
 			port: 12300,
 			reporter: 'bar',
 			standard: 'baz',
+			strict: false,
 			timeout: 123,
 			useragent: 'qux'
 		};
@@ -57,6 +58,7 @@ describe('sniff/manage-options', function () {
 				port: 12300,
 				reporter: 'foo',
 				standard: 'WCAG2AA',
+				strict: false,
 				timeout: 123,
 				useragent: 'pa11y/' + pkg.version
 			});
