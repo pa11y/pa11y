@@ -53,6 +53,7 @@ Once installed, the `pa11y` command should be available to you.
     -u, --useragent <ua>   specify a useragent to use when loading your URL. Default: pa11y/<version>
     -p, --port <port>      specify the port to run the PhantomJS server on. Default: 12300
     -d, --debug            output debug messages
+    --strict               upgrade warnings to errors for exit status
 
 ```
 
