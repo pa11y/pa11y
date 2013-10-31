@@ -23,10 +23,11 @@
 		"underscore": "~1.4"
 	},
 	"devDependencies": {
-		"cucumber": "~0.3",
 		"express": "~3.2",
-		"jshint": "~2.1",
-		"mocha": "~1.11",
+		"grunt": "~0.4",
+		"grunt-contrib-jshint": "~0.7",
+		"grunt-cucumber": "~0.2",
+		"grunt-mocha-test": "~0.7",
 		"mockery": "~1.4",
 		"proclaim": "~1.3",
 		"sinon": "~1.7"
@@ -34,7 +35,7 @@
 
 	"main": "./lib/pa11y.js",
 	"scripts": {
-		"test": "make lint test-unit"
+		"test": "grunt ci"
 	},
 	"bin": {
 		"pa11y": "./bin/pa11y"

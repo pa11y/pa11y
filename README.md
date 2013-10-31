@@ -227,20 +227,14 @@ For example reporters, take a look at the [built-in reporters](lib/reporters) or
 Development
 -----------
 
-To develop pa11y, you'll need to clone the repo and install dependencies with `make deps`. If you're on Windows, you'll also need to install [Make for Windows][make].
+To develop pa11y, you'll need to clone the repo and install dependencies with `npm install`. You'll also need [Grunt][grunt] to be installed globally in order to run tests, you can do this with `npm install -g grunt-cli`.
 
-Once you're set up, you can run the following commands:
-
-```sh
-$ make deps  # Install dependencies
-$ make lint  # Run JSHint with the correct config
-$ make test  # Run tests
-```
-
-When no build target is specified, make will run `deps lint test`. This means you can use the following command for brevity:
+Once you're set up, the following commands are available:
 
 ```sh
-$ make
+$ grunt       # Run the lint and test tasks together
+$ grunt lint  # Run JSHint with the correct config
+$ grunt test  # Run unit and feature tests
 ```
 
 Code with lint errors or failing tests will not be accepted, please use the build tools outlined above.
@@ -257,8 +251,8 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 
 
 [brew]: http://mxcl.github.com/homebrew/
-[make]: http://gnuwin32.sourceforge.net/packages/make.htm
 [gpl]: http://www.gnu.org/licenses/gpl-3.0.html
+[grunt]: http://gruntjs.com/
 [node]: http://nodejs.org/
 [phantom]: http://phantomjs.org/
 [rainbows]: https://github.com/rowanmanning/pa11y-reporter-rainbows
