@@ -80,7 +80,8 @@ if (!opts.config) {
 // Run pa11y
 pa11y.sniff(opts, function (err, results) {
 	if (err instanceof OptionError) {
-		program.help();
+		program.outputHelp();
+		process.exit(1);
 	}
 	var exitStatus = err ? -1 :
 	opts.strict ? (results.count.warning + results.count.error) :

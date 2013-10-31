@@ -234,7 +234,7 @@ Once you're set up, the following commands are available:
 ```sh
 $ grunt       # Run the lint and test tasks together
 $ grunt lint  # Run JSHint with the correct config
-$ grunt test  # Run unit and feature tests
+$ grunt test  # Run unit and functional tests
 ```
 
 Code with lint errors or failing tests will not be accepted, please use the build tools outlined above.
