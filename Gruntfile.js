@@ -2,13 +2,6 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 
-		cucumberjs: {
-			src: 'test/feature',
-			options: {
-				format: 'pretty'
-			}
-		},
-
 		jshint: {
 			all: ['bin/pa11y', 'Gruntfile.js', 'lib/**/*.js', 'test/**/*.js'],
 			options: {
@@ -43,12 +36,11 @@ module.exports = function (grunt) {
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-cucumber');
 	grunt.loadNpmTasks('grunt-mocha-test');
 
 	grunt.registerTask('lint', ['jshint']);
-	grunt.registerTask('test', ['mochaTest:unit', 'mochaTest:functional']);
+	grunt.registerTask('test', ['mochaTest']);
 	grunt.registerTask('default', ['lint', 'test']);
-	grunt.registerTask('ci', ['lint', 'mochaTest']);
+	grunt.registerTask('ci', ['lint', 'mochaTest:unit']);
 
 };

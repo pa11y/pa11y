@@ -26,7 +26,6 @@
 		"express": "~3.2",
 		"grunt": "~0.4",
 		"grunt-contrib-jshint": "~0.7",
-		"grunt-cucumber": "~0.2",
 		"grunt-mocha-test": "~0.7",
 		"mockery": "~1.4",
 		"proclaim": "~1.3",
