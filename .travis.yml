@@ -4,7 +4,9 @@ node_js:
   - "0.10"
 
 # Build script
-script: 'npm test'
+before_script:
+  - npm install -g grunt-cli
+script: 'grunt ci'
 
 # Notifications
 notifications:
