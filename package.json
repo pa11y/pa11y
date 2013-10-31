@@ -4,8 +4,12 @@
 
 	"description": "pa11y is your automated accessibility testing pal",
 	"keywords": [ "accessibility", "analysis", "cli", "report" ],
+
+	"author": "Nature Publishing Group",
 	"contributors": [
-		"Rowan Manning (http://rowanmanning.co.uk/)"
+		"Rowan Manning (http://rowanmanning.com/)",
+		"Whymarrh Whitby (http://whymarrh.com/)",
+		"Stephen Mathieson (http://www.stephenmathieson.com/)"
 	],
 
 	"repository": {
