@@ -35,9 +35,9 @@ describe('pa11y --standard foo http://localhost:4117/normal', function () {
 		});
 	});
 
-	/*it('should not be successful', function () {
+	it('should not be successful', function () {
 		assert.isNotNull(this.result.err);
-	});*/
+	});
 
 	it('should output usage information', function () {
 		assert.match(this.result.stdout, /usage/i);
