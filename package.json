@@ -35,7 +35,7 @@
 
 	"main": "./lib/pa11y.js",
 	"scripts": {
-		"test": "make lint test-unit"
+		"test": "grunt lint mochaTest"
 	},
 	"bin": {
 		"pa11y": "./bin/pa11y"
