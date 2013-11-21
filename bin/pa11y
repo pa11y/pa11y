@@ -8,6 +8,16 @@ var program = require('commander');
 var pa11y = require('../lib/pa11y');
 var fs = require('fs');
 var path = require('path');
+var searchPath = require('../lib/search-path');
+
+// Check for PhantomJS binary in PATH
+// Exit with error if not found
+searchPath(['phantomjs', 'phantomjs.exe'], function (found) {
+	if (!found) {
+		console.error('pa11y requires PhantomJS to be in the PATH');
+		process.exit(-1);
+	}
+});
 
 // Configure command-line app
 program
