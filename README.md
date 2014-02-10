@@ -4,7 +4,7 @@ pa11y
 pa11y is your automated accessibility testing pal.  
 It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
 
-**Current Version:** *1.5.2*  
+**Current Version:** *1.5.3*  
 **Build Status:** [![Build Status][travis-img]][travis]  
 **Node Version Support:** *0.10*
 
