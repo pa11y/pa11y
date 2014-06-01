@@ -108,35 +108,42 @@ describe('dom-test', function () {
             });
         });
 
-        it('should call each test function with the DOM object and a callback', function (done) {
-            var test1 = sinon.stub().yields();
-            var test2 = sinon.stub().yields();
+        it('should call each test function with the DOM object, a report function, and a callback', function (done) {
+            var test1 = sinon.stub().callsArg(2);
+            var test2 = sinon.stub().callsArg(2);
             var tester = domTest.createTester({
                 tests: [test1, test2]
             });
             mockDom = {foo: 'bar'};
             tester('foo', function () {
                 assert.isTrue(test1.withArgs(mockDom).calledOnce);
+                assert.isFunction(test1.getCall(0).args[1]);
+                assert.isFunction(test1.getCall(0).args[2]);
                 assert.isTrue(test2.withArgs(mockDom).calledOnce);
+                assert.isFunction(test2.getCall(0).args[1]);
+                assert.isFunction(test2.getCall(0).args[2]);
                 done();
             });
         });
 
         it('should callback with an array of test results', function (done) {
-            var test1 = function (dom, next) {
-                next('foo');
+            var test1 = function (dom, report, done) {
+                report('foo');
+                done();
             };
-            var test2 = function (dom, next) {
-                next();
+            var test2 = function (dom, report, done) {
+                done();
             };
-            var test3 = function (dom, next) {
-                next('bar');
+            var test3 = function (dom, report, done) {
+                report('bar');
+                report('baz');
+                done();
             };
             var tester = domTest.createTester({
                 tests: [test1, test2, test3]
             });
             tester('foo', function (err, results) {
-                assert.deepEqual(results, ['foo', 'bar']);
+                assert.deepEqual(results, ['foo', 'bar', 'baz']);
                 done();
             });
         });
