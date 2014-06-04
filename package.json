@@ -2,7 +2,7 @@
     "name": "truffler",
     "version": "0.0.0",
 
-    "description": "Run tests against HTML snippets",
+    "description": "Run tests against web pages or HTML snippets",
     "keywords": [ "dom", "html", "test" ],
     "author": "Rowan Manning (http://rowanmanning.com/)",
 
