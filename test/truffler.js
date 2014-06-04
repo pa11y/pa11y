@@ -6,8 +6,8 @@ var assert = require('proclaim');
 var mockery = require('mockery');
 var sinon = require('sinon');
 
-describe('dom-test', function () {
-    var async, domTest, jsdom, mockDom;
+describe('truffler', function () {
+    var async, truffler, jsdom, mockDom;
 
     beforeEach(function () {
         mockery.enable({
@@ -25,7 +25,7 @@ describe('dom-test', function () {
         };
         mockery.registerMock('jsdom', jsdom);
         async = require('async');
-        domTest = require('../lib/dom-test');
+        truffler = require('../lib/truffler');
     });
 
     afterEach(function () {
@@ -34,17 +34,17 @@ describe('dom-test', function () {
     });
 
     it('should be an object', function () {
-        assert.isObject(domTest);
+        assert.isObject(truffler);
     });
 
     it('should have a `createTester` method', function () {
-        assert.isFunction(domTest.createTester);
+        assert.isFunction(truffler.createTester);
     });
 
     describe('.createTester()', function () {
 
         it('should return a function (tester)', function () {
-            assert.isFunction(domTest.createTester());
+            assert.isFunction(truffler.createTester());
         });
 
     });
@@ -52,7 +52,7 @@ describe('dom-test', function () {
     describe('tester()', function () {
 
         it('should error when called with a non-string', function () {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             var msg = 'context argument must be a string';
             var fn = function () {};
             assert.throws(tester.bind(null, null, fn), msg);
@@ -61,7 +61,7 @@ describe('dom-test', function () {
         });
 
         it('should error when called without a callback', function () {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             var msg = 'done argument must be a function';
             assert.throws(tester.bind(null, '', null), msg);
             assert.throws(tester.bind(null, '', 1), msg);
@@ -69,12 +69,12 @@ describe('dom-test', function () {
         });
 
         it('should call the callback', function (done) {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             tester('foo', done);
         });
 
         it('should create a DOM object with the expected HTML', function (done) {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             tester('foo', function () {
                 assert.strictEqual(jsdom.env.callCount, 1);
                 assert.strictEqual(jsdom.env.getCall(0).args[0].html, 'foo');
@@ -83,7 +83,7 @@ describe('dom-test', function () {
         });
 
         it('should create a DOM object with the expected HTML when the context string is empty', function (done) {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             tester('', function () {
                 assert.strictEqual(jsdom.env.getCall(0).args[0].html, '<!-- -->');
                 done();
@@ -91,7 +91,7 @@ describe('dom-test', function () {
         });
 
         it('should load jQuery', function (done) {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             tester('foo', function () {
                 assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['../node_modules/jquery/dist/jquery.js']);
                 done();
@@ -99,7 +99,7 @@ describe('dom-test', function () {
         });
 
         it('should not load jQuery if `options.jquery` is `false`', function (done) {
-            var tester = domTest.createTester({
+            var tester = truffler.createTester({
                 jquery: false
             });
             tester('foo', function () {
@@ -111,7 +111,7 @@ describe('dom-test', function () {
         it('should call each test function with the DOM object, a report function, and a callback', function (done) {
             var test1 = sinon.stub().callsArg(2);
             var test2 = sinon.stub().callsArg(2);
-            var tester = domTest.createTester({
+            var tester = truffler.createTester({
                 tests: [test1, test2]
             });
             mockDom = {foo: 'bar'};
@@ -139,7 +139,7 @@ describe('dom-test', function () {
                 report('baz');
                 done();
             };
-            var tester = domTest.createTester({
+            var tester = truffler.createTester({
                 tests: [test1, test2, test3]
             });
             tester('foo', function (err, results) {
@@ -149,7 +149,7 @@ describe('dom-test', function () {
         });
 
         it('should run tests in parallel', function (done) {
-            var tester = domTest.createTester();
+            var tester = truffler.createTester();
             sinon.spy(async, 'parallelLimit');
             tester('foo', function () {
                 assert.strictEqual(async.parallelLimit.callCount, 1, 'function was called');
@@ -160,7 +160,7 @@ describe('dom-test', function () {
         });
 
         it('should run `options.concurrency` number of tests in parallel', function (done) {
-            var tester = domTest.createTester({
+            var tester = truffler.createTester({
                 concurrency: 20
             });
             sinon.spy(async, 'parallelLimit');
