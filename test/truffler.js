@@ -47,128 +47,128 @@ describe('truffler', function () {
             assert.isFunction(truffler.createTester());
         });
 
-    });
+        describe('tester()', function () {
 
-    describe('tester()', function () {
+            it('should error when called with a non-string', function () {
+                var tester = truffler.createTester();
+                var msg = 'context argument must be a string';
+                var fn = function () {};
+                assert.throws(tester.bind(null, null, fn), msg);
+                assert.throws(tester.bind(null, 1, fn), msg);
+                assert.throws(tester.bind(null, {}, fn), msg);
+            });
 
-        it('should error when called with a non-string', function () {
-            var tester = truffler.createTester();
-            var msg = 'context argument must be a string';
-            var fn = function () {};
-            assert.throws(tester.bind(null, null, fn), msg);
-            assert.throws(tester.bind(null, 1, fn), msg);
-            assert.throws(tester.bind(null, {}, fn), msg);
-        });
+            it('should error when called without a callback', function () {
+                var tester = truffler.createTester();
+                var msg = 'done argument must be a function';
+                assert.throws(tester.bind(null, '', null), msg);
+                assert.throws(tester.bind(null, '', 1), msg);
+                assert.throws(tester.bind(null, '', {}), msg);
+            });
 
-        it('should error when called without a callback', function () {
-            var tester = truffler.createTester();
-            var msg = 'done argument must be a function';
-            assert.throws(tester.bind(null, '', null), msg);
-            assert.throws(tester.bind(null, '', 1), msg);
-            assert.throws(tester.bind(null, '', {}), msg);
-        });
+            it('should call the callback', function (done) {
+                var tester = truffler.createTester();
+                tester('foo', done);
+            });
 
-        it('should call the callback', function (done) {
-            var tester = truffler.createTester();
-            tester('foo', done);
-        });
+            it('should create a DOM object with the expected HTML', function (done) {
+                var tester = truffler.createTester();
+                tester('foo', function () {
+                    assert.strictEqual(jsdom.env.callCount, 1);
+                    assert.strictEqual(jsdom.env.getCall(0).args[0].html, 'foo');
+                    done();
+                });
+            });
 
-        it('should create a DOM object with the expected HTML', function (done) {
-            var tester = truffler.createTester();
-            tester('foo', function () {
-                assert.strictEqual(jsdom.env.callCount, 1);
-                assert.strictEqual(jsdom.env.getCall(0).args[0].html, 'foo');
-                done();
+            it('should create a DOM object with the expected HTML when the context string is empty', function (done) {
+                var tester = truffler.createTester();
+                tester('', function () {
+                    assert.strictEqual(jsdom.env.getCall(0).args[0].html, '<!-- -->');
+                    done();
+                });
             });
-        });
 
-        it('should create a DOM object with the expected HTML when the context string is empty', function (done) {
-            var tester = truffler.createTester();
-            tester('', function () {
-                assert.strictEqual(jsdom.env.getCall(0).args[0].html, '<!-- -->');
-                done();
+            it('should load jQuery', function (done) {
+                var tester = truffler.createTester();
+                tester('foo', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['../node_modules/jquery/dist/jquery.js']);
+                    done();
+                });
             });
-        });
 
-        it('should load jQuery', function (done) {
-            var tester = truffler.createTester();
-            tester('foo', function () {
-                assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['../node_modules/jquery/dist/jquery.js']);
-                done();
+            it('should not load jQuery if `options.jquery` is `false`', function (done) {
+                var tester = truffler.createTester({
+                    jquery: false
+                });
+                tester('foo', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, []);
+                    done();
+                });
             });
-        });
 
-        it('should not load jQuery if `options.jquery` is `false`', function (done) {
-            var tester = truffler.createTester({
-                jquery: false
+            it('should call each test function with the DOM object, a report function, and a callback', function (done) {
+                var test1 = sinon.stub().callsArg(2);
+                var test2 = sinon.stub().callsArg(2);
+                var tester = truffler.createTester({
+                    tests: [test1, test2]
+                });
+                mockDom = {foo: 'bar'};
+                tester('foo', function () {
+                    assert.isTrue(test1.withArgs(mockDom).calledOnce);
+                    assert.isFunction(test1.getCall(0).args[1]);
+                    assert.isFunction(test1.getCall(0).args[2]);
+                    assert.isTrue(test2.withArgs(mockDom).calledOnce);
+                    assert.isFunction(test2.getCall(0).args[1]);
+                    assert.isFunction(test2.getCall(0).args[2]);
+                    done();
+                });
             });
-            tester('foo', function () {
-                assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, []);
-                done();
-            });
-        });
 
-        it('should call each test function with the DOM object, a report function, and a callback', function (done) {
-            var test1 = sinon.stub().callsArg(2);
-            var test2 = sinon.stub().callsArg(2);
-            var tester = truffler.createTester({
-                tests: [test1, test2]
+            it('should callback with an array of test results', function (done) {
+                var test1 = function (dom, report, done) {
+                    report('foo');
+                    done();
+                };
+                var test2 = function (dom, report, done) {
+                    done();
+                };
+                var test3 = function (dom, report, done) {
+                    report('bar');
+                    report('baz');
+                    done();
+                };
+                var tester = truffler.createTester({
+                    tests: [test1, test2, test3]
+                });
+                tester('foo', function (err, results) {
+                    assert.deepEqual(results, ['foo', 'bar', 'baz']);
+                    done();
+                });
             });
-            mockDom = {foo: 'bar'};
-            tester('foo', function () {
-                assert.isTrue(test1.withArgs(mockDom).calledOnce);
-                assert.isFunction(test1.getCall(0).args[1]);
-                assert.isFunction(test1.getCall(0).args[2]);
-                assert.isTrue(test2.withArgs(mockDom).calledOnce);
-                assert.isFunction(test2.getCall(0).args[1]);
-                assert.isFunction(test2.getCall(0).args[2]);
-                done();
-            });
-        });
 
-        it('should callback with an array of test results', function (done) {
-            var test1 = function (dom, report, done) {
-                report('foo');
-                done();
-            };
-            var test2 = function (dom, report, done) {
-                done();
-            };
-            var test3 = function (dom, report, done) {
-                report('bar');
-                report('baz');
-                done();
-            };
-            var tester = truffler.createTester({
-                tests: [test1, test2, test3]
+            it('should run tests in parallel', function (done) {
+                var tester = truffler.createTester();
+                sinon.spy(async, 'parallelLimit');
+                tester('foo', function () {
+                    assert.strictEqual(async.parallelLimit.callCount, 1, 'function was called');
+                    assert.strictEqual(async.parallelLimit.getCall(0).args[1], 10, 'has correct default concurrency');
+                    async.parallelLimit.restore();
+                    done();
+                });
             });
-            tester('foo', function (err, results) {
-                assert.deepEqual(results, ['foo', 'bar', 'baz']);
-                done();
-            });
-        });
 
-        it('should run tests in parallel', function (done) {
-            var tester = truffler.createTester();
-            sinon.spy(async, 'parallelLimit');
-            tester('foo', function () {
-                assert.strictEqual(async.parallelLimit.callCount, 1, 'function was called');
-                assert.strictEqual(async.parallelLimit.getCall(0).args[1], 10, 'has correct default concurrency');
-                async.parallelLimit.restore();
-                done();
+            it('should run `options.concurrency` number of tests in parallel', function (done) {
+                var tester = truffler.createTester({
+                    concurrency: 20
+                });
+                sinon.spy(async, 'parallelLimit');
+                tester('foo', function () {
+                    assert.strictEqual(async.parallelLimit.getCall(0).args[1], 20);
+                    async.parallelLimit.restore();
+                    done();
+                });
             });
-        });
 
-        it('should run `options.concurrency` number of tests in parallel', function (done) {
-            var tester = truffler.createTester({
-                concurrency: 20
-            });
-            sinon.spy(async, 'parallelLimit');
-            tester('foo', function () {
-                assert.strictEqual(async.parallelLimit.getCall(0).args[1], 20);
-                async.parallelLimit.restore();
-                done();
-            });
         });
 
     });
