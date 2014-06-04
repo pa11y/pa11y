@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "async": "~0.9",
-        "jquery": "~2.1",
+        "jquery": "2.1.1",
         "jsdom": "~0.10",
         "underscore": "~1.6"
     },
