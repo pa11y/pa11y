@@ -96,22 +96,10 @@ describe('truffler', function () {
                 });
             });
 
-            it('should load the expected scripts when specified', function (done) {
-                var tester = truffler.createTester({
-                    scripts: ['foo', 'bar']
-                });
-                tester('http://foo/', function () {
-                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['foo', 'bar']);
-                    done();
-                });
-            });
-
             it('should call each test function with the DOM object, a report function, and a callback', function (done) {
                 var test1 = sinon.stub().callsArg(2);
                 var test2 = sinon.stub().callsArg(2);
-                var tester = truffler.createTester({
-                    tests: [test1, test2]
-                });
+                var tester = truffler.createTester([test1, test2]);
                 mockDom = {foo: 'bar'};
                 tester('foo', function () {
                     assert.isTrue(test1.withArgs(mockDom).calledOnce);
@@ -137,11 +125,27 @@ describe('truffler', function () {
                     report('baz');
                     done();
                 };
-                var tester = truffler.createTester({
-                    tests: [test1, test2, test3]
-                });
+                var tester = truffler.createTester([test1, test2, test3]);
                 tester('foo', function (err, results) {
                     assert.deepEqual(results, ['foo', 'bar', 'baz']);
+                    done();
+                });
+            });
+
+            it('should load no scripts if none are specified', function (done) {
+                var tester = truffler.createTester();
+                tester('http://foo/', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, []);
+                    done();
+                });
+            });
+
+            it('should load the expected scripts when specified', function (done) {
+                var tester = truffler.createTester([], {
+                    scripts: ['foo', 'bar']
+                });
+                tester('http://foo/', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['foo', 'bar']);
                     done();
                 });
             });
@@ -157,8 +161,8 @@ describe('truffler', function () {
                 });
             });
 
-            it('should run `options.concurrency` number of tests in parallel', function (done) {
-                var tester = truffler.createTester({
+            it('should run the expected number of tests in parallel', function (done) {
+                var tester = truffler.createTester([], {
                     concurrency: 20
                 });
                 sinon.spy(async, 'parallelLimit');

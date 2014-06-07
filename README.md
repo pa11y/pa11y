@@ -28,16 +28,14 @@ Usage
 var truffler = require('truffler');
 
 // Create a test function
-var test = truffler.createTester({
-    tests: [
-        function (dom, report, done) {
-            if (!dom.getElementsByTagName('title').length) {
-                report('Page should have a title');
-            }
-            done();
+var test = truffler.createTester([
+    function (dom, report, done) {
+        if (!dom.getElementsByTagName('title').length) {
+            report('Page should have a title');
         }
-    ]
-});
+        done();
+    }
+]);
 
 // Run the tests on a URL
 test('http://example.com/', function (err, results) {
