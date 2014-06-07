@@ -29,7 +29,7 @@ var truffler = require('truffler');
 
 ### Creating a tester
 
-Create a test function using `truffler.init()`. This expects an array of test functions:
+Create a test function using `truffler.init()`. This expects an array of test functions and an optional [`options`](#options) argument:
 
 ```js
 var test = truffler.init([
@@ -39,7 +39,7 @@ var test = truffler.init([
         ...
     }
 
-]);
+], { ... });
 ```
 
 Each test function should accept three arguments:
@@ -171,6 +171,23 @@ test(exampleHtml, function (err, results) {
     //         html: '<img src="bar.jpg">'
     //     }
     // ]
+});
+```
+
+### Options
+
+The `truffler.init` function accepts an optional second argument which is expected to be an options object. The following options are available:
+
+- `concurrency` *(number)*: The number of tests which can run in parallel. Default: `10`.
+- `scripts` *(array)*: An array of additional scripts to load into the page before testing. Default: `[]`.
+
+The `scripts` option could be used, for example, to load jQuery into the page before testing commences:
+
+```js
+var test = truffler.init([ ... ], {
+    scripts: [
+        'http://code.jquery.com/jquery.js'
+    ]
 });
 ```
 
