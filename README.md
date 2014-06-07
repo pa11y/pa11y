@@ -28,7 +28,7 @@ Usage
 var truffler = require('truffler');
 
 // Create a test function
-var test = truffler.createTester([
+var test = truffler.init([
     function (dom, report, done) {
         if (!dom.getElementsByTagName('title').length) {
             report('Page should have a title');
