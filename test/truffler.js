@@ -96,28 +96,12 @@ describe('truffler', function () {
                 });
             });
 
-            it('should load jQuery from a remote source when a URL is provided', function (done) {
-                var tester = truffler.createTester();
-                tester('http://foo/', function () {
-                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['http://code.jquery.com/jquery-2.1.1.js']);
-                    done();
-                });
-            });
-
-            it('should load jQuery from a local source when HTML is provided', function (done) {
-                var tester = truffler.createTester();
-                tester('foo', function () {
-                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['../node_modules/jquery/dist/jquery.js']);
-                    done();
-                });
-            });
-
-            it('should not load jQuery if `options.jquery` is `false`', function (done) {
+            it('should load the expected scripts when specified', function (done) {
                 var tester = truffler.createTester({
-                    jquery: false
+                    scripts: ['foo', 'bar']
                 });
-                tester('foo', function () {
-                    assert.isUndefined(jsdom.env.getCall(0).args[0].scripts);
+                tester('http://foo/', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].scripts, ['foo', 'bar']);
                     done();
                 });
             });

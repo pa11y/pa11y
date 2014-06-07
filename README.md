@@ -31,7 +31,7 @@ var truffler = require('truffler');
 var test = truffler.createTester({
     tests: [
         function (dom, report, done) {
-            if (!dom.$('title').length) {
+            if (!dom.getElementsByTagName('title').length) {
                 report('Page should have a title');
             }
             done();
