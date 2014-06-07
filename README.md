@@ -24,31 +24,155 @@ Usage
 -----
 
 ```js
+var truffler = require('truffler');
+```
+
+### Creating a tester
+
+Create a test function using `truffler.init()`. This expects an array of test functions:
+
+```js
+var test = truffler.init([
+
+    // Example test
+    function (dom, report, done) {
+        ...
+    }
+
+]);
+```
+
+Each test function should accept three arguments:
+
+- `dom` *(object)*: The DOM object of the page or HTML snippet being tested.
+- `report` *(function)*: A function which can be called multiple times to report issues with the DOM.
+- `done` *(function)*: A callback which should be called when the test is complete.
+
+This example test will check that each `img` element in the DOM has an `alt` attribute:
+
+```js
+function (dom, report, done) {
+    var images = dom.document.getElementsByTagName('img');
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].getAttribute('alt') === null) {
+            report('Images should have an `alt` attribute');
+        }
+    }
+    done();
+}
+```
+
+The `report` function accepts any data, not just strings. It's up to your test functions to decide how to represent the information. The report in the example above could look like this:
+
+```js
+report({
+    type: 'error',
+    msg: 'Images should have an `alt` attribute',
+    html: images[i].outerHTML
+});
+```
+
+If an error occurs in the test itself, then this can be reported in a couple of ways. Firstly by passing an error into the callback:
+
+```js
+function (dom, report, done) {
+    done(new Error('Something went horribly wrong'));
+}
+```
+
+Secondly, by simply throwing an error:
+
+```js
+function (dom, report, done) {
+    throw new Error('Something went horribly wrong');
+}
+```
+
+### Running tests
+
+Once you have a test function, you can call it like any other function. It accepts two arguments:
+
+- `context` *(string)*: The URL or HTML snippet to test.
+- `done` *(function)*: A callback function to run when the tests are complete.
+
+```js
+var test = truffler.init([ ... ]);
+
+test('http://example.com/', function (err, results) {
+    ...
+});
+
+test('<p>Hello World!</p>', function (err, results) {
+    ...
+});
+```
+
+The callback should accept two arguments:
+
+- `err` *(object)*: An error which occured in the tests.
+- `results` *(array)*: An array of reports made by the `report` function in each test.
+
+### Full example
+
+```js
 // Load Truffler
 var truffler = require('truffler');
 
 // Create a test function
 var test = truffler.init([
+
+    // Make sure the page contains at least one paragraph
     function (dom, report, done) {
-        if (!dom.getElementsByTagName('title').length) {
-            report('Page should have a title');
+        var paragraphs = dom.document.getElementsByTagName('p');
+        if (!paragraphs.length) {
+            report({
+                type: 'warning',
+                msg: 'There should be at least one paragraph in the page'
+            });
+        }
+        done();
+    },
+
+    // Ensure each image in the page has alternative text
+    function (dom, report, done) {
+        var images = dom.document.getElementsByTagName('img');
+        for (var i = 0; i < images.length; i++) {
+            if (images[i].getAttribute('alt') === null) {
+                report({
+                    type: 'error',
+                    msg: 'Images should have an `alt` attribute',
+                    html: images[i].outerHTML
+                });
+            }
         }
         done();
     }
+
 ]);
 
-// Run the tests on a URL
-test('http://example.com/', function (err, results) {
-    console.log(results); // ['Page should have a title']
-});
-
 // Run the tests on an HTML snippet
-test('<p>Hello World!</p>', function (err, results) {
-    console.log(results); // ['Page should have a title']
-})
+var exampleHtml = '<img src="foo.jpg"/><img src="bar.jpg"/>';
+test(exampleHtml, function (err, results) {
+    console.log(err); // null
+    console.log(results);
+    // [
+    //     {
+    //         type: 'warning',
+    //         msg: 'There should be at least one paragraph in the page'
+    //     },
+    //     {
+    //         type: 'error',
+    //         msg: 'Images should have an `alt` attribute',
+    //         html: '<img src="foo.jpg">'
+    //     },
+    //     {
+    //         type: 'error',
+    //         msg: 'Images should have an `alt` attribute',
+    //         html: '<img src="bar.jpg">'
+    //     }
+    // ]
+});
 ```
-
-TODO: full usage docs
 
 
 Contributing
