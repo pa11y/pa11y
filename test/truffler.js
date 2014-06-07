@@ -132,6 +132,30 @@ describe('truffler', function () {
                 });
             });
 
+            it('should callback with an error if a test passes one on', function (done) {
+                var error = new Error('oops');
+                var test1 = function (dom, report, done) {
+                    done(error);
+                };
+                var test = truffler.init([test1]);
+                test('foo', function (err) {
+                    assert.strictEqual(err, error);
+                    done();
+                });
+            });
+
+            it('should callback with an error if a test throws', function (done) {
+                var error = new Error('oops');
+                var test1 = function () {
+                    throw error;
+                };
+                var test = truffler.init([test1]);
+                test('foo', function (err) {
+                    assert.strictEqual(err, error);
+                    done();
+                });
+            });
+
             it('should load no scripts if none are specified', function (done) {
                 var test = truffler.init();
                 test('http://foo/', function () {
