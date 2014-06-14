@@ -180,6 +180,7 @@ The `truffler.init` function accepts an optional second argument which is expect
 
 - `concurrency` *(number)*: The number of tests which can run in parallel. Default: `10`.
 - `scripts` *(array)*: An array of additional scripts to load into the page before testing. Default: `[]`.
+- `useragent` *(string)*: A user-agent string to send to the tested page. Default: `truffler/x.x.x` (where `x.x.x` is the library version).
 
 The `scripts` option could be used, for example, to load jQuery into the page before testing commences:
 

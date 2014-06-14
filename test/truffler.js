@@ -7,7 +7,7 @@ var mockery = require('mockery');
 var sinon = require('sinon');
 
 describe('truffler', function () {
-    var async, truffler, jsdom, mockDom;
+    var async, truffler, jsdom, mockDom, pkg;
 
     beforeEach(function () {
         mockery.enable({
@@ -25,6 +25,7 @@ describe('truffler', function () {
         };
         mockery.registerMock('jsdom', jsdom);
         async = require('async');
+        pkg = require('../package.json');
         truffler = require('../lib/truffler');
     });
 
@@ -185,7 +186,7 @@ describe('truffler', function () {
                 });
             });
 
-            it('should run the expected number of tests in parallel', function (done) {
+            it('should run the expected number of tests in parallel when specified', function (done) {
                 var test = truffler.init([], {
                     concurrency: 20
                 });
@@ -193,6 +194,24 @@ describe('truffler', function () {
                 test('foo', function () {
                     assert.strictEqual(async.parallelLimit.getCall(0).args[1], 20);
                     async.parallelLimit.restore();
+                    done();
+                });
+            });
+
+            it('should set a name/version user-agent string if a URL is tested', function (done) {
+                var test = truffler.init();
+                test('http://foo/', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].headers['User-Agent'], pkg.name + '/' + pkg.version);
+                    done();
+                });
+            });
+
+            it('should set a custom user-agent string when specified', function (done) {
+                var test = truffler.init([], {
+                    useragent: 'foo'
+                });
+                test('http://foo/', function () {
+                    assert.deepEqual(jsdom.env.getCall(0).args[0].headers['User-Agent'], 'foo');
                     done();
                 });
             });
