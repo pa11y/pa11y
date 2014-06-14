@@ -24,10 +24,10 @@
     },
     "devDependencies": {
         "jshint": "~2.5",
-        "mocha": "~1.18",
+        "mocha": "~1.20",
         "mockery": "~1.4",
         "proclaim": "~2.0",
-        "sinon": "~1.9"
+        "sinon": "~1.10"
     },
 
     "main": "./lib/truffler.js",
