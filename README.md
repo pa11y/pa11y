@@ -4,7 +4,7 @@ Truffler
 
 Run tests against web pages or HTML snippets.
 
-**Current Version:** *0.1.0*  
+**Current Version:** *0.2.0*  
 **Node Support:** *0.10.x, 0.11.x*  
 **License:** [MIT][mit]  
 **Build Status:** [![Build Status][travis-img]][travis]
