@@ -85,7 +85,7 @@ if (!opts.url || program.args[1]) {
 	program.help();
 }
 
-// when applicable, use the local `.pa11yrc` file if it exists
+// When applicable, use the local `.pa11yrc` file if it exists
 if (!opts.config) {
 	var rc = path.join(process.cwd(), '.pa11yrc');
 	if (fs.existsSync(rc)) {
