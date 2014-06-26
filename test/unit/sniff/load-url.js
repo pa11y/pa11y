@@ -42,6 +42,10 @@ describe('sniff/load-url', function () {
 			userAgent: 'ua',
 			port: 1234,
 			cookies: [],
+			viewport: {
+				height: 1000,
+				width: 2000,
+			}
 		};
 	});
 
@@ -88,6 +92,17 @@ describe('sniff/load-url', function () {
 	it('should set the user agent string', function (done) {
 		loadUrl('successfulpage', options, function () {
 			assert.isTrue(page.set.withArgs('settings.userAgent', 'ua').calledOnce);
+			done();
+		});
+	});
+
+
+	it('should set the viewport size', function (done) {
+		loadUrl('successfulpage', options, function () {
+			assert.isTrue(page.set.withArgs('viewportSize', {
+				height: 1000,
+				width: 2000,
+			}).calledOnce);
 			done();
 		});
 	});

@@ -50,7 +50,11 @@ describe('pa11y', function () {
 				reporter: 'bar',
 				config: 'baz',
 				port: 1234,
-				useragent: 'qux'
+				useragent: 'qux',
+				viewport: {
+					width: 1024,
+					height: 960,
+				},
 			};
 			manageOptions = sinon.stub().callsArgWith(1, null, opts);
 			mockery.registerMock('./sniff/manage-options', manageOptions);
@@ -170,6 +174,10 @@ describe('pa11y', function () {
 				assert.deepEqual({
 					userAgent: 'qux',
 					port: 1234,
+					viewport: {
+						width: 1024,
+						height: 960,
+					},
 					cookies: [
 						{
 							name: 'Valid-Cookie-Name',
