@@ -1,15 +1,15 @@
 // This file is part of pa11y.
-// 
+//
 // pa11y is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // pa11y is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with pa11y.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -83,7 +83,7 @@ describe('pa11y', function () {
 				exit: sinon.spy()
 			};
 			page = {};
-			loadUrl = sinon.stub().callsArgWith(4, null, browser, page);
+			loadUrl = sinon.stub().callsArgWith(2, null, browser, page);
 			mockery.registerMock('./sniff/load-url', loadUrl);
 
 			messages = [
@@ -163,7 +163,23 @@ describe('pa11y', function () {
 
 		it('should load the expected page with the correct user agent, port, and cookies', function (done) {
 			pa11y.sniff(opts, function () {
-				assert.isTrue(loadUrl.withArgs(opts.url, opts.useragent, opts.port, config.cookies).calledOnce);
+				var args = loadUrl.args[0];
+				// url
+				assert.equal('foo', args[0]);
+				// options
+				assert.deepEqual({
+					userAgent: 'qux',
+					port: 1234,
+					cookies: [
+						{
+							name: 'Valid-Cookie-Name',
+							value: 'Valid-Cookie-Value',
+							domain: 'localhost',
+						},
+					],
+				}, args[1]);
+				// callback
+				assert.isFunction(args[2]);
 				done();
 			});
 		});

@@ -1,15 +1,15 @@
 // This file is part of pa11y.
-// 
+//
 // pa11y is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // pa11y is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with pa11y.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,7 +23,7 @@ var sinon = require('sinon');
 
 describe('sniff/load-url', function () {
 	var loadUrl = require('../../../lib/sniff/load-url');
-	var page, browser;
+	var page, browser, options;
 
 	beforeEach(function () {
 		page = {
@@ -37,6 +37,12 @@ describe('sniff/load-url', function () {
 			createPage: sinon.stub().callsArgWithAsync(0, page)
 		};
 		sinon.stub(phantom, 'create').callsArgWithAsync(1, browser);
+
+		options = {
+			userAgent: 'ua',
+			port: 1234,
+			cookies: [],
+		};
 	});
 
 	afterEach(function () {
@@ -48,7 +54,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should create a phantom page and open the given URL', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, [], function () {
+		loadUrl('successfulpage', options, function () {
 			assert.isTrue(phantom.create.calledOnce);
 			assert.isFalse(browser.addCookie.called);
 			assert.isTrue(browser.createPage.calledOnce);
@@ -58,7 +64,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should pass the cookies to the browser', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, [
+		options.cookies = [
 			{
 				'name': 'foo',
 				'value': 'bar',
@@ -69,7 +75,9 @@ describe('sniff/load-url', function () {
 				'value': 'qux',
 				'domain': 'localhost'
 			}
-		], function () {
+		];
+
+		loadUrl('successfulpage', options, function () {
 			assert.isTrue(browser.addCookie.calledTwice);
 			assert.isTrue(browser.addCookie.withArgs('foo', 'bar', 'localhost').calledOnce);
 			assert.isTrue(browser.addCookie.withArgs('baz', 'qux', 'localhost').calledOnce);
@@ -78,14 +86,14 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should set the user agent string', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, [], function () {
+		loadUrl('successfulpage', options, function () {
 			assert.isTrue(page.set.withArgs('settings.userAgent', 'ua').calledOnce);
 			done();
 		});
 	});
 
 	it('should set the port', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, [], function () {
+		loadUrl('successfulpage', options, function () {
 			assert.isTrue(phantom.create.calledOnce);
 			assert.strictEqual(phantom.create.firstCall.args[0].port, 1234);
 			done();
@@ -93,7 +101,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should callback with the phantom browser and page', function (done) {
-		loadUrl('successfulpage', 'ua', 1234, [], function (err, br, pa) {
+		loadUrl('successfulpage', options, function (err, br, pa) {
 			assert.strictEqual(br, browser);
 			assert.strictEqual(pa, page);
 			done();
@@ -101,7 +109,7 @@ describe('sniff/load-url', function () {
 	});
 
 	it('should callback with an error if the page fails to load', function (done) {
-		loadUrl('failingpage', 'ua', 1234, [], function (err) {
+		loadUrl('failingpage', options, function (err) {
 			assert.isInstanceOf(err, Error);
 			done();
 		});
