@@ -54,6 +54,10 @@ program
 		'specify a useragent to use when loading your URL. Default: pa11y/<version>'
 	)
 	.option(
+		'-v, --viewport <wxh>',
+		'specify the size of the browser viewport. Default: 640x480'
+	)
+	.option(
 		'-p, --port <port>',
 		'specify the port to run the PhantomJS server on. Default: 12300'
 	)
@@ -91,6 +95,17 @@ if (!opts.config) {
 	if (fs.existsSync(rc)) {
 		opts.config = rc;
 	}
+}
+
+// Parse the viewport option
+if (program.viewport) {
+	var viewport = program.viewport.split('x').map(function (num) {
+		return parseInt(num, 10);
+	});
+	opts.viewport = {
+		width: viewport[0],
+		height: viewport[1]
+	};
 }
 
 // Run pa11y
