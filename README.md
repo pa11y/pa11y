@@ -107,6 +107,12 @@ pa11y.sniff(options, callback);
 #### options.port
 *(number)* The port the PhantomJS server should run on. Default `12300`.
 
+#### options.viewport.width
+*(number)* The viewport width to load the page at.
+
+#### options.viewport.height
+*(number)* The viewport height to load the page at.
+
 #### options.debug
 *(boolean)* Whether to report debug-level messages. Default: `false`.
 
