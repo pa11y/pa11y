@@ -58,6 +58,11 @@ program
 		'specify the size of the browser viewport. Default: 640x480'
 	)
 	.option(
+		'-p, --phantomOpts <string>',
+		'specify the phantomjs command line switches without leading dashes. Default: "".' +
+		'Example: "ssl-protocol=any load-images=false". '
+	)
+	.option(
 		'-p, --port <port>',
 		'specify the port to run the PhantomJS server on. Default: 12300'
 	)
@@ -82,7 +87,8 @@ var opts = _.pick(program, [
 	'standard',
 	'strict',
 	'timeout',
-	'useragent'
+	'useragent',
+	'phantomOpts'
 ]);
 opts.url = program.args[0];
 if (!opts.url || program.args[1]) {
@@ -106,6 +112,17 @@ if (program.viewport) {
 		width: viewport[0],
 		height: viewport[1]
 	};
+}
+
+if (program.phantomOpts) {
+	var phantomOpts = program.phantomOpts.split(' ').map(function (arg) {
+		/**
+		* Args must start with '--', but the node commander used
+		* doesn't accept arguments that start with '--'
+		**/
+		return '--' + arg;
+	});
+	opts.phantomOpts = phantomOpts;
 }
 
 // Run pa11y

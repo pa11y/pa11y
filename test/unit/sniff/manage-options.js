@@ -55,8 +55,9 @@ describe('sniff/manage-options', function () {
 			timeout: 123,
 			viewport: {
 				width: 10,
-				height: 20,
+				height: 20
 			},
+			phantomOpts: [],
 			useragent: 'qux'
 		};
 		manageOptions(allOpts, function (err, opts) {
@@ -81,8 +82,9 @@ describe('sniff/manage-options', function () {
 				timeout: 123,
 				viewport: {
 					width: 640,
-					height: 480,
+					height: 480
 				},
+				phantomOpts: [],
 				useragent: 'pa11y/' + pkg.version
 			});
 			done();
