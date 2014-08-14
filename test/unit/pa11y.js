@@ -53,8 +53,9 @@ describe('pa11y', function () {
 				useragent: 'qux',
 				viewport: {
 					width: 1024,
-					height: 960,
+					height: 960
 				},
+				phantomOpts: ['--ssl-protocol=any', '--load-images=false']
 			};
 			manageOptions = sinon.stub().callsArgWith(1, null, opts);
 			mockery.registerMock('./sniff/manage-options', manageOptions);
@@ -75,7 +76,7 @@ describe('pa11y', function () {
 				cookies: [{
 					'name': 'Valid-Cookie-Name',
 					'value': 'Valid-Cookie-Value',
-					'domain': 'localhost',
+					'domain': 'localhost'
 				}],
 				ignore: ['bar']
 			};
@@ -176,15 +177,16 @@ describe('pa11y', function () {
 					port: 1234,
 					viewport: {
 						width: 1024,
-						height: 960,
+						height: 960
 					},
+					phantomOpts: ['--ssl-protocol=any', '--load-images=false'],
 					cookies: [
 						{
 							name: 'Valid-Cookie-Name',
 							value: 'Valid-Cookie-Value',
-							domain: 'localhost',
+							domain: 'localhost'
 						},
-					],
+					]
 				}, args[1]);
 				// callback
 				assert.isFunction(args[2]);
