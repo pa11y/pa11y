@@ -79,16 +79,16 @@ describe('sniff/handle-result', function () {
 
 		it('should transform messages as expected', function () {
 			var rawMessages = [
-				{code: 12, msg: 'foo', type: 1},
-				{code: 34, msg: 'bar', type: 2},
-				{code: 56, msg: 'baz', type: 3},
-				{code: 78, msg: 'qux', type: 4}
+				{code: 12, msg: 'foo', type: 1, outerHTML: 'foo'},
+				{code: 34, msg: 'bar', type: 2, outerHTML: 'bar'},
+				{code: 56, msg: 'baz', type: 3, outerHTML: 'baz'},
+				{code: 78, msg: 'qux', type: 4, outerHTML: 'qux'}
 			];
 			var expectedMessages = [
-				{code: 12, message: 'foo', type: 'error'},
-				{code: 34, message: 'bar', type: 'warning'},
-				{code: 56, message: 'baz', type: 'notice'},
-				{code: 78, message: 'qux', type: 'unknown'}
+				{code: 12, message: 'foo', type: 'error', html: 'foo'},
+				{code: 34, message: 'bar', type: 'warning', html: 'bar'},
+				{code: 56, message: 'baz', type: 'notice', html: 'baz'},
+				{code: 78, message: 'qux', type: 'unknown', html: 'qux'}
 			];
 			var sanitizedMessages = handleResult.sanitizeMessages(rawMessages);
 			assert.deepEqual(sanitizedMessages[0], expectedMessages[0]);
