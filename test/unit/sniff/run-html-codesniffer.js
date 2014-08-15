@@ -79,7 +79,7 @@ describe('sniff/run-html-codesniffer', function () {
 
 	it('should callback with the resulting HTML CodeSniffer messages', function (done) {
 		runHtmlCodeSniffer(page, opts, function (err, results) {
-			assert.strictEqual(results, messages);
+			assert.deepEqual(results, messages);
 			done();
 		});
 	});
