@@ -32,7 +32,7 @@ Coding Guidelines
 
 
 
-[bugs]: https://github.com/nature/pa11y/issues?labels=bug&state=open
-[ready]: https://github.com/nature/pa11y/issues?labels=ready&state=open
+[bugs]: https://github.com/nature/pa11y/issues?q=is%3Aopen+is%3Aissue+label%3Abug
+[ready]: https://github.com/nature/pa11y/issues?q=is%3Aopen+is%3Aissue+label%3Aready
 [issues]: https://github.com/nature/pa11y/issues
-[milestones]: https://github.com/nature/pa11y/issues/milestones
+[milestones]: https://github.com/nature/pa11y/milestones
