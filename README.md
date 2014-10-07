@@ -23,7 +23,7 @@ $ brew install phantomjs
 
 If you're on Linux, you'll probably be able to work it out.
 
-Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.10) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS).
+Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.10) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 Once you've got these dependencies, you can install pa11y globally with:
 
@@ -268,3 +268,4 @@ pa11y is licensed under the [GNU General Public License 3.0][gpl].
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [travis]: https://travis-ci.org/nature/pa11y
 [travis-img]: https://travis-ci.org/nature/pa11y.png?branch=master
+[windows-install]: https://github.com/TooTallNate/node-gyp#installation
