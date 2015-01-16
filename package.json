@@ -20,20 +20,20 @@
 	"bugs": "https://github.com/nature/pa11y/issues",
 
 	"dependencies": {
-		"async": "~0.2",
-		"colors": "~0.6",
-		"commander": "~2.0",
-		"phantom": "~0.5",
-		"underscore": "~1.5"
+		"async": "~0.9",
+		"colors": "~1.0",
+		"commander": "~2.6",
+		"phantom": "~0.7",
+		"underscore": "~1.7"
 	},
 	"devDependencies": {
-		"express": "~3.4",
+		"express": "~3.19",
 		"grunt": "~0.4",
-		"grunt-contrib-jshint": "~0.7",
-		"grunt-mocha-test": "~0.7",
+		"grunt-contrib-jshint": "~0.10",
+		"grunt-mocha-test": "~0.12",
 		"mockery": "~1.4",
 		"proclaim": "~2.0",
-		"sinon": "~1.7"
+		"sinon": "~1.12"
 	},
 
 	"main": "./lib/pa11y.js",
