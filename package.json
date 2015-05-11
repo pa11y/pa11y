@@ -1,0 +1,43 @@
+{
+	"name": "pa11y",
+	"version": "2.0.0-pre",
+	"private": true,
+
+	"description": "pa11y is your automated accessibility testing pal",
+	"keywords": [ "accessibility", "analysis", "cli", "report" ],
+
+	"author": "Nature Publishing Group",
+	"contributors": [
+		"Rowan Manning (http://rowanmanning.com/)",
+		"Whymarrh Whitby (http://whymarrh.com/)",
+		"Stephen Mathieson (http://www.stephenmathieson.com/)"
+	],
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nature/pa11y.git"
+	},
+	"homepage": "https://github.com/nature/pa11y",
+	"bugs": "https://github.com/nature/pa11y/issues",
+	"license": "gpl-3.0",
+
+	"engines": {
+		"node": ">=0.10"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"jshint": "~2.7",
+		"mocha": "~2.2",
+		"mockery": "~1.4",
+		"proclaim": "~3.2",
+		"sinon": "~1.14"
+	},
+
+	"main": "./lib/pa11y.js",
+	"bin": {
+		"pa11y": "./bin/pa11y"
+	},
+	"scripts": {
+		"test": "make ci"
+	}
+}

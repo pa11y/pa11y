@@ -1,0 +1,13 @@
+{
+	"globalstrict": true,
+	"indent": 4,
+	"latedef": "nofunc",
+	"maxparams": 5,
+	"maxdepth": 2,
+	"maxstatements": 5,
+	"maxcomplexity": 5,
+	"maxlen": 100,
+	"node": true,
+	"quotmark": "single",
+	"unused": true
+}
