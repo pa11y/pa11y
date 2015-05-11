@@ -97,18 +97,23 @@ describe('lib/pa11y', function () {
 
 	});
 
-	it('should return a function', function () {
-		assert.isFunction(pa11y());
+	it('should call the callback with a function', function (done) {
+		pa11y({}, function (error, test) {
+			assert.isFunction(test);
+			done();
+		});
 	});
 
-	it('should default the options', function () {
+	it('should default the options', function (done) {
 		var options = {};
-		pa11y(options);
-		assert.calledOnce(extend);
-		assert.isTrue(extend.firstCall.args[0]);
-		assert.isObject(extend.firstCall.args[1]);
-		assert.strictEqual(extend.firstCall.args[2], pa11y.defaults);
-		assert.strictEqual(extend.firstCall.args[3], options);
+		pa11y(options, function () {
+			assert.calledOnce(extend);
+			assert.isTrue(extend.firstCall.args[0]);
+			assert.isObject(extend.firstCall.args[1]);
+			assert.strictEqual(extend.firstCall.args[2], pa11y.defaults);
+			assert.strictEqual(extend.firstCall.args[3], options);
+			done();
+		});
 	});
 
 });

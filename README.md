@@ -18,8 +18,11 @@ pa11y nature.com
 
 ```js
 var pa11y = require('pa11y');
-var test = pa11y(options);
-test('nature.com', function (error, results) { /* ... */ })
+pa11y(options, function (error, test) {
+    test('nature.com', function (error, results) {
+        /* ... */
+    });
+});
 ```
 
 
