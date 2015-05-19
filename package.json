@@ -25,7 +25,8 @@
 		"node": ">=0.10"
 	},
 	"dependencies": {
-		"node.extend": "~1.1"
+		"node.extend": "~1.1",
+		"truffler": "~1.0"
 	},
 	"devDependencies": {
 		"jshint": "~2.7",

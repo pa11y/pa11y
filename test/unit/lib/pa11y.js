@@ -7,7 +7,7 @@ var mockery = require('mockery');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function () {
-	var extend, pa11y, pkg;
+	var extend, pa11y, pkg, trufflerPkg;
 
 	beforeEach(function () {
 
@@ -15,6 +15,7 @@ describe('lib/pa11y', function () {
 		mockery.registerMock('node.extend', extend);
 
 		pkg = require('../../../package.json');
+		trufflerPkg = require('truffler/package.json');
 
 		pa11y = require('../../../lib/pa11y');
 
@@ -55,32 +56,12 @@ describe('lib/pa11y', function () {
 			assert.isObject(defaults.page);
 		});
 
-		it('should have a `page.cookies` property', function () {
-			assert.isArray(defaults.page.cookies);
-		});
-
 		it('should have a `page.settings` property', function () {
 			assert.isObject(defaults.page.settings);
 		});
 
-		it('should have a `page.viewport` property', function () {
-			assert.isObject(defaults.page.viewport);
-		});
-
-		it('should have a `page.viewport.width` property', function () {
-			assert.strictEqual(defaults.page.viewport.width, 1024);
-		});
-
-		it('should have a `page.viewport.width` property', function () {
-			assert.strictEqual(defaults.page.viewport.height, 768);
-		});
-
-		it('should have a `phantom` property', function () {
-			assert.isObject(defaults.phantom);
-		});
-
-		it('should have a `phantom.port` property', function () {
-			assert.strictEqual(defaults.phantom.port, 12300);
+		it('should have a `page.settings.userAgent` property', function () {
+			assert.strictEqual(defaults.page.settings.userAgent, 'pa11y/' + pkg.version + ' (truffler/' + trufflerPkg.version + ')');
 		});
 
 		it('should have a `standard` property', function () {
@@ -91,13 +72,9 @@ describe('lib/pa11y', function () {
 			assert.strictEqual(defaults.timeout, 30000);
 		});
 
-		it('should have a `useragent` property', function () {
-			assert.strictEqual(defaults.useragent, 'pa11y/' + pkg.version);
-		});
-
 	});
 
-	it('should call the callback with a function', function (done) {
+	it('should callback with a function', function (done) {
 		pa11y({}, function (error, test) {
 			assert.isFunction(test);
 			done();
@@ -114,6 +91,18 @@ describe('lib/pa11y', function () {
 			assert.strictEqual(extend.firstCall.args[3], options);
 			done();
 		});
+	});
+
+	it('should initialise truffler with the expected options');
+
+	it('should callback with an error if truffler fails');
+
+	it('should callback with truffler\'s test and exit functions');
+
+	describe('truffler `testFunction` option', function () {
+
+		it('should do all the things pa11y is supposed to do');
+
 	});
 
 });
