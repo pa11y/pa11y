@@ -7,15 +7,21 @@ var mockery = require('mockery');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function () {
-	var extend, pa11y, pkg, trufflerPkg;
+	var extend, pa11y, phantom, pkg, truffler, trufflerPkg;
 
 	beforeEach(function () {
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
 
+		phantom = require('../mock/phantom');
+		mockery.registerMock('phantom', phantom);
+
 		pkg = require('../../../package.json');
 		trufflerPkg = require('truffler/package.json');
+
+		truffler = require('../mock/truffler');
+		mockery.registerMock('truffler', truffler);
 
 		pa11y = require('../../../lib/pa11y');
 
@@ -74,13 +80,6 @@ describe('lib/pa11y', function () {
 
 	});
 
-	it('should callback with a function', function (done) {
-		pa11y({}, function (error, test) {
-			assert.isFunction(test);
-			done();
-		});
-	});
-
 	it('should default the options', function (done) {
 		var options = {};
 		pa11y(options, function () {
@@ -93,13 +92,63 @@ describe('lib/pa11y', function () {
 		});
 	});
 
-	it('should initialise truffler with the expected options');
+	it('should initialise Truffler with the expected options', function (done) {
+		pa11y({}, function () {
+			assert.calledOnce(truffler);
+			var options = truffler.firstCall.args[0];
+			delete options.testFunction;
+			assert.deepEqual(options, pa11y.defaults);
+			assert.isFunction(truffler.firstCall.args[1]);
+			done();
+		});
+	});
 
-	it('should callback with an error if truffler fails');
+	it('should set a `testFunction` option in Truffler', function (done) {
+		pa11y({}, function () {
+			assert.isFunction(truffler.firstCall.args[0].testFunction);
+			done();
+		});
+	});
 
-	it('should callback with truffler\'s test and exit functions');
+	it('should not allow overriding of the `testFunction` option', function (done) {
+		var testFunction = sinon.spy();
+		pa11y({}, function () {
+			assert.notStrictEqual(truffler.firstCall.args[0].testFunction, testFunction);
+			done();
+		});
+	});
 
-	describe('truffler `testFunction` option', function () {
+	it('should callback with Truffler\'s test and exit functions', function (done) {
+		pa11y({}, function (error, test, exit) {
+			assert.strictEqual(test, truffler.mockTestFunction);
+			assert.strictEqual(exit, truffler.mockExitFunction);
+			done();
+		});
+	});
+
+	it('should callback with an error if Truffler fails', function (done) {
+		var trufflerError = new Error('...');
+		truffler.yieldsAsync(trufflerError, null, null);
+		pa11y({}, function (error) {
+			assert.strictEqual(error, trufflerError);
+			done();
+		});
+	});
+
+	describe('Truffler `testFunction` option', function () {
+		var options, testFunction;
+
+		beforeEach(function (done) {
+			options = {};
+			pa11y(options, function () {
+				testFunction = truffler.firstCall.args[0].testFunction;
+				done();
+			});
+		});
+
+		it('should callback', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, done);
+		});
 
 		it('should do all the things pa11y is supposed to do');
 
