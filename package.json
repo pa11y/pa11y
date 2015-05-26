@@ -26,6 +26,7 @@
 	},
 	"dependencies": {
 		"async": "~0.9",
+		"commander": "~2.8",
 		"node.extend": "~1.1",
 		"once": "~1.3",
 		"truffler": "~1.0"
