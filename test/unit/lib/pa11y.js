@@ -1,9 +1,10 @@
 /* jshint maxstatements: false, maxlen: false */
-/* global beforeEach, describe, it */
+/* global afterEach, beforeEach, describe, it */
 'use strict';
 
 var assert = require('proclaim');
 var mockery = require('mockery');
+var path = require('path');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function () {
@@ -136,10 +137,28 @@ describe('lib/pa11y', function () {
 	});
 
 	describe('Truffler `testFunction` option', function () {
-		var options, testFunction;
+		var evaluateResults, options, testFunction;
 
 		beforeEach(function (done) {
-			options = {};
+			evaluateResults = {
+				messages: [
+					'foo',
+					'bar'
+				]
+			};
+			options = {
+				standard: 'FOO-STANDARD'
+			};
+
+			// Big old nasty mock
+			phantom.mockPage.set = sinon.spy(function (property, value) {
+				if (property == 'onCallback') {
+					setTimeout(function () {
+						value(evaluateResults);
+					}, 50);
+				}
+			});
+
 			pa11y(options, function () {
 				testFunction = truffler.firstCall.args[0].testFunction;
 				done();
@@ -150,7 +169,118 @@ describe('lib/pa11y', function () {
 			testFunction(phantom.mockBrowser, phantom.mockPage, done);
 		});
 
-		it('should do all the things pa11y is supposed to do');
+		it('should callback with results', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function (error, results) {
+				assert.isNull(error);
+				assert.strictEqual(results, evaluateResults.messages);
+				done();
+			});
+		});
+
+		it('should set the page `onCallback` handler', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+				assert.calledOnce(phantom.mockPage.set.withArgs('onCallback'));
+				assert.isFunction(phantom.mockPage.set.firstCall.args[1]);
+				done();
+			});
+		});
+
+		it('should inject HTML CodeSniffer', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+				var inject = phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js');
+				assert.calledOnce(inject);
+				assert.isFunction(inject.firstCall.args[1]);
+				done();
+			});
+		});
+
+		it('should inject the pa11y inject script', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+				var inject = phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js');
+				assert.calledOnce(inject);
+				assert.isFunction(inject.firstCall.args[1]);
+				done();
+			});
+		});
+
+		it('should run the pa11y inject script through an evaluate call with passed in options', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+				assert.calledOnce(phantom.mockPage.evaluate);
+				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
+				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[1]);
+				assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[2], {
+					standard: 'FOO-STANDARD'
+				});
+				done();
+			});
+		});
+
+		describe('evaluated function', function () {
+			var evaluate;
+
+			beforeEach(function (done) {
+				testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+					evaluate = phantom.mockPage.evaluate.firstCall.args[0];
+					global.window = {
+						callPhantom: sinon.spy()
+					};
+					global.injectPa11y = sinon.spy();
+					done();
+				});
+			});
+
+			afterEach(function () {
+				delete global.window;
+				delete global.injectPa11y;
+			});
+
+			it('should call the `injectPa11y` global function with the expected arguments', function () {
+				evaluate(options);
+				assert.calledOnce(global.injectPa11y);
+				assert.calledWith(global.injectPa11y, global.window, options, global.window.callPhantom);
+			});
+
+			it('should not return anything if PhantomJS is present', function () {
+				assert.isUndefined(evaluate(options));
+			});
+
+			it('should return an error if PhantomJS is not present', function () {
+				delete global.window.callPhantom;
+				var returnValue = evaluate(options);
+				assert.isInstanceOf(returnValue, Error);
+				assert.strictEqual(returnValue.message, 'Pa11y could not report back to PhantomJS');
+			});
+
+		});
+
+		it('should inject and evaluate in the correct order', function (done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+				assert.callOrder(
+					phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js'),
+					phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js'),
+					phantom.mockPage.evaluate
+				);
+				done();
+			});
+		});
+
+		it('should callback with an error if HTML CodeSniffer does not inject properly', function (done) {
+			phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js').yieldsAsync(false);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function (error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
+				done();
+			});
+		});
+
+		it('should callback with an error if pa11y does not inject properly', function (done) {
+			phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js').yieldsAsync(false);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function (error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
+				done();
+			});
+		});
 
 	});
 
