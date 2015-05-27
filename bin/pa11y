@@ -11,8 +11,9 @@ runProgram(program);
 function configureProgram (program) {
 	program.version(pkg.version)
 		.usage('[options] <url>')
+		.option('-s, --standard <name>', 'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA', 'WCAG2AA')
+		.option('-r, --reporter <reporter>', 'the reporter to use: cli (default), csv, json', 'cli')
 		.option('-p, --port <port>', 'the port to run PhantomJS on')
-		.option('-r, --reporter <reporter>', 'the reporter to use: cli, csv, json', 'cli')
 		.option('-d, --debug', 'Output debug messages')
 		.parse(process.argv);
 	program.url = program.args[0];
@@ -30,7 +31,8 @@ function runProgram (program) {
 		log: reporter,
 		phantom: {
 			port: program.port
-		}
+		},
+		standard: program.standard
 	};
 	reporter.begin();
 	pa11y(options, function (error, test, exit) {
