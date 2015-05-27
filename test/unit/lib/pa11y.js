@@ -93,6 +93,28 @@ describe('lib/pa11y', function () {
 		});
 	});
 
+	it('should callback with an error if `options.standard` is invalid', function (done) {
+		var options = {
+			standard: 'foo'
+		};
+		pa11y(options, function (error) {
+			assert.isNotNull(error);
+			assert.strictEqual(error.message, 'Standard must be one of Section508, WCAG2A, WCAG2AA, WCAG2AAA');
+			done();
+		});
+	});
+
+	it('should callback with an error if `options.timeout` is invalid', function (done) {
+		var options = {
+			timeout: 'foo'
+		};
+		pa11y(options, function (error) {
+			assert.isNotNull(error);
+			assert.strictEqual(error.message, 'Timeout must be numeric');
+			done();
+		});
+	});
+
 	it('should initialise Truffler with the expected options', function (done) {
 		pa11y({}, function () {
 			assert.calledOnce(truffler);
@@ -147,7 +169,7 @@ describe('lib/pa11y', function () {
 				]
 			};
 			options = {
-				standard: 'FOO-STANDARD'
+				standard: 'Section508'
 			};
 
 			// Big old nasty mock
@@ -209,7 +231,7 @@ describe('lib/pa11y', function () {
 				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
 				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[1]);
 				assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[2], {
-					standard: 'FOO-STANDARD'
+					standard: 'Section508'
 				});
 				done();
 			});
