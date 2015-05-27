@@ -12,6 +12,8 @@ function configureProgram (program) {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option('-p, --port <port>', 'the port to run PhantomJS on')
+		.option('-r, --reporter <reporter>', 'the reporter to use: cli, csv, json', 'cli')
+		.option('-d, --debug', 'Output debug messages')
 		.parse(process.argv);
 	program.url = program.args[0];
 }
@@ -20,23 +22,43 @@ function runProgram (program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
+	var reporter = loadReporter(program.reporter);
+	if (!program.debug) {
+		reporter.debug = function () {};
+	}
 	var options = {
+		log: reporter,
 		phantom: {
 			port: program.port
 		}
 	};
+	reporter.begin();
 	pa11y(options, function (error, test, exit) {
 		if (error) {
-			console.error(error);
+			reporter.error(error.stack);
 			process.exit(1);
 		}
 		test(program.url, function (error, results) {
 			if (error) {
-				console.error(error);
+				reporter.error(error.stack);
 				process.exit(1);
 			}
-			console.log(results);
+			reporter.results(results);
 			exit();
 		});
 	});
+}
+
+function loadReporter (name) {
+	var reporter;
+	try {
+		reporter = require('../reporter/' + name);
+	} catch (error) {
+		try {
+			reporter = require('pa11y-reporter-' + name);
+		} catch (error) {
+			reporter = pa11y.defaults.log;
+		}
+	}
+	return reporter;
 }
