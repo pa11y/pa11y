@@ -13,6 +13,7 @@ function configureProgram (program) {
 		.usage('[options] <url>')
 		.option('-s, --standard <name>', 'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA', 'WCAG2AA')
 		.option('-r, --reporter <reporter>', 'the reporter to use: cli (default), csv, json', 'cli')
+		.option('-l, --level <level>', 'the level of message to fail on (exit with code 2): error, warning, notice', 'error')
 		.option('-p, --port <port>', 'the port to run PhantomJS on')
 		.option('-t, --timeout <ms>', 'the timeout in milliseconds')
 		.option('-d, --debug', 'Output debug messages')
@@ -49,6 +50,9 @@ function runProgram (program) {
 			}
 			reporter.results(results);
 			exit();
+			if (reportShouldFail(program.level, results)) {
+				process.exit(2);
+			}
 		});
 	});
 }
@@ -65,4 +69,22 @@ function loadReporter (name) {
 		}
 	}
 	return reporter;
+}
+
+function reportShouldFail (level, results) {
+	if (level === 'notice') {
+		return (results.length > 0);
+	}
+	if (level === 'warning') {
+		return (results.filter(isWarningOrError).length > 0);
+	}
+	return (results.filter(isError).length > 0);
+}
+
+function isError (result) {
+	return (result.type === 'error');
+}
+
+function isWarningOrError (result) {
+	return (result.type === 'warning' || result.type === 'error');
 }
