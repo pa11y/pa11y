@@ -282,6 +282,19 @@ describe('lib/pa11y', function () {
 			});
 		});
 
+		it('should callback with an error if the testing process takes longer than `options.timeout`', function (done) {
+			var clock = sinon.useFakeTimers('setTimeout', 'clearTimeout');
+			phantom.mockPage.set = function () {
+				clock.tick(30001);
+			};
+			testFunction(phantom.mockBrowser, phantom.mockPage, function (error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error.message, 'Pa11y timed out');
+				clock.restore();
+				done();
+			});
+		});
+
 	});
 
 });
