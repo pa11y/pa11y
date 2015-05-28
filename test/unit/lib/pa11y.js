@@ -177,7 +177,7 @@ describe('lib/pa11y', function () {
 				if (property == 'onCallback') {
 					setTimeout(function () {
 						value(evaluateResults);
-					}, 50);
+					}, 10);
 				}
 			});
 

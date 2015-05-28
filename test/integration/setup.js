@@ -2,6 +2,9 @@
 /* global before */
 'use strict';
 
-before(function () {
-	// Test setup will go here
+var startWebsite = require('./mock/website');
+
+before(function (done) {
+	this.port = process.env.PORT || 3131;
+	startWebsite(this.port, done);
 });

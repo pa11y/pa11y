@@ -23,12 +23,12 @@ test: test-unit test-integration
 # Run unit tests
 test-unit:
 	@echo "$(C_CYAN)> running unit tests$(C_RESET)"
-	@./node_modules/.bin/mocha ./test/unit --reporter spec --recursive --full-trace
+	@./node_modules/.bin/mocha ./test/unit --reporter spec --recursive --timeout 200 --slow 50
 
 # Run integration tests
 test-integration:
 	@echo "$(C_CYAN)> running integration tests$(C_RESET)"
-	@./node_modules/.bin/mocha ./test/integration --reporter spec --recursive
+	@./node_modules/.bin/mocha ./test/integration --reporter spec --recursive --timeout 5000 --slow 50
 
 # Rebuild a local HTML CodeSniffer
 build-htmlcs:
