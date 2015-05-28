@@ -1,6 +1,13 @@
 
 # History
 
+## 2.0.0 (2015-xx-xx)
+
+  * Initial 2.0 release
+  * Full rewrite
+
+---
+
 ## 1.7.0 (2015-05-08)
 
   * Add HTML snippets to results for additional context
