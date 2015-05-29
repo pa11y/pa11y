@@ -43,6 +43,10 @@ describe('lib/pa11y', function () {
 			defaults = pa11y.defaults;
 		});
 
+		it('should have an `ignore` property', function () {
+			assert.isArray(defaults.ignore);
+		});
+
 		it('should have a `log` property', function () {
 			assert.isObject(defaults.log);
 		});
@@ -115,6 +119,24 @@ describe('lib/pa11y', function () {
 		});
 	});
 
+	it('should lower-case all of the ignored codes and types', function (done) {
+		var options = {
+			ignore: [
+				'FOO',
+				'Bar',
+				'baz'
+			]
+		};
+		pa11y(options, function () {
+			assert.deepEqual(extend.firstCall.returnValue.ignore, [
+				'foo',
+				'bar',
+				'baz'
+			]);
+			done();
+		});
+	});
+
 	it('should initialise Truffler with the expected options', function (done) {
 		pa11y({}, function () {
 			assert.calledOnce(truffler);
@@ -169,6 +191,10 @@ describe('lib/pa11y', function () {
 				]
 			};
 			options = {
+				ignore: [
+					'BAZ',
+					'qux'
+				],
 				standard: 'Section508'
 			};
 
@@ -231,6 +257,10 @@ describe('lib/pa11y', function () {
 				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
 				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[1]);
 				assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[2], {
+					ignore: [
+						'baz',
+						'qux'
+					],
 					standard: 'Section508'
 				});
 				done();

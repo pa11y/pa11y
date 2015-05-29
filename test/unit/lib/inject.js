@@ -10,6 +10,7 @@ describe('lib/inject', function () {
 	beforeEach(function () {
 		window = require('../mock/window');
 		options = {
+			ignore: [],
 			standard: 'FOO-STANDARD'
 		};
 		inject = require('../../../lib/inject');
@@ -91,6 +92,80 @@ describe('lib/inject', function () {
 					message: 'baz message',
 					type: 'notice',
 					typeCode: 3
+				}
+			]);
+			done();
+		});
+	});
+
+	it('should ignore messages when their code appears in `options.ignore`', function (done) {
+		options.ignore.push('foo-code');
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'Foo-Code',
+				element: {
+					innerHTML: 'foo inner',
+					outerHTML: '<element>foo inner</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'bar-code',
+				element: {
+					innerHTML: 'bar inner at more than 30 characters long',
+					outerHTML: '<element>bar inner at more than 30 characters long</element>'
+				},
+				msg: 'bar message',
+				type: 2
+			}
+		]);
+		inject(window, options, function (result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'bar-code',
+					context: '<element>bar inner at more than 30 chara...</element>',
+					message: 'bar message',
+					type: 'warning',
+					typeCode: 2
+				}
+			]);
+			done();
+		});
+	});
+
+	it('should ignore messages when their type appears in `options.ignore`', function (done) {
+		options.ignore.push('warning');
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: {
+					innerHTML: 'foo inner',
+					outerHTML: '<element>foo inner</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'bar-code',
+				element: {
+					innerHTML: 'bar inner at more than 30 characters long',
+					outerHTML: '<element>bar inner at more than 30 characters long</element>'
+				},
+				msg: 'bar message',
+				type: 2
+			}
+		]);
+		inject(window, options, function (result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'foo-code',
+					context: '<element>foo inner</element>',
+					message: 'foo message',
+					type: 'error',
+					typeCode: 1
 				}
 			]);
 			done();

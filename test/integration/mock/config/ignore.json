@@ -1,0 +1,6 @@
+{
+	"ignore": [
+		"warning",
+		"WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2"
+	]
+}

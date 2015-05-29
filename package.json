@@ -28,6 +28,7 @@
 		"async": "~0.9",
 		"chalk": "~1.0",
 		"commander": "~2.8",
+		"lower-case": "~1.1",
 		"node.extend": "~1.1",
 		"once": "~1.3",
 		"truffler": "~1.0"
