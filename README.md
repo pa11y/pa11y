@@ -150,7 +150,23 @@ The command-line tool can report test results in a few different ways using the 
   - `csv`: output test results as comma-separated values
   - `json`: output test results as a JSON array
 
-You can also write and publish your own reporters; TODO.
+You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder, using the naming pattern `pa11y-reporter-<name>`.
+
+So the following will attempt to load `pa11y-reporter-rainbows`:
+
+```
+pa11y --reporter rainbows nature.com
+```
+
+A pa11y reporter should export the following methods:
+
+```js
+begin(url); // Called when pa11y starts
+error(message); // Called when a technical error is reported
+debug(message); // Called when a debug message is reported
+info(message); // Called when an information message is reported
+results(resultsArray, url); // Called with the results of a test run
+```
 
 
 JavaScript Interface
