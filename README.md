@@ -231,7 +231,147 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 Configuration
 -------------
 
-TODO
+### `ignore` (array)
+
+An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`.
+
+```js
+pa11y({
+    ignore: [
+        'notice',
+        'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'
+    ]
+});
+```
+
+Defaults to an empty array.
+
+### `log` (object)
+
+An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
+
+```js
+pa11y({
+    log: {
+        debug: console.log.bind(console),
+        error: console.error.bind(console),
+        info: console.info.bind(console)
+    }
+});
+```
+
+Each of these defaults to an empty function.
+
+### `page.headers` (object)
+
+A key-value map of request headers to send when testing a web page.
+
+```js
+pa11y({
+    page: {
+        headers: {
+            Cookie: 'foo=bar'
+        }
+    }
+});
+```
+
+Defaults to an empty object.
+
+### `page.settings` (object)
+
+A key-value map of settings to add to the PhantomJS page. For a full list of available settings, see the [PhantomJS page settings documentation][phantom-page-settings].
+
+```js
+pa11y({
+    page: {
+        settings: {
+            loadImages: false,
+            userName: 'nature',
+            password: 'say the magic word'
+        }
+    }
+});
+```
+
+Defaults to:
+
+```js
+{
+    userAgent: 'pa11y/<version> (truffler/<version>)'
+}
+```
+
+### `page.viewport` (object)
+
+The viewport width and height in pixels. The `viewport` object must have both `width` and `height` properties.
+
+```js
+pa11y({
+    page: {
+        viewport: {
+            width: 320,
+            height: 480
+        }
+    }
+});
+```
+
+Defaults to:
+
+```js
+{
+    width: 1024,
+    height: 768
+}
+```
+
+### `phantom` (object)
+
+A key-value map of settings to initialise PhantomJS with. This is passed directly into the `phantom` module – [documentation can be found here][phantom-node-options]. You can pass PhantomJS command-line parameters in the `phantom.parameters` option as key-value pairs.
+
+```js
+pa11y({
+    phantom: {
+        port: 1234,
+        parameters: {
+            'ignore-ssl-errors': 'true'
+        }
+    }
+});
+```
+
+Defaults to:
+
+```js
+{
+    port: 12300
+}
+```
+
+### `standard` (string)
+
+The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`.
+
+```js
+pa11y({
+    standard: 'Section508'
+});
+```
+
+Defaults to `WCAG2AA`.
+
+### `timeout` (number)
+
+The time in milliseconds that a test should be allowed to run before calling back with a timeout error.
+
+```js
+pa11y({
+    timeout: 500
+});
+```
+
+Defaults to `30000`.
 
 
 Examples
@@ -279,6 +419,8 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
+[phantom-node-options]: https://github.com/sgentle/phantomjs-node#functionality-details
+[phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
