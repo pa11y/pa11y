@@ -28,7 +28,7 @@ function runProgram (program) {
 		program.help();
 	}
 	var options = processOptions(program);
-	options.log.begin();
+	options.log.begin(program.url);
 	pa11y(options, function (error, test, exit) {
 		if (error) {
 			options.log.error(error.stack);
@@ -39,7 +39,7 @@ function runProgram (program) {
 				options.log.error(error.stack);
 				process.exit(1);
 			}
-			options.log.results(results);
+			options.log.results(results, program.url);
 			exit();
 			if (reportShouldFail(program.level, results)) {
 				process.exit(2);

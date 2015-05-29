@@ -39,7 +39,8 @@ function reportInfo (message) {
 	console.log(start + message);
 }
 
-function reportResults (results) {
+function reportResults (results, url) {
+	console.log('\n' + chalk.underline('Results for ' + url + ':'));
 	if (results.length === 0) {
 		return console.log('\n' + chalk.green('No errors found!') + '\n');
 	}
