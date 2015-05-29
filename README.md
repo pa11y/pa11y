@@ -32,7 +32,7 @@ Table Of Contents
 - [Requirements](#requirements)
 - [Command-Line Interface](#command-line-interface)
 - [JavaScript Interface](#javascript-interface)
-- [Configuration](#options)
+- [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -155,7 +155,73 @@ You can also write and publish your own reporters; TODO.
 JavaScript Interface
 --------------------
 
-TODO
+Install pa11y with [npm][npm] or add to your `package.json`:
+
+```
+npm install pa11y
+```
+
+Require pa11y:
+
+```js
+var pa11y = require('pa11y');
+```
+
+Create a test function by initialising pa11y with [some options](#configuration):
+
+```js
+pa11y(options, function (error, test, exit) { /* ... */ });
+```
+
+Within your callback, you can use the `test` and `exit` functions to run accessibility tests against web pages or exit PhantomJS:
+
+```js
+pa11y(options, function (error, test, exit) {
+
+    // Run a test on nature.com
+    test('http://www.nature.com/', function (error, results) {
+        // ...
+    });
+
+});
+```
+
+```js
+pa11y(options, function (error, test, exit) {
+
+    // Exit PhantomJS
+    exit();
+
+});
+```
+
+The results that get passed into your test callback come from HTML CodeSniffer, and look like this:
+
+```js
+[
+    {
+        code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
+        context: '<a href="http://example.com/"><img src="example.jpg" alt=""/></a>',
+        message: 'Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.',
+        type: 'error',
+        typeCode: 1
+    },
+    {
+        code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
+        context: '<b>Hello World!</b>',
+        message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
+        type: 'warning',
+        typeCode: 2
+    },
+    {
+        code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
+        context: '<a href="http://example.com/">Return to the current design</a>',
+        message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
+        type: 'notice',
+        typeCode: 3
+    }
+]
+```
 
 
 Configuration
