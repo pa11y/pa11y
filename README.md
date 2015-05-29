@@ -76,6 +76,7 @@ Usage: pa11y [options] <url>
     -s, --standard <name>      the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
     -r, --reporter <reporter>  the reporter to use: cli (default), csv, html, json
     -l, --level <level>        the level of message to fail on (exit with code 2): error, warning, notice
+    -i, --ignore <ignore>      types and codes of messages to ignore separated by semi-colons
     -c, --config <path>        a JSON config file
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
