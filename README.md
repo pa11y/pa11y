@@ -107,20 +107,16 @@ pa11y --standard Section508 nature.com
 
 The command-line tool uses the following exit codes:
 
-```
-0 = pa11y ran successfully, and there are no errors
-1 = pa11y failed run due to a technical fault
-2 = pa11y ran successfully but there are errors in the page
-```
+  - `0`: pa11y ran successfully, and there are no errors
+  - `1`: pa11y failed run due to a technical fault
+  - `2`: pa11y ran successfully but there are errors in the page
 
 By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
-```
-error   = exit on errors only, ignoring warnings and notices
-warning = exit on errors and warnings, ignoring notices
-notice  = exit on all messages
-none    = never exit
-```
+  - `error`: exit on errors only, ignoring warnings and notices
+  - `warning`: exit on errors and warnings, ignoring notices
+  - `notice`: exit on all messages
+  - `none`: never exit
 
 ### Command-Line Configuration
 
