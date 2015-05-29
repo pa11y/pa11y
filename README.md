@@ -33,6 +33,7 @@ Table Of Contents
 - [Command-Line Interface](#command-line-interface)
 - [JavaScript Interface](#javascript-interface)
 - [Configuration](#configuration)
+- [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -230,6 +231,26 @@ Configuration
 TODO
 
 
+Examples
+--------
+
+### Basic Example
+
+Run pa11y on a URL and output the results:
+
+```
+node example/basic
+```
+
+### Multiple Example
+
+Use [async][async] to run pa11y on multiple URLs in series, and output the results:
+
+```
+node example/multiple
+```
+
+
 Contributing
 ------------
 
@@ -250,6 +271,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 
 
 
+[async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
