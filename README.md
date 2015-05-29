@@ -74,7 +74,7 @@ Usage: pa11y [options] <url>
     -h, --help                 output usage information
     -V, --version              output the version number
     -s, --standard <name>      the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>  the reporter to use: cli (default), csv, json
+    -r, --reporter <reporter>  the reporter to use: cli (default), csv, html, json
     -l, --level <level>        the level of message to fail on (exit with code 2): error, warning, notice
     -c, --config <path>        a JSON config file
     -p, --port <port>          the port to run PhantomJS on
@@ -137,6 +137,7 @@ The command-line tool can report test results in a few different ways using the 
 
   - `cli`: output test results in a human-readable format
   - `csv`: output test results as comma-separated values
+  - `html`: output test results as an HTML document
   - `json`: output test results as a JSON array
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder, using the naming pattern `pa11y-reporter-<name>`.

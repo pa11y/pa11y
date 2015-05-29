@@ -13,7 +13,7 @@ function configureProgram (program) {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option('-s, --standard <name>', 'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA')
-		.option('-r, --reporter <reporter>', 'the reporter to use: cli (default), csv, json', 'cli')
+		.option('-r, --reporter <reporter>', 'the reporter to use: cli (default), csv, html, json', 'cli')
 		.option('-l, --level <level>', 'the level of message to fail on (exit with code 2): error, warning, notice', 'error')
 		.option('-c, --config <path>', 'a JSON config file', './pa11y.json')
 		.option('-p, --port <port>', 'the port to run PhantomJS on')
