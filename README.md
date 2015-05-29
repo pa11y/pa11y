@@ -112,24 +112,13 @@ The command-line tool uses the following exit codes:
 2 = pa11y ran successfully but there are errors in the page
 ```
 
-By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag.
-
-Exit on errors only, ignoring warnings and notices:
+By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
 ```
-pa11y --level error nature.com
-```
-
-Exit on errors and warnings, ignoring notices:
-
-```
-pa11y --level warning nature.com
-```
-
-Exit on all messages:
-
-```
-pa11y --level notice nature.com
+error   = exit on errors only, ignoring warnings and notices
+warning = exit on errors and warnings, ignoring notices
+notice  = exit on all messages
+none    = never exit
 ```
 
 ### Command-Line Configuration

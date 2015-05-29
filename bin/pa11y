@@ -91,6 +91,9 @@ function requireFirst (stack, defaultReturn) {
 }
 
 function reportShouldFail (level, results) {
+	if (level === 'none') {
+		return false;
+	}
 	if (level === 'notice') {
 		return (results.length > 0);
 	}
