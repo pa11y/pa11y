@@ -1,5 +1,6 @@
-/* jshint maxstatements: false, maxlen: false */
+/* jshint maxstatements: false */
 /* global before, describe */
+// jscs:disable maximumLineLength
 'use strict';
 
 var extend = require('node.extend');

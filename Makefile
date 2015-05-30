@@ -17,6 +17,11 @@ lint:
 	@echo "$(C_CYAN)> linting javascript$(C_RESET)"
 	@./node_modules/.bin/jshint . --config .jshintrc
 
+# Run JavaScript Code Style
+jscs-check:
+	@echo "$(C_CYAN)> checking javascript code style$(C_RESET)"
+	@./node_modules/.bin/jscs . --config .jscsrc
+
 # Run all tests
 test: test-unit test-integration
 

@@ -6,7 +6,6 @@
 	"maxdepth": 2,
 	"maxstatements": 10,
 	"maxcomplexity": 5,
-	"maxlen": 100,
 	"node": true,
 	"quotmark": "single",
 	"unused": true

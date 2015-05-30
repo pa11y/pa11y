@@ -26,7 +26,8 @@ function reportBegin () {
 function reportError (message) {
 	if (/^error:/i.test(message)) {
 		console.error(message);
-	} else {
+	}
+	else {
 		console.error(start + chalk.red('Error: ' + message));
 	}
 }

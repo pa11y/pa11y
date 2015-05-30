@@ -1,5 +1,6 @@
-/* jshint maxstatements: false, maxlen: false */
+/* jshint maxstatements: false */
 /* global before */
+// jscs:disable maximumLineLength
 'use strict';
 
 var startWebsite = require('./mock/website');

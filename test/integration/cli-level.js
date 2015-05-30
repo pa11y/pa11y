@@ -1,5 +1,6 @@
-/* jshint maxstatements: false, maxlen: false */
+/* jshint maxstatements: false */
 /* global describe, it */
+// jscs:disable maximumLineLength
 'use strict';
 
 var assert = require('proclaim');

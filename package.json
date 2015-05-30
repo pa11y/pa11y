@@ -34,6 +34,7 @@
 		"truffler": "~1.0"
 	},
 	"devDependencies": {
+		"jscs": "~1.13",
 		"jshint": "~2.7",
 		"mocha": "~2.2",
 		"mockery": "~1.4",
