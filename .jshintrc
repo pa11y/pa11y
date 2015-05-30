@@ -1,12 +1,17 @@
 {
+	"globals": {
+		"afterEach": true,
+		"before": true,
+		"beforeEach": true,
+		"describe": true,
+		"it": true
+	},
 	"globalstrict": true,
-	"indent": 4,
 	"latedef": "nofunc",
 	"maxparams": 5,
 	"maxdepth": 2,
 	"maxstatements": 10,
 	"maxcomplexity": 5,
 	"node": true,
-	"quotmark": "single",
 	"unused": true
 }

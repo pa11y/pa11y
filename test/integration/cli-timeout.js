@@ -1,5 +1,4 @@
-/* jshint maxstatements: false */
-/* global describe, it */
+// jshint maxstatements: false
 // jscs:disable maximumLineLength
 'use strict';
 

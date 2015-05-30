@@ -1,5 +1,4 @@
-/* jshint maxstatements: false */
-/* global afterEach, beforeEach, describe, it */
+// jshint maxstatements: false
 // jscs:disable disallowMultipleVarDecl, maximumLineLength
 'use strict';
 
