@@ -418,7 +418,7 @@ Migrating
 
 If you're using pa11y 1.0 and wish to migrate to 2.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
 
-It's recommended that you migrate to 2.0 as soon as possible, but [1.0 is still available in the 1.x branch][1.x]. We'll be providing support for 1.0 for the forseeable future, but there will be no new feature development.
+It's recommended that you migrate to 2.0 as soon as possible, but [1.0 is still available on the 1.x branch][1.x]. We'll be providing support for 1.0 for the forseeable future, but there will be no new feature development.
 
 
 License

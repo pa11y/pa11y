@@ -52,7 +52,15 @@ Results in pa11y 2.0 are no longer output as an object, instead only the results
 
 ### Configuration
 
-TODO
+Configuration options have had a big overhaul between 1.0 and 2.0:
+
+  - The `url` option has been removed. See [JavaScript Interface](#javascript-interface) for more information
+  - The `htmlcs` option has been removed, HTML CodeSniffer is now loaded from a local file
+  - The `config` option has been removed. Cookies are now set as in the `page.headers` option. Ignored rules are now set in a new `ignore` option
+  - The `useragent` option has been removed, it can now be set in the `page.headers` option
+  - The `port` option has been removed, it can now be set in the `phantom.port` option
+  - The `viewport` option has been removed, it can now be set in the `page.viewport` option
+  - The `debug` option has been removed, debugging is now handled by the `log.debug` option which expects a function
 
 ### Contributing/Testing
 
