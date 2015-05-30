@@ -10,7 +10,7 @@ pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sn
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
 [![Dependencies][shield-dependencies]][info-dependencies]
-[![GPL v3.0 licensed][shield-license]][info-license]
+[![GPLv3 licensed][shield-license]][info-license]
 
 ```sh
 pa11y nature.com
@@ -437,7 +437,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/nature/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/nature/pa11y.svg
-[shield-license]: https://img.shields.io/badge/license-MIT-blue.svg
+[shield-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg?label=node.js%20support
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/nature/pa11y/master.svg
