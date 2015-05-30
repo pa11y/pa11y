@@ -34,6 +34,7 @@ Table Of Contents
 - [JavaScript Interface](#javascript-interface)
 - [Configuration](#configuration)
 - [Examples](#examples)
+- [Common Questions](#common-questions)
 - [Contributing](#contributing)
 - [Migrating](#migrating)
 - [License](#license)
@@ -392,6 +393,55 @@ Use [async][async] to run pa11y on multiple URLs in series, and output the resul
 
 ```
 node example/multiple
+```
+
+
+Common Questions
+----------------
+
+Common questions about pa11y are answered here.
+
+### How do I set cookies on a tested page?
+
+Use the `page.headers` option either in your JS code or in your JSON config file:
+
+```js
+pa11y({
+    page: {
+        headers: {
+            Cookie: 'foo=bar'
+        }
+    }
+});
+```
+
+### How can pa11y log in if my site's behind basic auth?
+
+Use the `page.settings` option either in your JS code or in your JSON config file to set a username and password:
+
+```js
+pa11y({
+    page: {
+        settings: {
+            userName: 'nature',
+            password: 'say the magic word'
+        }
+    }
+});
+```
+
+### How can I ignore SSL errors when a page doesn't have a valid certificate?
+
+Use the `phantom.parameters` option either in your JS code or in your JSON config file to set PhantomJS command-line flags:
+
+```js
+pa11y({
+    phantom: {
+        parameters: {
+            'ignore-ssl-errors': 'true'
+        }
+    }
+});
 ```
 
 
