@@ -47,7 +47,7 @@ build-htmlcs:
 	@npm install -g grunt-cli
 	@cd ./node_modules/HTML_CodeSniffer && npm install --development
 	@cd ./node_modules/HTML_CodeSniffer/Contrib/Grunt && grunt build
-	@mkdir -p lib/vendor
-	@cp ./node_modules/HTML_CodeSniffer/build/HTMLCS.js lib/vendor/HTMLCS.js
+	@cat ./lib/vendor/HTMLCS-LICENSE > lib/vendor/HTMLCS.js
+	@cat ./node_modules/HTML_CodeSniffer/build/HTMLCS.js >> lib/vendor/HTMLCS.js
 
 .PHONY: test
