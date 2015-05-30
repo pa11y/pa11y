@@ -405,6 +405,12 @@ Please write unit tests for your code, and check that everything works by runnin
 make lint test
 ```
 
+We use [JavaScript Code Style][jscs] to ensure pa11y's source code is clean and consistent. You can check your work against our rules by running:
+
+```sh
+make jscs-check
+```
+
 
 License
 -------
@@ -416,6 +422,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
+[jscs]: http://jscs.info/
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
