@@ -115,10 +115,10 @@ The command-line tool uses the following exit codes:
 
 By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
-  - `error`: exit on errors only, ignoring warnings and notices
-  - `warning`: exit on errors and warnings, ignoring notices
-  - `notice`: exit on all messages
-  - `none`: never exit
+  - `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
+  - `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
+  - `notice`: exit with a code of `2` on errors, warnings, and notices
+  - `none`: always exit with a code of `0`
 
 ### Command-Line Configuration
 
