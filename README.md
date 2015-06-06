@@ -221,7 +221,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
     },
     {
         code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
-        context: '<a href="http://example.com/">Return to the current design</a>',
+        context: '<a href="http://example.com/">Hello World!</a>',
         message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
         type: 'notice',
         typeCode: 3
