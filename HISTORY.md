@@ -1,6 +1,10 @@
 
 # History
 
+## 2.0.1 (2015-06-08)
+
+  * Update dependencies
+
 ## 2.0.0 (2015-06-08)
 
   * Initial 2.0 release
