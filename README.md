@@ -341,7 +341,8 @@ pa11y({
     phantom: {
         port: 1234,
         parameters: {
-            'ignore-ssl-errors': 'false'
+            'ignore-ssl-errors': 'false',
+            'ssl-protocol': 'tlsv1'
         }
     }
 });
