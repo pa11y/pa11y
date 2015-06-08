@@ -5,8 +5,7 @@
 
   * Initial 2.0 release
   * Full rewrite
-
----
+  * See the [migration guide](https://github.com/nature/pa11y/blob/master/MIGRATION.md#migrating-from-10-to-20) for details
 
 ## 1.7.0 (2015-05-08)
 
