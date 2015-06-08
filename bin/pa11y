@@ -90,10 +90,15 @@ function loadConfig (filePath) {
 }
 
 function loadReporter (name) {
-	return requireFirst([
+	var reporter = requireFirst([
 		'../reporter/' + name,
 		'pa11y-reporter-' + name
-	], pa11y.defaults.log);
+	], null);
+	if (!reporter) {
+		console.error('Reporter "' + name + '" could not be found');
+		process.exit(1);
+	}
+	return reporter;
 }
 
 function requireFirst (stack, defaultReturn) {
