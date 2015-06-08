@@ -90,6 +90,18 @@ describe('lib/pa11y', function () {
 			assert.strictEqual(defaults.page.settings.userAgent, 'pa11y/' + pkg.version + ' (truffler/' + trufflerPkg.version + ')');
 		});
 
+		it('should have a `phantom` property', function () {
+			assert.isObject(defaults.phantom);
+		});
+
+		it('should have a `phantom.parameters` property', function () {
+			assert.isObject(defaults.phantom.parameters);
+		});
+
+		it('should have a `phantom.parameters[\'ignore-ssl-errors\']` property', function () {
+			assert.strictEqual(defaults.phantom.parameters['ignore-ssl-errors'], 'true');
+		});
+
 		it('should have a `standard` property', function () {
 			assert.strictEqual(defaults.standard, 'WCAG2AA');
 		});

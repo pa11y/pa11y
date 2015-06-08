@@ -341,7 +341,7 @@ pa11y({
     phantom: {
         port: 1234,
         parameters: {
-            'ignore-ssl-errors': 'true'
+            'ignore-ssl-errors': 'false'
         }
     }
 });
@@ -351,6 +351,9 @@ Defaults to:
 
 ```js
 {
+    parameters: {
+        'ignore-ssl-errors': 'true'
+    },
     port: 12300
 }
 ```
@@ -429,20 +432,6 @@ pa11y({
         settings: {
             userName: 'nature',
             password: 'say the magic word'
-        }
-    }
-});
-```
-
-### How can I ignore SSL errors when a page doesn't have a valid certificate?
-
-Use the `phantom.parameters` option either in your JS code or in your JSON config file to set PhantomJS command-line flags:
-
-```js
-pa11y({
-    phantom: {
-        parameters: {
-            'ignore-ssl-errors': 'true'
         }
     }
 });
