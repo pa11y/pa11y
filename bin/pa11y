@@ -18,6 +18,7 @@
 'use strict';
 
 var extend = require('node.extend');
+var path = require('path');
 var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
@@ -92,7 +93,8 @@ function loadConfig (filePath) {
 function loadReporter (name) {
 	var reporter = requireFirst([
 		'../reporter/' + name,
-		'pa11y-reporter-' + name
+		'pa11y-reporter-' + name,
+		path.join(process.cwd(), name)
 	], null);
 	if (!reporter) {
 		console.error('Reporter "' + name + '" could not be found');

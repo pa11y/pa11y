@@ -139,12 +139,18 @@ The command-line tool can report test results in a few different ways using the 
   - `html`: output test results as an HTML document
   - `json`: output test results as a JSON array
 
-You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder, using the naming pattern `pa11y-reporter-<name>`.
-
-So the following will attempt to load `pa11y-reporter-rainbows`:
+You can also write and publish your own reporters. Pa11y looks for reporters in the core library, your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```
 pa11y --reporter rainbows nature.com
+```
+
+The following locations will be checked:
+
+```
+<pa11y-core>/reporter/rainbows
+<cwd>/node_modules/pa11y-reporter-rainbows
+<cwd>/rainbows
 ```
 
 A pa11y reporter should export the following methods:
