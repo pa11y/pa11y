@@ -1,7 +1,6 @@
 {
 	"name": "pa11y",
-	"version": "2.0.0-pre",
-	"private": true,
+	"version": "2.0.0",
 
 	"description": "pa11y is your automated accessibility testing pal",
 	"keywords": [ "accessibility", "analysis", "cli", "report" ],
