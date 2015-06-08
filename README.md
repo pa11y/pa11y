@@ -157,6 +157,10 @@ info(message); // Called when an information message is reported
 results(resultsArray, url); // Called with the results of a test run
 ```
 
+You may find the following reporters useful:
+
+  - [`1.0-json`][1.0-json-reporter]: output test results in the pa11y 1.0 JSON format
+
 
 JavaScript Interface
 --------------------
@@ -479,6 +483,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 
 
 
+[1.0-json-reporter]: https://github.com/nature/pa11y-reporter-1.0-json
 [1.x]: https://github.com/nature/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
