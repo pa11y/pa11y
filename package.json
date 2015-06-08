@@ -24,7 +24,7 @@
 		"node": ">=0.10"
 	},
 	"dependencies": {
-		"async": "~0.9",
+		"async": "~1.2",
 		"chalk": "~1.0",
 		"commander": "~2.8",
 		"lower-case": "~1.1",
@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"jscs": "~1.13",
-		"jshint": "~2.7",
+		"jshint": "~2.8",
 		"mocha": "~2.2",
 		"mockery": "~1.4",
 		"proclaim": "~3.2",
