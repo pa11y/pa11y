@@ -35,6 +35,7 @@ describe('Pa11y CLI Config', function () {
 				code: 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2',
 				context: '<title>bar</title>',
 				message: 'Check that the title element describes the document.',
+				selector: 'html > head > title',
 				type: 'notice',
 				typeCode: 3
 			});

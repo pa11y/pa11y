@@ -91,6 +91,7 @@ describe('lib/inject', function () {
 					code: 'foo-code',
 					context: '<element>foo inner</element>',
 					message: 'foo message',
+					selector: '',
 					type: 'error',
 					typeCode: 1
 				},
@@ -98,6 +99,7 @@ describe('lib/inject', function () {
 					code: 'bar-code',
 					context: '<element>bar inner at more than 30 chara...</element>',
 					message: 'bar message',
+					selector: '',
 					type: 'warning',
 					typeCode: 2
 				},
@@ -105,6 +107,7 @@ describe('lib/inject', function () {
 					code: 'baz-code',
 					context: '<element with=\"loads of attributes\" that=\"push the total outerHTML length\" to=\"more than we really want to send back to Node.js\" this=\"is getting kind of silly now, I really want to stop writing dummy text to push the length of this element out\">baz ...',
 					message: 'baz message',
+					selector: '',
 					type: 'notice',
 					typeCode: 3
 				}
@@ -142,6 +145,7 @@ describe('lib/inject', function () {
 					code: 'bar-code',
 					context: '<element>bar inner at more than 30 chara...</element>',
 					message: 'bar message',
+					selector: '',
 					type: 'warning',
 					typeCode: 2
 				}
@@ -179,6 +183,7 @@ describe('lib/inject', function () {
 					code: 'foo-code',
 					context: '<element>foo inner</element>',
 					message: 'foo message',
+					selector: '',
 					type: 'error',
 					typeCode: 1
 				}
