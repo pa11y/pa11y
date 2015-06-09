@@ -70,9 +70,11 @@ function reportResult (result) {
 		'\n' +
 		(typeStarts[result.type]) + result.message +
 		'\n' +
-		'   ' + chalk.gray(result.code) +
+		chalk.grey('   ├── ' + result.code) +
 		'\n' +
-		'   ' + chalk.gray(result.context.replace(/\s+/g, ' '))
+		chalk.grey('   ├── ' + result.selector.replace(/\s+/g, ' ')) +
+		'\n' +
+		chalk.grey('   └── ' + result.context.replace(/\s+/g, ' '))
 	);
 }
 
