@@ -29,7 +29,7 @@ describe('Pa11y CLI Reporter (CSV)', function () {
 		});
 
 		it('should respond with the expected output', function () {
-			assert.include(this.lastStdout, '"type","code","message","context"\n"notice","WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2","Check that the title element describes the document.","<title>Page Title</title>"');
+			assert.include(this.lastStdout, '"type","code","message","context","selector"\n"notice","WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2","Check that the title element describes the document.","<title>Page Title</title>","html > head > title"');
 		});
 
 	});
