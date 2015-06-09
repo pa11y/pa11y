@@ -94,6 +94,10 @@ describe('lib/pa11y', function () {
 			assert.isObject(defaults.phantom);
 		});
 
+		it('should have a `phantom.onStdout` method', function () {
+			assert.isFunction(defaults.phantom.onStdout);
+		});
+
 		it('should have a `phantom.parameters` property', function () {
 			assert.isObject(defaults.phantom.parameters);
 		});
