@@ -30,7 +30,7 @@ function reportError (message) {
 }
 
 function reportResults (results) {
-	console.log('"type","code","message","context"');
+	console.log('"type","code","message","context","selector"');
 	results.forEach(reportResult);
 }
 
@@ -39,6 +39,7 @@ function reportResult (result) {
 		JSON.stringify(result.type),
 		JSON.stringify(result.code),
 		JSON.stringify(result.message),
-		JSON.stringify(result.context)
+		JSON.stringify(result.context),
+		JSON.stringify(result.selector)
 	].join(','));
 }

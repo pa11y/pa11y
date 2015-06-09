@@ -13,7 +13,7 @@ Migrating From 1.0 To 2.0
 The command-line interface in 2.0 is similar to 1.0, but there are a few key changes.
 
   - The `console` reporter has been renamed to `cli` and has a different output format
-  - The `csv` reporter now includes the message context
+  - The `csv` reporter now includes the message context and selector
   - The `json` reporter now outputs an array which matches the new [output format](#output-format). You can use the [pa11y JSON 1.0 reporter](https://github.com/nature/pa11y-reporter-1.0-json) to output 1.0-style JSON
   - Reporters no longer handle the way pa11y exits, this is controlled through the new `--level` flag
   - Custom reporters now have a different API, see the [README](README.md) for more information
