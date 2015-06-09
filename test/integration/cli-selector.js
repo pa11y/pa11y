@@ -20,7 +20,7 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 
-describe('Pa11y CLI Basic', function () {
+describe('Pa11y CLI Selectors', function () {
 
 	describeCliCall('/selectors', [], {}, function () {
 
