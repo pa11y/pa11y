@@ -45,6 +45,7 @@ Results in pa11y 2.0 are no longer output as an object, instead only the results
     code: 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2',
     context: '<title>Pa11y - Your automated accessib...</title>',
     message: 'Check that the title element describes the document.',
+    selector: 'html > head > title',
     type: 'notice',
     typeCode: 3
 }

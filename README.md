@@ -217,6 +217,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
         code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
         context: '<a href="http://example.com/"><img src="example.jpg" alt=""/></a>',
         message: 'Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.',
+        selector: 'html > body > p:nth-child(1) > a',
         type: 'error',
         typeCode: 1
     },
@@ -224,6 +225,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
         code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
         context: '<b>Hello World!</b>',
         message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
+        selector: '#content > b:nth-child(4)',
         type: 'warning',
         typeCode: 2
     },
@@ -231,6 +233,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
         code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
         context: '<a href="http://example.com/">Hello World!</a>',
         message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
+        selector: 'html > body > ul > li:nth-child(2) > a',
         type: 'notice',
         typeCode: 3
     }
