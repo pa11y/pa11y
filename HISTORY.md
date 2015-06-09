@@ -1,6 +1,10 @@
 
 # History
 
+## 2.0.2 (2015-06-09)
+
+  * Fix a bug caused by PhantomJS stdout
+
 ## 2.0.1 (2015-06-08)
 
   * Update dependencies
