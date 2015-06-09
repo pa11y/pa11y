@@ -1,6 +1,10 @@
 
 # History
 
+## 2.1.0 (2015-06-09)
+
+  * Add CSS selectors to the results, making it easier to find elements in the page
+
 ## 2.0.2 (2015-06-09)
 
   * Fix a bug caused by PhantomJS stdout
