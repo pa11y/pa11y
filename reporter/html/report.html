@@ -45,16 +45,12 @@
 		.counts {
 			margin-top: 30px;
 			font-size: 20px;
-			color: #ccc;
 		}
-		.error-count {
-			color: #FF3434;
-		}
-		.warning-count {
-			color: #E5BA0E;
-		}
-		.notice-count {
-			color: #699FFF;
+		.count {
+			display: inline-block;
+			padding: 5px;
+			border-radius: 5px;
+			border: 1px solid #eee;
 		}
 
 		.clean-list {
@@ -95,9 +91,9 @@
 		<p>Generated at: {date}</p>
 
 		<p class="counts">
-			<span class="error-count">{errorCount} errors</span> |
-			<span class="warning-count">{warningCount} warnings</span> |
-			<span class="notice-count">{noticeCount} notices</span>
+			<span class="count error">{errorCount} errors</span>
+			<span class="count warning">{warningCount} warnings</span>
+			<span class="count notice">{noticeCount} notices</span>
 		</p>
 
 		<ul class="clean-list results-list">
