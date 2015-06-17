@@ -13,3 +13,4 @@ notifications:
   email:
     - j.robinson@nature.com
     - rowan.manning@nature.com
+  slack: thefeds:vG3hLYB07EwTYpQFp3TNUx82
