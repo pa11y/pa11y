@@ -81,6 +81,7 @@ Usage: pa11y [options] <url>
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
     -d, --debug                output debug messages
+    -H, --htmlcs <url/path>    the URL or path to source HTML_CodeSniffer from
 ```
 
 ### Running Tests
@@ -243,6 +244,18 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 
 Configuration
 -------------
+
+### `htmlcs` (string)
+
+The path or URL to source HTML CodeSniffer from.
+
+```js
+pa11y({
+    htmlcs: 'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js'
+});
+```
+
+Defaults to a local copy of HTML CodeSniffer, found in [lib/vendor/HTMLCS.js](lib/vendor/HTMLCS.js).
 
 ### `ignore` (array)
 

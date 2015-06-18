@@ -58,6 +58,10 @@ describe('lib/pa11y', function () {
 			defaults = pa11y.defaults;
 		});
 
+		it('should have an `htmlcs` property', function () {
+			assert.strictEqual(defaults.htmlcs, path.resolve(__dirname + '/../../..') + '/lib/vendor/HTMLCS.js');
+		});
+
 		it('should have an `ignore` property', function () {
 			assert.isArray(defaults.ignore);
 		});
@@ -270,10 +274,28 @@ describe('lib/pa11y', function () {
 
 		it('should inject HTML CodeSniffer', function (done) {
 			testFunction(phantom.mockBrowser, phantom.mockPage, function () {
-				var inject = phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js');
+				var inject = phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs);
 				assert.calledOnce(inject);
 				assert.isFunction(inject.firstCall.args[1]);
+				assert.notCalled(phantom.mockPage.includeJs);
 				done();
+			});
+		});
+
+		it('should include a remote HTML CodeSniffer if specified', function (done) {
+			options = {
+				htmlcs: 'http://foo.com/HTMLCS.js'
+			};
+			truffler.reset();
+			pa11y(options, function () {
+				testFunction = truffler.firstCall.args[0].testFunction;
+				testFunction(phantom.mockBrowser, phantom.mockPage, function () {
+					var include = phantom.mockPage.includeJs.withArgs(options.htmlcs);
+					assert.calledOnce(include);
+					assert.isFunction(include.firstCall.args[1]);
+					assert.notCalled(phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs));
+					done();
+				});
 			});
 		});
 
@@ -357,6 +379,22 @@ describe('lib/pa11y', function () {
 				assert.isNotNull(error);
 				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
 				done();
+			});
+		});
+
+		it('should callback with an error if a remote HTML CodeSniffer does not include properly', function (done) {
+			options = {
+				htmlcs: 'http://foo.com/HTMLCS.js'
+			};
+			truffler.reset();
+			phantom.mockPage.includeJs.withArgs('http://foo.com/HTMLCS.js').yieldsAsync(false);
+			pa11y(options, function () {
+				testFunction = truffler.firstCall.args[0].testFunction;
+				testFunction(phantom.mockBrowser, phantom.mockPage, function (error) {
+					assert.isNotNull(error);
+					assert.strictEqual(error.message, 'Pa11y was unable to include scripts in the page');
+					done();
+				});
 			});
 		});
 

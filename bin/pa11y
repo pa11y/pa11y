@@ -37,6 +37,7 @@ function configureProgram (program) {
 		.option('-p, --port <port>', 'the port to run PhantomJS on')
 		.option('-t, --timeout <ms>', 'the timeout in milliseconds')
 		.option('-d, --debug', 'output debug messages')
+		.option('-H, --htmlcs <url>', 'the URL or path to source HTML_CodeSniffer from')
 		.parse(process.argv);
 	program.url = program.args[0];
 }
@@ -68,6 +69,7 @@ function runProgram (program) {
 
 function processOptions (program) {
 	var options = extend(true, {}, loadConfig(program.config), {
+		htmlcs: program.htmlcs,
 		ignore: (program.ignore ? program.ignore.split(';') : undefined),
 		log: loadReporter(program.reporter),
 		phantom: {
