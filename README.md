@@ -81,7 +81,7 @@ Usage: pa11y [options] <url>
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
     -d, --debug                output debug messages
-    -h, --htmlcs <url/path>    The url or path to the HTML_CodeSniffer Library
+    -H, --htmlcs <url/path>    the URL or path to source HTML_CodeSniffer from
 ```
 
 ### Running Tests

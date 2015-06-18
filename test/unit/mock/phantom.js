@@ -27,6 +27,7 @@ var phantom = module.exports = {
 	mockPage: {
 		close: sinon.stub(),
 		evaluate: sinon.stub().callsArgAsync(1),
+		includeJs: sinon.stub().yieldsAsync(true),
 		injectJs: sinon.stub().yieldsAsync(true),
 		open: sinon.stub(),
 		set: sinon.stub()
