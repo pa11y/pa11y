@@ -230,6 +230,7 @@ describe('lib/pa11y', function () {
 					'BAZ',
 					'qux'
 				],
+				htmlcs: 'local',
 				standard: 'Section508'
 			};
 
