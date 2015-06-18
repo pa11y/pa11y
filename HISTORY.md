@@ -1,6 +1,11 @@
 
 # History
 
+## 2.2.0 (2015-06-18)
+
+  * Add the ability to specify a HTML CodeSniffer URL/path
+  * Make sure that the HTML reporter passes WCAG2AA
+
 ## 2.1.0 (2015-06-09)
 
   * Add CSS selectors to the results, making it easier to find elements in the page
