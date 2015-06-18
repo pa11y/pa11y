@@ -18,10 +18,11 @@ The command-line interface in 2.0 is similar to 1.0, but there are a few key cha
   - Reporters no longer handle the way pa11y exits, this is controlled through the new `--level` flag
   - Custom reporters now have a different API, see the [README](README.md) for more information
   - The file specified by the `--config` flag now expects JSON in a different format. See [configuration](#configuration)
-  - The `--htmlcs` flag has been removed, HTML CodeSniffer is now loaded from a local file
+  - The `--htmlcs` flag shorthand has been changed to `-H`
   - The `--useragent` flag has been removed, this is now managed through the config file
   - The `--viewport` flag has been removed, this is now managed through the config file
   - The `--strict` flag has been removed, this is controlled through the new `--level` flag
+  - HTML CodeSniffer is now loaded from a local file by default so tests can be run offline
 
 ### JavaScript Interface
 
