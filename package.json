@@ -18,7 +18,7 @@
 	},
 	"homepage": "https://github.com/nature/pa11y",
 	"bugs": "https://github.com/nature/pa11y/issues",
-	"license": "gpl-3.0",
+	"license": "GPL-3.0",
 
 	"engines": {
 		"node": ">=0.10"
