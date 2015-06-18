@@ -245,6 +245,18 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 Configuration
 -------------
 
+### `htmlcs` (string)
+
+The path or URL to source HTML CodeSniffer from.
+
+```js
+pa11y({
+    htmlcs: 'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js'
+});
+```
+
+Defaults to a local copy of HTML CodeSniffer, found in [lib/vendor/HTMLCS.js](lib/vendor/HTMLCS.js).
+
 ### `ignore` (array)
 
 An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`.
