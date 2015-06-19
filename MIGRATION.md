@@ -57,7 +57,6 @@ Results in pa11y 2.0 are no longer output as an object, instead only the results
 Configuration options have had a big overhaul between 1.0 and 2.0:
 
   - The `url` option has been removed. See [JavaScript Interface](#javascript-interface) for more information
-  - The `htmlcs` option has been removed, HTML CodeSniffer is now loaded from a local file
   - The `config` option has been removed. Cookies are now set as in the `page.headers` option. Ignored rules are now set in a new `ignore` option
   - The `ignore` option now accepts message types (error, warning, notice) as well as codes
   - The `useragent` option has been removed, it can now be set in the `page.headers` option
