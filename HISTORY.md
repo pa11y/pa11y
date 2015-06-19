@@ -1,6 +1,10 @@
 
 # History
 
+## 2.2.1 (2015-06-19)
+
+  * Update the migration guide
+
 ## 2.2.0 (2015-06-18)
 
   * Add the ability to specify a HTML CodeSniffer URL/path
