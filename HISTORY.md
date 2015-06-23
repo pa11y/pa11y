@@ -1,6 +1,11 @@
 
 # History
 
+## 2.3.0 (2015-06-23)
+
+  * Add a `wait` option for pages which take time to fully render
+  * Relax development dependencies
+
 ## 2.2.1 (2015-06-19)
 
   * Update the migration guide
