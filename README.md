@@ -467,13 +467,7 @@ To contribute to pa11y, clone this repo locally and commit your code on a separa
 Please write unit tests for your code, and check that everything works by running the following before opening a pull-request:
 
 ```sh
-make lint test
-```
-
-We use [JavaScript Code Style][jscs] to ensure pa11y's source code is clean and consistent. You can check your work against our rules by running:
-
-```sh
-make jscs-check
+make ci
 ```
 
 
