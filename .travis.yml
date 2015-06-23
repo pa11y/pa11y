@@ -5,6 +5,11 @@ node_js:
   - "0.12"
   - "0.10"
 
+# Build only master (and pull-requests)
+branches:
+  only:
+    - master
+
 # Build script
 script: make ci
 
