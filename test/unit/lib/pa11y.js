@@ -122,6 +122,10 @@ describe('lib/pa11y', function () {
 			assert.strictEqual(defaults.timeout, 30000);
 		});
 
+		it('should have a `wait` property', function () {
+			assert.strictEqual(defaults.wait, 0);
+		});
+
 	});
 
 	it('should default the options', function (done) {
@@ -154,6 +158,17 @@ describe('lib/pa11y', function () {
 		pa11y(options, function (error) {
 			assert.isNotNull(error);
 			assert.strictEqual(error.message, 'Timeout must be numeric');
+			done();
+		});
+	});
+
+	it('should callback with an error if `options.wait` is invalid', function (done) {
+		var options = {
+			wait: 'foo'
+		};
+		pa11y(options, function (error) {
+			assert.isNotNull(error);
+			assert.strictEqual(error.message, 'Wait time must be numeric');
 			done();
 		});
 	});
@@ -234,7 +249,8 @@ describe('lib/pa11y', function () {
 					'BAZ',
 					'qux'
 				],
-				standard: 'Section508'
+				standard: 'Section508',
+				wait: 0
 			};
 
 			// Big old nasty mock
@@ -318,7 +334,8 @@ describe('lib/pa11y', function () {
 						'baz',
 						'qux'
 					],
-					standard: 'Section508'
+					standard: 'Section508',
+					wait: 0
 				});
 				done();
 			});

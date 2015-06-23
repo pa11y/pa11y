@@ -80,6 +80,7 @@ Usage: pa11y [options] <url>
     -c, --config <path>        a JSON config file
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
+    -w, --wait <ms>            the time to wait before running tests in milliseconds
     -d, --debug                output debug messages
     -H, --htmlcs <url/path>    the URL or path to source HTML_CodeSniffer from
 ```
@@ -402,6 +403,18 @@ pa11y({
 ```
 
 Defaults to `30000`.
+
+### `wait` (number)
+
+The time in milliseconds to wait before running HTML CodeSniffer on the page.
+
+```js
+pa11y({
+    wait: 500
+});
+```
+
+Defaults to `0`.
 
 
 Examples
