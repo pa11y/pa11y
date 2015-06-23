@@ -26,7 +26,8 @@ describe('lib/inject', function () {
 		window = require('../mock/window');
 		options = {
 			ignore: [],
-			standard: 'FOO-STANDARD'
+			standard: 'FOO-STANDARD',
+			wait: 0
 		};
 		inject = require('../../../lib/inject');
 	});
@@ -39,6 +40,17 @@ describe('lib/inject', function () {
 		inject(window, options, function () {
 			assert.calledOnce(window.HTMLCS.process);
 			assert.calledWith(window.HTMLCS.process, 'FOO-STANDARD', window.document);
+			done();
+		});
+	});
+
+	it('should wait before processing the page if `options.wait` is set', function (done) {
+		// Note: this test isn't particularly reliable, revisit some time
+		var start = Date.now();
+		options.wait = 10;
+		inject(window, options, function () {
+			var end = Date.now() - start;
+			assert.greaterThanOrEqual(end, 10);
 			done();
 		});
 	});

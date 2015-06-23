@@ -403,6 +403,18 @@ pa11y({
 
 Defaults to `30000`.
 
+### `wait` (number)
+
+The time in milliseconds to wait before running HTML CodeSniffer on the page.
+
+```js
+pa11y({
+    wait: 500
+});
+```
+
+Defaults to `0`.
+
 
 Examples
 --------
