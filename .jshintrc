@@ -8,10 +8,10 @@
 	},
 	"globalstrict": true,
 	"latedef": "nofunc",
-	"maxparams": 5,
+	"maxparams": 4,
 	"maxdepth": 2,
-	"maxstatements": 10,
-	"maxcomplexity": 5,
+	"maxstatements": 8,
+	"maxcomplexity": 4,
 	"node": true,
 	"unused": true
 }
