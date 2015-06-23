@@ -33,12 +33,12 @@
 		"truffler": "~1.0"
 	},
 	"devDependencies": {
-		"jscs": "~1.13",
-		"jshint": "~2.8",
-		"mocha": "~2.2",
+		"jscs": "^1",
+		"jshint": "^2",
+		"mocha": "^2",
 		"mockery": "~1.4",
-		"proclaim": "~3.2",
-		"sinon": "~1.14"
+		"proclaim": "^3",
+		"sinon": "^1"
 	},
 
 	"main": "./lib/pa11y.js",
