@@ -1,6 +1,11 @@
 
 # History
 
+## 2.4.0 (2015-07-13)
+
+  * Add a Markdown reporter
+  * Update dependencies
+
 ## 2.3.0 (2015-06-23)
 
   * Add a `wait` option for pages which take time to fully render
