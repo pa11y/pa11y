@@ -1,6 +1,10 @@
 
 # History
 
+## 2.4.1 (2015-07-13)
+
+  * Add a question about proxying to the README
+
 ## 2.4.0 (2015-07-13)
 
   * Add a Markdown reporter
