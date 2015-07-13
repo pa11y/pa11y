@@ -472,6 +472,24 @@ pa11y({
 });
 ```
 
+### How can I use pa11y with a proxy server?
+
+Use the `phantom.parameters` option either in your JS code or in your JSON config file:
+
+```js
+pa11y({
+    phantom: {
+        parameters: {
+            'proxy': '1.2.3.4:8080',
+            'proxy-type': 'http',
+            'proxy-auth': 'username:password'
+        }
+    }
+});
+```
+
+These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can be set to `http`, `socks5`, or `none`.
+
 
 Contributing
 ------------
@@ -509,6 +527,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
+[phantom-cli]: http://phantomjs.org/api/command-line.html
 [phantom-node-options]: https://github.com/sgentle/phantomjs-node#functionality-details
 [phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
