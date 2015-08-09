@@ -15,12 +15,12 @@ deps:
 # Lint JavaScript
 lint:
 	@echo "$(C_CYAN)> linting javascript$(C_RESET)"
-	@./node_modules/.bin/jshint . --config .jshintrc
+	@./node_modules/.bin/jshint . ./bin/pa11y --config .jshintrc
 
 # Run JavaScript Code Style
 jscs:
 	@echo "$(C_CYAN)> checking javascript code style$(C_RESET)"
-	@./node_modules/.bin/jscs . --config .jscsrc
+	@./node_modules/.bin/jscs . ./bin/pa11y --config .jscsrc
 
 # Run all tests
 test: test-unit test-integration
