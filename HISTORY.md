@@ -1,6 +1,11 @@
 
 # History
 
+## 2.4.2 (2015-08-09)
+
+  * Update dependencies
+  * Increase linter coverage
+
 ## 2.4.1 (2015-07-13)
 
   * Add a question about proxying to the README
