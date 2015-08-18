@@ -26,12 +26,18 @@ jscs:
 	@./node_modules/.bin/jscs . ./bin/pa11y
 
 # Run all tests
-test: test-unit test-integration
+test: test-coverage test-integration
 
 # Run unit tests
 test-unit:
 	@echo "$(C_CYAN)> running unit tests$(C_RESET)"
 	@./node_modules/.bin/mocha ./test/unit --reporter spec --recursive --timeout 200 --slow 50
+
+# Run unit tests with coverage
+test-coverage:
+	@echo "$(C_CYAN)> running unit tests with coverage$(C_RESET)"
+	@./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- ./test/unit --reporter spec --recursive
+	@./node_modules/.bin/istanbul check-coverage --statement 70 --branch 70 --function 70
 
 # Run integration tests
 test-integration:
