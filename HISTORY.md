@@ -1,6 +1,10 @@
 
 # History
 
+## 2.4.3 (2015-08-18)
+
+  * Add code coverage reporting and increase coverage
+
 ## 2.4.2 (2015-08-09)
 
   * Update dependencies
