@@ -37,7 +37,7 @@ test-unit:
 test-coverage:
 	@echo "$(C_CYAN)> running unit tests with coverage$(C_RESET)"
 	@./node_modules/.bin/istanbul cover node_modules/mocha/bin/_mocha -- ./test/unit --reporter spec --recursive
-	@./node_modules/.bin/istanbul check-coverage --statement 70 --branch 70 --function 70
+	@./node_modules/.bin/istanbul check-coverage --statement 90 --branch 90 --function 90
 
 # Run integration tests
 test-integration:

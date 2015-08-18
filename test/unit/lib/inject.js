@@ -18,6 +18,7 @@
 'use strict';
 
 var assert = require('proclaim');
+var jsdom = require('jsdom');
 
 describe('lib/inject', function () {
 	var inject, options, window;
@@ -201,6 +202,102 @@ describe('lib/inject', function () {
 				}
 			]);
 			done();
+		});
+	});
+
+	it('should handle malformed messages and elements', function (done) {
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: {},
+				msg: 'foo message',
+				type: 4
+			}
+		]);
+		inject(window, options, function (result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'foo-code',
+					context: null,
+					message: 'foo message',
+					selector: '',
+					type: 'unknown',
+					typeCode: 4
+				}
+			]);
+			done();
+		});
+	});
+
+	it('should generate CSS selectors for elements', function (done) {
+		var html = [
+			'<body>',
+				'<div>',
+					'<div id="foo">',
+						'<p class="foo1">1</p>',
+						'<p id="foo2" class="foo2">2</p>',
+						'<p class="foo3">3</p>',
+					'</div>',
+				'</div>',
+				'<div id="bar">',
+					'<p class="bar1">1</p>',
+					'<div class="bar2"></div>',
+				'</div>',
+			'</body>'
+		].join('');
+		jsdom.env(html, [], function (error, jsdomWindow) {
+			assert.isNull(error);
+			window.HTMLCS.getMessages.returns([
+				{
+					code: 'foo-code',
+					element: jsdomWindow.document.querySelector('.foo3'),
+					msg: 'foo message',
+					type: 1
+				},
+				{
+					code: 'bar-code',
+					element: jsdomWindow.document.querySelector('.foo2'),
+					msg: 'bar message',
+					type: 1
+				},
+				{
+					code: 'baz-code',
+					element: jsdomWindow.document.querySelector('.bar1'),
+					msg: 'baz message',
+					type: 1
+				}
+			]);
+			inject(window, options, function (result) {
+				assert.isDefined(result.messages);
+				assert.deepEqual(result.messages, [
+					{
+						code: 'foo-code',
+						context: '<p class="foo3">3</p>',
+						message: 'foo message',
+						selector: '#foo > p:nth-child(3)',
+						type: 'error',
+						typeCode: 1
+					},
+					{
+						code: 'bar-code',
+						context: '<p id="foo2" class="foo2">2</p>',
+						message: 'bar message',
+						selector: '#foo2',
+						type: 'error',
+						typeCode: 1
+					},
+					{
+						code: 'baz-code',
+						context: '<p class="bar1">1</p>',
+						message: 'baz message',
+						selector: '#bar > p',
+						type: 'error',
+						typeCode: 1
+					}
+				]);
+				done();
+			});
 		});
 	});
 
