@@ -1,6 +1,10 @@
 
 # History
 
+## 2.4.4 (2015-08-20)
+
+  * Handle PhantomJS exits better when a timeout occurs
+
 ## 2.4.3 (2015-08-18)
 
   * Add code coverage reporting and increase coverage
