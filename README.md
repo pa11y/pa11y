@@ -7,6 +7,7 @@ pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sn
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
+[![Code coverage][shield-coverage]][info-coverage]
 [![Dependencies][shield-dependencies]][info-dependencies]
 [![GPLv3 licensed][shield-license]][info-license]
 
@@ -533,12 +534,14 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
+[info-coverage]: https://coveralls.io/github/nature/pa11y
 [info-dependencies]: https://gemnasium.com/nature/pa11y
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/nature/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/nature/pa11y.svg
+[shield-coverage]: https://img.shields.io/coveralls/nature/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg?label=node.js%20support
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
