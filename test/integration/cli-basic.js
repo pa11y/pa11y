@@ -20,15 +20,15 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 
-describe('Pa11y CLI Basic', function () {
+describe('Pa11y CLI Basic', function() {
 
-	describeCliCall('/notices', [], {}, function () {
+	describeCliCall('/notices', [], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -43,13 +43,13 @@ describe('Pa11y CLI Basic', function () {
 
 	});
 
-	describeCliCall('/warnings', [], {}, function () {
+	describeCliCall('/warnings', [], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 2);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -72,13 +72,13 @@ describe('Pa11y CLI Basic', function () {
 
 	});
 
-	describeCliCall('/errors', [], {}, function () {
+	describeCliCall('/errors', [], {}, function() {
 
-		it('should respond with an exit code of `2`', function () {
+		it('should respond with an exit code of `2`', function() {
 			assert.strictEqual(this.lastExitCode, 2);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 3);
 			assert.deepEqual(this.lastJsonResponse[0], {

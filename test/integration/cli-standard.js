@@ -20,28 +20,28 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 
-describe('Pa11y CLI Standard', function () {
+describe('Pa11y CLI Standard', function() {
 
-	describeCliCall('/notices', ['--standard', 'Section508'], {}, function () {
+	describeCliCall('/notices', ['--standard', 'Section508'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 0);
 		});
 
 	});
 
-	describeCliCall('/notices', ['--standard', 'WCAG2A'], {}, function () {
+	describeCliCall('/notices', ['--standard', 'WCAG2A'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -56,13 +56,13 @@ describe('Pa11y CLI Standard', function () {
 
 	});
 
-	describeCliCall('/notices', ['--standard', 'WCAG2AA'], {}, function () {
+	describeCliCall('/notices', ['--standard', 'WCAG2AA'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -77,13 +77,13 @@ describe('Pa11y CLI Standard', function () {
 
 	});
 
-	describeCliCall('/notices', ['--standard', 'WCAG2AAA'], {}, function () {
+	describeCliCall('/notices', ['--standard', 'WCAG2AAA'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -98,13 +98,13 @@ describe('Pa11y CLI Standard', function () {
 
 	});
 
-	describeCliCall('/notices', ['--config', './mock/config/standard.json'], {}, function () {
+	describeCliCall('/notices', ['--config', './mock/config/standard.json'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 0);
 		});

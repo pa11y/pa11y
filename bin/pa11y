@@ -26,7 +26,7 @@ var pa11y = require('../lib/pa11y');
 configureProgram(program);
 runProgram(program);
 
-function configureProgram (program) {
+function configureProgram(program) {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option(
@@ -76,18 +76,18 @@ function configureProgram (program) {
 	program.url = program.args[0];
 }
 
-function runProgram (program) {
+function runProgram(program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
 	var options = processOptions(program);
 	options.log.begin(program.url);
-	pa11y(options, function (error, test, exitPhantom) {
+	pa11y(options, function(error, test, exitPhantom) {
 		if (error) {
 			options.log.error(error.stack);
 			process.exit(1);
 		}
-		test(program.url, function (error, results) {
+		test(program.url, function(error, results) {
 			exitPhantom();
 			if (error) {
 				options.log.error(error.stack);
@@ -101,7 +101,7 @@ function runProgram (program) {
 	});
 }
 
-function processOptions (program) {
+function processOptions(program) {
 	var options = extend(true, {}, loadConfig(program.config), {
 		htmlcs: program.htmlcs,
 		ignore: (program.ignore ? program.ignore.split(';') : undefined),
@@ -114,12 +114,12 @@ function processOptions (program) {
 		wait: program.wait
 	});
 	if (!program.debug) {
-		options.log.debug = function () {};
+		options.log.debug = function() {};
 	}
 	return options;
 }
 
-function loadConfig (filePath) {
+function loadConfig(filePath) {
 	return requireFirst([
 		filePath,
 		filePath.replace(/^\.\//, process.cwd() + '/'),
@@ -127,7 +127,7 @@ function loadConfig (filePath) {
 	], {});
 }
 
-function loadReporter (name) {
+function loadReporter(name) {
 	var reporter = requireFirst([
 		'../reporter/' + name,
 		'pa11y-reporter-' + name,
@@ -140,19 +140,18 @@ function loadReporter (name) {
 	return reporter;
 }
 
-function requireFirst (stack, defaultReturn) {
+function requireFirst(stack, defaultReturn) {
 	if (!stack.length) {
 		return defaultReturn;
 	}
 	try {
 		return require(stack.shift());
-	}
-	catch (error) {
+	} catch (error) {
 		return requireFirst(stack, defaultReturn);
 	}
 }
 
-function reportShouldFail (level, results) {
+function reportShouldFail(level, results) {
 	if (level === 'none') {
 		return false;
 	}
@@ -165,10 +164,10 @@ function reportShouldFail (level, results) {
 	return (results.filter(isError).length > 0);
 }
 
-function isError (result) {
+function isError(result) {
 	return (result.type === 'error');
 }
 
-function isWarningOrError (result) {
+function isWarningOrError(result) {
 	return (result.type === 'warning' || result.type === 'error');
 }

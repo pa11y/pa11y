@@ -20,15 +20,15 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 
-describe('Pa11y CLI Config', function () {
+describe('Pa11y CLI Config', function() {
 
-	describeCliCall('/headers', ['--config', './mock/config/headers.json'], {}, function () {
+	describeCliCall('/headers', ['--config', './mock/config/headers.json'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {

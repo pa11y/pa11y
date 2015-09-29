@@ -33,29 +33,28 @@ module.exports = {
 	results: reportResults
 };
 
-function reportBegin () {
+function reportBegin() {
 	console.log(chalk.cyan.underline('Welcome to Pa11y'));
 	console.log('');
 }
 
-function reportError (message) {
+function reportError(message) {
 	if (/^error:/i.test(message)) {
 		console.error(message);
-	}
-	else {
+	} else {
 		console.error(start + chalk.red('Error: ' + message));
 	}
 }
 
-function reportDebug (message) {
+function reportDebug(message) {
 	console.log(start + chalk.gray('Debug: ' + message));
 }
 
-function reportInfo (message) {
+function reportInfo(message) {
 	console.log(start + message);
 }
 
-function reportResults (results, url) {
+function reportResults(results, url) {
 	console.log('\n' + chalk.underline('Results for ' + url + ':'));
 	if (results.length === 0) {
 		return console.log('\n' + chalk.green('No errors found!') + '\n');
@@ -65,7 +64,7 @@ function reportResults (results, url) {
 	reportTotals(results);
 }
 
-function reportResult (result) {
+function reportResult(result) {
 	console.log(
 		'\n' +
 		(typeStarts[result.type]) + result.message +
@@ -78,7 +77,7 @@ function reportResult (result) {
 	);
 }
 
-function reportTotals (results) {
+function reportTotals(results) {
 	var totalErrors = results.filter(isError).length;
 	var totalNotices = results.filter(isNotice).length;
 	var totalWarnings = results.filter(isWarning).length;
@@ -92,14 +91,14 @@ function reportTotals (results) {
 	);
 }
 
-function isError (result) {
+function isError(result) {
 	return (result.type === 'error');
 }
 
-function isNotice (result) {
+function isNotice(result) {
 	return (result.type === 'notice');
 }
 
-function isWarning (result) {
+function isWarning(result) {
 	return (result.type === 'warning');
 }

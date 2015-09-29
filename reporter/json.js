@@ -23,12 +23,12 @@ module.exports = {
 	results: reportResults
 };
 
-function emptyFunction () {}
+function emptyFunction() {}
 
-function reportError (message) {
+function reportError(message) {
 	console.error(message);
 }
 
-function reportResults (results) {
+function reportResults(results) {
 	console.log(JSON.stringify(results));
 }

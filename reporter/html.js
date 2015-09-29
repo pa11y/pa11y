@@ -25,17 +25,17 @@ module.exports = {
 	results: reportResults
 };
 
-function emptyFunction () {}
+function emptyFunction() {}
 
-function reportError (message) {
+function reportError(message) {
 	console.error(message);
 }
 
-function reportResults (results, url) {
+function reportResults(results, url) {
 	console.log(buildHtml(results, url));
 }
 
-function buildHtml (results, url) {
+function buildHtml(results, url) {
 	var renderMain = template(__dirname + '/html/report.html');
 	return renderMain({
 		date: new Date(),
@@ -47,19 +47,19 @@ function buildHtml (results, url) {
 	});
 }
 
-function buildResultsHtml (results) {
+function buildResultsHtml(results) {
 	var renderResult = template(__dirname + '/html/result.html');
-	return results.map(function (result) {
+	return results.map(function(result) {
 		result.typeLabel = upperCaseFirst(result.type);
 		return renderResult(result);
 	}).join('');
 }
 
-function template (filePath) {
+function template(filePath) {
 	var content = fs.readFileSync(filePath, 'utf-8');
-	return function (context) {
+	return function(context) {
 		var output = content;
-		Object.keys(context).forEach(function (key) {
+		Object.keys(context).forEach(function(key) {
 			output = output.replace(new RegExp('\\{' + key + '\\}', 'g'), escapeHtml(context[key]));
 			output = output.replace(new RegExp('\\{' + key + '\\|raw\\}', 'g'), context[key]);
 		});
@@ -67,11 +67,11 @@ function template (filePath) {
 	};
 }
 
-function upperCaseFirst (string) {
+function upperCaseFirst(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function escapeHtml (html) {
+function escapeHtml(html) {
 	return String(html)
 		.replace(/&/g, '&amp;')
 		.replace(/"/g, '&quot;')
@@ -80,14 +80,14 @@ function escapeHtml (html) {
 		.replace(/>/g, '&gt;');
 }
 
-function isError (result) {
+function isError(result) {
 	return (result.type === 'error');
 }
 
-function isNotice (result) {
+function isNotice(result) {
 	return (result.type === 'notice');
 }
 
-function isWarning (result) {
+function isWarning(result) {
 	return (result.type === 'warning');
 }
