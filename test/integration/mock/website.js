@@ -21,8 +21,8 @@ var parseUrl = require('url').parse;
 
 module.exports = startWebsite;
 
-function startWebsite (port, done) {
-	var website = http.createServer(function (request, response) {
+function startWebsite(port, done) {
+	var website = http.createServer(function(request, response) {
 		var url = parseUrl(request.url).pathname;
 		try {
 			var html = fs.readFileSync(__dirname + '/html/' + url + '.html', 'utf-8');
@@ -36,7 +36,7 @@ function startWebsite (port, done) {
 			response.end('Not found');
 		}
 	});
-	website.listen(port, function (error) {
+	website.listen(port, function(error) {
 		done(error, website);
 	});
 }

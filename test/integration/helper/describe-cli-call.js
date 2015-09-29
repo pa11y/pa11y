@@ -23,9 +23,9 @@ var spawn = require('child_process').spawn;
 
 module.exports = describeCliCall;
 
-function describeCliCall (urlPath, cliArguments, environment, testFunction) {
-	describe('call with url "' + urlPath + '"' + (cliArguments.length ? ' and arguments "' + cliArguments.join(' ') + '"' : ''), function () {
-		before(function (done) {
+function describeCliCall(urlPath, cliArguments, environment, testFunction) {
+	describe('call with url "' + urlPath + '"' + (cliArguments.length ? ' and arguments "' + cliArguments.join(' ') + '"' : ''), function() {
+		before(function(done) {
 
 			var self = this;
 			self.lastStdout = '';
@@ -42,15 +42,15 @@ function describeCliCall (urlPath, cliArguments, environment, testFunction) {
 				cwd: path.resolve(__dirname, '../'),
 				env: environment
 			});
-			child.stdout.on('data', function (data) {
+			child.stdout.on('data', function(data) {
 				self.lastStdout += data;
 				self.lastOutput += data;
 			});
-			child.stderr.on('data', function (data) {
+			child.stderr.on('data', function(data) {
 				self.lastStderr += data;
 				self.lastOutput += data;
 			});
-			child.on('close', function (code) {
+			child.on('close', function(code) {
 				self.lastJsonResponse = null;
 				try {
 					self.lastJsonResponse = JSON.parse(self.lastOutput);

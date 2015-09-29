@@ -20,15 +20,15 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 
-describe('Pa11y CLI Ignore', function () {
+describe('Pa11y CLI Ignore', function() {
 
-	describeCliCall('/errors', ['--ignore', 'warning;WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'], {}, function () {
+	describeCliCall('/errors', ['--ignore', 'warning;WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {
@@ -43,13 +43,13 @@ describe('Pa11y CLI Ignore', function () {
 
 	});
 
-	describeCliCall('/errors', ['--config', './mock/config/ignore.json'], {}, function () {
+	describeCliCall('/errors', ['--config', './mock/config/ignore.json'], {}, function() {
 
-		it('should respond with an exit code of `0`', function () {
+		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
 		});
 
-		it('should respond with the expected messages', function () {
+		it('should respond with the expected messages', function() {
 			assert.isArray(this.lastJsonResponse);
 			assert.lengthEquals(this.lastJsonResponse, 1);
 			assert.deepEqual(this.lastJsonResponse[0], {

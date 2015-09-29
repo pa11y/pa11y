@@ -12,10 +12,10 @@ pa11y({
 		info: console.log.bind(console)
 	}
 
-}, function (error, test, exit) {
+}, function(error, test, exit) {
 
 	// Test http://nature.com/
-	test('nature.com', function (error, result) {
+	test('nature.com', function(error, result) {
 
 		// Log the result
 		console.log(result);

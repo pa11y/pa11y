@@ -7,6 +7,10 @@
 		"numeric",
 		"string"
 	],
+	"disallowKeywordsOnNewLine": [
+		"catch",
+		"else"
+	],
 	"disallowMixedSpacesAndTabs": true,
 	"disallowMultipleSpaces": true,
 	"disallowMultipleVarDecl": true,
@@ -17,28 +21,53 @@
 	"disallowSpaceBeforeComma": true,
 	"disallowSpaceBeforeSemicolon": true,
 	"disallowSpacesInCallExpression": true,
+	"disallowSpacesInFunction": {
+		"beforeOpeningRoundBrace": true
+	},
+	"disallowSpacesInsideArrayBrackets": true,
+	"disallowSpacesInsideBrackets": true,
+	"disallowSpacesInsideObjectBrackets": true,
+	"disallowSpacesInsideParentheses": true,
 	"disallowTrailingComma": true,
 	"disallowTrailingWhitespace": true,
 	"disallowYodaConditions": true,
-	"maximumLineLength": 100,
+	"maximumLineLength": 200,
 	"requireBlocksOnNewline": true,
 	"requireCamelCaseOrUpperCaseIdentifiers": true,
 	"requireCapitalizedConstructors": true,
 	"requireCommaBeforeLineBreak": true,
-	"requireCurlyBraces": true,
-	"requireDotNotation": true,
-	"requireFunctionDeclarations": true,
-	"requireKeywordsOnNewLine": [
-		"else"
+	"requireCurlyBraces": [
+		"if",
+		"else",
+		"for",
+		"while",
+		"do",
+		"switch",
+		"try",
+		"catch"
 	],
+	"requireDotNotation": true,
 	"requireLineBreakAfterVariableAssignment": true,
 	"requireLineFeedAtFileEnd": true,
 	"requireObjectKeysOnNewLine": true,
 	"requireParenthesesAroundIIFE": true,
 	"requireSemicolons": true,
 	"requireSpaceAfterBinaryOperators": true,
-	"requireSpaceAfterKeywords": true,
-	"requireSpaceAfterLineComment": true,
+	"requireSpaceAfterKeywords": [
+		"if",
+		"else",
+		"for",
+		"while",
+		"do",
+		"switch",
+		"try",
+		"catch"
+	],
+	"requireSpaceAfterLineComment": {
+		"allExcept": [
+			"="
+		]
+	},
 	"requireSpaceBeforeBinaryOperators": true,
 	"requireSpaceBeforeBlockStatements": true,
 	"requireSpaceBeforeObjectValues": true,
@@ -46,17 +75,17 @@
 	"requireSpacesInConditionalExpression": true,
 	"requireSpacesInForStatement": true,
 	"requireSpacesInFunction": {
-		"beforeOpeningRoundBrace": true,
 		"beforeOpeningCurlyBrace": true
 	},
 	"validateIndentation": "\t",
 	"validateLineBreaks": "LF",
+	"validateNewlineAfterArrayElements": true,
 	"validateParameterSeparator": ", ",
 	"validateQuoteMarks": "'",
 
 	"excludeFiles": [
-		"coverage/**",
-		"lib/vendor/**",
-		"node_modules/**"
+		"coverage",
+		"lib/vendor",
+		"node_modules"
 	]
 }

@@ -30,11 +30,11 @@ module.exports = {
 	results: reportResults
 };
 
-function reportBegin () {
+function reportBegin() {
 	console.log('# Welcome to Pa11y\n');
 }
 
-function reportResults (results, url) {
+function reportResults(results, url) {
 	console.log('## Results for ' + url + ':');
 	if (results.length === 0) {
 		return console.log('\n * No errors found!');
@@ -44,7 +44,7 @@ function reportResults (results, url) {
 	reportTotals(results);
 }
 
-function reportResult (result) {
+function reportResult(result) {
 	console.log(
 		'* ' + typeStarts[result.type] + result.message +
 		'\n' +
@@ -57,7 +57,7 @@ function reportResult (result) {
 	);
 }
 
-function reportTotals (results) {
+function reportTotals(results) {
 	var totalErrors = results.filter(isError).length;
 	var totalNotices = results.filter(isNotice).length;
 	var totalWarnings = results.filter(isWarning).length;
@@ -69,20 +69,20 @@ function reportTotals (results) {
 	);
 }
 
-function reportError (message) {
+function reportError(message) {
 	console.error(message);
 }
 
-function emptyFunction () {}
+function emptyFunction() {}
 
-function isError (result) {
+function isError(result) {
 	return (result.type === 'error');
 }
 
-function isNotice (result) {
+function isNotice(result) {
 	return (result.type === 'notice');
 }
 
-function isWarning (result) {
+function isWarning(result) {
 	return (result.type === 'warning');
 }

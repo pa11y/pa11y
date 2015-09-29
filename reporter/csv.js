@@ -23,18 +23,18 @@ module.exports = {
 	results: reportResults
 };
 
-function emptyFunction () {}
+function emptyFunction() {}
 
-function reportError (message) {
+function reportError(message) {
 	console.error(message);
 }
 
-function reportResults (results) {
+function reportResults(results) {
 	console.log('"type","code","message","context","selector"');
 	results.forEach(reportResult);
 }
 
-function reportResult (result) {
+function reportResult(result) {
 	console.log([
 		JSON.stringify(result.type),
 		JSON.stringify(result.code),

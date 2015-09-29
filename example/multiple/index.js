@@ -13,7 +13,7 @@ pa11y({
 		info: console.log.bind(console)
 	}
 
-}, function (error, test, exit) {
+}, function(error, test, exit) {
 
 	// Use the async library to run multiple tests in series
 	// https://github.com/caolan/async
@@ -25,7 +25,7 @@ pa11y({
 		// Test the Nature Plants home page
 		plants: test.bind(null, 'http://nature.com/nplants/')
 
-	}, function (error, results) {
+	}, function(error, results) {
 
 		// Log the results
 		console.log(results.home);

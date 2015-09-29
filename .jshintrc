@@ -1,5 +1,10 @@
 {
+	"browser": true,
+	"curly": true,
+	"eqeqeq": true,
+	"forin": true,
 	"globals": {
+		"after": true,
 		"afterEach": true,
 		"before": true,
 		"beforeEach": true,
@@ -8,10 +13,18 @@
 	},
 	"globalstrict": true,
 	"latedef": "nofunc",
-	"maxparams": 4,
-	"maxdepth": 2,
-	"maxstatements": 8,
 	"maxcomplexity": 4,
+	"maxdepth": 2,
+	"maxparams": 4,
+	"maxstatements": 8,
+	"noarg": true,
 	"node": true,
+	"nonew": true,
+	"nonstandard": true,
+	"regexp": true,
+	"shadow": true,
+	"sub": true,
+	"trailing": true,
+	"undef": true,
 	"unused": true
 }

@@ -20,10 +20,10 @@
 var assert = require('proclaim');
 var jsdom = require('jsdom');
 
-describe('lib/inject', function () {
+describe('lib/inject', function() {
 	var inject, options, window;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		window = require('../mock/window');
 		options = {
 			ignore: [],
@@ -33,31 +33,31 @@ describe('lib/inject', function () {
 		inject = require('../../../lib/inject');
 	});
 
-	it('should be a function', function () {
+	it('should be a function', function() {
 		assert.isFunction(inject);
 	});
 
-	it('should process the page with HTML CodeSniffer', function (done) {
-		inject(window, options, function () {
+	it('should process the page with HTML CodeSniffer', function(done) {
+		inject(window, options, function() {
 			assert.calledOnce(window.HTMLCS.process);
 			assert.calledWith(window.HTMLCS.process, 'FOO-STANDARD', window.document);
 			done();
 		});
 	});
 
-	it('should wait before processing the page if `options.wait` is set', function (done) {
+	it('should wait before processing the page if `options.wait` is set', function(done) {
 		// Note: this test isn't particularly reliable, revisit some time
 		var start = Date.now();
 		options.wait = 10;
-		inject(window, options, function () {
+		inject(window, options, function() {
 			var end = Date.now() - start;
 			assert.greaterThanOrEqual(end, 10);
 			done();
 		});
 	});
 
-	it('should get the HTML CodeSniffer messages after processing the page', function (done) {
-		inject(window, options, function () {
+	it('should get the HTML CodeSniffer messages after processing the page', function(done) {
+		inject(window, options, function() {
 			assert.calledOnce(window.HTMLCS.getMessages);
 			assert.callOrder(
 				window.HTMLCS.process,
@@ -67,7 +67,7 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should callback with the messages reformatted for pa11y', function (done) {
+	it('should callback with the messages reformatted for pa11y', function(done) {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'foo-code',
@@ -97,7 +97,7 @@ describe('lib/inject', function () {
 				type: 3
 			}
 		]);
-		inject(window, options, function (result) {
+		inject(window, options, function(result) {
 			assert.isDefined(result.messages);
 			assert.deepEqual(result.messages, [
 				{
@@ -129,7 +129,7 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should ignore messages when their code appears in `options.ignore`', function (done) {
+	it('should ignore messages when their code appears in `options.ignore`', function(done) {
 		options.ignore.push('foo-code');
 		window.HTMLCS.getMessages.returns([
 			{
@@ -151,7 +151,7 @@ describe('lib/inject', function () {
 				type: 2
 			}
 		]);
-		inject(window, options, function (result) {
+		inject(window, options, function(result) {
 			assert.isDefined(result.messages);
 			assert.deepEqual(result.messages, [
 				{
@@ -167,7 +167,7 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should ignore messages when their type appears in `options.ignore`', function (done) {
+	it('should ignore messages when their type appears in `options.ignore`', function(done) {
 		options.ignore.push('warning');
 		window.HTMLCS.getMessages.returns([
 			{
@@ -189,7 +189,7 @@ describe('lib/inject', function () {
 				type: 2
 			}
 		]);
-		inject(window, options, function (result) {
+		inject(window, options, function(result) {
 			assert.isDefined(result.messages);
 			assert.deepEqual(result.messages, [
 				{
@@ -205,7 +205,7 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should handle malformed messages and elements', function (done) {
+	it('should handle malformed messages and elements', function(done) {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'foo-code',
@@ -214,7 +214,7 @@ describe('lib/inject', function () {
 				type: 4
 			}
 		]);
-		inject(window, options, function (result) {
+		inject(window, options, function(result) {
 			assert.isDefined(result.messages);
 			assert.deepEqual(result.messages, [
 				{
@@ -230,7 +230,7 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should generate CSS selectors for elements', function (done) {
+	it('should generate CSS selectors for elements', function(done) {
 		var html = [
 			'<body>',
 				'<div>',
@@ -246,7 +246,7 @@ describe('lib/inject', function () {
 				'</div>',
 			'</body>'
 		].join('');
-		jsdom.env(html, [], function (error, jsdomWindow) {
+		jsdom.env(html, [], function(error, jsdomWindow) {
 			assert.isNull(error);
 			window.HTMLCS.getMessages.returns([
 				{
@@ -268,7 +268,7 @@ describe('lib/inject', function () {
 					type: 1
 				}
 			]);
-			inject(window, options, function (result) {
+			inject(window, options, function(result) {
 				assert.isDefined(result.messages);
 				assert.deepEqual(result.messages, [
 					{
@@ -301,9 +301,9 @@ describe('lib/inject', function () {
 		});
 	});
 
-	it('should callback with an error message if HTML CodeSniffer throws', function (done) {
+	it('should callback with an error message if HTML CodeSniffer throws', function(done) {
 		window.HTMLCS.process.throws(new Error('Oopsie'));
-		inject(window, options, function (result) {
+		inject(window, options, function(result) {
 			assert.isDefined(result.error);
 			assert.strictEqual(result.error, 'HTML CodeSniffer: Oopsie');
 			done();
