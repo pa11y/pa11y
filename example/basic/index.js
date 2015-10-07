@@ -2,8 +2,8 @@
 
 var pa11y = require('../..');
 
-// Start pa11y
-pa11y({
+// Create a test instance with some default options
+var test = pa11y({
 
 	// Log what's happening to the console
 	log: {
@@ -12,17 +12,12 @@ pa11y({
 		info: console.log.bind(console)
 	}
 
-}, function(error, test, exit) {
+});
 
-	// Test http://nature.com/
-	test('nature.com', function(error, result) {
-
-		// Log the result
-		console.log(result);
-
-		// Exit pa11y
-		exit();
-
-	});
-
+// Test http://nature.com/
+test.run('nature.com', function(error, result) {
+	if (error) {
+		return console.error(error.message);
+	}
+	console.log(result);
 });

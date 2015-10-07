@@ -18,7 +18,6 @@
 'use strict';
 
 var assert = require('proclaim');
-var jsdom = require('jsdom');
 
 describe('lib/inject', function() {
 	var inject, options, window;
@@ -230,74 +229,145 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements', function(done) {
-		var html = [
-			'<body>',
-				'<div>',
-					'<div id="foo">',
-						'<p class="foo1">1</p>',
-						'<p id="foo2" class="foo2">2</p>',
-						'<p class="foo3">3</p>',
-					'</div>',
-				'</div>',
-				'<div id="bar">',
-					'<p class="bar1">1</p>',
-					'<div class="bar2"></div>',
-				'</div>',
-			'</body>'
-		].join('');
-		jsdom.env(html, [], function(error, jsdomWindow) {
-			assert.isNull(error);
-			window.HTMLCS.getMessages.returns([
-				{
-					code: 'foo-code',
-					element: jsdomWindow.document.querySelector('.foo3'),
-					msg: 'foo message',
-					type: 1
-				},
-				{
-					code: 'bar-code',
-					element: jsdomWindow.document.querySelector('.foo2'),
-					msg: 'bar message',
-					type: 1
-				},
-				{
-					code: 'baz-code',
-					element: jsdomWindow.document.querySelector('.bar1'),
-					msg: 'baz message',
-					type: 1
-				}
-			]);
-			inject(window, options, function(result) {
-				assert.isDefined(result.messages);
-				assert.deepEqual(result.messages, [
-					{
-						code: 'foo-code',
-						context: '<p class="foo3">3</p>',
-						message: 'foo message',
-						selector: '#foo > p:nth-child(3)',
-						type: 'error',
-						typeCode: 1
-					},
-					{
-						code: 'bar-code',
-						context: '<p id="foo2" class="foo2">2</p>',
-						message: 'bar message',
-						selector: '#foo2',
-						type: 'error',
-						typeCode: 1
-					},
-					{
-						code: 'baz-code',
-						context: '<p class="bar1">1</p>',
-						message: 'baz message',
-						selector: '#bar > p',
-						type: 'error',
-						typeCode: 1
-					}
-				]);
-				done();
-			});
+	it('should generate CSS selectors for elements with IDs', function(done) {
+		var element = {
+			id: 'foo',
+			nodeType: 1
+		};
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: element,
+				msg: 'foo message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.lengthEquals(result.messages, 1);
+			assert.strictEqual(result.messages[0].selector, '#foo');
+			done();
+		});
+	});
+
+	it('should generate CSS selectors for elements with IDs', function(done) {
+		var element = {
+			id: 'foo',
+			nodeType: 1
+		};
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'code',
+				element: element,
+				msg: 'message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.lengthEquals(result.messages, 1);
+			assert.strictEqual(result.messages[0].selector, '#foo');
+			done();
+		});
+	});
+
+	it('should generate CSS selectors for elements whose parents have IDs and are unique children', function(done) {
+		var element = {
+			nodeType: 1,
+			tagName: 'BAR',
+			parentNode: {
+				id: 'foo',
+				nodeType: 1
+			}
+		};
+		element.parentNode.childNodes = [
+			{
+				nodeType: 1,
+				tagName: 'BAZ'
+			},
+			element,
+			{
+				nodeType: 1,
+				tagName: 'BAZ'
+			}
+		];
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'code',
+				element: element,
+				msg: 'message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.lengthEquals(result.messages, 1);
+			assert.strictEqual(result.messages[0].selector, '#foo > bar');
+			done();
+		});
+	});
+
+	it('should generate CSS selectors for elements whose parents have IDs and are not unique children', function(done) {
+		var element = {
+			nodeType: 1,
+			tagName: 'BAR',
+			parentNode: {
+				id: 'foo',
+				nodeType: 1
+			}
+		};
+		element.parentNode.childNodes = [
+			{
+				nodeType: 1,
+				tagName: 'BAR'
+			},
+			element,
+			{
+				nodeType: 1,
+				tagName: 'BAR'
+			}
+		];
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'code',
+				element: element,
+				msg: 'message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.lengthEquals(result.messages, 1);
+			assert.strictEqual(result.messages[0].selector, '#foo > bar:nth-child(2)');
+			done();
+		});
+	});
+
+	it('should generate CSS selectors for elements whose parents have no IDs', function(done) {
+		var element = {
+			nodeType: 1,
+			tagName: 'BAR',
+			parentNode: {
+				nodeType: 1,
+				tagName: 'FOO'
+			}
+		};
+		element.parentNode.childNodes = [
+			element
+		];
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'code',
+				element: element,
+				msg: 'message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.lengthEquals(result.messages, 1);
+			assert.strictEqual(result.messages[0].selector, 'foo > bar');
+			done();
 		});
 	});
 

@@ -3,8 +3,8 @@
 var async = require('async');
 var pa11y = require('../..');
 
-// Start pa11y
-pa11y({
+// Create a test instance with some default options
+var test = pa11y({
 
 	// Log what's happening to the console
 	log: {
@@ -13,27 +13,23 @@ pa11y({
 		info: console.log.bind(console)
 	}
 
-}, function(error, test, exit) {
+});
 
-	// Use the async library to run multiple tests in series
-	// https://github.com/caolan/async
-	async.series({
 
-		// Test the Nature home page
-		home: test.bind(null, 'http://nature.com/'),
+// Use the async library to run multiple tests in series
+// https://github.com/caolan/async
+async.series({
 
-		// Test the Nature Plants home page
-		plants: test.bind(null, 'http://nature.com/nplants/')
+	// Test the Nature home page
+	home: test.run.bind(test, 'http://nature.com/'),
 
-	}, function(error, results) {
+	// Test the Nature Plants home page
+	plants: test.run.bind(test, 'http://nature.com/nplants/')
 
-		// Log the results
-		console.log(results.home);
-		console.log(results.plants);
-
-		// Exit pa11y
-		exit();
-
-	});
-
+}, function(error, results) {
+	if (error) {
+		return console.error(error.message);
+	}
+	console.log(results.home);
+	console.log(results.plants);
 });
