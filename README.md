@@ -526,9 +526,14 @@ make ci
 Migrating
 ---------
 
-If you're using pa11y 1.0 and wish to migrate to 2.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
+If you're using pa11y 1.0 or 2.0 and wish to migrate to 3.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
 
-It's recommended that you migrate to 2.0 as soon as possible, but [1.0 is still available on the 1.x branch][1.x]. We'll be providing support for 1.0 for the forseeable future, but there will be no new feature development.
+It's recommended that you migrate to 3.0 as soon as possible, but we maintain branches for previous major versions. Each of these will be supported (critical bug fixes only) for 1 year from the next major version's released date:
+
+- [pa11y 2.0][2.x] (support ends 8th October 2016)
+- [pa11y 1.0][1.x] (support ends 8th June 2016)
+
+If you're opening issues related to these, please mention the version being used.
 
 
 License
@@ -540,6 +545,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 
 
 [1.0-json-reporter]: https://github.com/nature/pa11y-reporter-1.0-json
+[2.x]: https://github.com/nature/pa11y/tree/2.x
 [1.x]: https://github.com/nature/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
