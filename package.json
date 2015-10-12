@@ -22,7 +22,7 @@
 	},
 	"homepage": "https://github.com/nature/pa11y",
 	"bugs": "https://github.com/nature/pa11y/issues",
-	"license": "GPL-3.0",
+	"license": "LGPL-3.0",
 
 	"engines": {
 		"node": ">=0.12"
