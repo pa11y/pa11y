@@ -1,6 +1,13 @@
 
 # History
 
+## 3.0.0 (2015-10-16)
+
+  * Initial 3.0 release
+  * Overhaul the API (now uses Truffler 2.0)
+  * Drop Node.js 0.10 support
+  * See the [migration guide](https://github.com/nature/pa11y/blob/master/MIGRATION.md#migrating-from-20-to-30) for details
+
 ## 2.4.4 (2015-08-20)
 
   * Handle PhantomJS exits better when a timeout occurs

@@ -530,7 +530,7 @@ If you're using pa11y 1.0 or 2.0 and wish to migrate to 3.0, we've written a [Mi
 
 It's recommended that you migrate to 3.0 as soon as possible, but we maintain branches for previous major versions. Each of these will be supported (critical bug fixes only) for 1 year from the next major version's released date:
 
-- [pa11y 2.0][2.x] (support ends 8th October 2016)
+- [pa11y 2.0][2.x] (support ends 16th October 2016)
 - [pa11y 1.0][1.x] (support ends 8th June 2016)
 
 If you're opening issues related to these, please mention the version being used.
