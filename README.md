@@ -11,16 +11,21 @@ pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sn
 [![Dependencies][shield-dependencies]][info-dependencies]
 [![GPLv3 licensed][shield-license]][info-license]
 
+On the command line:
+
 ```sh
 pa11y nature.com
 ```
 
+In JavaScript:
+
 ```js
 var pa11y = require('pa11y');
-pa11y(options, function (error, test, exit) {
-    test('nature.com', function (error, results) {
-        /* ... */
-    });
+
+var test = pa11y(options);
+
+test.run('nature.com', function (error, results) {
+    /* ... */
 });
 ```
 
@@ -42,7 +47,7 @@ Table Of Contents
 Requirements
 ------------
 
-pa11y requires [Node.js][node] 0.10+ and [PhantomJS][phantom] to run.
+pa11y requires [Node.js][node] 0.12+ and [PhantomJS][phantom] to run.
 
 On a Mac, you can install these with [Homebrew][brew]:
 
@@ -53,7 +58,7 @@ $ brew install phantomjs
 
 If you're on Linux, you'll probably be able to work it out.
 
-Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.10) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 
 Command-Line Interface
@@ -185,31 +190,17 @@ Require pa11y:
 var pa11y = require('pa11y');
 ```
 
-Create a test function by initialising pa11y with [some options](#configuration):
+Create a tester by initialising pa11y with [some options](#configuration):
 
 ```js
-pa11y(options, function (error, test, exit) { /* ... */ });
+var test = pa11y(options);
 ```
 
-Within your callback, you can use the `test` and `exit` functions to run accessibility tests against web pages or exit PhantomJS:
+The `test.run` function can then be used to run your test function against a URL:
 
 ```js
-pa11y(options, function (error, test, exit) {
-
-    // Run a test on nature.com
-    test('http://www.nature.com/', function (error, results) {
-        // ...
-    });
-
-});
-```
-
-```js
-pa11y(options, function (error, test, exit) {
-
-    // Exit PhantomJS
-    exit();
-
+test.run('http://www.nature.com/', function(error, results) {
+    // ...
 });
 ```
 
@@ -247,6 +238,33 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 
 Configuration
 -------------
+
+pa11y has lots of options you can use to change the way PhantomJS runs, or the way your page is loaded. Options can be set either on the pa11y instance when it's created or the individual test runs. This allows you to set some defaults which can be overridden per-test:
+
+```js
+// Set the default Foo header to "bar"
+var test = pa11y({
+    page: {
+        headers: {
+            Foo: 'bar'
+        }
+    }
+});
+
+// Run a test with the Foo header set to "bar"
+test.run('http://www.nature.com/', function(error, results) { /* ... */ });
+
+// Run a test with the Foo header overridden
+test.run('http://www.nature.com/', {
+    page: {
+        headers: {
+            Foo: 'hello'
+        }
+    }
+}, function(error, results) { /* ... */ });
+```
+
+Below is a reference of all the options that are available:
 
 ### `htmlcs` (string)
 
@@ -377,10 +395,11 @@ Defaults to:
 {
     parameters: {
         'ignore-ssl-errors': 'true'
-    },
-    port: 12300
+    }
 }
 ```
+
+If `phantom.port` is not specified, a random available port will be used.
 
 ### `standard` (string)
 
@@ -507,9 +526,14 @@ make ci
 Migrating
 ---------
 
-If you're using pa11y 1.0 and wish to migrate to 2.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
+If you're using pa11y 1.0 or 2.0 and wish to migrate to 3.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
 
-It's recommended that you migrate to 2.0 as soon as possible, but [1.0 is still available on the 1.x branch][1.x]. We'll be providing support for 1.0 for the forseeable future, but there will be no new feature development.
+It's recommended that you migrate to 3.0 as soon as possible, but we maintain branches for previous major versions. Each of these will be supported (critical bug fixes only) for 1 year from the next major version's released date:
+
+- [pa11y 2.0][2.x] (support ends 8th October 2016)
+- [pa11y 1.0][1.x] (support ends 8th June 2016)
+
+If you're opening issues related to these, please mention the version being used.
 
 
 License
@@ -521,6 +545,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 
 
 [1.0-json-reporter]: https://github.com/nature/pa11y-reporter-1.0-json
+[2.x]: https://github.com/nature/pa11y/tree/2.x
 [1.x]: https://github.com/nature/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
@@ -543,6 +568,6 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [shield-dependencies]: https://img.shields.io/gemnasium/nature/pa11y.svg
 [shield-coverage]: https://img.shields.io/coveralls/nature/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
-[shield-node]: https://img.shields.io/node/v/pa11y.svg?label=node.js%20support
+[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–4-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/nature/pa11y/master.svg

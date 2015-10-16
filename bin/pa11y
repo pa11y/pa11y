@@ -82,13 +82,9 @@ function runProgram(program) {
 	}
 	var options = processOptions(program);
 	options.log.begin(program.url);
-	pa11y(options, function(error, test, exitPhantom) {
-		if (error) {
-			options.log.error(error.stack);
-			process.exit(1);
-		}
-		test(program.url, function(error, results) {
-			exitPhantom();
+	try {
+		var test = pa11y(options);
+		test.run(program.url, function(error, results) {
 			if (error) {
 				options.log.error(error.stack);
 				process.exit(1);
@@ -98,7 +94,10 @@ function runProgram(program) {
 				process.exit(2);
 			}
 		});
-	});
+	} catch (error) {
+		options.log.error(error.stack);
+		process.exit(1);
+	}
 }
 
 function processOptions(program) {
@@ -106,6 +105,11 @@ function processOptions(program) {
 		htmlcs: program.htmlcs,
 		ignore: (program.ignore ? program.ignore.split(';') : undefined),
 		log: loadReporter(program.reporter),
+		page: {
+			settings: {
+				resourceTimeout: program.timeout
+			}
+		},
 		phantom: {
 			port: program.port
 		},

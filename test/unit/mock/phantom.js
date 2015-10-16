@@ -17,23 +17,11 @@
 
 var sinon = require('sinon');
 
-var phantom = module.exports = {
-	create: sinon.stub(),
-	mockBrowser: {
-		addCookie: sinon.stub(),
-		createPage: sinon.stub(),
-		exit: sinon.stub()
-	},
+module.exports = {
+	mockBrowser: {},
 	mockPage: {
-		close: sinon.stub(),
-		evaluate: sinon.stub().callsArgAsync(1),
-		includeJs: sinon.stub().yieldsAsync(true),
-		injectJs: sinon.stub().yieldsAsync(true),
-		open: sinon.stub(),
-		set: sinon.stub()
+		evaluate: sinon.stub().yieldsAsync(),
+		includeJs: sinon.stub().yieldsAsync(null, true),
+		injectJs: sinon.stub().yieldsAsync(null, true)
 	}
 };
-
-phantom.create.yieldsAsync(phantom.mockBrowser);
-phantom.mockBrowser.createPage.yieldsAsync(phantom.mockPage);
-phantom.mockPage.open.yieldsAsync('success');

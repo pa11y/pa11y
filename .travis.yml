@@ -1,14 +1,27 @@
 
-# Language/versions
+# Build matrix
 language: node_js
-node_js:
-  - "0.12"
-  - "0.10"
+matrix:
+  include:
 
-# Build only master (and pull-requests)
+    # Run tests in Node.js 0.10 (unsupported)
+    - node_js: '0.10'
+
+    # Run tests in Node.js 0.12
+    - node_js: '0.12'
+
+    # Run tests in Node.js 4.x
+    - node_js: '4'
+
+  # Allow Node.js 0.10 to fail – it's unsupported
+  allow_failures:
+    - node_js: '0.10'
+
+# Restrict builds on branches
 branches:
   only:
     - master
+    - /^\d+\.\d+\.\d+$/
 
 # Before install
 before_install:

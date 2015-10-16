@@ -22,7 +22,7 @@
 	"license": "GPL-3.0",
 
 	"engines": {
-		"node": ">=0.10"
+		"node": ">=0.12"
 	},
 	"dependencies": {
 		"async": "~1.4",
@@ -31,12 +31,11 @@
 		"lower-case": "~1.1",
 		"node.extend": "~1.1",
 		"once": "~1.3",
-		"truffler": "~1.0"
+		"truffler": "~2.0"
 	},
 	"devDependencies": {
 		"istanbul": "~0.3",
 		"jscs": "^2",
-		"jsdom": "~3.1",
 		"jshint": "^2",
 		"mocha": "^2",
 		"mockery": "~1.4",

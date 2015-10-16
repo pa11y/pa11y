@@ -23,12 +23,14 @@ var path = require('path');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function() {
-	var extend, pa11y, phantom, pkg, truffler, trufflerPkg;
+	var extend, injectScriptPath, pa11y, phantom, pkg, truffler, trufflerPkg, window;
 
 	beforeEach(function() {
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
+
+		injectScriptPath = path.resolve(__dirname, '..', '..', '..', 'lib', 'inject.js');
 
 		phantom = require('../mock/phantom');
 		mockery.registerMock('phantom', phantom);
@@ -38,6 +40,8 @@ describe('lib/pa11y', function() {
 
 		truffler = require('../mock/truffler');
 		mockery.registerMock('truffler', truffler);
+
+		window = require('../mock/window');
 
 		pa11y = require('../../../lib/pa11y');
 
@@ -118,132 +122,72 @@ describe('lib/pa11y', function() {
 			assert.strictEqual(defaults.standard, 'WCAG2AA');
 		});
 
-		it('should have a `timeout` property', function() {
-			assert.strictEqual(defaults.timeout, 30000);
-		});
-
 		it('should have a `wait` property', function() {
 			assert.strictEqual(defaults.wait, 0);
 		});
 
 	});
 
-	it('should default the options', function(done) {
-		var options = {};
-		pa11y(options, function() {
+	describe('.pa11y(options)', function() {
+		var instance, options;
+
+		beforeEach(function() {
+			options = {
+				foo: 'bar'
+			};
+			instance = pa11y(options);
+		});
+
+		it('should default the options', function() {
 			assert.calledOnce(extend);
 			assert.isTrue(extend.firstCall.args[0]);
 			assert.isObject(extend.firstCall.args[1]);
 			assert.strictEqual(extend.firstCall.args[2], pa11y.defaults);
 			assert.strictEqual(extend.firstCall.args[3], options);
-			done();
 		});
-	});
 
-	it('should callback with an error if `options.standard` is invalid', function(done) {
-		var options = {
-			standard: 'foo'
-		};
-		pa11y(options, function(error) {
-			assert.isNotNull(error);
-			assert.strictEqual(error.message, 'Standard must be one of Section508, WCAG2A, WCAG2AA, WCAG2AAA');
-			done();
-		});
-	});
-
-	it('should callback with an error if `options.timeout` is invalid', function(done) {
-		var options = {
-			timeout: 'foo'
-		};
-		pa11y(options, function(error) {
-			assert.isNotNull(error);
-			assert.strictEqual(error.message, 'Timeout must be numeric');
-			done();
-		});
-	});
-
-	it('should callback with an error if `options.wait` is invalid', function(done) {
-		var options = {
-			wait: 'foo'
-		};
-		pa11y(options, function(error) {
-			assert.isNotNull(error);
-			assert.strictEqual(error.message, 'Wait time must be numeric');
-			done();
-		});
-	});
-
-	it('should lower-case all of the ignored codes and types', function(done) {
-		var options = {
-			ignore: [
+		it('should lower-case all of the ignored codes and types', function() {
+			options.ignore = [
 				'FOO',
 				'Bar',
 				'baz'
-			]
-		};
-		pa11y(options, function() {
+			];
+			extend.reset();
+			pa11y(options);
 			assert.deepEqual(extend.firstCall.returnValue.ignore, [
 				'foo',
 				'bar',
 				'baz'
 			]);
-			done();
 		});
-	});
 
-	it('should initialise Truffler with the expected options', function(done) {
-		pa11y({}, function() {
+		it('should create a Truffler instance with the defaulted options', function() {
 			assert.calledOnce(truffler);
-			var options = truffler.firstCall.args[0];
-			delete options.testFunction;
-			assert.deepEqual(options, pa11y.defaults);
+			assert.strictEqual(truffler.firstCall.args[0], extend.firstCall.returnValue);
+		});
+
+		it('should pass a test function into Truffler', function() {
 			assert.isFunction(truffler.firstCall.args[1]);
-			done();
 		});
+
+		it('should return the Truffler instance', function() {
+			assert.isObject(instance);
+			assert.strictEqual(instance, truffler.mockReturn);
+		});
+
+		it('should throw an error if `options.standard` is invalid', function() {
+			options.standard = 'foo';
+			assert.throws(function() {
+				pa11y(options);
+			}, 'Standard must be one of Section508, WCAG2A, WCAG2AA, WCAG2AAA');
+		});
+
 	});
 
-	it('should set a `testFunction` option in Truffler', function(done) {
-		pa11y({}, function() {
-			assert.isFunction(truffler.firstCall.args[0].testFunction);
-			done();
-		});
-	});
-
-	it('should not allow overriding of the `testFunction` option', function(done) {
-		var testFunction = sinon.spy();
-		pa11y({}, function() {
-			assert.notStrictEqual(truffler.firstCall.args[0].testFunction, testFunction);
-			done();
-		});
-	});
-
-	it('should callback with Truffler\'s test and exit functions', function(done) {
-		pa11y({}, function(error, test, exit) {
-			assert.strictEqual(test, truffler.mockTestFunction);
-			assert.strictEqual(exit, truffler.mockExitFunction);
-			done();
-		});
-	});
-
-	it('should callback with an error if Truffler fails', function(done) {
-		var trufflerError = new Error('...');
-		truffler.yieldsAsync(trufflerError, null, null);
-		pa11y({}, function(error) {
-			assert.strictEqual(error, trufflerError);
-			done();
-		});
-	});
-
-	describe('Truffler `testFunction` option', function() {
-		var evaluateResults, options, testFunction;
+	describe('Truffler test function', function() {
+		var expectedResults, options, runResults, testFunction;
 
 		beforeEach(function(done) {
-			evaluateResults = {
-				messages: [
-					'foo',
-					'bar'
-				]
-			};
 			options = {
 				ignore: [
 					'BAZ',
@@ -252,107 +196,143 @@ describe('lib/pa11y', function() {
 				standard: 'Section508',
 				wait: 0
 			};
+			pa11y(options);
 
-			// Big old nasty mock
-			phantom.mockPage.set = sinon.spy(function(property, value) {
-				if (property === 'onCallback') {
-					setTimeout(function() {
-						value(evaluateResults);
-					}, 10);
-				}
-			});
-
-			pa11y(options, function() {
-				testFunction = truffler.firstCall.args[0].testFunction;
-				done();
-			});
-		});
-
-		it('should callback', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, done);
-		});
-
-		it('should callback with results', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error, results) {
-				assert.isNull(error);
-				assert.strictEqual(results, evaluateResults.messages);
-				done();
-			});
-		});
-
-		it('should set the page `onCallback` handler', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-				assert.calledOnce(phantom.mockPage.set.withArgs('onCallback'));
-				assert.isFunction(phantom.mockPage.set.firstCall.args[1]);
-				done();
-			});
-		});
-
-		it('should inject HTML CodeSniffer', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-				var inject = phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs);
-				assert.calledOnce(inject);
-				assert.isFunction(inject.firstCall.args[1]);
-				assert.notCalled(phantom.mockPage.includeJs);
-				done();
-			});
-		});
-
-		it('should include a remote HTML CodeSniffer if specified', function(done) {
-			options = {
-				htmlcs: 'http://foo.com/HTMLCS.js'
+			expectedResults = {
+				messages: [
+					'foo',
+					'bar'
+				]
 			};
-			truffler.reset();
-			pa11y(options, function() {
-				testFunction = truffler.firstCall.args[0].testFunction;
-				testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-					var include = phantom.mockPage.includeJs.withArgs(options.htmlcs);
-					assert.calledOnce(include);
-					assert.isFunction(include.firstCall.args[1]);
-					assert.notCalled(phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs));
-					done();
-				});
+			phantom.mockPage.evaluate = sinon.spy(function() {
+				phantom.mockPage.onCallback(expectedResults);
+			});
+
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, function(error, results) {
+				runResults = results;
+				done(error);
 			});
 		});
 
-		it('should inject the pa11y inject script', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-				var inject = phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js');
-				assert.calledOnce(inject);
-				assert.isFunction(inject.firstCall.args[1]);
+		it('should create a page callback on the PhantomJS page', function() {
+			assert.isFunction(phantom.mockPage.onCallback);
+		});
+
+		it('should inject HTML CodeSniffer', function() {
+			var inject = phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs);
+			assert.calledOnce(inject);
+			assert.isFunction(inject.firstCall.args[1]);
+			assert.notCalled(phantom.mockPage.includeJs);
+		});
+
+		it('should callback with an error if HTML CodeSniffer injection errors', function(done) {
+			var expectedError = new Error('...');
+			phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs).yieldsAsync(expectedError);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error, expectedError);
 				done();
 			});
 		});
 
-		it('should run the pa11y inject script through an evaluate call with passed in options', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-				assert.calledOnce(phantom.mockPage.evaluate);
-				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
-				assert.isFunction(phantom.mockPage.evaluate.firstCall.args[1]);
-				assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[2], {
-					ignore: [
-						'baz',
-						'qux'
-					],
-					standard: 'Section508',
-					wait: 0
-				});
+		it('should callback with an error if HTML CodeSniffer does not inject properly', function(done) {
+			phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs).yieldsAsync(null, false);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
 				done();
 			});
 		});
 
-		describe('evaluated function', function() {
-			var evaluate;
+		describe('when a remote HTML CodeSniffer is specified', function() {
 
 			beforeEach(function(done) {
-				testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-					evaluate = phantom.mockPage.evaluate.firstCall.args[0];
-					global.window = {
-						callPhantom: sinon.spy()
-					};
-					global.injectPa11y = sinon.spy();
+				options = {
+					htmlcs: 'http://foo.com/HTMLCS.js'
+				};
+				truffler.reset();
+				phantom.mockPage.injectJs.reset();
+				pa11y(options);
+				testFunction = truffler.firstCall.args[1];
+				testFunction(phantom.mockBrowser, phantom.mockPage, done);
+			});
+
+			it('should include the remote HTML CodeSniffer', function() {
+				var include = phantom.mockPage.includeJs.withArgs(options.htmlcs);
+				assert.calledOnce(include);
+				assert.isFunction(include.firstCall.args[1]);
+				assert.notCalled(phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs));
+			});
+
+			it('should callback with an error if HTML CodeSniffer inclusion errors', function(done) {
+				var expectedError = new Error('...');
+				phantom.mockPage.includeJs.withArgs(options.htmlcs).yieldsAsync(expectedError);
+				testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+					assert.isNotNull(error);
+					assert.strictEqual(error, expectedError);
 					done();
 				});
+			});
+
+			it('should callback with an error if HTML CodeSniffer does not include properly', function(done) {
+				phantom.mockPage.includeJs.withArgs(options.htmlcs).yieldsAsync(null, false);
+				testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+					assert.isNotNull(error);
+					assert.strictEqual(error.message, 'Pa11y was unable to include scripts in the page');
+					done();
+				});
+			});
+
+		});
+
+		it('should inject the pa11y inject script', function() {
+			var inject = phantom.mockPage.injectJs.withArgs(injectScriptPath);
+			assert.calledOnce(inject);
+			assert.isFunction(inject.firstCall.args[1]);
+		});
+
+		it('should callback with an error if the pa11y inject script injection errors', function(done) {
+			var expectedError = new Error('...');
+			phantom.mockPage.injectJs.withArgs(injectScriptPath).yieldsAsync(expectedError);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error, expectedError);
+				done();
+			});
+		});
+
+		it('should callback with an error if the pa11y inject script does not inject properly', function(done) {
+			phantom.mockPage.injectJs.withArgs(injectScriptPath).yieldsAsync(null, false);
+			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
+				done();
+			});
+		});
+
+		it('should evaluate a JavaScript function with passed in options', function() {
+			assert.calledOnce(phantom.mockPage.evaluate);
+			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
+			assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[1], {
+				ignore: [
+					'baz',
+					'qux'
+				],
+				standard: 'Section508',
+				wait: 0
+			});
+			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
+		});
+
+		describe('evaluated function()', function() {
+			var evaluatedFunction, returnValue;
+
+			beforeEach(function() {
+				global.window = window;
+				global.injectPa11y = sinon.spy();
+				evaluatedFunction = phantom.mockPage.evaluate.firstCall.args[0];
+				returnValue = evaluatedFunction(options);
 			});
 
 			afterEach(function() {
@@ -361,78 +341,56 @@ describe('lib/pa11y', function() {
 			});
 
 			it('should call the `injectPa11y` global function with the expected arguments', function() {
-				evaluate(options);
 				assert.calledOnce(global.injectPa11y);
-				assert.calledWith(global.injectPa11y, global.window, options, global.window.callPhantom);
+				assert.calledWithExactly(global.injectPa11y, global.window, options, global.window.callPhantom);
 			});
 
-			it('should not return anything if PhantomJS is present', function() {
-				assert.isUndefined(evaluate(options));
+			it('should return nothing', function() {
+				assert.isUndefined(returnValue);
 			});
 
-			it('should return an error if PhantomJS is not present', function() {
+			it('should return an error-like structure if `window.callPhantom` is not a function', function() {
+				global.injectPa11y.reset();
 				delete global.window.callPhantom;
-				var returnValue = evaluate(options);
-				assert.isInstanceOf(returnValue, Error);
-				assert.strictEqual(returnValue.message, 'Pa11y could not report back to PhantomJS');
-			});
-
-		});
-
-		it('should inject and evaluate in the correct order', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
-				assert.callOrder(
-					phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js'),
-					phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js'),
-					phantom.mockPage.evaluate
-				);
-				done();
-			});
-		});
-
-		it('should callback with an error if HTML CodeSniffer does not inject properly', function(done) {
-			phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/vendor/HTMLCS.js').yieldsAsync(false);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
-				assert.isNotNull(error);
-				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
-				done();
-			});
-		});
-
-		it('should callback with an error if a remote HTML CodeSniffer does not include properly', function(done) {
-			options = {
-				htmlcs: 'http://foo.com/HTMLCS.js'
-			};
-			truffler.reset();
-			phantom.mockPage.includeJs.withArgs('http://foo.com/HTMLCS.js').yieldsAsync(false);
-			pa11y(options, function() {
-				testFunction = truffler.firstCall.args[0].testFunction;
-				testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
-					assert.isNotNull(error);
-					assert.strictEqual(error.message, 'Pa11y was unable to include scripts in the page');
-					done();
+				returnValue = evaluatedFunction(options);
+				assert.deepEqual(returnValue, {
+					error: 'Pa11y could not report back to PhantomJS'
 				});
 			});
+
 		});
 
-		it('should callback with an error if pa11y does not inject properly', function(done) {
-			phantom.mockPage.injectJs.withArgs(path.resolve(__dirname, '../../../lib') + '/inject.js').yieldsAsync(false);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
-				assert.isNotNull(error);
-				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
+		it('should log that the run is about to wait if configured to', function(done) {
+			options = {
+				wait: 500,
+				log: {
+					debug: sinon.spy()
+				}
+			};
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+				assert.calledWith(options.log.debug, 'Waiting for ' + options.wait + 'ms');
 				done();
 			});
 		});
 
-		it('should callback with an error if the testing process takes longer than `options.timeout`', function(done) {
-			var clock = sinon.useFakeTimers('setTimeout', 'clearTimeout');
-			phantom.mockPage.set = function() {
-				clock.tick(30001);
+		it('should callback with the expected results', function() {
+			assert.strictEqual(runResults, expectedResults.messages);
+		});
+
+		it('should callback with an error if the evaluated script errors', function(done) {
+			expectedResults = {
+				error: 'foo'
 			};
+			phantom.mockPage.evaluate = sinon.spy(function() {
+				phantom.mockPage.onCallback(expectedResults);
+			});
 			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
 				assert.isNotNull(error);
-				assert.strictEqual(error.message, 'Pa11y timed out');
-				clock.restore();
+				assert.instanceOf(error, Error);
+				assert.strictEqual(error.message, 'foo');
 				done();
 			});
 		});

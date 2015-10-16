@@ -5,6 +5,23 @@ Migration Guide
 pa11y's API changes between major versions. This is a guide to help you make the switch when this happens.
 
 
+Migrating From 2.0 To 3.0
+-------------------------
+
+### API Overhaul
+
+The pa11y JavaScript API has been overhauled completely. It would be best to refer to the [usage guide in the README](README.md#usage) as your code will need refactoring.
+
+### Randomized Ports
+
+The `phantom.port` option no longer has a default. If a port is not specified, then pa11y will bind to an available port. This allows for easier running of tests in parallel, as PhantomJS instances will no longer conflict with eachother.
+
+### Node.js Support
+
+Node.js 0.10 is no longer officially supported. We'll be running tests against it still, but these are marked as "allowed to fail". If you're absolutely reliant on Node.js 0.10, [check the latest build](https://travis-ci.org/nature/pa11y) to verify that it's still working.
+
+
+
 Migrating From 1.0 To 2.0
 -------------------------
 
