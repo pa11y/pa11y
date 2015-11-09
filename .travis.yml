@@ -13,6 +13,9 @@ matrix:
     # Run tests in Node.js 4.x
     - node_js: '4'
 
+    # Run tests in Node.js 5.x
+    - node_js: '5'
+
   # Allow Node.js 0.10 to fail – it's unsupported
   allow_failures:
     - node_js: '0.10'
