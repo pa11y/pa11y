@@ -568,6 +568,6 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [shield-dependencies]: https://img.shields.io/gemnasium/nature/pa11y.svg
 [shield-coverage]: https://img.shields.io/coveralls/nature/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-GPLv3-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–4-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–5-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/nature/pa11y/master.svg
