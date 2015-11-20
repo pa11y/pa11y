@@ -89,6 +89,7 @@ Usage: pa11y [options] <url>
     -w, --wait <ms>            the time to wait before running tests in milliseconds
     -d, --debug                output debug messages
     -H, --htmlcs <url/path>    the URL or path to source HTML_CodeSniffer from
+    -e, --phantomjs <path>     the path to the phantomjs executable
 ```
 
 ### Running Tests

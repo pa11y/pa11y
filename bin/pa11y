@@ -72,6 +72,10 @@ function configureProgram(program) {
 			'-H, --htmlcs <url>',
 			'the URL or path to source HTML_CodeSniffer from'
 		)
+		.option(
+			'-e, --phantomjs <path>',
+			'the path to the phantomjs executable'
+		)
 		.parse(process.argv);
 	program.url = program.args[0];
 }
@@ -111,6 +115,7 @@ function processOptions(program) {
 			}
 		},
 		phantom: {
+			path: program.phantomjs,
 			port: program.port
 		},
 		standard: program.standard,
