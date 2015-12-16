@@ -166,7 +166,6 @@ function requireFirst(stack, defaultReturn) {
 }
 
 function reportShouldFail(level, results, threshold) {
-	console.log(threshold);
 	if (level === 'none') {
 		return false;
 	}
