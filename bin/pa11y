@@ -44,6 +44,11 @@ function configureProgram(program) {
 			'error'
 		)
 		.option(
+			'-T, --threshold <name>',
+			'the number of errors to permit before failing',
+			'0'
+		)		
+		.option(
 			'-i, --ignore <ignore>',
 			'types and codes of messages to ignore separated by semi-colons'
 		)
@@ -94,7 +99,7 @@ function runProgram(program) {
 				process.exit(1);
 			}
 			options.log.results(results, program.url);
-			if (reportShouldFail(program.level, results)) {
+			if (reportShouldFail(program.level, results, program.threshold)) {
 				process.exit(2);
 			}
 		});
@@ -160,17 +165,18 @@ function requireFirst(stack, defaultReturn) {
 	}
 }
 
-function reportShouldFail(level, results) {
+function reportShouldFail(level, results, threshold) {
+	console.log(threshold);
 	if (level === 'none') {
 		return false;
 	}
 	if (level === 'notice') {
-		return (results.length > 0);
+		return (results.length > threshold);
 	}
 	if (level === 'warning') {
-		return (results.filter(isWarningOrError).length > 0);
+		return (results.filter(isWarningOrError).length > threshold);
 	}
-	return (results.filter(isError).length > 0);
+	return (results.filter(isError).length > threshold);
 }
 
 function isError(result) {
