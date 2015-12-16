@@ -47,7 +47,7 @@ function configureProgram(program) {
 			'-T, --threshold <name>',
 			'the number of errors to permit before failing',
 			'0'
-		)		
+		)
 		.option(
 			'-i, --ignore <ignore>',
 			'types and codes of messages to ignore separated by semi-colons'
