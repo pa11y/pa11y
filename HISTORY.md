@@ -1,6 +1,10 @@
 
 # History
 
+## 3.2.0 (2015-12-17)
+
+  * Add a threshold CLI parameter to allow a certain number of errors before failing
+
 ## 3.1.0 (2015-12-14)
 
   * Add the ability to specify the path to the PhantomJS binary
