@@ -25,6 +25,8 @@ var pa11y = require('../lib/pa11y');
 var readline = require('readline');
 var async = require('async');
 var chalk = require('chalk');
+var fs = require('fs');
+var crypto = require('crypto');
 
 configureProgram(program);
 runProgram(program);
@@ -40,6 +42,10 @@ function configureProgram(program) {
 			'-r, --reporter <reporter>',
 			'the reporter to use: cli (default), csv, html, json',
 			'cli'
+		)
+		.option(
+			'-o, --output <output>',
+			'filename that will receive the output (special keyword: %HASH%, representing the hash of the current URL)'
 		)
 		.option(
 			'-l, --level <level>',
@@ -93,6 +99,7 @@ function configureProgram(program) {
 }
 
 function runTest(test, options, url, callbacks) {
+	processOutput(options.output, url);
 	options.log.begin(url);
 	try {
 		test.run(url, function(error, results) {
@@ -179,6 +186,7 @@ function processOptions(program) {
 		htmlcs: program.htmlcs,
 		ignore: (program.ignore ? program.ignore.split(';') : undefined),
 		log: loadReporter(program.reporter),
+		output: program.output,
 		page: {
 			settings: {
 				resourceTimeout: program.timeout
@@ -217,6 +225,17 @@ function loadReporter(name) {
 		process.exit(1);
 	}
 	return reporter;
+}
+
+function processOutput(output, url) {
+	if (!output) {
+		return;
+	}
+	var hash = output.replace(/%HASH%/, crypto.createHash('sha1').update(url).digest('hex'));
+	var outputStream = fs.createWriteStream(hash);
+	console.log = function(message) {
+		outputStream.write(message);
+	};
 }
 
 function requireFirst(stack, defaultReturn) {
