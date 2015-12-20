@@ -70,6 +70,10 @@ function configureProgram(program) {
 			'the time to wait before running tests in milliseconds'
 		)
 		.option(
+			'-I, --injectJs <path>',
+			'a script that can be injected into phantomjs before pa11y runs'
+		)
+		.option(
 			'-d, --debug',
 			'output debug messages'
 		)
@@ -125,7 +129,8 @@ function processOptions(program) {
 		},
 		standard: program.standard,
 		timeout: program.timeout,
-		wait: program.wait
+		wait: program.wait,
+		injectJs: program.injectJs
 	});
 	if (!program.debug) {
 		options.log.debug = function() {};
