@@ -1,6 +1,10 @@
 
 # History
 
+## 2.4.5 (2016-01-05)
+
+  * Fix an issue where JSON output was truncated
+
 ## 2.4.4 (2015-08-20)
 
   * Handle PhantomJS exits better when a timeout occurs
