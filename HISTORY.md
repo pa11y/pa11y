@@ -1,6 +1,10 @@
 
 # History
 
+## 3.2.1 (2016-01-05)
+
+  * Fix an issue where JSON output was truncated
+
 ## 3.2.0 (2015-12-17)
 
   * Add a threshold CLI parameter to allow a certain number of errors before failing
@@ -19,6 +23,10 @@
   * Overhaul the API (now uses Truffler 2.0)
   * Drop Node.js 0.10 support
   * See the [migration guide](https://github.com/nature/pa11y/blob/master/MIGRATION.md#migrating-from-20-to-30) for details
+
+## 2.4.5 (2016-01-05)
+
+  * Fix an issue where JSON output was truncated
 
 ## 2.4.4 (2015-08-20)
 
