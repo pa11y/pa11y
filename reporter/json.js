@@ -15,6 +15,8 @@
 
 'use strict';
 
+var bfj = require('bfj');
+
 module.exports = {
 	begin: emptyFunction,
 	error: reportError,
@@ -30,5 +32,12 @@ function reportError(message) {
 }
 
 function reportResults(results) {
-	console.log(JSON.stringify(results));
+	var stream = bfj.streamify(results);
+	stream.on('dataError', function(error) {
+		reportError(error.message);
+	});
+	stream.on('end', function() {
+		process.stdout.write('\n');
+	});
+	stream.pipe(process.stdout);
 }

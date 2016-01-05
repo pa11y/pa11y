@@ -98,10 +98,12 @@ function runProgram(program) {
 				options.log.error(error.stack);
 				process.exit(1);
 			}
-			options.log.results(results, program.url);
 			if (reportShouldFail(program.level, results, program.threshold)) {
-				process.exit(2);
+				process.once('exit', function() {
+					process.exit(2);
+				});
 			}
+			options.log.results(results, program.url);
 		});
 	} catch (error) {
 		options.log.error(error.stack);
