@@ -45,7 +45,7 @@ function configureProgram(program) {
 		)
 		.option(
 			'-T, --threshold <name>',
-			'the number of errors to permit before failing',
+			'the number of individual errors, warnings, or notices to permit before failing',
 			'0'
 		)
 		.option(
