@@ -50,7 +50,9 @@ function configureProgram(program) {
 		)
 		.option(
 			'-i, --ignore <ignore>',
-			'types and codes of messages to ignore separated by semi-colons'
+			'types and codes of messages to ignore, a repeatable value or separated by semi-colons',
+			collectIgnoreOptions,
+			[]
 		)
 		.option(
 			'-c, --config <path>',
@@ -114,7 +116,7 @@ function runProgram(program) {
 function processOptions(program) {
 	var options = extend(true, {}, loadConfig(program.config), {
 		htmlcs: program.htmlcs,
-		ignore: (program.ignore ? program.ignore.split(';') : undefined),
+		ignore: program.ignore,
 		log: loadReporter(program.reporter),
 		page: {
 			settings: {
@@ -186,4 +188,8 @@ function isError(result) {
 
 function isWarningOrError(result) {
 	return (result.type === 'warning' || result.type === 'error');
+}
+
+function collectIgnoreOptions(val, array) {
+	return array.concat(val.split(';'));
 }

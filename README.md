@@ -83,7 +83,7 @@ Usage: pa11y [options] <url>
     -r, --reporter <reporter>  the reporter to use: cli (default), csv, html, json
     -l, --level <level>        the level of message to fail on (exit with code 2): error, warning, notice
     -T, --threshold <name>     the number of individual errors, warnings, or notices to permit before failing
-    -i, --ignore <ignore>      types and codes of messages to ignore separated by semi-colons
+    -i, --ignore <ignore>      types and codes of messages to ignore, a repeatable value or separated by semi-colons
     -c, --config <path>        a JSON config file
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
@@ -137,6 +137,20 @@ pa11y --config ./path/to/config.json nature.com
 ```
 
 For more information on configuring pa11y, see the [configuration documentation](#configuration).
+
+### Ignoring
+
+The ignore flag can be used in several different ways. Seperated by semi-colons:
+
+```
+pa11y --ignore "warning;notice" nature.com
+```
+
+or by using the flag mutiple times:
+
+```
+pa11y --ignore warning --ignore notice nature.com
+```
 
 ### Reporters
 
