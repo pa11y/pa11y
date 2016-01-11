@@ -4,19 +4,17 @@ language: node_js
 matrix:
   include:
 
-    # Run tests in Node.js 0.10 (unsupported)
-    - node_js: '0.10'
-
-    # Run tests in Node.js 0.12
+    # Run linter once
     - node_js: '0.12'
+      env: LINT=true
 
-    # Run tests in Node.js 4.x
+    # Run tests
+    - node_js: '0.10'
+    - node_js: '0.12'
     - node_js: '4'
-
-    # Run tests in Node.js 5.x
     - node_js: '5'
 
-  # Allow Node.js 0.10 to fail – it's unsupported
+  # Allowed failures
   allow_failures:
     - node_js: '0.10'
 
@@ -32,5 +30,6 @@ before_install:
 
 # Build script
 script:
-  - make ci
-  - cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+  - 'if [ $LINT ]; then make lint; fi'
+  - 'if [ ! $LINT ]; then make test; fi'
+  - 'if [ ! $LINT ]; then cat ./coverage/lcov.info | ./node_modules/.bin/coveralls; fi'
