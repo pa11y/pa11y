@@ -1,6 +1,10 @@
 
 # History
 
+## 3.3.0 (2016-01-11)
+
+  * Add the ability to use the `--ignore` command line more than once
+
 ## 3.2.1 (2016-01-05)
 
   * Fix an issue where JSON output was truncated
