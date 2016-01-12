@@ -173,7 +173,7 @@ function runProgram(program) {
 		);
 	} else if (program.stdin) {
 		var urls = getRunQueue(test, options);
-		readline.createInterface(process.stdin, process.stdout).on('line', function(url) {
+		readline.createInterface(process.stdin, undefined).on('line', function(url) {
 			urls.push({url: url});
 		});
 	} else {
