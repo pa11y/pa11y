@@ -101,6 +101,12 @@ Run an accessibility test against a URL:
 pa11y nature.com
 ```
 
+Run an accessibility test against a file:
+
+```
+pa11y file:///path/to/your/file.html
+```
+
 Run a test with CSV reporting and save to a file:
 
 ```
