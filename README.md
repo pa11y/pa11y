@@ -60,6 +60,46 @@ If you're on Linux, you'll probably be able to work it out.
 
 Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
+If you are able to successfully install both pa11y and PhantomJS on Windows but run into following error
+
+``` bash
+> pa11y google.com
+Welcome to Pa11y
+
+Error: spawn phantomjs ENOENT
+    at exports._errnoException (util.js:874:11)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:178:32)
+    at onErrorNT (internal/child_process.js:344:16)
+    at doNTCallback2 (node.js:439:9)
+    at process._tickCallback (node.js:353:17)
+    at Function.Module.runMain (module.js:469:11)
+    at startup (node.js:134:18)
+    at node.js:961:3
+```
+
+follow these steps:
+
+1. Install pa11y via [npm][npm]:
+   ```
+     npm install -g pa11y
+   ```
+2. Install PhantomJS@v2.0 via [npm][npm]
+   ```
+      npm install -g phantomjs2
+   ```
+3. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
+
+You should now be able to run pa11y:
+
+``` bash
+> pa11y google.com
+
+Welcome to Pa11y
+
+ > PhantomJS browser created
+ > Testing the page "http://google.com"
+
+```
 
 Command-Line Interface
 ----------------------
