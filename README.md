@@ -63,7 +63,7 @@ Windows users approach with caution – we've been able to get pa11y running (Wi
 If you are able to successfully install both pa11y and PhantomJS on Windows but run into following error
 
 ``` bash
-> pa11y google.com
+> pa11y nature.com
 Welcome to Pa11y
 
 Error: spawn phantomjs ENOENT
@@ -83,21 +83,23 @@ follow these steps:
    ```
      npm install -g pa11y
    ```
+   
 2. Install PhantomJS@v2.0 via [npm][npm]
    ```
       npm install -g phantomjs2
    ```
+   
 3. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
 You should now be able to run pa11y:
 
 ``` bash
-> pa11y google.com
+> pa11y nature.com
 
 Welcome to Pa11y
 
  > PhantomJS browser created
- > Testing the page "http://google.com"
+ > Testing the page "http://nature.com"
 
 ```
 
