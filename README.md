@@ -83,12 +83,12 @@ follow these steps:
    ```
      npm install -g pa11y
    ```
-   
+
 2. Install PhantomJS@v2.0 via [npm][npm]
    ```
       npm install -g phantomjs2
    ```
-   
+
 3. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
 You should now be able to run pa11y:
@@ -330,6 +330,18 @@ test.run('http://www.nature.com/', {
 
 Below is a reference of all the options that are available:
 
+### `allowedStandards` (array)
+
+The accessibility standards that are allowed to be used. This can be modified to allow for custom HTML CodeSniffer standards.
+
+```js
+pa11y({
+    allowedStandards: ['WCAG2AA', 'My Custom Standard']
+});
+```
+
+Defaults to `Section508`, `WCAG2A`, `WCAG2AA`, and `WCAG2AAA`.
+
 ### `htmlcs` (string)
 
 The path or URL to source HTML CodeSniffer from.
@@ -467,7 +479,7 @@ If `phantom.port` is not specified, a random available port will be used.
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`.
+The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA` (or match one of the standards in the [`allowedStandards`](#allowedstandards-array) option).
 
 ```js
 pa11y({
