@@ -62,6 +62,10 @@ describe('lib/pa11y', function() {
 			defaults = pa11y.defaults;
 		});
 
+		it('should have a `beforeScript` property', function() {
+			assert.strictEqual(defaults.beforeScript, null);
+		});
+
 		it('should have an `htmlcs` property', function() {
 			assert.strictEqual(defaults.htmlcs, path.resolve(__dirname + '/../../..') + '/lib/vendor/HTMLCS.js');
 		});
@@ -217,6 +221,39 @@ describe('lib/pa11y', function() {
 
 		it('should create a page callback on the PhantomJS page', function() {
 			assert.isFunction(phantom.mockPage.onCallback);
+		});
+
+		it('should call the `beforeScript` function if specified in `options.beforeScript`', function(done) {
+			options = {
+				beforeScript: sinon.stub().yieldsAsync()
+			};
+
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+				assert.calledOnce(options.beforeScript);
+				assert.strictEqual(options.beforeScript.firstCall.args[0], phantom.mockPage);
+				assert.strictEqual(options.beforeScript.firstCall.args[1], extend.secondCall.returnValue);
+				assert.isFunction(options.beforeScript.firstCall.args[2]);
+				done();
+			});
+		});
+
+		it('should log that a script is running before testing starts if configured to', function(done) {
+			options = {
+				beforeScript: sinon.stub().yieldsAsync(),
+				log: {
+					debug: sinon.spy()
+				}
+			};
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+				assert.calledWith(options.log.debug, 'Running beforeScript');
+				done();
+			});
 		});
 
 		it('should inject HTML CodeSniffer', function() {

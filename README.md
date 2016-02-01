@@ -91,7 +91,6 @@ follow these steps:
 
 2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
-
 Command-Line Interface
 ----------------------
 
@@ -331,6 +330,26 @@ pa11y({
 
 Defaults to `Section508`, `WCAG2A`, `WCAG2AA`, and `WCAG2AAA`.
 
+### `beforeScript` (function)
+
+A function to be run before pa11y tests the page. The function accepts three parameters;
+
+- `page` is the phantomjs page object, [documentation for the phantom bridge can be found here][phantom-node-options]
+- `options` is the finished options object used to configure pa11y
+- `next` is a callback function 
+
+```js
+pa11y({
+    beforeScript: function(page, options, next) {
+		// Make changes to the page
+		// When finished call next to continue running pa11y tests
+		next();
+	}
+});
+```
+
+Defaults to `null`.
+
 ### `htmlcs` (string)
 
 The path or URL to source HTML CodeSniffer from.
@@ -557,6 +576,47 @@ pa11y({
 });
 ```
 
+### How can pa11y log in if my site has a log in form?
+
+Use the `beforeScript` option either in your JS code or in your JSON config file to input login details and submit the form.
+Once the form has been submitted you will also have to wait until the page you want to test has loaded before calling `next` to run pa11y.
+
+```js
+pa11y({
+	beforeScript: function(page, options, next) {
+		var waitUntil = function(condition, retries, waitOver) {
+			page.evaluate(condition, function(error, result) {
+				if (result || retries < 1) {
+					waitOver();
+				} else {
+					retries -= 1;
+					setTimeout(function() {
+						waitUntil(condition, retries, waitOver);
+					}, 200);
+				}
+			});
+		};
+
+		page.evaluate(function() {
+			var user = document.querySelector('#username');
+			var password = document.querySelector('#password');
+			var submit = document.querySelector('#submit');
+
+			user.value = 'exampleUser';
+			password.value = 'password1234';
+
+			submit.click();
+
+		}, function() {
+
+			waitUntil(function() {
+				return window.location.href === 'http://example.com/myaccount';
+			}, 20, next);
+		});
+	}
+});
+```
+
 ### How can I use pa11y with a proxy server?
 
 Use the `phantom.parameters` option either in your JS code or in your JSON config file:
@@ -575,6 +635,44 @@ pa11y({
 
 These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can be set to `http`, `socks5`, or `none`.
 
+### How can I simulate a user interaction before running pa11y?
+
+Use the `beforeScript` option either in your JS code or in your JSON config file to simulate the interactions before running pa11y.
+
+In this example, additional content is loaded via ajax when a button is clicked.
+Once the content is loaded the `aria-hidden` atrribute switches from `true` to `false`.
+
+```js
+pa11y({
+	beforeScript: function(page, options, next) {
+		var waitUntil = function(condition, retries, waitOver) {
+			page.evaluate(condition, function(error, result) {
+				if (result || retries < 1) {
+					waitOver();
+				} else {
+					retries -= 1;
+					setTimeout(function() {
+						waitUntil(condition, retries, waitOver);
+					}, 200);
+				}
+			});
+		};
+
+		page.evaluate(function() {
+			var ajaxButton = document.querySelector('#loadContent');
+			var dynamicContent = document.querySelector('#content');
+
+			ajaxButton.click();
+
+		}, function() {
+
+			waitUntil(function() {
+				return dynamicContent.getAttribute('aria-hidden') === 'false';
+			}, 20, next);
+		});
+	}
+});
+```
 
 Contributing
 ------------
@@ -619,7 +717,7 @@ pa11y is licensed under the [GNU General Public License 3.0][info-license].
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
 [phantom-cli]: http://phantomjs.org/api/command-line.html
-[phantom-node-options]: https://github.com/sgentle/phantomjs-node#functionality-details
+[phantom-node-options]: https://github.com/baudehlo/node-phantom-simple#node-phantom-simple 
 [phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
