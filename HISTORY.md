@@ -1,6 +1,12 @@
 
 # History
 
+## 3.4.0 (2016-02-01)
+
+  * Document running pa11y against local files
+  * Add a trouble-shooting guide for Windows
+  * Make allowed standards configurable
+
 ## 3.3.0 (2016-01-11)
 
   * Add the ability to use the `--ignore` command line more than once
