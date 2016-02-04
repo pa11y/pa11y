@@ -49,23 +49,28 @@ Requirements
 
 pa11y requires [Node.js][node] 0.12+ and [PhantomJS][phantom] to run.
 
-On a Mac, you can install these with [Homebrew][brew]:
+### OS X
+
+On a Mac, you can install the required dependencies with [Homebrew][brew]:
 
 ```sh
 $ brew install node
 $ brew install phantomjs
 ```
 
-If you're on Linux, you'll probably be able to work it out.
+Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+
+### Linux
+
+Depending on your flavour of Linux, you should be able to use a package manager to install the required dependencies. Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+
+### Windows
 
 Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
-If you are able to successfully install both pa11y and PhantomJS on Windows but run into following error
+If you run into following error:
 
-``` bash
-> pa11y nature.com
-Welcome to Pa11y
-
+```
 Error: spawn phantomjs ENOENT
     at exports._errnoException (util.js:874:11)
     at Process.ChildProcess._handle.onexit (internal/child_process.js:178:32)
@@ -79,29 +84,13 @@ Error: spawn phantomjs ENOENT
 
 follow these steps:
 
-1. Install pa11y via [npm][npm]:
+1. Install PhantomJS@v2.0 via [npm][npm]
    ```
-     npm install -g pa11y
-   ```
-
-2. Install PhantomJS@v2.0 via [npm][npm]
-   ```
-      npm install -g phantomjs2
+   npm install -g phantomjs2
    ```
 
-3. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
+2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
-You should now be able to run pa11y:
-
-``` bash
-> pa11y nature.com
-
-Welcome to Pa11y
-
- > PhantomJS browser created
- > Testing the page "http://nature.com"
-
-```
 
 Command-Line Interface
 ----------------------
