@@ -1,6 +1,11 @@
 
 # History
 
+## 3.5.1 (2016-02-09)
+
+  * Update repository references to springernature
+  * Update the license
+
 ## 3.5.0 (2016-02-09)
 
   * Adding the `beforeScript` option so JavaScript can be run on the page before testing
