@@ -114,7 +114,7 @@ Usage: pa11y [options] <url>
     -l, --level <level>        the level of message to fail on (exit with code 2): error, warning, notice
     -T, --threshold <name>     the number of individual errors, warnings, or notices to permit before failing
     -i, --ignore <ignore>      types and codes of messages to ignore, a repeatable value or separated by semi-colons
-    -c, --config <path>        a JSON config file
+    -c, --config <path>        a JSON or JavaScript config file
     -p, --port <port>          the port to run PhantomJS on
     -t, --timeout <ms>         the timeout in milliseconds
     -w, --wait <ms>            the time to wait before running tests in milliseconds
@@ -549,7 +549,7 @@ Common questions about pa11y are answered here.
 
 ### How do I set cookies on a tested page?
 
-Use the `page.headers` option either in your JS code or in your JSON config file:
+Use the `page.headers` option either in your JS code or in your config file:
 
 ```js
 pa11y({
@@ -563,7 +563,7 @@ pa11y({
 
 ### How can pa11y log in if my site's behind basic auth?
 
-Use the `page.settings` option either in your JS code or in your JSON config file to set a username and password:
+Use the `page.settings` option either in your JS code or in your config file to set a username and password:
 
 ```js
 pa11y({
@@ -578,7 +578,7 @@ pa11y({
 
 ### How can pa11y log in if my site has a log in form?
 
-Use the `beforeScript` option either in your JS code or in your JSON config file to input login details and submit the form.
+Use the `beforeScript` option either in your JS code or in your config file to input login details and submit the form.
 Once the form has been submitted you will also have to wait until the page you want to test has loaded before calling `next` to run pa11y.
 
 ```js
@@ -619,7 +619,7 @@ pa11y({
 
 ### How can I use pa11y with a proxy server?
 
-Use the `phantom.parameters` option either in your JS code or in your JSON config file:
+Use the `phantom.parameters` option either in your JS code or in your config file:
 
 ```js
 pa11y({
@@ -637,7 +637,7 @@ These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can b
 
 ### How can I simulate a user interaction before running pa11y?
 
-Use the `beforeScript` option either in your JS code or in your JSON config file to simulate the interactions before running pa11y.
+Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running pa11y.
 
 In this example, additional content is loaded via ajax when a button is clicked.
 Once the content is loaded the `aria-hidden` atrribute switches from `true` to `false`.

@@ -56,7 +56,7 @@ function configureProgram(program) {
 		)
 		.option(
 			'-c, --config <path>',
-			'a JSON config file',
+			'a JSON or JavaScript config file',
 			'./pa11y.json'
 		)
 		.option(
