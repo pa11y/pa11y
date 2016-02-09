@@ -91,6 +91,7 @@ follow these steps:
 
 2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
+
 Command-Line Interface
 ----------------------
 
@@ -336,7 +337,7 @@ A function to be run before pa11y tests the page. The function accepts three par
 
 - `page` is the phantomjs page object, [documentation for the phantom bridge can be found here][phantom-node-options]
 - `options` is the finished options object used to configure pa11y
-- `next` is a callback function 
+- `next` is a callback function
 
 ```js
 pa11y({
@@ -703,13 +704,13 @@ License
 -------
 
 pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
-Copyright &copy; 2013, Nature Publishing Group
+Copyright &copy; 2013, Springer Nature
 
 
 
-[1.0-json-reporter]: https://github.com/nature/pa11y-reporter-1.0-json
-[2.x]: https://github.com/nature/pa11y/tree/2.x
-[1.x]: https://github.com/nature/pa11y/tree/1.x
+[1.0-json-reporter]: https://github.com/springernature/pa11y-reporter-1.0-json
+[2.x]: https://github.com/springernature/pa11y/tree/2.x
+[1.x]: https://github.com/springernature/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
 [jscs]: http://jscs.info/
@@ -717,20 +718,20 @@ Copyright &copy; 2013, Nature Publishing Group
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
 [phantom-cli]: http://phantomjs.org/api/command-line.html
-[phantom-node-options]: https://github.com/baudehlo/node-phantom-simple#node-phantom-simple 
+[phantom-node-options]: https://github.com/baudehlo/node-phantom-simple#node-phantom-simple
 [phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
-[info-coverage]: https://coveralls.io/github/nature/pa11y
-[info-dependencies]: https://gemnasium.com/nature/pa11y
+[info-coverage]: https://coveralls.io/github/springernature/pa11y
+[info-dependencies]: https://gemnasium.com/springernature/pa11y
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
-[info-build]: https://travis-ci.org/nature/pa11y
-[shield-dependencies]: https://img.shields.io/gemnasium/nature/pa11y.svg
-[shield-coverage]: https://img.shields.io/coveralls/nature/pa11y.svg
+[info-build]: https://travis-ci.org/springernature/pa11y
+[shield-dependencies]: https://img.shields.io/gemnasium/springernature/pa11y.svg
+[shield-coverage]: https://img.shields.io/coveralls/springernature/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/badge/node.js%20support-0.12–5-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
-[shield-build]: https://img.shields.io/travis/nature/pa11y/master.svg
+[shield-build]: https://img.shields.io/travis/springernature/pa11y/master.svg
