@@ -1,6 +1,6 @@
 {
 	"name": "pa11y",
-	"version": "3.4.0",
+	"version": "3.5.0",
 
 	"description": "pa11y is your automated accessibility testing pal",
 	"keywords": [ "accessibility", "analysis", "cli", "report" ],
@@ -13,7 +13,8 @@
 		"Alex Soble (http://www.alexsoble.com/)",
 		"Charlie Brown (http://www.carbonatethis.com/)",
 		"Hollie Kay (http://www.hollsk.co.uk/)",
-		"Adam Tavener (http://www.tavvy.co.uk/)"
+		"Adam Tavener (http://www.tavvy.co.uk/)",
+		"Glynn Phillips (http://www.glynnphillips.co.uk/)"
 	],
 
 	"repository": {

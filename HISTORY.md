@@ -1,6 +1,11 @@
 
 # History
 
+## 3.5.0 (2016-02-09)
+
+  * Adding the `beforeScript` option so JavaScript can be run on the page before testing
+  * Re-license under the LGPL 3.0
+
 ## 3.4.0 (2016-02-01)
 
   * Document running pa11y against local files
