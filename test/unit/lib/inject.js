@@ -29,6 +29,33 @@ describe('lib/inject', function() {
 		});
 	});
 
+	it('should select elements using `hideElements` option', function(done) {
+		options.hideElements = '#ad, .modal';
+		inject(window, options, function() {
+			assert.calledOnce(window.document.querySelectorAll);
+			assert.calledWith(window.document.querySelectorAll, '#ad, .modal');
+			done();
+		});
+	});
+
+	it('should hide the elements set in the `hideElements` option', function(done) {
+		options.hideElements = '#ad, .modal';
+		var mockElement1 = {
+			style: {}
+		};
+		var mockElement2 = {
+			style: {}
+		};
+
+		window.document.querySelectorAll.returns([mockElement1, mockElement2]);
+
+		inject(window, options, function() {
+			assert.strictEqual(mockElement1.style.visibility, 'hidden');
+			assert.strictEqual(mockElement2.style.visibility, 'hidden');
+			done();
+		});
+	});
+
 	it('should wait before processing the page if `options.wait` is set', function(done) {
 		// Note: this test isn't particularly reliable, revisit some time
 		var start = Date.now();
