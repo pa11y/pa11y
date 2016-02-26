@@ -12,7 +12,8 @@ describe('lib/inject', function() {
 		options = {
 			ignore: [],
 			standard: 'FOO-STANDARD',
-			wait: 0
+			wait: 0,
+			selector: null
 		};
 		inject = require('../../../lib/inject');
 	});
