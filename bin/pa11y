@@ -38,6 +38,11 @@ function configureProgram(program) {
 			collectIgnoreOptions,
 			[]
 		)
+
+		.option(
+			'-S, --selector <selector>',
+			'filter the results to only show results within an element'
+		)
 		.option(
 			'-E, --hide-elements <hide>',
 			'a CSS selector to hide elements from testing, selectors can be comma separated'
@@ -116,6 +121,7 @@ function processOptions(program) {
 			path: program.phantomjs,
 			port: program.port
 		},
+		selector: program.selector,
 		standard: program.standard,
 		timeout: program.timeout,
 		wait: program.wait
