@@ -184,7 +184,7 @@ describe('lib/pa11y', function() {
 				],
 				standard: 'Section508',
 				wait: 0,
-				selector: null
+				rootElement: null
 			};
 			pa11y(options);
 
@@ -345,7 +345,7 @@ describe('lib/pa11y', function() {
 				],
 				standard: 'Section508',
 				wait: 0,
-				selector: null
+				rootElement: null
 			});
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
 		});

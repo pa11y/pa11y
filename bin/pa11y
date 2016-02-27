@@ -40,7 +40,7 @@ function configureProgram(program) {
 		)
 
 		.option(
-			'-S, --selector <selector>',
+			'-R, --root-element <element>',
 			'filter the results to only show results within an element'
 		)
 		.option(
@@ -121,7 +121,7 @@ function processOptions(program) {
 			path: program.phantomjs,
 			port: program.port
 		},
-		selector: program.selector,
+		rootElement: program.rootElement,
 		standard: program.standard,
 		timeout: program.timeout,
 		wait: program.wait

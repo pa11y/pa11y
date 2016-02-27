@@ -11,9 +11,9 @@ describe('lib/inject', function() {
 		window = require('../mock/window');
 		options = {
 			ignore: [],
+			rootElement: null,
 			standard: 'FOO-STANDARD',
-			wait: 0,
-			selector: null
+			wait: 0
 		};
 		inject = require('../../../lib/inject');
 	});
@@ -207,6 +207,47 @@ describe('lib/inject', function() {
 				{
 					code: 'foo-code',
 					context: '<element>foo inner</element>',
+					message: 'foo message',
+					selector: '',
+					type: 'error',
+					typeCode: 1
+				}
+			]);
+			done();
+		});
+	});
+
+	it('should ignore messages when they are NOT a child of `options.rootElement`', function(done) {
+		options.rootElement = '[data-test=true]';
+		window.document.querySelector.returns('<element data-test="true">parent</element>');
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: null,
+					innerHTML: 'outside rootElement',
+					outerHTML: '<element>outside rootElement</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: '<element data-test="true">parent</element>',
+					innerHTML: 'inside rootElement',
+					outerHTML: '<element>inside rootElement</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'foo-code',
+					context: '<element>inside rootElement</element>',
 					message: 'foo message',
 					selector: '',
 					type: 'error',
