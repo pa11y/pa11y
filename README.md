@@ -107,21 +107,22 @@ Usage: pa11y [options] <url>
 
   Options:
 
-    -h, --help                  output usage information
-    -V, --version               output the version number
-    -s, --standard <name>       the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>   the reporter to use: cli (default), csv, html, json
-    -l, --level <level>         the level of message to fail on (exit with code 2): error, warning, notice
-    -T, --threshold <name>      the number of individual errors, warnings, or notices to permit before failing
-    -i, --ignore <ignore>       types and codes of messages to ignore, a repeatable value or separated by semi-colons
-    -E, --hide-elements <hide>  a CSS selector to hide elements from testing, selectors can be comma separated
-    -c, --config <path>         a JSON or JavaScript config file
-    -p, --port <port>           the port to run PhantomJS on
-    -t, --timeout <ms>          the timeout in milliseconds
-    -w, --wait <ms>             the time to wait before running tests in milliseconds
-    -d, --debug                 output debug messages
-    -H, --htmlcs <url/path>     the URL or path to source HTML_CodeSniffer from
-    -e, --phantomjs <path>      the path to the phantomjs executable
+    -h, --help                    output usage information
+    -V, --version                 output the version number
+    -s, --standard <name>         the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
+    -r, --reporter <reporter>     the reporter to use: cli (default), csv, html, json
+    -l, --level <level>           the level of message to fail on (exit with code 2): error, warning, notice
+    -T, --threshold <name>        the number of individual errors, warnings, or notices to permit before failing
+    -i, --ignore <ignore>         types and codes of messages to ignore, a repeatable value or separated by semi-colons
+    -E, --hide-elements <hide>    a CSS selector to hide elements from testing, selectors can be comma separated
+    -R, --root-element <element>  the root element for testing a subset of the document
+    -c, --config <path>           a JSON or JavaScript config file
+    -p, --port <port>             the port to run PhantomJS on
+    -t, --timeout <ms>            the timeout in milliseconds
+    -w, --wait <ms>               the time to wait before running tests in milliseconds
+    -d, --debug                   output debug messages
+    -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
+    -e, --phantomjs <path>        the path to the phantomjs executable
 ```
 
 ### Running Tests
@@ -496,6 +497,16 @@ Defaults to:
 ```
 
 If `phantom.port` is not specified, a random available port will be used.
+
+### `rootElement` (element)
+
+The root element for testing a subset of the page opposed to the full document.
+
+```js
+pa11y({
+    rootElement: '#main'
+});
+```
 
 ### `standard` (string)
 
