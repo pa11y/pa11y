@@ -507,6 +507,7 @@ pa11y({
     rootElement: '#main'
 });
 ```
+Defaults to `null`, meaning the full document will be tested.
 
 ### `standard` (string)
 
