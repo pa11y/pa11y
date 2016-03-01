@@ -39,6 +39,10 @@ function configureProgram(program) {
 			[]
 		)
 		.option(
+			'-R, --root-element <selector>',
+			'a CSS selector used to limit which part of a page is tested'
+		)
+		.option(
 			'-E, --hide-elements <hide>',
 			'a CSS selector to hide elements from testing, selectors can be comma separated'
 		)
@@ -116,6 +120,7 @@ function processOptions(program) {
 			path: program.phantomjs,
 			port: program.port
 		},
+		rootElement: program.rootElement,
 		standard: program.standard,
 		timeout: program.timeout,
 		wait: program.wait

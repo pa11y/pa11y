@@ -183,7 +183,8 @@ describe('lib/pa11y', function() {
 					'qux'
 				],
 				standard: 'Section508',
-				wait: 0
+				wait: 0,
+				rootElement: null
 			};
 			pa11y(options);
 
@@ -343,7 +344,8 @@ describe('lib/pa11y', function() {
 					'qux'
 				],
 				standard: 'Section508',
-				wait: 0
+				wait: 0,
+				rootElement: null
 			});
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
 		});
