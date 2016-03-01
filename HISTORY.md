@@ -1,6 +1,11 @@
 
 # History
 
+## 3.6.0 (2016-03-01)
+
+  * Adding the `rootElement` option so a subset of the document can be tested
+  * Adding the `hideElements` option so elements can be hidden from testing
+
 ## 3.5.1 (2016-02-09)
 
   * Update repository references to springernature
