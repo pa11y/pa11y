@@ -337,6 +337,7 @@ describe('lib/pa11y', function() {
 			assert.calledOnce(phantom.mockPage.evaluate);
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[0]);
 			assert.deepEqual(phantom.mockPage.evaluate.firstCall.args[1], {
+				hideElements: null,
 				ignore: [
 					'baz',
 					'qux'

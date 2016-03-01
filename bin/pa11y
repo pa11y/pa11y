@@ -39,6 +39,10 @@ function configureProgram(program) {
 			[]
 		)
 		.option(
+			'-E, --hide-elements <hide>',
+			'a CSS selector to hide elements from testing, selectors can be comma separated'
+		)
+		.option(
 			'-c, --config <path>',
 			'a JSON or JavaScript config file',
 			'./pa11y.json'
@@ -99,6 +103,7 @@ function runProgram(program) {
 
 function processOptions(program) {
 	var options = extend(true, {}, loadConfig(program.config), {
+		hideElements: program.hideElements,
 		htmlcs: program.htmlcs,
 		ignore: program.ignore,
 		log: loadReporter(program.reporter),
@@ -115,6 +120,7 @@ function processOptions(program) {
 		timeout: program.timeout,
 		wait: program.wait
 	});
+
 	if (!program.debug) {
 		options.log.debug = function() {};
 	}

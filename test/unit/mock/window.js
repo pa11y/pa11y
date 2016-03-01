@@ -4,7 +4,9 @@ var sinon = require('sinon');
 
 module.exports = {
 	callPhantom: sinon.spy(),
-	document: {},
+	document: {
+		querySelectorAll: sinon.stub().returns([])
+	},
 	HTMLCS: {
 		getMessages: sinon.stub().returns([]),
 		process: sinon.stub().yieldsAsync()
