@@ -39,7 +39,7 @@ Table Of Contents
 - [Examples](#examples)
 - [Common Questions](#common-questions)
 - [Contributing](#contributing)
-- [Migrating](#migrating)
+- [Support and Migration](#support-and-migration)
 - [License](#license)
 
 
@@ -710,17 +710,20 @@ make ci
 ```
 
 
-Migrating
----------
+Support and Migration
+---------------------
 
-If you're using pa11y 1.0 or 2.0 and wish to migrate to 3.0, we've written a [Migration Guide](MIGRATION.md) to help with that.
+Pa11y major versions are normally supported for 6 months after their last minor release. This means that patch-level changes will be added and bugs will be fixed. The table below outlines the end-of-support dates for major versions, and the last minor release for that version.
 
-It's recommended that you migrate to 3.0 as soon as possible, but we maintain branches for previous major versions. Each of these will be supported (critical bug fixes only) for 1 year from the next major version's released date:
+We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 
-- [pa11y 2.0][2.x] (support ends 16th October 2016)
-- [pa11y 1.0][1.x] (support ends 8th June 2016)
+| Major Version | Last Minor Release | Node.js Versions | Support End Date |
+| :------------ | :----------------- | :--------------- | :--------------- |
+| 3             | N/A                | 0.12+            | N/A              |
+| 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
+| 1             | 1.7                | 0.10             | 2016-06-08       |
 
-If you're opening issues related to these, please mention the version being used.
+If you're opening issues related to these, please mention the version that the issue relates to.
 
 
 License
