@@ -5,7 +5,14 @@ Migration Guide
 pa11y's API changes between major versions. This is a guide to help you make the switch when this happens.
 
 
-Migrating From 2.0 To 3.0
+Table Of Contents
+-----------------
+
+- [Migrating from 2.0 to 3.0](#migrating-from-20-to-30)
+- [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
+
+
+Migrating from 2.0 to 3.0
 -------------------------
 
 ### API Overhaul
@@ -21,8 +28,7 @@ The `phantom.port` option no longer has a default. If a port is not specified, t
 Node.js 0.10 is no longer officially supported. We'll be running tests against it still, but these are marked as "allowed to fail". If you're absolutely reliant on Node.js 0.10, [check the latest build](https://travis-ci.org/springernature/pa11y) to verify that it's still working.
 
 
-
-Migrating From 1.0 To 2.0
+Migrating from 1.0 to 2.0
 -------------------------
 
 ### Command-Line Interface
