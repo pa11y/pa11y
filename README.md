@@ -717,11 +717,11 @@ Pa11y major versions are normally supported for 6 months after their last minor 
 
 We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 
-| Major Version | Last Minor Release | Node.js Versions | Support End Date |
-| :------------ | :----------------- | :--------------- | :--------------- |
-| 3             | N/A                | 0.12+            | N/A              |
-| 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
-| 1             | 1.7                | 0.10             | 2016-06-08       |
+| :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
+| :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
+| :heart:         | 3             | N/A                | 0.12+            | N/A              |
+| :hourglass:     | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
+| :hourglass:     | 1             | 1.7                | 0.10             | 2016-06-08       |
 
 If you're opening issues related to these, please mention the version that the issue relates to.
 
