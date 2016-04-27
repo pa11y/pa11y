@@ -1,6 +1,12 @@
 
 # History
 
+## 3.7.0 (2016-04-27)
+
+  * Update dependencies
+    * truffler: ~2.1 to ~2.2
+    * HTML CodeSniffer: 2.0.1 to 2.0.7
+
 ## 3.6.0 (2016-03-01)
 
   * Adding the `rootElement` option so a subset of the document can be tested
