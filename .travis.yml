@@ -9,15 +9,10 @@ matrix:
       env: LINT=true
 
     # Run tests
-    - node_js: '0.10'
     - node_js: '0.12'
     - node_js: '4'
     - node_js: '5'
     - node_js: '6'
-
-  # Allowed failures
-  allow_failures:
-    - node_js: '0.10'
 
 # Restrict builds on branches
 branches:

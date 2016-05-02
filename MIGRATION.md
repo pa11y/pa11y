@@ -25,7 +25,7 @@ The `phantom.port` option no longer has a default. If a port is not specified, t
 
 ### Node.js Support
 
-Node.js 0.10 is no longer officially supported. We'll be running tests against it still, but these are marked as "allowed to fail". If you're absolutely reliant on Node.js 0.10, [check the latest build](https://travis-ci.org/springernature/pa11y) to verify that it's still working.
+Node.js 0.10 is no longer officially supported, pa11y is unlikely to continue to work with this version going forward.
 
 
 Migrating from 1.0 to 2.0
