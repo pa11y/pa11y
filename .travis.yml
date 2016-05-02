@@ -5,7 +5,7 @@ matrix:
   include:
 
     # Run linter once
-    - node_js: '0.12'
+    - node_js: '6'
       env: LINT=true
 
     # Run tests
@@ -13,6 +13,7 @@ matrix:
     - node_js: '0.12'
     - node_js: '4'
     - node_js: '5'
+    - node_js: '6'
 
   # Allowed failures
   allow_failures:

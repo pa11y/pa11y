@@ -758,6 +758,6 @@ Copyright &copy; 2013, Springer Nature
 [shield-dependencies]: https://img.shields.io/gemnasium/springernature/pa11y.svg
 [shield-coverage]: https://img.shields.io/coveralls/springernature/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–5-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/springernature/pa11y/master.svg
