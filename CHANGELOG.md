@@ -1,5 +1,5 @@
 
-# History
+# Changelog
 
 ## 3.7.1 (2016-05-03)
 
