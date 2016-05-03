@@ -1,6 +1,10 @@
 
 # History
 
+## 3.7.1 (2016-05-03)
+
+  * Support Node.js 6.x
+
 ## 3.7.0 (2016-04-27)
 
   * Update dependencies
