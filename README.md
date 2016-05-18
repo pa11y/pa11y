@@ -730,7 +730,7 @@ License
 -------
 
 pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
-Copyright &copy; 2013, Springer Nature
+Copyright &copy; 2016, Springer Nature
 
 
 
