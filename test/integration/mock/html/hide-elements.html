@@ -7,6 +7,37 @@
 
 </head>
 <body style="background:#fff">
-	<h1 style="color:#fff" class="heading">Hello World</h1>
+	<div id="hide-parent">
+
+		<!-- Bad contrast -->
+		<h1 style="color:#fff" class="heading">Hello World</h1>
+
+		<!-- Heading with no content -->
+		<h2></h2>
+
+		<!-- No alt attribute -->
+		<img src="/path/to/image.jpg" />
+
+		<!-- Link only contains image and image has no alt attribute -->
+		<a href="http://pa11y.org/">
+			<img src="http://pa11y.org/false-img.jpg"/>
+		</a>
+
+		<!-- No link content -->
+		<a href="http://www.nature.com/"></a>
+
+		<!-- No title attribute -->
+		<iframe src="http://pa11y.org/"></iframe>
+
+		<!-- Duplicate ID -->
+		<p id="para">foo</p>
+		<p id="para">bar</p>
+
+		<form action="">
+			<!-- No label -->
+			<input id="input" name="input" value="" />
+			<!-- No submit -->
+		</form>
+	</div>
 </body>
 </html>
