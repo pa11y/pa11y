@@ -748,6 +748,7 @@ Copyright &copy; 2016, Springer Nature
 [phantom-cli]: http://phantomjs.org/api/command-line.html
 [phantom-node-options]: https://github.com/baudehlo/node-phantom-simple#node-phantom-simple
 [phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
+[sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
