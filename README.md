@@ -28,6 +28,8 @@ test.run('nature.com', function (error, results) {
 });
 ```
 
+✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to pa11y-dashboard and pa11y-webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
+
 
 Table Of Contents
 -----------------
