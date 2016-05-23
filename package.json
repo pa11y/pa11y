@@ -19,10 +19,10 @@
 
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/springernature/pa11y.git"
+		"url": "https://github.com/pa11y/pa11y.git"
 	},
-	"homepage": "https://github.com/springernature/pa11y",
-	"bugs": "https://github.com/springernature/pa11y/issues",
+	"homepage": "https://github.com/pa11y/pa11y",
+	"bugs": "https://github.com/pa11y/pa11y/issues",
 	"license": "LGPL-3.0",
 
 	"engines": {

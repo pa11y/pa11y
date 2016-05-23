@@ -740,9 +740,9 @@ Copyright &copy; 2016, Springer Nature
 
 
 
-[1.0-json-reporter]: https://github.com/springernature/pa11y-reporter-1.0-json
-[2.x]: https://github.com/springernature/pa11y/tree/2.x
-[1.x]: https://github.com/springernature/pa11y/tree/1.x
+[1.0-json-reporter]: https://github.com/pa11y/pa11y-reporter-1.0-json
+[2.x]: https://github.com/pa11y/pa11y/tree/2.x
+[1.x]: https://github.com/pa11y/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
 [jscs]: http://jscs.info/
@@ -756,15 +756,15 @@ Copyright &copy; 2016, Springer Nature
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
-[info-coverage]: https://coveralls.io/github/springernature/pa11y
-[info-dependencies]: https://gemnasium.com/springernature/pa11y
+[info-coverage]: https://coveralls.io/github/pa11y/pa11y
+[info-dependencies]: https://gemnasium.com/pa11y/pa11y
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
-[info-build]: https://travis-ci.org/springernature/pa11y
-[shield-dependencies]: https://img.shields.io/gemnasium/springernature/pa11y.svg
-[shield-coverage]: https://img.shields.io/coveralls/springernature/pa11y.svg
+[info-build]: https://travis-ci.org/pa11y/pa11y
+[shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
+[shield-coverage]: https://img.shields.io/coveralls/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/badge/node.js%20support-0.12–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
-[shield-build]: https://img.shields.io/travis/springernature/pa11y/master.svg
+[shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg

@@ -37,7 +37,7 @@ The command-line interface in 2.0 is similar to 1.0, but there are a few key cha
 
   - The `console` reporter has been renamed to `cli` and has a different output format
   - The `csv` reporter now includes the message context and selector
-  - The `json` reporter now outputs an array which matches the new [output format](#output-format). You can use the [pa11y JSON 1.0 reporter](https://github.com/springernature/pa11y-reporter-1.0-json) to output 1.0-style JSON
+  - The `json` reporter now outputs an array which matches the new [output format](#output-format). You can use the [pa11y JSON 1.0 reporter](https://github.com/pa11y/pa11y-reporter-1.0-json) to output 1.0-style JSON
   - Reporters no longer handle the way pa11y exits, this is controlled through the new `--level` flag
   - Custom reporters now have a different API, see the [README](README.md) for more information
   - The file specified by the `--config` flag now expects JSON in a different format. See [configuration](#configuration)

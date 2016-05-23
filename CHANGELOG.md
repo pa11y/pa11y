@@ -57,7 +57,7 @@
   * Initial 3.0 release
   * Overhaul the API (now uses Truffler 2.0)
   * Drop Node.js 0.10 support
-  * See the [migration guide](https://github.com/springernature/pa11y/blob/master/MIGRATION.md#migrating-from-20-to-30) for details
+  * See the [migration guide](https://github.com/pa11y/pa11y/blob/master/MIGRATION.md#migrating-from-20-to-30) for details
 
 ## 2.4.5 (2016-01-05)
 
@@ -115,7 +115,7 @@
 
   * Initial 2.0 release
   * Full rewrite
-  * See the [migration guide](https://github.com/springernature/pa11y/blob/master/MIGRATION.md#migrating-from-10-to-20) for details
+  * See the [migration guide](https://github.com/pa11y/pa11y/blob/master/MIGRATION.md#migrating-from-10-to-20) for details
 
 ## 1.7.0 (2015-05-08)
 
