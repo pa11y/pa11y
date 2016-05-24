@@ -571,6 +571,14 @@ Use [async][async] to run pa11y on multiple URLs in series, and output the resul
 node example/multiple
 ```
 
+### Multiple Concurrent Example
+
+Use [async][async] to run pa11y on multiple URLs in parallel, with a configurable concurrency. Then output the results. [See the example](example/multiple-concurrent), or run it with:
+
+```
+node example/multiple-concurrent
+```
+
 ### Before Script Example
 
 Inject a script before pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running pa11y. [See the example](example/before-script).
