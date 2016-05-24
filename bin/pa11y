@@ -6,13 +6,18 @@ var path = require('path');
 var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
+var readline = require('readline');
+var async = require('async');
+var chalk = require('chalk');
+var fs = require('fs');
+var crypto = require('crypto');
 
 configureProgram(program);
 runProgram(program);
 
 function configureProgram(program) {
 	program.version(pkg.version)
-		.usage('[options] <url>')
+		.usage('[options] [url]')
 		.option(
 			'-s, --standard <name>',
 			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA'
@@ -21,6 +26,10 @@ function configureProgram(program) {
 			'-r, --reporter <reporter>',
 			'the reporter to use: cli (default), csv, html, json',
 			'cli'
+		)
+		.option(
+			'-o, --output <output>',
+			'filename that will receive the output (special keyword: %HASH%, representing the hash of the current URL)'
 		)
 		.option(
 			'-l, --level <level>',
@@ -75,33 +84,94 @@ function configureProgram(program) {
 			'-e, --phantomjs <path>',
 			'the path to the phantomjs executable'
 		)
+		.option(
+			'-0, --stdin',
+			'read URL from stdin'
+		)
 		.parse(process.argv);
-	program.url = program.args[0];
+	program.url = program.args[0] || null;
 }
 
-function runProgram(program) {
-	if (!program.url || program.args[1]) {
-		program.help();
-	}
-	var options = processOptions(program);
-	options.log.begin(program.url);
+function runTest(test, options, url, callbacks) {
+	processOutput(options.output, url);
+	options.log.begin(url);
 	try {
-		var test = pa11y(options);
-		test.run(program.url, function(error, results) {
+		test.run(url, function(error, results) {
 			if (error) {
 				options.log.error(error.stack);
-				process.exit(1);
+				return callbacks.error(error);
 			}
+			options.log.results(results, url);
 			if (reportShouldFail(program.level, results, program.threshold)) {
-				process.once('exit', function() {
-					process.exit(2);
-				});
+				return callbacks.error(error);
 			}
-			options.log.results(results, program.url);
+			callbacks.complete(results);
 		});
 	} catch (error) {
 		options.log.error(error.stack);
 		process.exit(1);
+	}
+}
+
+function getRunQueue(test, options) {
+	var hasErrors = false;
+	var urls = async.queue(
+		function(task, onTaskComplete) {
+			if (program.reporter === 'cli') {
+				console.log('\n' + chalk.black.bgYellow('Compute ' + task.url + '\n\n'));
+			}
+			runTest(
+				test,
+				options,
+				task.url,
+				{
+					complete: function(results) {
+						onTaskComplete(null, results);
+					},
+					error: function(error) {
+						hasErrors = true;
+						onTaskComplete(error);
+					}
+				}
+			);
+		},
+		1
+	);
+	urls.drain = function() {
+		if (hasErrors) {
+			process.on('exit', function() {
+				process.exit(2);
+			});
+		}
+	};
+	return urls;
+}
+
+function runProgram(program) {
+	var options = processOptions(program);
+	var test = pa11y(options);
+
+	if (program.url) {
+		runTest(
+			test,
+			options,
+			program.url,
+			{
+				complete: process.exit.bind(null, 0),
+				error: function() {
+					process.once('exit', function() {
+						process.exit(2);
+					});
+				}
+			}
+		);
+	} else if (program.stdin) {
+		var urls = getRunQueue(test, options);
+		readline.createInterface(process.stdin, undefined).on('line', function(url) {
+			urls.push({url: url});
+		});
+	} else {
+		program.help();
 	}
 }
 
@@ -111,6 +181,7 @@ function processOptions(program) {
 		htmlcs: program.htmlcs,
 		ignore: program.ignore,
 		log: loadReporter(program.reporter),
+		output: program.output,
 		page: {
 			settings: {
 				resourceTimeout: program.timeout
@@ -151,6 +222,17 @@ function loadReporter(name) {
 		process.exit(1);
 	}
 	return reporter;
+}
+
+function processOutput(output, url) {
+	if (!output) {
+		return;
+	}
+	var hash = output.replace(/%HASH%/, crypto.createHash('sha1').update(url).digest('hex'));
+	var outputStream = fs.createWriteStream(hash);
+	console.log = function(message) {
+		outputStream.write(message);
+	};
 }
 
 function requireFirst(stack, defaultReturn) {
