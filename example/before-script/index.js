@@ -1,10 +1,8 @@
+// An example of injecting a script before pa11y runs.
+// This example logs in to a fictional site then waits
+// until the account page has loaded before running pa11y
 'use strict';
 
-/*
- * An example to inject a script before pa11y runs
- * This example logs in to a fictional site
- * Then it waits until the account page has loaded before running pa11y
- */
 
 var pa11y = require('../..');
 

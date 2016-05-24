@@ -1,3 +1,5 @@
+// An example of running pa11y on multiple URLS
+// in series
 'use strict';
 
 var async = require('async');
