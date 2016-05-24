@@ -7,7 +7,8 @@ module.exports = {
 	error: reportError,
 	debug: emptyFunction,
 	info: emptyFunction,
-	results: reportResults
+	results: reportResults,
+	process: buildHtml
 };
 
 function emptyFunction() {}

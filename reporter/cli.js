@@ -15,8 +15,11 @@ module.exports = {
 	error: reportError,
 	debug: reportDebug,
 	info: reportInfo,
-	results: reportResults
+	results: reportResults,
+	process: emptyFunction
 };
+
+function emptyFunction() {}
 
 function reportBegin() {
 	console.log(chalk.cyan.underline('Welcome to Pa11y'));

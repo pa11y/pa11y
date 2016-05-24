@@ -220,7 +220,7 @@ The following locations will be checked:
 <cwd>/rainbows
 ```
 
-A pa11y reporter should export the following methods:
+A pa11y reporter should export the following methods, and these should make use of `console` to send output:
 
 ```js
 begin(url); // Called when pa11y starts
@@ -228,6 +228,12 @@ error(message); // Called when a technical error is reported
 debug(message); // Called when a debug message is reported
 info(message); // Called when an information message is reported
 results(resultsArray, url); // Called with the results of a test run
+```
+
+Reporters may also optionally export a `process` method. This should accept the same arguments as the `results` method but return the processed results rather than outputting them:
+
+```js
+process(resultsArray, url); // Called with results by a user
 ```
 
 You may find the following reporters useful:
@@ -293,6 +299,15 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
         typeCode: 3
     }
 ]
+```
+
+If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
+
+```js
+// Assuming you've already run tests, and the results
+// are available in a `results` variable:
+var htmlReporter = require('pa11y/reporter/html');
+var html = htmlReporter.process(results, url);
 ```
 
 
