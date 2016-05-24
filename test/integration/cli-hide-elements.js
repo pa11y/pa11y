@@ -7,7 +7,7 @@ var describeCliCall = require('./helper/describe-cli-call');
 
 describe('Pa11y CLI Hide Elements', function() {
 
-	describeCliCall('/hide-elements', ['--hide-elements', '.heading'], {}, function() {
+	describeCliCall('/hide-elements', ['--hide-elements', '.heading,a'], {}, function() {
 
 		it('should respond with an exit code of `0`', function() {
 			assert.strictEqual(this.lastExitCode, 0);
