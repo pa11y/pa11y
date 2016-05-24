@@ -557,7 +557,7 @@ Examples
 
 ### Basic Example
 
-Run pa11y on a URL and output the results:
+Run pa11y on a URL and output the results. [See the example](example/basic), or run it with:
 
 ```
 node example/basic
@@ -565,11 +565,15 @@ node example/basic
 
 ### Multiple Example
 
-Use [async][async] to run pa11y on multiple URLs in series, and output the results:
+Use [async][async] to run pa11y on multiple URLs in series, and output the results. [See the example](example/multiple), or run it with:
 
 ```
 node example/multiple
 ```
+
+### Before Script Example
+
+Inject a script before pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running pa11y. [See the example](example/before-script).
 
 
 Common Questions
