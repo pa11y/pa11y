@@ -1,3 +1,4 @@
+// An example of running pa11y programmatically
 'use strict';
 
 var pa11y = require('../..');
