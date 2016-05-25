@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 3.8.0 (2016-05-25)
+
+  * Make the built-in reporters usable in JavaScript
+  * Tidy up the examples
+
 ## 3.7.1 (2016-05-03)
 
   * Support Node.js 6.x
