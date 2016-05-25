@@ -7,7 +7,8 @@ module.exports = {
 	error: reportError,
 	debug: emptyFunction,
 	info: emptyFunction,
-	results: reportResults
+	results: reportResults,
+	process: buildJson
 };
 
 function emptyFunction() {}
@@ -25,4 +26,8 @@ function reportResults(results) {
 		process.stdout.write('\n');
 	});
 	stream.pipe(process.stdout);
+}
+
+function buildJson(results) {
+	return results;
 }
