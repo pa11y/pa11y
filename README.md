@@ -739,7 +739,7 @@ If parts of the DOM are been loaded after the document is first generated, you m
 If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
 
 We are aware of an issue with regard to iframe content, PhantomJS doesn't automatically provide access to the inner content of iframes, and so Pa11y doesn't currently support testing against iframe content from a parent page context.
-Any page that makes use of iframes, e.g. for displaying ads, will show different results on Pa11y than those when running HTML_CodeSniffer in the browser.
+Any page that makes use of iframes, e.g. for displaying ads, may show different results on Pa11y than those when running HTML_CodeSniffer in the browser.
 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
 
