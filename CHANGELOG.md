@@ -33,7 +33,7 @@
 
 ## 3.4.0 (2016-02-01)
 
-  * Document running pa11y against local files
+  * Document running Pa11y against local files
   * Add a trouble-shooting guide for Windows
   * Make allowed standards configurable
 
@@ -179,11 +179,11 @@
 
 ## 1.4.1 (2013-09-09)
 
-  * Fix an issue where HTML CodeSniffer errors can derail pa11y
+  * Fix an issue where HTML CodeSniffer errors can derail Pa11y
 
 ## 1.4.0 (2013-08-30)
 
-  * Allow users to specify a port to run PhantomJS on. This means you can run multiple pa11y commands in parallel
+  * Allow users to specify a port to run PhantomJS on. This means you can run multiple Pa11y commands in parallel
 
 ## 1.3.0 (2013-08-23)
 

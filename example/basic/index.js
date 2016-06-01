@@ -1,4 +1,4 @@
-// An example of running pa11y programmatically
+// An example of running Pa11y programmatically
 'use strict';
 
 var pa11y = require('../..');

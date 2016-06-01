@@ -1,4 +1,4 @@
-// An example of running pa11y on multiple URLS
+// An example of running Pa11y on multiple URLS
 // in parallel, with a configurable concurrency.
 'use strict';
 
