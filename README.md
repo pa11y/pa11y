@@ -1,8 +1,8 @@
 
-pa11y
+Pa11y
 =====
 
-pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
+Pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
 
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
@@ -30,7 +30,7 @@ test.run('nature.com', function (error, results) {
 
 ---
 
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to pa11y-dashboard and pa11y-webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
+✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
 
 ---
 
@@ -52,7 +52,7 @@ Table Of Contents
 Requirements
 ------------
 
-pa11y requires [Node.js][node] 0.12+ and [PhantomJS][phantom] to run.
+Pa11y requires [Node.js][node] 0.12+ and [PhantomJS][phantom] to run.
 
 ### OS X
 
@@ -71,7 +71,7 @@ Depending on your flavour of Linux, you should be able to use a package manager 
 
 ### Windows
 
-Windows users approach with caution – we've been able to get pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 If you run into following error:
 
@@ -100,7 +100,7 @@ follow these steps:
 Command-Line Interface
 ----------------------
 
-Install pa11y globally with [npm][npm]:
+Install Pa11y globally with [npm][npm]:
 
 ```
 npm install -g pa11y
@@ -151,7 +151,7 @@ Run a test with CSV reporting and save to a file:
 pa11y --reporter csv nature.com > report.csv
 ```
 
-Run pa11y with the Section508 ruleset:
+Run Pa11y with the Section508 ruleset:
 
 ```
 pa11y --standard Section508 nature.com
@@ -161,9 +161,9 @@ pa11y --standard Section508 nature.com
 
 The command-line tool uses the following exit codes:
 
-  - `0`: pa11y ran successfully, and there are no errors
-  - `1`: pa11y failed run due to a technical fault
-  - `2`: pa11y ran successfully but there are errors in the page
+  - `0`: Pa11y ran successfully, and there are no errors
+  - `1`: Pa11y failed run due to a technical fault
+  - `2`: Pa11y ran successfully but there are errors in the page
 
 By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
@@ -180,7 +180,7 @@ The command-line tool can be configured with a JSON file as well as arguments. B
 pa11y --config ./path/to/config.json nature.com
 ```
 
-For more information on configuring pa11y, see the [configuration documentation](#configuration).
+For more information on configuring Pa11y, see the [configuration documentation](#configuration).
 
 ### Ignoring
 
@@ -220,7 +220,7 @@ The following locations will be checked:
 <cwd>/rainbows
 ```
 
-A pa11y reporter should export the following methods, and these should make use of `console` to send output:
+A Pa11y reporter should export the following methods, and these should make use of `console` to send output:
 
 ```js
 begin(url); // Called when pa11y starts
@@ -238,25 +238,25 @@ process(resultsArray, url); // Called with results by a user
 
 You may find the following reporters useful:
 
-  - [`1.0-json`][1.0-json-reporter]: output test results in the pa11y 1.0 JSON format
+  - [`1.0-json`][1.0-json-reporter]: output test results in the Pa11y 1.0 JSON format
 
 
 JavaScript Interface
 --------------------
 
-Install pa11y with [npm][npm] or add to your `package.json`:
+Install Pa11y with [npm][npm] or add to your `package.json`:
 
 ```
 npm install pa11y
 ```
 
-Require pa11y:
+Require Pa11y:
 
 ```js
 var pa11y = require('pa11y');
 ```
 
-Create a tester by initialising pa11y with [some options](#configuration):
+Create a tester by initialising Pa11y with [some options](#configuration):
 
 ```js
 var test = pa11y(options);
@@ -314,7 +314,7 @@ var html = htmlReporter.process(results, url);
 Configuration
 -------------
 
-pa11y has lots of options you can use to change the way PhantomJS runs, or the way your page is loaded. Options can be set either on the pa11y instance when it's created or the individual test runs. This allows you to set some defaults which can be overridden per-test:
+Pa11y has lots of options you can use to change the way PhantomJS runs, or the way your page is loaded. Options can be set either on the Pa11y instance when it's created or the individual test runs. This allows you to set some defaults which can be overridden per-test:
 
 ```js
 // Set the default Foo header to "bar"
@@ -355,7 +355,7 @@ Defaults to `Section508`, `WCAG2A`, `WCAG2AA`, and `WCAG2AAA`.
 
 ### `beforeScript` (function)
 
-A function to be run before pa11y tests the page. The function accepts three parameters;
+A function to be run before Pa11y tests the page. The function accepts three parameters;
 
 - `page` is the phantomjs page object, [documentation for the phantom bridge can be found here][phantom-node-options]
 - `options` is the finished options object used to configure pa11y
@@ -365,7 +365,7 @@ A function to be run before pa11y tests the page. The function accepts three par
 pa11y({
     beforeScript: function(page, options, next) {
 		// Make changes to the page
-		// When finished call next to continue running pa11y tests
+		// When finished call next to continue running Pa11y tests
 		next();
 	}
 });
@@ -572,7 +572,7 @@ Examples
 
 ### Basic Example
 
-Run pa11y on a URL and output the results. [See the example](example/basic/index.js), or run it with:
+Run Pa11y on a URL and output the results. [See the example](example/basic/index.js), or run it with:
 
 ```
 node example/basic
@@ -580,7 +580,7 @@ node example/basic
 
 ### Multiple Example
 
-Use [async][async] to run pa11y on multiple URLs in series, and output the results. [See the example](example/multiple/index.js), or run it with:
+Use [async][async] to run Pa11y on multiple URLs in series, and output the results. [See the example](example/multiple/index.js), or run it with:
 
 ```
 node example/multiple
@@ -588,7 +588,7 @@ node example/multiple
 
 ### Multiple Concurrent Example
 
-Use [async][async] to run pa11y on multiple URLs in parallel, with a configurable concurrency. Then output the results. [See the example](example/multiple-concurrent/index.js), or run it with:
+Use [async][async] to run Pa11y on multiple URLs in parallel, with a configurable concurrency. Then output the results. [See the example](example/multiple-concurrent/index.js), or run it with:
 
 ```
 node example/multiple-concurrent
@@ -596,13 +596,13 @@ node example/multiple-concurrent
 
 ### Before Script Example
 
-Inject a script before pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running pa11y. [See the example](example/before-script/index.js).
+Inject a script before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/before-script/index.js).
 
 
 Common Questions
 ----------------
 
-Common questions about pa11y are answered here.
+Common questions about Pa11y are answered here.
 
 ### How do I set cookies on a tested page?
 
@@ -618,7 +618,7 @@ pa11y({
 });
 ```
 
-### How can pa11y log in if my site's behind basic auth?
+### How can Pa11y log in if my site's behind basic auth?
 
 Use the `page.settings` option either in your JS code or in your config file to set a username and password:
 
@@ -633,10 +633,10 @@ pa11y({
 });
 ```
 
-### How can pa11y log in if my site has a log in form?
+### How can Pa11y log in if my site has a log in form?
 
 Use the `beforeScript` option either in your JS code or in your config file to input login details and submit the form.
-Once the form has been submitted you will also have to wait until the page you want to test has loaded before calling `next` to run pa11y.
+Once the form has been submitted you will also have to wait until the page you want to test has loaded before calling `next` to run Pa11y.
 
 ```js
 pa11y({
@@ -674,7 +674,7 @@ pa11y({
 });
 ```
 
-### How can I use pa11y with a proxy server?
+### How can I use Pa11y with a proxy server?
 
 Use the `phantom.parameters` option either in your JS code or in your config file:
 
@@ -692,9 +692,9 @@ pa11y({
 
 These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can be set to `http`, `socks5`, or `none`.
 
-### How can I simulate a user interaction before running pa11y?
+### How can I simulate a user interaction before running Pa11y?
 
-Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running pa11y.
+Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
 
 In this example, additional content is loaded via ajax when a button is clicked.
 Once the content is loaded the `aria-hidden` atrribute switches from `true` to `false`.
@@ -747,7 +747,7 @@ If you do need to test the contents of an iframe, run Pa11y against the iframe s
 Contributing
 ------------
 
-To contribute to pa11y, clone this repo locally and commit your code on a separate branch.
+To contribute to Pa11y, clone this repo locally and commit your code on a separate branch.
 
 Please write unit tests for your code, and check that everything works by running the following before opening a pull-request:
 
@@ -775,12 +775,12 @@ If you're opening issues related to these, please mention the version that the i
 License
 -------
 
-pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
 Copyright &copy; 2016, Springer Nature
 
 
 
-[1.0-json-reporter]: https://github.com/pa11y/pa11y-reporter-1.0-json
+[1.0-json-reporter]: https://github.com/pa11y/reporter-1.0-json
 [2.x]: https://github.com/pa11y/pa11y/tree/2.x
 [1.x]: https://github.com/pa11y/pa11y/tree/1.x
 [async]: https://github.com/caolan/async

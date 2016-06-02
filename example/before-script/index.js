@@ -1,6 +1,6 @@
-// An example of injecting a script before pa11y runs.
+// An example of injecting a script before Pa11y runs.
 // This example logs in to a fictional site then waits
-// until the account page has loaded before running pa11y
+// until the account page has loaded before running Pa11y
 'use strict';
 
 
@@ -16,7 +16,7 @@ var test = pa11y({
 		info: console.log.bind(console)
 	},
 
-	// A script to be run on the inital page before pa11y is run.
+	// A script to be run on the inital page before Pa11y is run.
 	// beforeScript accepts three parameters, the page object, the pa11y options and a callback
 	beforeScript: function(page, options, next) {
 
@@ -24,7 +24,7 @@ var test = pa11y({
 		var waitUntil = function(condition, retries, waitOver) {
 			page.evaluate(condition, function(error, result) {
 				if (result || retries < 1) {
-					// Once the changes have taken place continue with pa11y testing
+					// Once the changes have taken place continue with Pa11y testing
 					waitOver();
 				} else {
 					retries -= 1;
