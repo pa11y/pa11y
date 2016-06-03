@@ -30,29 +30,128 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should select elements using `hideElements` option', function(done) {
-		options.hideElements = '#ad, .modal';
-		inject(window, options, function() {
-			assert.calledOnce(window.document.querySelectorAll);
-			assert.calledWith(window.document.querySelectorAll, '#ad, .modal');
+	it('should ignore messages when they are a child of `options.hideElements`', function(done) {
+		options.hideElements = '.hide';
+		window.document.querySelectorAll.returns([
+			{
+				outerHTML: '<element class="hide">parent</element>'
+			}
+		]);
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: null,
+					isEqualNode: function() {
+						return false;
+					},
+					innerHTML: 'outside hideElements',
+					outerHTML: '<element>outside hideElements</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: {
+						isEqualNode: function() {
+							return true;
+						}
+					},
+					isEqualNode: function() {
+						return false;
+					},
+					innerHTML: 'inside hideElements',
+					outerHTML: '<element>inside hideElements</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'foo-code',
+					context: '<element>outside hideElements</element>',
+					message: 'foo message',
+					selector: '',
+					type: 'error',
+					typeCode: 1
+				}
+			]);
 			done();
 		});
 	});
 
-	it('should hide the elements set in the `hideElements` option', function(done) {
-		options.hideElements = '#ad, .modal';
-		var mockElement1 = {
-			style: {}
-		};
-		var mockElement2 = {
-			style: {}
-		};
-
-		window.document.querySelectorAll.returns([mockElement1, mockElement2]);
-
-		inject(window, options, function() {
-			assert.strictEqual(mockElement1.style.visibility, 'hidden');
-			assert.strictEqual(mockElement2.style.visibility, 'hidden');
+	it('should ignore messages when the element is in `options.hideElements`', function(done) {
+		options.hideElements = '#hide,.hidden';
+		window.document.querySelectorAll.returns([
+			{
+				parentNode: null,
+				innerHTML: 'Is a hidden Element',
+				outerHTML: '<element class="hidden">Is a hidden Element</element>'
+			},
+			{
+				parentNode: null,
+				innerHTML: 'Is a hidden Element',
+				outerHTML: '<element id="hide">Is a hidden Element</element>'
+			}
+		]);
+		window.HTMLCS.getMessages.returns([
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: null,
+					isEqualNode: function() {
+						return true;
+					},
+					innerHTML: 'Is a hidden Element',
+					outerHTML: '<element class="hidden">Is a hidden Element</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: null,
+					isEqualNode: function() {
+						return true;
+					},
+					innerHTML: 'Is a hidden Element',
+					outerHTML: '<element id="hide">Is a hidden Element</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			},
+			{
+				code: 'foo-code',
+				element: {
+					parentNode: null,
+					isEqualNode: function() {
+						return false;
+					},
+					innerHTML: 'Is a NOT hidden Element',
+					outerHTML: '<element>Is NOT a hidden Element</element>'
+				},
+				msg: 'foo message',
+				type: 1
+			}
+		]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.deepEqual(result.messages, [
+				{
+					code: 'foo-code',
+					context: '<element>Is NOT a hidden Element</element>',
+					message: 'foo message',
+					selector: '',
+					type: 'error',
+					typeCode: 1
+				}
+			]);
 			done();
 		});
 	});
