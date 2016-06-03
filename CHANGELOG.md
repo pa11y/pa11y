@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 3.8.1 (2016-06-03)
+
+  * Fixes the `hideElements` option
+
 ## 3.8.0 (2016-05-25)
 
   * Make the built-in reporters usable in JavaScript
