@@ -9,7 +9,6 @@ matrix:
       env: LINT=true
 
     # Run tests
-    - node_js: '0.12'
     - node_js: '4'
     - node_js: '5'
     - node_js: '6'

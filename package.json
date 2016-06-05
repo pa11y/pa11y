@@ -26,7 +26,7 @@
 	"license": "LGPL-3.0",
 
 	"engines": {
-		"node": ">=0.12"
+		"node": ">=4"
 	},
 	"dependencies": {
 		"async": "~1.4",

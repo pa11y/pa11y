@@ -52,7 +52,7 @@ Table Of Contents
 Requirements
 ------------
 
-Pa11y requires [Node.js][node] 0.12+ and [PhantomJS][phantom] to run.
+Pa11y requires [Node.js][node] 4+ and [PhantomJS][phantom] to run.
 
 ### OS X
 
@@ -71,7 +71,7 @@ Depending on your flavour of Linux, you should be able to use a package manager 
 
 ### Windows
 
-Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 0.12) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 If you run into following error:
 
@@ -806,6 +806,6 @@ Copyright &copy; 2016, Springer Nature
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
 [shield-coverage]: https://img.shields.io/coveralls/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-0.12–6-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg
