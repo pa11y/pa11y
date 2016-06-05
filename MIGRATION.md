@@ -8,8 +8,17 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 Table Of Contents
 -----------------
 
+- [Migrating from 3.0 to 4.0](#migrating-from-30-to-40)
 - [Migrating from 2.0 to 3.0](#migrating-from-20-to-30)
 - [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
+
+
+Migrating from 3.0 to 4.0
+-------------------------
+
+### Node.js Support
+
+The only breaking change in Pa11y Dashboard 4.0 is that Node.js 0.12 is no longer supported. We'll be using newer ES6 features in upcoming releases which will not work in this older Node.js version.
 
 
 Migrating from 2.0 to 3.0
