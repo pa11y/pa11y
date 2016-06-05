@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 4.0.0 (2016-06-05)
+
+  * Drop Node.js 0.12 support
+  * See the [migration guide](https://github.com/pa11y/pa11y/blob/master/MIGRATION.md#migrating-from-30-to-40) for details
+
 ## 3.8.1 (2016-06-03)
 
   * Fixes the `hideElements` option
