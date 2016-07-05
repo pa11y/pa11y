@@ -1,7 +1,6 @@
 {
   "name": "pa11y-ci",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "The Pa11y CI application",
   "keywords": [],
   "author": "Team Pa11y",
