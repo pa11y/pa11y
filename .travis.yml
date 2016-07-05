@@ -1,0 +1,36 @@
+
+# Build matrix
+language: node_js
+matrix:
+  include:
+
+    # Run linter once
+    - node_js: '6'
+      env: LINT=true
+
+    # Run tests
+    - node_js: '4'
+    - node_js: '5'
+    - node_js: '6'
+
+# Global environment variables
+env:
+  global:
+    - TEST_DATABASE=postgres://postgres:@localhost:5432/pa11y_sidekick_travis
+
+# Services setup
+services:
+  - postgresql
+
+# Restrict builds on branches
+branches:
+  only:
+    - master
+    - /^\d+\.\d+\.\d+$/
+
+# Build script
+before_script:
+  - psql -c "CREATE DATABASE pa11y_sidekick_travis" -U postgres
+script:
+  - 'if [ $LINT ]; then make verify; fi'
+  - 'if [ ! $LINT ]; then make test; fi'

@@ -1,0 +1,26 @@
+{
+	"curly": true,
+	"eqeqeq": true,
+	"esversion": 6,
+	"forin": true,
+	"globals": {
+		"after": true,
+		"afterEach": true,
+		"before": true,
+		"beforeEach": true,
+		"describe": true,
+		"it": true
+	},
+	"latedef": "nofunc",
+	"maxcomplexity": 5,
+	"maxdepth": 2,
+	"maxparams": 4,
+	"noarg": true,
+	"node": true,
+	"nonew": true,
+	"nonstandard": true,
+	"shadow": false,
+	"strict": true,
+	"undef": true,
+	"unused": true
+}

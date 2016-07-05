@@ -1,0 +1,48 @@
+{
+  "name": "pa11y-ci",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Pa11y CI application",
+  "keywords": [],
+  "author": "Team Pa11y",
+  "contributors": [
+    "Rowan Manning (http://rowanmanning.com/)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pa11y/ci.git"
+  },
+  "homepage": "https://github.com/pa11y/ci",
+  "bugs": "https://github.com/pa11y/ci/issues",
+  "license": "LGPL-3.0",
+  "engines": {
+    "node": ">=4"
+  },
+  "dependencies": {
+    "async": "^2.0.0-rc",
+    "chalk": "^1",
+    "cheerio": "^0.20",
+    "commander": "^2",
+    "lodash": "^4",
+    "node-fetch": "^1",
+    "pa11y": "^4",
+    "wordwrap": "^1"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4",
+    "jscs": "^2",
+    "jshint": "^2",
+    "mocha": "^2",
+    "mockery": "^1",
+    "proclaim": "^3",
+    "sinon": "^1",
+    "sinon-as-promised": "^4"
+  },
+  "main": "./lib/pa11y-ci.js",
+  "bin": {
+    "pa11y-ci": "./bin/pa11y-ci.js"
+  },
+  "scripts": {
+    "test": "make ci"
+  }
+}

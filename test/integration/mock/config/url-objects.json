@@ -1,0 +1,10 @@
+{
+	"urls": [
+		{
+			"url": "http://localhost:8090/passing-1"
+		},
+		{
+			"url": "http://localhost:8090/passing-2"
+		}
+	]
+}
