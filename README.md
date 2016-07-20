@@ -744,6 +744,11 @@ Any page that makes use of iframes, e.g. for displaying ads, may show different 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
 
 
+### Is Pa11y testing the contrast of the hover state ?
+
+Pa11y uses HTML CodeSniffer to test the site, and as it does not check the hover state, Pa11y will no do it either. Instead, the contrast of your hover state colours can be tested by adding them to the page.
+
+
 Contributing
 ------------
 
