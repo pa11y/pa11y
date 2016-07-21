@@ -97,106 +97,106 @@ follow these steps:
 2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
 
 
-	Command-Line Interface
-	----------------------
+Command-Line Interface
+----------------------
 
-	Install Pa11y globally with [npm][npm]:
+Install Pa11y globally with [npm][npm]:
 
-	```
-	npm install -g pa11y
-	```
+```
+npm install -g pa11y
+```
 
-	This installs the `pa11y` command-line tool:
+This installs the `pa11y` command-line tool:
 
-	```
-	Usage: pa11y [options] <url>
+```
+Usage: pa11y [options] <url>
 
-	  Options:
+  Options:
 
-	    -h, --help                    output usage information
-	    -V, --version                 output the version number
-	    -s, --standard <name>         the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-	    -r, --reporter <reporter>     the reporter to use: cli (default), csv, html, json
-	    -l, --level <level>           the level of message to fail on (exit with code 2): error, warning, notice
-	    -T, --threshold <name>        the number of individual errors, warnings, or notices to permit before failing
-	    -i, --ignore <ignore>         types and codes of messages to ignore, a repeatable value or separated by semi-colons
-	    -E, --hide-elements <hide>    a CSS selector to hide elements from testing, selectors can be comma separated
-	    -R, --root-element <element>  the root element for testing a subset of the document
-	    -c, --config <path>           a JSON or JavaScript config file
-	    -p, --port <port>             the port to run PhantomJS on
-	    -t, --timeout <ms>            the timeout in milliseconds
-	    -w, --wait <ms>               the time to wait before running tests in milliseconds
-	    -d, --debug                   output debug messages
-	    -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
-	    -e, --phantomjs <path>        the path to the phantomjs executable
-	```
+    -h, --help                    output usage information
+    -V, --version                 output the version number
+    -s, --standard <name>         the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
+    -r, --reporter <reporter>     the reporter to use: cli (default), csv, html, json
+    -l, --level <level>           the level of message to fail on (exit with code 2): error, warning, notice
+    -T, --threshold <name>        the number of individual errors, warnings, or notices to permit before failing
+    -i, --ignore <ignore>         types and codes of messages to ignore, a repeatable value or separated by semi-colons
+    -E, --hide-elements <hide>    a CSS selector to hide elements from testing, selectors can be comma separated
+    -R, --root-element <element>  the root element for testing a subset of the document
+    -c, --config <path>           a JSON or JavaScript config file
+    -p, --port <port>             the port to run PhantomJS on
+    -t, --timeout <ms>            the timeout in milliseconds
+    -w, --wait <ms>               the time to wait before running tests in milliseconds
+    -d, --debug                   output debug messages
+    -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
+    -e, --phantomjs <path>        the path to the phantomjs executable
+```
 
-	### Running Tests
+### Running Tests
 
-	Run an accessibility test against a URL:
+Run an accessibility test against a URL:
 
-	```
-	pa11y nature.com
-	```
+```
+pa11y nature.com
+```
 
-	Run an accessibility test against a file:
+Run an accessibility test against a file:
 
-	```
-	pa11y file:///path/to/your/file.html
-	```
+```
+pa11y file:///path/to/your/file.html
+```
 
-	Run a test with CSV reporting and save to a file:
+Run a test with CSV reporting and save to a file:
 
-	```
-	pa11y --reporter csv nature.com > report.csv
-	```
+```
+pa11y --reporter csv nature.com > report.csv
+```
 
-	Run Pa11y with the Section508 ruleset:
+Run Pa11y with the Section508 ruleset:
 
-	```
-	pa11y --standard Section508 nature.com
-	```
+```
+pa11y --standard Section508 nature.com
+```
 
-	### Exit Codes
+### Exit Codes
 
-	The command-line tool uses the following exit codes:
+The command-line tool uses the following exit codes:
 
-	  - `0`: Pa11y ran successfully, and there are no errors
-	  - `1`: Pa11y failed run due to a technical fault
-	  - `2`: Pa11y ran successfully but there are errors in the page
+  - `0`: Pa11y ran successfully, and there are no errors
+  - `1`: Pa11y failed run due to a technical fault
+  - `2`: Pa11y ran successfully but there are errors in the page
 
-	By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
+By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
-	  - `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
-	  - `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
-	  - `notice`: exit with a code of `2` on errors, warnings, and notices
-	  - `none`: always exit with a code of `0`
+  - `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
+  - `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
+  - `notice`: exit with a code of `2` on errors, warnings, and notices
+  - `none`: always exit with a code of `0`
 
-	### Command-Line Configuration
+### Command-Line Configuration
 
-	The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
+The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
-	```
-	pa11y --config ./path/to/config.json nature.com
-	```
+```
+pa11y --config ./path/to/config.json nature.com
+```
 
-	For more information on configuring Pa11y, see the [configuration documentation](#configuration).
+For more information on configuring Pa11y, see the [configuration documentation](#configuration).
 
-	### Ignoring
+### Ignoring
 
-	The ignore flag can be used in several different ways. Seperated by semi-colons:
+The ignore flag can be used in several different ways. Seperated by semi-colons:
 
-	```
-	pa11y --ignore "warning;notice" nature.com
-	```
+```
+pa11y --ignore "warning;notice" nature.com
+```
 
-	or by using the flag mutiple times:
+or by using the flag mutiple times:
 
-	```
-	pa11y --ignore warning --ignore notice nature.com
-	```
+```
+pa11y --ignore warning --ignore notice nature.com
+```
 
-	### Reporters
+### Reporters
 
 The command-line tool can report test results in a few different ways using the `--reporter` flag. The built-in reporters are:
 
