@@ -28,7 +28,7 @@ function configureProgram(program) {
 			'error'
 		)
 		.option(
-			'-T, --threshold <name>',
+			'-T, --threshold <number>',
 			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
 			'0'
 		)
