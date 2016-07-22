@@ -118,7 +118,7 @@ Usage: pa11y [options] <url>
     -s, --standard <name>         the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
     -r, --reporter <reporter>     the reporter to use: cli (default), csv, html, json
     -l, --level <level>           the level of message to fail on (exit with code 2): error, warning, notice
-    -T, --threshold <name>        the number of individual errors, warnings, or notices to permit before failing
+    -T, --threshold <name>        permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>         types and codes of messages to ignore, a repeatable value or separated by semi-colons
     -E, --hide-elements <hide>    a CSS selector to hide elements from testing, selectors can be comma separated
     -R, --root-element <element>  the root element for testing a subset of the document
@@ -195,6 +195,12 @@ or by using the flag mutiple times:
 ```
 pa11y --ignore warning --ignore notice nature.com
 ```
+
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors. 
+
+```pa11y --threshold 10 nature.com
+```
+
 
 ### Reporters
 
