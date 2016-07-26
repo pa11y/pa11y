@@ -42,3 +42,25 @@ describe('pa11y-ci (with a sitemap that can\'t be loaded)', () => {
 	});
 
 });
+
+describe('pa11y-ci (with a sitemap and find/replace)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--sitemap',
+			'http://localhost:8090/sitemap.xml',
+			'--sitemap-find',
+			'LOCALHOST',
+			'--sitemap-replace',
+			'127.0.0.1',
+			'--config',
+			'empty'
+		]);
+	});
+
+	it('loads the expected sitemap and performs a find/replace on the URLs', () => {
+		assert.include(global.lastResult.output, 'http://127.0.0.1:8090/passing-1');
+		assert.include(global.lastResult.output, 'http://127.0.0.1:8090/failing-1');
+	});
+
+});

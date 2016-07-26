@@ -33,11 +33,13 @@ Usage: pa11y-ci [options]
 
 Options:
 
-  -h, --help           output usage information
-  -V, --version        output the version number
-  -c, --config <path>  the path to a JSON or JavaScript config file
-  -s, --sitemap <url>  the path to a sitemap
-  -j, --json           Output results as JSON
+  -h, --help                      output usage information
+  -V, --version                   output the version number
+  -c, --config <path>             the path to a JSON or JavaScript config file
+  -s, --sitemap <url>             the path to a sitemap
+  -f, --sitemap-find <pattern>    a pattern to find in sitemaps. Use with --sitemap-replace
+  -r, --sitemap-replace <string>  a replacement to apply in sitemaps. Use with --sitemap-find
+  -j, --json                      Output results as JSON
 ```
 
 ### Configuration
@@ -111,6 +113,14 @@ pa11y-ci --sitemap http://pa11y.org/sitemap.xml
 ```
 
 This takes the text content of each `<loc>` in the XML and runs Pa11y against that URL. This can also be combined with a config file, but URLs in the Sitemap will override any found in your JSON config.
+
+If you'd like to perform a find/replace operation on each URL in a sitemap, e.g. if your sitemap points to your production URLs rather than local ones, then you can use the following flags:
+
+```sh
+pa11y-ci --sitemap http://pa11y.org/sitemap.xml --sitemap-find pa11y.org --sitemap-replace localhost
+```
+
+The above would ensure that you run Pa11y CI against local URLs instead of the live site.
 
 
 ## Contributing

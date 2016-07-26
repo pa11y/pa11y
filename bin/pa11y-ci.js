@@ -29,6 +29,14 @@ program
 		'the path to a sitemap'
 	)
 	.option(
+		'-f, --sitemap-find <pattern>',
+		'a pattern to find in sitemaps. Use with --sitemap-replace'
+	)
+	.option(
+		'-r, --sitemap-replace <string>',
+		'a replacement to apply in sitemaps. Use with --sitemap-find'
+	)
+	.option(
 		'-j, --json',
 		'Output results as JSON'
 	)
@@ -43,7 +51,7 @@ Promise.resolve()
 	.then(config => {
 		// Load a sitemap based on the `--sitemap` flag
 		if (program.sitemap) {
-			return loadSitemapIntoConfig(program.sitemap, config);
+			return loadSitemapIntoConfig(program, config);
 		}
 		return config;
 	})
@@ -148,7 +156,11 @@ function defaultConfig(config) {
 
 // Load a sitemap from a remote URL, parse out the
 // URLs, and add them to an existing config object
-function loadSitemapIntoConfig(sitemapUrl, config) {
+function loadSitemapIntoConfig(program, config) {
+	const sitemapUrl = program.sitemap;
+	const sitemapFind = (program.sitemapFind ? new RegExp(program.sitemapFind, 'gi') : null);
+	const sitemapReplace = program.sitemapReplace || '';
+
 	return Promise.resolve()
 		.then(() => {
 			return fetch(sitemapUrl);
@@ -161,7 +173,11 @@ function loadSitemapIntoConfig(sitemapUrl, config) {
 				xmlMode: true
 			});
 			config.urls = $('url > loc').toArray().map(element => {
-				return $(element).text();
+				let url = $(element).text();
+				if (sitemapFind) {
+					url = url.replace(sitemapFind, sitemapReplace);
+				}
+				return url;
 			});
 			return config;
 		})
