@@ -42,7 +42,7 @@
 		"istanbul": "~0.3",
 		"jscs": "^2",
 		"jshint": "^2",
-		"mocha": "^2",
+		"mocha": "^3",
 		"mockery": "~1.4",
 		"proclaim": "^3",
 		"sinon": "^1"
