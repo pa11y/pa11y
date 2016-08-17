@@ -52,7 +52,7 @@ Table Of Contents
 Requirements
 ------------
 
-Pa11y requires [Node.js][node] 4+ and [PhantomJS][phantom] to run.
+Pa11y requires [Node.js][node] 4+ and [PhantomJS][phantom] (latest stable version recommended) to run.
 
 ### OS X
 
