@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 4.0.1 (2016-08-18)
+
+  * Upgrade mocha to version 3. This fixes a security vuln with versions of minimatch older than
+3.0.2. Minimatch is one of mocha's dependencies. This only affects `devDependencies`.
+  * Documentation updates.
+
 ## 4.0.0 (2016-06-05)
 
   * Drop Node.js 0.12 support
