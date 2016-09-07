@@ -1,58 +1,59 @@
 {
-	"name": "pa11y",
-	"version": "4.0.1",
-
-	"description": "Pa11y is your automated accessibility testing pal",
-	"keywords": [ "accessibility", "analysis", "cli", "report" ],
-
-	"author": "Nature Publishing Group",
-	"contributors": [
-		"Rowan Manning (http://rowanmanning.com/)",
-		"Whymarrh Whitby (http://whymarrh.com/)",
-		"Stephen Mathieson (http://www.stephenmathieson.com/)",
-		"Alex Soble (http://www.alexsoble.com/)",
-		"Charlie Brown (http://www.carbonatethis.com/)",
-		"Hollie Kay (http://www.hollsk.co.uk/)",
-		"Adam Tavener (http://www.tavvy.co.uk/)",
-		"Glynn Phillips (http://www.glynnphillips.co.uk/)"
-	],
-
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/pa11y/pa11y.git"
-	},
-	"homepage": "https://github.com/pa11y/pa11y",
-	"bugs": "https://github.com/pa11y/pa11y/issues",
-	"license": "LGPL-3.0",
-
-	"engines": {
-		"node": ">=4"
-	},
-	"dependencies": {
-		"async": "~1.4",
-		"bfj": "~1.2",
-		"chalk": "~1.1",
-		"commander": "~2.8",
-		"lower-case": "~1.1",
-		"node.extend": "~1.1",
-		"once": "~1.3",
-		"truffler": "~2.2"
-	},
-	"devDependencies": {
-		"istanbul": "~0.3",
-		"jscs": "^2",
-		"jshint": "^2",
-		"mocha": "^3",
-		"mockery": "~1.4",
-		"proclaim": "^3",
-		"sinon": "^1"
-	},
-
-	"main": "./lib/pa11y.js",
-	"bin": {
-		"pa11y": "./bin/pa11y"
-	},
-	"scripts": {
-		"test": "make ci"
-	}
+  "name": "pa11y",
+  "version": "4.0.1",
+  "description": "Pa11y is your automated accessibility testing pal",
+  "keywords": [
+    "accessibility",
+    "analysis",
+    "cli",
+    "report"
+  ],
+  "author": "Nature Publishing Group",
+  "contributors": [
+    "Rowan Manning (http://rowanmanning.com/)",
+    "Whymarrh Whitby (http://whymarrh.com/)",
+    "Stephen Mathieson (http://www.stephenmathieson.com/)",
+    "Alex Soble (http://www.alexsoble.com/)",
+    "Charlie Brown (http://www.carbonatethis.com/)",
+    "Hollie Kay (http://www.hollsk.co.uk/)",
+    "Adam Tavener (http://www.tavvy.co.uk/)",
+    "Glynn Phillips (http://www.glynnphillips.co.uk/)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pa11y/pa11y.git"
+  },
+  "homepage": "https://github.com/pa11y/pa11y",
+  "bugs": "https://github.com/pa11y/pa11y/issues",
+  "license": "LGPL-3.0",
+  "engines": {
+    "node": ">=4"
+  },
+  "dependencies": {
+    "async": "~1.4",
+    "bfj": "~1.2",
+    "chalk": "~1.1",
+    "commander": "~2.8",
+    "lower-case": "~1.1",
+    "node.extend": "~1.1",
+    "once": "~1.3",
+    "phantomjs-prebuilt": "^2.1.12",
+    "truffler": "~2.2"
+  },
+  "devDependencies": {
+    "istanbul": "~0.3",
+    "jscs": "^2",
+    "jshint": "^2",
+    "mocha": "^3",
+    "mockery": "~1.4",
+    "proclaim": "^3",
+    "sinon": "^1"
+  },
+  "main": "./lib/pa11y.js",
+  "bin": {
+    "pa11y": "./bin/pa11y"
+  },
+  "scripts": {
+    "test": "make ci"
+  }
 }
