@@ -30,7 +30,7 @@ test.run('nature.com', function (error, results) {
 
 ---
 
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
+✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
 ---
 
@@ -52,26 +52,25 @@ Table Of Contents
 Requirements
 ------------
 
-Pa11y requires [Node.js][node] 4+ and [PhantomJS][phantom] (latest stable version recommended) to run.
+Pa11y requires [Node.js][node] 4+ to run.
 
 ### OS X
 
-On a Mac, you can install the required dependencies with [Homebrew][brew]:
+On a Mac, you can install the required dependency with [Homebrew][brew]:
 
 ```sh
 $ brew install node
-$ brew install phantomjs
 ```
 
-Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+Alternatively download pre-built packages from the [Node.js][node] website.
 
 ### Linux
 
-Depending on your flavour of Linux, you should be able to use a package manager to install the required dependencies. Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+Depending on your flavour of Linux, you should be able to use a package manager to install the required dependency. Alternatively download pre-built packages from the [Node.js][node] website.
 
 ### Windows
 
-Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 If you run into following error:
 
@@ -196,7 +195,7 @@ or by using the flag mutiple times:
 pa11y --ignore warning --ignore notice nature.com
 ```
 
-Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors. 
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
 
 ```
 pa11y --threshold 10 nature.com
@@ -788,7 +787,7 @@ If you're opening issues related to these, please mention the version that the i
 License
 -------
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].
 Copyright &copy; 2016, Springer Nature
 
 
