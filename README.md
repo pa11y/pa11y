@@ -40,6 +40,7 @@ Options:
   -f, --sitemap-find <pattern>    a pattern to find in sitemaps. Use with --sitemap-replace
   -r, --sitemap-replace <string>  a replacement to apply in sitemaps. Use with --sitemap-find
   -j, --json                      Output results as JSON
+  -T, --threshold <number>        permit this number of errors, warnings, or notices, otherwise fail with exit code 2
 ```
 
 ### Configuration
