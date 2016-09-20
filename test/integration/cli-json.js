@@ -17,6 +17,7 @@ describe('pa11y-ci (with the `--json` flag set)', () => {
 		const outputData = JSON.parse(global.lastResult.output);
 		assert.deepEqual(outputData, {
 			total: 3,
+			errors: 1,
 			passes: 1,
 			results: {
 				'http://notahost:8090/erroring-1': [

@@ -1,0 +1,6 @@
+{
+	"urls": [
+		"http://localhost:8090/failing-2",
+		"http://localhost:8090/passing-2"
+	]
+}

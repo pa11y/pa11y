@@ -40,6 +40,11 @@ program
 		'-j, --json',
 		'Output results as JSON'
 	)
+	.option(
+		'-T, --threshold <number>',
+		'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
+		'0'
+	)
 	.parse(process.argv);
 
 // Start the promise chain to actually run everything
@@ -72,8 +77,8 @@ Promise.resolve()
 			}));
 		}
 		// Decide on an exit code based on whether
-		// everything passes
-		if (report.passes < report.total) {
+		// errors are below threshold or everything passes
+		if (report.errors >= parseInt(program.threshold, 10) && report.passes < report.total) {
 			process.exit(2);
 		} else {
 			process.exit(0);
