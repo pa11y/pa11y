@@ -740,7 +740,7 @@ pa11y({
 
 ### Why does Pa11y give different results to HTML CodeSniffer bookmarklet ?
 
-Pa11y uses PhantomJS as a headless web browser to load the DOM content and can only analyse what is provided.
+Pa11y uses PhantomJS as a headless web browser to load the DOM content and can only analyze what is provided.
 If parts of the DOM are been loaded after the document is first generated, you may get results that differ from the bookmarklet which runs in the browser and can test against the complete DOM.
 
 If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
