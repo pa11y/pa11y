@@ -30,7 +30,7 @@ The Pa11y JavaScript API has been overhauled completely. It would be best to ref
 
 ### Randomized Ports
 
-The `phantom.port` option no longer has a default. If a port is not specified, then Pa11y will bind to an available port. This allows for easier running of tests in parallel, as PhantomJS instances will no longer conflict with eachother.
+The `phantom.port` option no longer has a default. If a port is not specified, then Pa11y will bind to an available port. This allows for easier running of tests in parallel, as PhantomJS instances will no longer conflict with each other.
 
 ### Node.js Support
 
@@ -58,7 +58,7 @@ The command-line interface in 2.0 is similar to 1.0, but there are a few key cha
 
 ### JavaScript Interface
 
-A two-step running process is now used over a single `pa11y.sniff()` function. This allows a single PhantomJS browser to run multiple tests, reducing memory usage and making Pa11y more usful to derivative tools. See the [README](README.md) for more information.
+A two-step running process is now used over a single `pa11y.sniff()` function. This allows a single PhantomJS browser to run multiple tests, reducing memory usage and making Pa11y more useful to derivative tools. See the [README](README.md) for more information.
 
 ### Output Format
 

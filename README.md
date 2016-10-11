@@ -184,19 +184,19 @@ For more information on configuring Pa11y, see the [configuration documentation]
 
 ### Ignoring
 
-The ignore flag can be used in several different ways. Seperated by semi-colons:
+The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```
 pa11y --ignore "warning;notice" nature.com
 ```
 
-or by using the flag mutiple times:
+or by using the flag multiple times:
 
 ```
 pa11y --ignore warning --ignore notice nature.com
 ```
 
-Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors. 
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
 
 ```
 pa11y --threshold 10 nature.com
@@ -704,7 +704,7 @@ These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can b
 Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
 
 In this example, additional content is loaded via ajax when a button is clicked.
-Once the content is loaded the `aria-hidden` atrribute switches from `true` to `false`.
+Once the content is loaded the `aria-hidden` attribute switches from `true` to `false`.
 
 ```js
 pa11y({
