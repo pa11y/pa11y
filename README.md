@@ -183,13 +183,13 @@ For more information on configuring Pa11y, see the [configuration documentation]
 
 ### Ignoring
 
-The ignore flag can be used in several different ways. Seperated by semi-colons:
+The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```
 pa11y --ignore "warning;notice" nature.com
 ```
 
-or by using the flag mutiple times:
+or by using the flag multiple times:
 
 ```
 pa11y --ignore warning --ignore notice nature.com
@@ -703,7 +703,7 @@ These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can b
 Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
 
 In this example, additional content is loaded via ajax when a button is clicked.
-Once the content is loaded the `aria-hidden` atrribute switches from `true` to `false`.
+Once the content is loaded the `aria-hidden` attribute switches from `true` to `false`.
 
 ```js
 pa11y({
@@ -739,7 +739,7 @@ pa11y({
 
 ### Why does Pa11y give different results to HTML CodeSniffer bookmarklet ?
 
-Pa11y uses PhantomJS as a headless web browser to load the DOM content and can only analyse what is provided.
+Pa11y uses PhantomJS as a headless web browser to load the DOM content and can only analyze what is provided.
 If parts of the DOM are been loaded after the document is first generated, you may get results that differ from the bookmarklet which runs in the browser and can test against the complete DOM.
 
 If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
