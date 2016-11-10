@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 4.0.2 (2016-11-10)
+
+  * Update dependencies
+    * truffler: ~2.2 to ~2.3
+  * Fix typos and mistakes across the documentation
+
 ## 4.0.1 (2016-08-18)
 
   * Upgrade mocha to version 3. This fixes a security vuln with versions of minimatch older than
