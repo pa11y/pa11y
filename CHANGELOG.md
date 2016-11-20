@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.0.3 (2016-11-20)
+
+  * Add protocols to URLs, make path instructions explicit
+
 ## 4.0.2 (2016-11-10)
 
   * Update dependencies
