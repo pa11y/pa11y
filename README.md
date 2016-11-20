@@ -136,10 +136,10 @@ Usage: pa11y [options] <url>
 Run an accessibility test against a URL:
 
 ```
-pa11y nature.com
+pa11y http://nature.com
 ```
 
-Run an accessibility test against a file:
+Run an accessibility test against a file (absolute paths only, not relative):
 
 ```
 pa11y file:///path/to/your/file.html
@@ -148,13 +148,13 @@ pa11y file:///path/to/your/file.html
 Run a test with CSV reporting and save to a file:
 
 ```
-pa11y --reporter csv nature.com > report.csv
+pa11y --reporter csv http://nature.com > report.csv
 ```
 
 Run Pa11y with the Section508 ruleset:
 
 ```
-pa11y --standard Section508 nature.com
+pa11y --standard Section508 http://nature.com
 ```
 
 ### Exit Codes
@@ -177,7 +177,7 @@ By default, only accessibility issues with a type of `error` will exit with a co
 The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
 ```
-pa11y --config ./path/to/config.json nature.com
+pa11y --config ./path/to/config.json http://nature.com
 ```
 
 For more information on configuring Pa11y, see the [configuration documentation](#configuration).
@@ -187,19 +187,19 @@ For more information on configuring Pa11y, see the [configuration documentation]
 The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```
-pa11y --ignore "warning;notice" nature.com
+pa11y --ignore "warning;notice" http://nature.com
 ```
 
 or by using the flag multiple times:
 
 ```
-pa11y --ignore warning --ignore notice nature.com
+pa11y --ignore warning --ignore notice http://nature.com
 ```
 
 Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
 
 ```
-pa11y --threshold 10 nature.com
+pa11y --threshold 10 http://nature.com
 ```
 
 
@@ -216,7 +216,7 @@ The command-line tool can report test results in a few different ways using the 
 You can also write and publish your own reporters. Pa11y looks for reporters in the core library, your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```
-pa11y --reporter rainbows nature.com
+pa11y --reporter rainbows http://nature.com
 ```
 
 The following locations will be checked:
