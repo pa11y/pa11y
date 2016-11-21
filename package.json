@@ -36,6 +36,7 @@
 		"lower-case": "~1.1",
 		"node.extend": "~1.1",
 		"once": "~1.3",
+		"phantomjs-prebuilt": "^2.1.12",
 		"truffler": "~2.3"
 	},
 	"devDependencies": {

@@ -30,7 +30,7 @@ test.run('nature.com', function (error, results) {
 
 ---
 
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
+✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
 ---
 
@@ -52,49 +52,25 @@ Table Of Contents
 Requirements
 ------------
 
-Pa11y requires [Node.js][node] 4+ and [PhantomJS][phantom] (latest stable version recommended) to run.
+Pa11y requires [Node.js][node] 4+ to run.
 
 ### OS X
 
-On a Mac, you can install the required dependencies with [Homebrew][brew]:
+On a Mac, you can install the required dependency with [Homebrew][brew]:
 
 ```sh
 $ brew install node
-$ brew install phantomjs
 ```
 
-Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+Alternatively download pre-built packages from the [Node.js][node] website.
 
 ### Linux
 
-Depending on your flavour of Linux, you should be able to use a package manager to install the required dependencies. Alternatively download pre-built packages from the [Node.js][node] and [PhantomJS][phantom] websites.
+Depending on your flavour of Linux, you should be able to use a package manager to install the required dependency. Alternatively download pre-built packages from the [Node.js][node] website.
 
 ### Windows
 
-Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, Python and PhantomJS). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
-
-If you run into following error:
-
-```
-Error: spawn phantomjs ENOENT
-    at exports._errnoException (util.js:874:11)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:178:32)
-    at onErrorNT (internal/child_process.js:344:16)
-    at doNTCallback2 (node.js:439:9)
-    at process._tickCallback (node.js:353:17)
-    at Function.Module.runMain (module.js:469:11)
-    at startup (node.js:134:18)
-    at node.js:961:3
-```
-
-follow these steps:
-
-1. Install PhantomJS@v2.0 via [npm][npm]
-   ```
-   npm install -g phantomjs2
-   ```
-
-2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
+Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
 
 Command-Line Interface
