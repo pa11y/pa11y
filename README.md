@@ -787,7 +787,7 @@ If you're opening issues related to these, please mention the version that the i
 License
 -------
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
 Copyright &copy; 2016, Springer Nature
 
 
