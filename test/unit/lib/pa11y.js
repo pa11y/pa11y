@@ -103,10 +103,6 @@ describe('lib/pa11y', function() {
 			assert.strictEqual(defaults.phantom.parameters['ignore-ssl-errors'], 'true');
 		});
 
-		it('should have a `phantom.parameters[\'ssl-protocol\']` property', function() {
-			assert.strictEqual(defaults.phantom.parameters['ssl-protocol'], 'tlsv1');
-		});
-
 		it('should have a `standard` property', function() {
 			assert.strictEqual(defaults.standard, 'WCAG2AA');
 		});
