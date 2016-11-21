@@ -72,29 +72,6 @@ Depending on your flavour of Linux, you should be able to use a package manager 
 
 Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
 
-If you run into following error:
-
-```
-Error: spawn phantomjs ENOENT
-    at exports._errnoException (util.js:874:11)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:178:32)
-    at onErrorNT (internal/child_process.js:344:16)
-    at doNTCallback2 (node.js:439:9)
-    at process._tickCallback (node.js:353:17)
-    at Function.Module.runMain (module.js:469:11)
-    at startup (node.js:134:18)
-    at node.js:961:3
-```
-
-follow these steps:
-
-1. Install PhantomJS@v2.0 via [npm][npm]
-   ```
-   npm install -g phantomjs2
-   ```
-
-2. Navigate to `%APPDATA%\AppData\Roaming\npm\node_modules\phantomjs2\lib\phantom\bin` and copy `phantomjs.exe` to `%APPDATA%\AppData\Roaming\npm\`
-
 
 Command-Line Interface
 ----------------------
