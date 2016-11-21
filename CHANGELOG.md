@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 4.1.0 (2016-11-21)
+
+  * Install PhantomJS as a dependency if the latest version isn't present
+  * Remove the SSL protocol from the default PhantomJS config
+
 ## 4.0.3 (2016-11-20)
 
   * Add protocols to URLs, make path instructions explicit
