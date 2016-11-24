@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 4.1.1 (2016-11-24)
+
+  * Update dependencies
+    * truffler: ~2.3 to ~3.0
+
 ## 4.1.0 (2016-11-21)
 
   * Install PhantomJS as a dependency if the latest version isn't present
