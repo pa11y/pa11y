@@ -195,7 +195,7 @@ describe('lib/pa11y', function() {
 			});
 
 			testFunction = truffler.firstCall.args[1];
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error, results) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error, results) {
 				runResults = results;
 				done(error);
 			});
@@ -213,7 +213,7 @@ describe('lib/pa11y', function() {
 			truffler.reset();
 			pa11y(options);
 			testFunction = truffler.firstCall.args[1];
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
 				assert.calledOnce(options.beforeScript);
 				assert.strictEqual(options.beforeScript.firstCall.args[0], phantom.mockPage);
 				assert.strictEqual(options.beforeScript.firstCall.args[1], extend.secondCall.returnValue);
@@ -232,7 +232,7 @@ describe('lib/pa11y', function() {
 			truffler.reset();
 			pa11y(options);
 			testFunction = truffler.firstCall.args[1];
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
 				assert.calledWith(options.log.debug, 'Running beforeScript');
 				done();
 			});
@@ -248,7 +248,7 @@ describe('lib/pa11y', function() {
 		it('should callback with an error if HTML CodeSniffer injection errors', function(done) {
 			var expectedError = new Error('...');
 			phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs).yieldsAsync(expectedError);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error) {
 				assert.isNotNull(error);
 				assert.strictEqual(error, expectedError);
 				done();
@@ -257,7 +257,7 @@ describe('lib/pa11y', function() {
 
 		it('should callback with an error if HTML CodeSniffer does not inject properly', function(done) {
 			phantom.mockPage.injectJs.withArgs(pa11y.defaults.htmlcs).yieldsAsync(null, false);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error) {
 				assert.isNotNull(error);
 				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
 				done();
@@ -274,7 +274,7 @@ describe('lib/pa11y', function() {
 				phantom.mockPage.injectJs.reset();
 				pa11y(options);
 				testFunction = truffler.firstCall.args[1];
-				testFunction(phantom.mockBrowser, phantom.mockPage, done);
+				testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, done);
 			});
 
 			it('should include the remote HTML CodeSniffer', function() {
@@ -287,7 +287,7 @@ describe('lib/pa11y', function() {
 			it('should callback with an error if HTML CodeSniffer inclusion errors', function(done) {
 				var expectedError = new Error('...');
 				phantom.mockPage.includeJs.withArgs(options.htmlcs).yieldsAsync(expectedError);
-				testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function(error) {
 					assert.isNotNull(error);
 					assert.strictEqual(error, expectedError);
 					done();
@@ -296,7 +296,7 @@ describe('lib/pa11y', function() {
 
 			it('should callback with an error if HTML CodeSniffer does not include properly', function(done) {
 				phantom.mockPage.includeJs.withArgs(options.htmlcs).yieldsAsync(null, false);
-				testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+				testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function(error) {
 					assert.isNotNull(error);
 					assert.strictEqual(error.message, 'Pa11y was unable to include scripts in the page');
 					done();
@@ -314,7 +314,7 @@ describe('lib/pa11y', function() {
 		it('should callback with an error if the pa11y inject script injection errors', function(done) {
 			var expectedError = new Error('...');
 			phantom.mockPage.injectJs.withArgs(injectScriptPath).yieldsAsync(expectedError);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error) {
 				assert.isNotNull(error);
 				assert.strictEqual(error, expectedError);
 				done();
@@ -323,7 +323,7 @@ describe('lib/pa11y', function() {
 
 		it('should callback with an error if the pa11y inject script does not inject properly', function(done) {
 			phantom.mockPage.injectJs.withArgs(injectScriptPath).yieldsAsync(null, false);
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error) {
 				assert.isNotNull(error);
 				assert.strictEqual(error.message, 'Pa11y was unable to inject scripts into the page');
 				done();
@@ -391,7 +391,7 @@ describe('lib/pa11y', function() {
 			truffler.reset();
 			pa11y(options);
 			testFunction = truffler.firstCall.args[1];
-			testFunction(phantom.mockBrowser, phantom.mockPage, function() {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
 				assert.calledWith(options.log.debug, 'Waiting for ' + options.wait + 'ms');
 				done();
 			});
@@ -408,7 +408,7 @@ describe('lib/pa11y', function() {
 			phantom.mockPage.evaluate = sinon.spy(function() {
 				phantom.mockPage.onCallback(expectedResults);
 			});
-			testFunction(phantom.mockBrowser, phantom.mockPage, function(error) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error) {
 				assert.isNotNull(error);
 				assert.instanceOf(error, Error);
 				assert.strictEqual(error.message, 'foo');
