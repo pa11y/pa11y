@@ -54,6 +54,6 @@
 		"pa11y": "./bin/pa11y"
 	},
 	"scripts": {
-		"test": "make ci"
+		"test": "snyk test && make ci"
 	}
 }
