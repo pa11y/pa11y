@@ -419,7 +419,7 @@ describe('lib/pa11y', function() {
 	});
 
 	describe('testPage function', function() {
-		var expectedResults, options, runResults, testFunction;
+		var expectedResults, options, testFunction;
 
 		beforeEach(function(done) {
 			options = {
@@ -441,7 +441,7 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should call debug log with document title', function(done) {
-			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error, results) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function() {
 				assert.calledWith(options.log.debug, 'Document title: "quux"');
 				done();
 			});
