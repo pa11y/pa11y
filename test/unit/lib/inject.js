@@ -30,6 +30,15 @@ describe('lib/inject', function() {
 		});
 	});
 
+	it('should return result with messages and documentTitle properties', function(done) {
+		window.HTMLCS.getMessages.returns([]);
+		inject(window, options, function(result) {
+			assert.isDefined(result.messages);
+			assert.isDefined(result.documentTitle);
+			done();
+		});
+	});
+
 	it('should ignore messages when they are a child of `options.hideElements`', function(done) {
 		options.hideElements = '.hide';
 		window.document.querySelectorAll.returns([
