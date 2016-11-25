@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.2.0 (2016-11-25)
+
+  * Display the page title in the logs to help with debugging
+
 ## 4.1.1 (2016-11-24)
 
   * Update dependencies
