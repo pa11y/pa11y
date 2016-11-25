@@ -418,4 +418,34 @@ describe('lib/pa11y', function() {
 
 	});
 
+	describe('testPage function', function() {
+		var expectedResults, options, runResults, testFunction;
+
+		beforeEach(function(done) {
+			options = {
+				log: {
+					debug: sinon.spy()
+				}
+			};
+			pa11y(options);
+
+			expectedResults = {
+				documentTitle: 'quux'
+			};
+			phantom.mockPage.evaluate = sinon.spy(function() {
+				phantom.mockPage.onCallback(expectedResults);
+			});
+
+			testFunction = truffler.firstCall.args[1];
+			done();
+		});
+
+		it('should call debug log with document title', function(done) {
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.firstCall.returnValue, function(error, results) {
+				assert.calledWith(options.log.debug, 'Document title: "quux"');
+				done();
+			});
+		});
+	});
+
 });
