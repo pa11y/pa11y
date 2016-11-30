@@ -22,7 +22,7 @@ describe('pa11y-ci (with the `--json` flag set)', () => {
 			results: {
 				'http://notahost:8090/erroring-1': [
 					{
-						message: 'Page "http://notahost:8090/erroring-1" could not be opened'
+						message: 'Error opening url "http://notahost:8090/erroring-1" : Host notahost not found'
 					}
 				],
 				'http://localhost:8090/failing-1': [

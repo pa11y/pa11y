@@ -24,7 +24,7 @@ describe('pa11y-ci (with erroring, failing, and passing URLs)', () => {
 
 	it('outputs error information', () => {
 		assert.include(global.lastResult.output, 'Errors in http://notahost:8090/erroring-1');
-		assert.include(global.lastResult.output, 'Page "http://notahost:8090/erroring-1" could not be opened');
+		assert.include(global.lastResult.output, 'Error opening url "http://notahost:8090/erroring-1" : Host notahost not found');
 		assert.include(global.lastResult.output, 'Errors in http://localhost:8090/failing-1');
 		assert.include(global.lastResult.output, 'html element should have a lang');
 		assert.notInclude(global.lastResult.output, 'Errors in http://notahost:8090/passing-1');
