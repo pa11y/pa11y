@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.3.1 pre-release (2016-11-30)
+
+  * Updates pa11y dependency to ^4.2
+
 ## 0.3.0 pre-release (2016-09-20)
 
   * Add a `--threshold` parameter to the command-line interface
