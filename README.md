@@ -735,9 +735,9 @@ Pa11y doesn't check the hover state. Instead, you must test the contrast of the 
 Contributing
 ------------
 
-To contribute to Pa11y, clone this repo locally and commit your code on a separate branch.
+There are many ways to contribute to Pa11y, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
 
-Please write unit tests for your code, and check that everything works by running the following before opening a pull-request:
+If you're ready to contribute some code, clone this repo locally and commit on a separate branch. Please write unit tests for your changes, and check that everything works by running the following before opening a pull-request:
 
 ```sh
 make ci
