@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.4.0 pre-release (2016-12-05)
+
+  * Exit with an error if config files have syntax errors
+
 ## 0.3.1 pre-release (2016-11-30)
 
   * Updates pa11y dependency to ^4.2
