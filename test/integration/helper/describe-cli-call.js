@@ -1,5 +1,4 @@
-// jshint maxstatements: false
-// jscs:disable maximumLineLength
+/* eslint-disable max-len, max-statements */
 'use strict';
 
 var extend = require('node.extend');
@@ -48,4 +47,4 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 		testFunction.call(this);
 	});
 }
-
+/* eslint-enable max-len, max-statements */

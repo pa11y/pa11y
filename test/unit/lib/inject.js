@@ -1,5 +1,4 @@
-// jshint maxstatements: false
-// jscs:disable disallowMultipleVarDecl, maximumLineLength
+/* eslint-disable one-var, max-len, max-statements */
 'use strict';
 
 var assert = require('proclaim');
@@ -543,3 +542,4 @@ describe('lib/inject', function() {
 	});
 
 });
+/* eslint-enable one-var, max-len, max-statements */

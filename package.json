@@ -41,9 +41,8 @@
     "truffler": "~3.0"
   },
   "devDependencies": {
+    "eslint": "^3.11.1",
     "istanbul": "~0.4",
-    "jscs": "^3",
-    "jshint": "^2",
     "mocha": "^3",
     "mockery": "~1.4",
     "proclaim": "^3",
