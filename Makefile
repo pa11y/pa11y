@@ -13,17 +13,12 @@ deps:
 	@npm install
 
 # Lint JavaScript
-lint: jshint jscs
+lint: eslint
 
-# Run JSHint
-jshint:
+# Run ESLint
+eslint:
 	@echo "$(C_CYAN)> linting javascript$(C_RESET)"
-	@./node_modules/.bin/jshint . ./bin/pa11y
-
-# Run JavaScript Code Style
-jscs:
-	@echo "$(C_CYAN)> checking javascript code style$(C_RESET)"
-	@./node_modules/.bin/jscs . ./bin/pa11y
+	@./node_modules/.bin/eslint . ./bin/pa11y
 
 # Run all tests
 test: test-coverage test-integration
