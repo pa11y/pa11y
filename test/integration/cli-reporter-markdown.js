@@ -1,5 +1,4 @@
-// jshint maxstatements: false
-// jscs:disable maximumLineLength
+/* eslint-disable max-len */
 'use strict';
 
 var assert = require('proclaim');
@@ -20,3 +19,4 @@ describe('Pa11y CLI Reporter (Markdown)', function() {
 	});
 
 });
+/* eslint-enable max-len */
