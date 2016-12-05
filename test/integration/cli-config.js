@@ -89,3 +89,63 @@ describe('pa11y-ci (with a config file that has an absolute path)', () => {
 	});
 
 });
+
+describe('pa11y-ci (with a config file that has no extension and syntax errors)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'syntax-errors'
+		]);
+	});
+
+	it('exits with 1', () => {
+		assert.strictEqual(global.lastResult.code, 1);
+	});
+
+	it('outputs an error message', () => {
+		assert.include(global.lastResult.output, 'There was a problem loading');
+		assert.include(global.lastResult.output, 'syntax-errors');
+	});
+
+});
+
+describe('pa11y-ci (with a config file that has a "json" extension and syntax errors)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'syntax-errors-json'
+		]);
+	});
+
+	it('exits with 1', () => {
+		assert.strictEqual(global.lastResult.code, 1);
+	});
+
+	it('outputs an error message', () => {
+		assert.include(global.lastResult.output, 'There was a problem loading');
+		assert.include(global.lastResult.output, 'syntax-errors-json');
+	});
+
+});
+
+describe('pa11y-ci (with a config file that has a "js" extension and syntax errors)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'syntax-errors-js'
+		]);
+	});
+
+	it('exits with 1', () => {
+		assert.strictEqual(global.lastResult.code, 1);
+	});
+
+	it('outputs an error message', () => {
+		assert.include(global.lastResult.output, 'There was a problem loading');
+		assert.include(global.lastResult.output, 'syntax-errors-js');
+	});
+
+});

@@ -1,2 +1,3 @@
 coverage
 node_modules
+test/integration/mock/config/syntax-errors-js.js

@@ -99,15 +99,20 @@ Promise.resolve()
 function loadConfig(configPath) {
 	return new Promise((resolve, reject) => {
 		configPath = resolveConfigPath(configPath);
-		let config = loadLocalConfigUnmodified(configPath);
-		if (!config) {
-			config = loadLocalConfigWithJs(configPath);
-		}
-		if (!config) {
-			config = loadLocalConfigWithJson(configPath);
-		}
-		if (program.config && !config) {
-			return reject(new Error(`The config file "${configPath}" could not be loaded`));
+		let config;
+		try {
+			config = loadLocalConfigUnmodified(configPath);
+			if (!config) {
+				config = loadLocalConfigWithJs(configPath);
+			}
+			if (!config) {
+				config = loadLocalConfigWithJson(configPath);
+			}
+			if (program.config && !config) {
+				return reject(new Error(`The config file "${configPath}" could not be loaded`));
+			}
+		} catch (error) {
+			return reject(new Error(`There was a problem loading "${configPath}":\n${error.stack}`));
 		}
 		resolve(defaultConfig(config || {}));
 	});
@@ -129,21 +134,33 @@ function resolveConfigPath(configPath) {
 function loadLocalConfigUnmodified(configPath) {
 	try {
 		return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-	} catch (error) {}
+	} catch (error) {
+		if (error.code !== 'ENOENT') {
+			throw error;
+		}
+	}
 }
 
 // Load the config file but adding a .js extension
 function loadLocalConfigWithJs(configPath) {
 	try {
 		return require(`${configPath}.js`);
-	} catch (error) {}
+	} catch (error) {
+		if (error.code !== 'MODULE_NOT_FOUND') {
+			throw error;
+		}
+	}
 }
 
 // Load the config file but adding a .json extension
 function loadLocalConfigWithJson(configPath) {
 	try {
 		return require(`${configPath}.json`);
-	} catch (error) {}
+	} catch (error) {
+		if (error.code !== 'MODULE_NOT_FOUND') {
+			throw error;
+		}
+	}
 }
 
 // Tidy up and default the configurations found in

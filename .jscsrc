@@ -89,6 +89,7 @@
 
 	"excludeFiles": [
 		"coverage",
-		"node_modules"
+		"node_modules",
+		"test/integration/mock/config/syntax-errors-js.js"
 	]
 }
