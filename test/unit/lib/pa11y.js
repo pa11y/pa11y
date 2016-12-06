@@ -397,7 +397,7 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should callback with the expected results', function() {
-			assert.strictEqual(runResults, expectedResults.messages);
+			assert.strictEqual(runResults, expectedResults);
 		});
 
 		it('should callback with an error if the evaluated script errors', function(done) {
