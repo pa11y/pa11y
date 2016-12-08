@@ -541,5 +541,26 @@ describe('lib/inject', function() {
 		});
 	});
 
+	describe('verifyPage flag', function() {
+
+		it('should not error when verifyPage value exists in HTML', function(done) {
+			options.verifyPage = '<title>Foo</title>';
+			inject(window, options, function(result) {
+				assert.isUndefined(result.error);
+				done();
+			});
+		});
+
+		it('should error when verifyPage value does not exist in HTML', function(done) {
+			options.verifyPage = '<title>Bar</title>';
+			inject(window, options, function(result) {
+				assert.isDefined(result.error);
+				assert.strictEqual(result.error, 'Page not verified');
+				done();
+			});
+		});
+
+	});
+
 });
 /* eslint-enable one-var, max-len, max-statements */
