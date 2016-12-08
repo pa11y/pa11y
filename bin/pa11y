@@ -64,6 +64,10 @@ function configureProgram(program) {
 			'the time to wait before running tests in milliseconds'
 		)
 		.option(
+			'-v, --verify-page <string>',
+			'HTML to verify is included in the page'
+		)
+		.option(
 			'-d, --debug',
 			'output debug messages'
 		)
@@ -123,7 +127,8 @@ function processOptions(program) {
 		rootElement: program.rootElement,
 		standard: program.standard,
 		timeout: program.timeout,
-		wait: program.wait
+		wait: program.wait,
+		verifyPage: program.verifyPage
 	});
 
 	if (!program.debug) {
