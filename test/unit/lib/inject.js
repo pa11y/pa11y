@@ -555,7 +555,7 @@ describe('lib/inject', function() {
 			options.verifyPage = '<title>Bar</title>';
 			inject(window, options, function(result) {
 				assert.isDefined(result.error);
-				assert.strictEqual(result.error, 'Page not verified');
+				assert.strictEqual(result.error, 'Page not verified - HTML did not contain: "<title>Bar</title>"');
 				done();
 			});
 		});
