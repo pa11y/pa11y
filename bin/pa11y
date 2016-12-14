@@ -65,7 +65,7 @@ function configureProgram(program) {
 		)
 		.option(
 			'-v, --verify-page <string>',
-			'HTML to verify is included in the page'
+			'HTML string to verify is included in the page source HTML'
 		)
 		.option(
 			'-d, --debug',
