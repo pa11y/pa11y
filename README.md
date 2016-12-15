@@ -102,6 +102,7 @@ Usage: pa11y [options] <url>
     -p, --port <port>             the port to run PhantomJS on
     -t, --timeout <ms>            the timeout in milliseconds
     -w, --wait <ms>               the time to wait before running tests in milliseconds
+    -v, --verify-page <string>    HTML string to verify is present in the page source HTML
     -d, --debug                   output debug messages
     -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
     -e, --phantomjs <path>        the path to the phantomjs executable
@@ -549,6 +550,18 @@ pa11y({
 
 Defaults to `0`.
 
+### `verifyPage` (string)
+
+HTML string to verify is present in the page source HTML. Could be used to ascertain that intended page is being tested (as opposed to error page) by using `<title>` tags and content (as below), or that a specific element is present.
+
+```js
+pa11y({
+    verifyPage: '<title>Nature Research: science journals, jobs, information and services.</title>'
+});
+```
+
+Defaults to `null`.
+
 
 Examples
 --------
@@ -764,7 +777,7 @@ If you're opening issues related to these, please mention the version that the i
 License
 -------
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].<br>
 Copyright &copy; 2016, Springer Nature
 
 
