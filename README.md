@@ -88,7 +88,7 @@ Pa11y CI has a few of its own configurations which you can set as well:
 
 ### URL configuration
 
-Each URL in your config file can be an object and specify [pa11y configurations] which override the defaults too. You do this by using an object instead of a string, and providing the URL as a `url` property on that object. This can be useful if you know that a certain URL takes a while to load, for example:
+Each URL in your config file can be an object and specify [pa11y configurations] which override the defaults too. You do this by using an object instead of a string, and providing the URL as a `url` property on that object. This can be useful if, for example, you know that a certain URL takes a while to load or you want to verify the presence of a specific piece of HTML:
 
 ```json
 {
@@ -99,7 +99,8 @@ Each URL in your config file can be an object and specify [pa11y configurations]
         "http://pa11y.org/",
         {
             "url": "http://pa11y.org/contributing",
-            "timeout": 50000
+            "timeout": 50000,
+            "verifyPage": "<title>Contributing to Pa11y</title>"
         }
     ]
 }
@@ -149,7 +150,7 @@ make test-integration    # Run the integration tests
 
 ## Licence
 
-Licensed under the [Lesser General Public License (LGPL-3.0)](LICENSE).  
+Licensed under the [Lesser General Public License (LGPL-3.0)](LICENSE).<br>
 Copyright &copy; 2016, Team Pa11y.
 
 
