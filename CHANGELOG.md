@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.5.0 pre-release (2016-12-16)
+
+  * Add and document the `verifyPage` option
+
 ## 0.4.0 pre-release (2016-12-05)
 
   * Exit with an error if config files have syntax errors
