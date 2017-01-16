@@ -1,9 +1,6 @@
 // An example of executing some actions before Pa11y runs.
 // This example logs in to a fictional site then waits
 // until the account page has loaded before running Pa11y.
-//
-// NOTE: This is proposed behaviour, and this example
-// replicates the before-script example
 'use strict';
 
 var pa11y = require('../..');
@@ -20,9 +17,9 @@ var test = pa11y({
 
 	// Run some actions before the tests
 	actions: [
-		'set #username to exampleUser',
-		'set #password to password1234',
-		'click #submit',
+		'set field #username to exampleUser',
+		'set field #password to password1234',
+		'click element #submit',
 		'wait for url to be http://example.com/myaccount'
 	]
 
