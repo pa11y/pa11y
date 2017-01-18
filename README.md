@@ -593,10 +593,13 @@ Actions are additional interactions that you can make Pa11y perform before the t
 ```js
 pa11y({
     actions: [
-        'set field #username to exampleUser',
-        'set field #password to password1234',
-        'click element #submit',
-        'wait for path to be /myaccount'
+        'click element #tab-1',
+        'set field #fullname to John Doe',
+        'check field #terms-and-conditions',
+        'uncheck field #subscribe-to-marketing',
+        'wait for fragment to be #page-2',
+        'wait for path to be /login',
+        'wait for url to be https://example.com/'
     ]
 });
 ```
