@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.4.0 (2017-01-19)
+
+  * Add support for actions
+
 ## 4.3.0 (2016-12-15)
 
   * Add a `verifyPage` option, and a `--verify-page` flag
