@@ -846,7 +846,7 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 4             | N/A                | 4+               | N/A              |
-| :hourglass:     | 3             | 3.8                | 0.12–6           | 2016-12-05       |
+| :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
 
