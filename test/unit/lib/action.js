@@ -19,6 +19,10 @@ describe('lib/action', function() {
 		assert.isArray(buildAction.allowedActions);
 	});
 
+	it('has an `isValidAction` method', function() {
+		assert.isFunction(buildAction.isValidAction);
+	});
+
 	describe('buildAction(browser, page, options, actionString)', function() {
 		var browser;
 		var mockActionRunner1;
@@ -167,6 +171,26 @@ describe('lib/action', function() {
 
 			});
 
+		});
+
+	});
+
+	describe('.isValidAction(actionString)', function() {
+
+		beforeEach(function() {
+			buildAction.allowedActions = [
+				{
+					match: /foo/i
+				}
+			];
+		});
+
+		it('should return `true` when the actionString matches one of the allowed actions', function() {
+			assert.isTrue(buildAction.isValidAction('hello foo!'));
+		});
+
+		it('should return `false` when the actionString does not match any of the allowed actions', function() {
+			assert.isFalse(buildAction.isValidAction('hello bar!'));
 		});
 
 	});
