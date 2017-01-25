@@ -295,6 +295,17 @@ var htmlReporter = require('pa11y/reporter/html');
 var html = htmlReporter.process(results, url);
 ```
 
+### Validating Actions
+
+Pa11y exposes a function which allows you to validate [action](#actions) strings before attempting to use them.
+
+This function accepts an action string and returns a boolean indicating whether it matches one of the actions that Pa11y supports:
+
+```js
+pa11y.validateAction('click element #submit');  // true
+pa11y.validateAction('open the pod bay doors'); // false
+```
+
 
 Configuration
 -------------

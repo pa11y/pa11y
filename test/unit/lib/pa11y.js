@@ -12,6 +12,7 @@ describe('lib/pa11y', function() {
 	beforeEach(function() {
 
 		buildAction = sinon.stub().returns(sinon.stub().yieldsAsync());
+		buildAction.isValidAction = sinon.stub();
 		mockery.registerMock('./action', buildAction);
 
 		extend = sinon.spy(require('node.extend'));
@@ -534,6 +535,11 @@ describe('lib/pa11y', function() {
 				done();
 			});
 		});
+	});
+
+	it('should have a `validateAction` method which aliases actions.isValidAction', function() {
+		assert.isFunction(pa11y.validateAction);
+		assert.strictEqual(pa11y.validateAction, buildAction.isValidAction);
 	});
 
 });
