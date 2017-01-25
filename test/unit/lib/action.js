@@ -738,31 +738,64 @@ describe('lib/action', function() {
 					'wait for fragment #foo',
 					'fragment',
 					undefined,
+					undefined,
 					'#foo'
 				]);
 				assert.deepEqual('wait for fragment to be #foo'.match(action.match), [
 					'wait for fragment to be #foo',
 					'fragment',
 					' to be',
+					undefined,
 					'#foo'
 				]);
 				assert.deepEqual('wait for hash to be #foo'.match(action.match), [
 					'wait for hash to be #foo',
 					'hash',
 					' to be',
+					undefined,
 					'#foo'
 				]);
 				assert.deepEqual('wait for path to be /foo'.match(action.match), [
 					'wait for path to be /foo',
 					'path',
 					' to be',
+					undefined,
 					'/foo'
 				]);
 				assert.deepEqual('wait for url to be https://example.com/'.match(action.match), [
 					'wait for url to be https://example.com/',
 					'url',
 					' to be',
+					undefined,
 					'https://example.com/'
+				]);
+				assert.deepEqual('wait for fragment to not be #bar'.match(action.match), [
+					'wait for fragment to not be #bar',
+					'fragment',
+					' to not be',
+					'not ',
+					'#bar'
+				]);
+				assert.deepEqual('wait for hash to not be #bar'.match(action.match), [
+					'wait for hash to not be #bar',
+					'hash',
+					' to not be',
+					'not ',
+					'#bar'
+				]);
+				assert.deepEqual('wait for path to not be /sso/login'.match(action.match), [
+					'wait for path to not be /sso/login',
+					'path',
+					' to not be',
+					'not ',
+					'/sso/login'
+				]);
+				assert.deepEqual('wait for url to not be https://example.com/login'.match(action.match), [
+					'wait for url to not be https://example.com/login',
+					'url',
+					' to not be',
+					'not ',
+					'https://example.com/login'
 				]);
 			});
 
@@ -805,7 +838,8 @@ describe('lib/action', function() {
 					assert.calledOnce(page.evaluate);
 					assert.isFunction(page.evaluate.firstCall.args[0]);
 					assert.deepEqual(page.evaluate.firstCall.args[1], {
-						expectedValue: matches[3],
+						expectedValue: matches[4],
+						negated: false,
 						subject: matches[1]
 					});
 				});
@@ -886,6 +920,26 @@ describe('lib/action', function() {
 							assert.strictEqual(returnedValue, global.window.location.href);
 						});
 
+					});
+
+				});
+
+				describe('handles negation appropriately', function() {
+
+					beforeEach(function(done) {
+						page.evaluate.reset();
+						matches = 'wait for url to not be https://portal.com/login'.match(action.match);
+						returnedValue = action.build({}, page, options, matches);
+						returnedValue(done);
+					});
+
+					it('checks for inequality if match string contains `to not be`', function() {
+						assert.called(page.evaluate);
+						assert.deepEqual(page.evaluate.firstCall.args[1], {
+							expectedValue: 'https://portal.com/login',
+							negated: true,
+							subject: 'url'
+						});
 					});
 
 				});
