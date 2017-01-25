@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.5.0 (2017-01-25)
+
+  * Expose action validation for use in dependent projects
+
 ## 4.4.0 (2017-01-19)
 
   * Add support for actions
