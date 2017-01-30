@@ -609,7 +609,7 @@ pa11y({
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing',
         'wait for fragment to be #page-2',
-        'wait for path to be /login',
+        'wait for path to not be /login',
         'wait for url to be https://example.com/'
     ]
 });
@@ -656,11 +656,14 @@ pa11y({
 
 ### Wait For Fragment/Path/URL
 
-This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. This action takes one of the forms:
+This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. You can also wait until the page does **not** have a given fragment, path, or URL using the `to not be` syntax. This action takes one of the forms:
 
-  - `wait for fragment to be <fragment>` (including the preceeding `#`)
-  - `wait for path to be <path>` (including the preceeding `/`)
+  - `wait for fragment to be <fragment>` (including the preceding `#`)
+  - `wait for fragment to not be <fragment>` (including the preceding `#`)
+  - `wait for path to be <path>` (including the preceding `/`)
+  - `wait for path to not be <path>` (including the preceding `/`)
   - `wait for url to be <url>`
+  - `wait for url to not be <url>`
 
 E.g.
 
