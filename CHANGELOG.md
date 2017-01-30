@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.6.0 (2017-01-30)
+
+  * Add negation to the "wait for..." actions
+
 ## 4.5.0 (2017-01-25)
 
   * Expose action validation for use in dependent projects
