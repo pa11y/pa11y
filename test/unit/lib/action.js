@@ -713,6 +713,55 @@ describe('lib/action', function() {
 
 	});
 
+	describe('wait-for-load action', function() {
+		var action;
+
+		beforeEach(function () {
+			action = buildAction.allowedActions.find(function (allowedAction) {
+				return allowedAction.name === 'wait-for-load';
+			});
+		});
+
+		it('should have a name property', function () {
+			assert.strictEqual(action.name, 'wait-for-load');
+		});
+
+		it('should have a match property', function () {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function () {
+
+			it('should match all of the expected action strings', function () {
+				assert.deepEqual('wait for .foo to load'.match(action.match), [
+					'wait for .foo to load',
+					undefined,
+					'.foo',
+					' to load'
+				]);
+				assert.deepEqual('wait for element .foo to load'.match(action.match), [
+					'wait for element .foo to load',
+					' element',
+					'.foo',
+					' to load'
+				]);
+				assert.deepEqual('wait for element .foo .bar .baz to load'.match(action.match), [
+					'wait for element .foo .bar .baz to load',
+					' element',
+					'.foo .bar .baz',
+					' to load'
+				]);
+			});
+
+		});
+
+		it('should have a build method', function () {
+			assert.isFunction(action.build);
+		});
+
+
+	});
+
 	describe('wait-for-url action', function() {
 		var action;
 
