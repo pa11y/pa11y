@@ -713,17 +713,17 @@ describe('lib/action', function() {
 
 	});
 
-	describe('wait-for-load action', function() {
+	describe('wait-for action', function() {
 		var action;
 
 		beforeEach(function () {
 			action = buildAction.allowedActions.find(function (allowedAction) {
-				return allowedAction.name === 'wait-for-load';
+				return allowedAction.name === 'wait-for';
 			});
 		});
 
 		it('should have a name property', function () {
-			assert.strictEqual(action.name, 'wait-for-load');
+			assert.strictEqual(action.name, 'wait-for');
 		});
 
 		it('should have a match property', function () {
@@ -733,23 +733,89 @@ describe('lib/action', function() {
 		describe('.match', function () {
 
 			it('should match all of the expected action strings', function () {
-				assert.deepEqual('wait for .foo to load'.match(action.match), [
-					'wait for .foo to load',
+				assert.deepEqual('wait for .foo to be added'.match(action.match), [
+					'wait for .foo to be added',
 					undefined,
 					'.foo',
-					' to load'
+					' to be',
+					'added'
 				]);
-				assert.deepEqual('wait for element .foo to load'.match(action.match), [
-					'wait for element .foo to load',
+				assert.deepEqual('wait for element .foo to be added'.match(action.match), [
+					'wait for element .foo to be added',
 					' element',
 					'.foo',
-					' to load'
+					' to be',
+					'added'
 				]);
-				assert.deepEqual('wait for element .foo .bar .baz to load'.match(action.match), [
-					'wait for element .foo .bar .baz to load',
+				assert.deepEqual('wait for element .foo .bar to be added'.match(action.match), [
+					'wait for element .foo .bar to be added',
 					' element',
-					'.foo .bar .baz',
-					' to load'
+					'.foo .bar',
+					' to be',
+					'added'
+				]);
+				assert.deepEqual('wait for .foo to be removed'.match(action.match), [
+					'wait for .foo to be removed',
+					undefined,
+					'.foo',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for element .foo to be removed'.match(action.match), [
+					'wait for element .foo to be removed',
+					' element',
+					'.foo',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be removed'.match(action.match), [
+					'wait for element .foo .bar to be removed',
+					' element',
+					'.foo .bar',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for .foo to be visible'.match(action.match), [
+					'wait for .foo to be visible',
+					undefined,
+					'.foo',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for element .foo to be visible'.match(action.match), [
+					'wait for element .foo to be visible',
+					' element',
+					'.foo',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be visible'.match(action.match), [
+					'wait for element .foo .bar to be visible',
+					' element',
+					'.foo .bar',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for .foo to be hidden'.match(action.match), [
+					'wait for .foo to be hidden',
+					undefined,
+					'.foo',
+					' to be',
+					'hidden'
+				]);
+				assert.deepEqual('wait for element .foo to be hidden'.match(action.match), [
+					'wait for element .foo to be hidden',
+					' element',
+					'.foo',
+					' to be',
+					'hidden'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be hidden'.match(action.match), [
+					'wait for element .foo .bar to be hidden',
+					' element',
+					'.foo .bar',
+					' to be',
+					'hidden'
 				]);
 			});
 
@@ -759,6 +825,24 @@ describe('lib/action', function() {
 			assert.isFunction(action.build);
 		});
 
+		describe('.build(browser, page, options, matches)', function() {
+			var matches;
+			var page;
+			var returnedValue;
+
+			beforeEach(function() {
+				page = {
+					evaluate: sinon.stub().callsArgWithAsync(2, null, true)
+				};
+				matches = 'wait for element .foo to be added'.match(action.match);
+				returnedValue = action.build({}, page, {}, matches);
+			});
+
+			it('returns a function', function() {
+				assert.isFunction(returnedValue);
+			});
+
+		});
 
 	});
 
