@@ -892,14 +892,12 @@ Copyright &copy; 2013–2017, Team Pa11y
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
-[info-coverage]: https://coveralls.io/github/pa11y/pa11y
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
-[shield-coverage]: https://img.shields.io/coveralls/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
