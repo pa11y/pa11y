@@ -79,6 +79,10 @@ function configureProgram(program) {
 			'-e, --phantomjs <path>',
 			'the path to the phantomjs executable'
 		)
+		.option(
+			'-S, --screen-capture <path>',
+			'a path to save a screen capture of the page to'
+		)
 		.parse(process.argv);
 	program.url = program.args[0];
 }
@@ -125,6 +129,7 @@ function processOptions(program) {
 			port: program.port
 		},
 		rootElement: program.rootElement,
+		screenCapture: program.screenCapture,
 		standard: program.standard,
 		timeout: program.timeout,
 		wait: program.wait,
