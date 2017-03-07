@@ -1,18 +1,27 @@
 
-# Pa11y CI ![beta stage][status-badge]
+# Pa11y CI
 
-This is a new project based around Pa11y, named Pa11y CI. Pa11y CI will be a command-line tool which runs Pa11y against multiple URLs. It will be heavily geared towards easily running in CI environments against new versions of websites, but will also be runnable in local development.
+Pa11y CI is a CI-centric accessibility test runner, built using [Pa11y].
 
-:sparkles: [Click here for the full proposal document, project roadmap, and FAQs](PROPOSAL.md) :sparkles:
-
----
-
+CI runs accessibility tests against multiple URLs and reports on any issues. This is best used during automated testing of your application and can act as a gatekeeper to stop a11y issues from making it to live.
 
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
 [![Dependencies][shield-dependencies]][info-dependencies]
 [![LGPL-3.0 licensed][shield-license]][info-license]
+
+
+## Table Of Contents
+
+- [Requirements](#requirements)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Default configuration](#default-configuration)
+  - [URL configuration](#url-configuration)
+  - [Sitemaps](#sitemaps)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 ## Requirements
@@ -157,8 +166,8 @@ Copyright &copy; 2016–2017, Team Pa11y
 
 [issues]: https://github.com/pa11y/ci/issues
 [node.js]: https://nodejs.org/
+[pa11y]: https://github.com/pa11y/pa11y
 [pa11y configurations]: https://github.com/pa11y/pa11y#configuration
-[status-badge]: https://img.shields.io/badge/status-beta-yellowgreen.svg
 [twitter]: https://twitter.com/pa11yorg
 
 [info-dependencies]: https://gemnasium.com/pa11y/ci
