@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.0 (2016-03-07)
+
+  * Initial stable release
+
 ## 0.5.0 pre-release (2016-12-16)
 
   * Add and document the `verifyPage` option
