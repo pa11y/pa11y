@@ -110,6 +110,10 @@ describe('lib/pa11y', function() {
 			assert.strictEqual(defaults.phantom.parameters['ignore-ssl-errors'], 'true');
 		});
 
+		it('should have a `screenCapture` property', function() {
+			assert.strictEqual(defaults.screenCapture, null);
+		});
+
 		it('should have a `standard` property', function() {
 			assert.strictEqual(defaults.standard, 'WCAG2AA');
 		});
@@ -486,6 +490,46 @@ describe('lib/pa11y', function() {
 			});
 		});
 
+		it('should create a screen capture if one is requested', function(done) {
+			options = {
+				screenCapture: 'foo.png',
+				log: {
+					info: sinon.spy()
+				}
+			};
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.calledWith(options.log.info, 'Capturing screen, saving to "' + options.screenCapture + '"');
+				assert.calledOnce(phantom.mockPage.render);
+				assert.calledWith(phantom.mockPage.render, options.screenCapture);
+				done();
+			});
+		});
+
+		it('should log an error if the screen capture errors', function(done) {
+			var screenCaptureError = new Error('screen-capture-error');
+			options = {
+				screenCapture: 'foo.png',
+				log: {
+					error: sinon.spy(),
+					info: sinon.spy()
+				}
+			};
+			truffler.reset();
+			phantom.mockPage.render.reset();
+			phantom.mockPage.render.yieldsAsync(screenCaptureError);
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.calledOnce(phantom.mockPage.render);
+				assert.calledWith(phantom.mockPage.render, options.screenCapture);
+				assert.calledWith(options.log.error, 'Error capturing screen: ' + screenCaptureError.message);
+				done();
+			});
+		});
+
 		it('should callback with the expected results', function() {
 			assert.strictEqual(runResults, expectedResults.messages);
 		});
@@ -535,6 +579,7 @@ describe('lib/pa11y', function() {
 				done();
 			});
 		});
+
 	});
 
 	it('should have a `validateAction` method which aliases actions.isValidAction', function() {

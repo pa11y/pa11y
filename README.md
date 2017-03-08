@@ -107,6 +107,7 @@ Usage: pa11y [options] <url>
     -d, --debug                   output debug messages
     -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
     -e, --phantomjs <path>        the path to the phantomjs executable
+    -S, --screen-capture <path>    a path to save a screen capture of the page to
 ```
 
 ### Running Tests
@@ -546,6 +547,18 @@ pa11y({
 });
 ```
 Defaults to `null`, meaning the full document will be tested.
+
+### `screenCapture` (string)
+
+A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
+
+```js
+pa11y({
+    screenCapture: __dirname + '/my-screen-capture.png'
+});
+```
+
+Defaults to `null`, meaning the screen will not be captured.
 
 ### `standard` (string)
 
