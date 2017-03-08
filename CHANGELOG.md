@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.1 (2016-03-08)
+
+  * Use default wrapWidth if process.stdout.columns is reported as 0
+
 ## 1.0.0 (2016-03-07)
 
   * Initial stable release
