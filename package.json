@@ -24,7 +24,7 @@
     "commander": "^2",
     "lodash": "^4",
     "node-fetch": "^1",
-    "pa11y": "^4.3.0",
+    "pa11y": "^4.7.0",
     "wordwrap": "^1"
   },
   "devDependencies": {
