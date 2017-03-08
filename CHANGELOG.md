@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 4.7.0 (2017-03-08)
+
+  * Add the ability to screen capture the tested page
+  * Move the main bin to a .js file
+  * Clean up coveralls
+
 ## 4.6.0 (2017-01-30)
 
   * Add negation to the "wait for..." actions
