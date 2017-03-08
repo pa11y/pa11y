@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.2 (2016-03-08)
+
+  * Use Pa11y 4.7.0+
+
 ## 1.0.1 (2016-03-08)
 
   * Use default wrapWidth if process.stdout.columns is reported as 0
