@@ -169,7 +169,8 @@ function defaultConfig(config) {
 	config.urls = config.urls || [];
 	config.defaults = config.defaults || {};
 	config.defaults.log = config.defaults.log || console;
-	config.defaults.wrapWidth = process.stdout.columns;
+	// 	Setting to undefined rather than 0 allows for a fallback to the default
+	config.defaults.wrapWidth = process.stdout.columns || undefined;
 	if (program.json) {
 		delete config.defaults.log;
 	}
