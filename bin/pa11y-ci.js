@@ -37,6 +37,10 @@ program
 		'a replacement to apply in sitemaps. Use with --sitemap-find'
 	)
 	.option(
+		'-x, --sitemap-exclude <pattern>',
+		'a pattern to find in sitemaps and exclude any url that matches'
+	)
+	.option(
 		'-j, --json',
 		'Output results as JSON'
 	)
@@ -183,6 +187,7 @@ function loadSitemapIntoConfig(program, config) {
 	const sitemapUrl = program.sitemap;
 	const sitemapFind = (program.sitemapFind ? new RegExp(program.sitemapFind, 'gi') : null);
 	const sitemapReplace = program.sitemapReplace || '';
+	const sitemapExclude = (program.sitemapExclude ? new RegExp(program.sitemapExclude, 'gi') : null);
 
 	return Promise.resolve()
 		.then(() => {
@@ -195,13 +200,18 @@ function loadSitemapIntoConfig(program, config) {
 			const $ = cheerio.load(body, {
 				xmlMode: true
 			});
-			config.urls = $('url > loc').toArray().map(element => {
+
+			$('url > loc').toArray().forEach(element => {
 				let url = $(element).text();
+				if (sitemapExclude && url.match(sitemapExclude)) {
+					return;
+				}
 				if (sitemapFind) {
 					url = url.replace(sitemapFind, sitemapReplace);
 				}
-				return url;
+				config.urls.push(url);
 			});
+
 			return config;
 		})
 		.catch(error => {

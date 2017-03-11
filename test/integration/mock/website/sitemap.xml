@@ -6,4 +6,7 @@
 	<url>
 		<loc>http://localhost:8090/failing-1</loc>
 	</url>
+	<url>
+		<loc>http://localhost:8090/excluded</loc>
+	</url>
 </urlset>

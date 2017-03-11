@@ -17,6 +17,7 @@ describe('pa11y-ci (with a sitemap)', () => {
 	it('loads the expected sitemap', () => {
 		assert.include(global.lastResult.output, 'http://localhost:8090/passing-1');
 		assert.include(global.lastResult.output, 'http://localhost:8090/failing-1');
+		assert.include(global.lastResult.output, 'http://localhost:8090/excluded');
 	});
 
 });
@@ -61,6 +62,28 @@ describe('pa11y-ci (with a sitemap and find/replace)', () => {
 	it('loads the expected sitemap and performs a find/replace on the URLs', () => {
 		assert.include(global.lastResult.output, 'http://127.0.0.1:8090/passing-1');
 		assert.include(global.lastResult.output, 'http://127.0.0.1:8090/failing-1');
+		assert.include(global.lastResult.output, 'http://127.0.0.1:8090/excluded');
+	});
+
+});
+
+describe('pa11y-ci (with a sitemap and sitemap-exclude)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--sitemap',
+			'http://localhost:8090/sitemap.xml',
+			'--sitemap-exclude',
+			'EXCLUDED',
+			'--config',
+			'empty'
+		]);
+	});
+
+	it('loads the expected sitemap without the excluded URLs', () => {
+		assert.include(global.lastResult.output, 'http://localhost:8090/passing-1');
+		assert.include(global.lastResult.output, 'http://localhost:8090/failing-1');
+		assert.doesNotInclude(global.lastResult.output, 'http://localhost:8090/excluded');
 	});
 
 });
