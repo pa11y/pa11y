@@ -1,15 +1,19 @@
 
 # Changelog
 
-## 1.0.2 (2016-03-08)
+## 1.1.0 (2017-03-11)
+
+  * Add a `--sitemap-exclude` parameter to the command-line interface
+
+## 1.0.2 (2017-03-08)
 
   * Use Pa11y 4.7.0+
 
-## 1.0.1 (2016-03-08)
+## 1.0.1 (2017-03-08)
 
   * Use default wrapWidth if process.stdout.columns is reported as 0
 
-## 1.0.0 (2016-03-07)
+## 1.0.0 (2017-03-07)
 
   * Initial stable release
 
