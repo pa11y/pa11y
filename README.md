@@ -48,6 +48,7 @@ Options:
   -s, --sitemap <url>             the path to a sitemap
   -f, --sitemap-find <pattern>    a pattern to find in sitemaps. Use with --sitemap-replace
   -r, --sitemap-replace <string>  a replacement to apply in sitemaps. Use with --sitemap-find
+  -r, --sitemap-exclude <pattern> a pattern to find in sitemaps and exclude any url that matches
   -j, --json                      Output results as JSON
   -T, --threshold <number>        permit this number of errors, warnings, or notices, otherwise fail with exit code 2
 ```
@@ -123,7 +124,7 @@ If you don't wish to specify your URLs in a config file, you can use an XML site
 pa11y-ci --sitemap http://pa11y.org/sitemap.xml
 ```
 
-This takes the text content of each `<loc>` in the XML and runs Pa11y against that URL. This can also be combined with a config file, but URLs in the Sitemap will override any found in your JSON config.
+This takes the text content of each `<loc>` in the XML and runs Pa11y against that URL. This can also be combined with a config file, but URLs in the sitemap will override any found in your JSON config.
 
 If you'd like to perform a find/replace operation on each URL in a sitemap, e.g. if your sitemap points to your production URLs rather than local ones, then you can use the following flags:
 
@@ -132,6 +133,8 @@ pa11y-ci --sitemap http://pa11y.org/sitemap.xml --sitemap-find pa11y.org --sitem
 ```
 
 The above would ensure that you run Pa11y CI against local URLs instead of the live site.
+
+If there are items in the sitemap that you'd like to exclude from the testing (for example PDFs) you can do so using the `--sitemap-exclude` flag.
 
 
 ## Contributing
