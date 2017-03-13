@@ -42,15 +42,15 @@ Usage: pa11y-ci [options]
 
 Options:
 
-  -h, --help                      output usage information
-  -V, --version                   output the version number
-  -c, --config <path>             the path to a JSON or JavaScript config file
-  -s, --sitemap <url>             the path to a sitemap
-  -f, --sitemap-find <pattern>    a pattern to find in sitemaps. Use with --sitemap-replace
-  -r, --sitemap-replace <string>  a replacement to apply in sitemaps. Use with --sitemap-find
-  -r, --sitemap-exclude <pattern> a pattern to find in sitemaps and exclude any url that matches
-  -j, --json                      Output results as JSON
-  -T, --threshold <number>        permit this number of errors, warnings, or notices, otherwise fail with exit code 2
+  -h, --help                       output usage information
+  -V, --version                    output the version number
+  -c, --config <path>              the path to a JSON or JavaScript config file
+  -s, --sitemap <url>              the path to a sitemap
+  -f, --sitemap-find <pattern>     a pattern to find in sitemaps. Use with --sitemap-replace
+  -r, --sitemap-replace <string>   a replacement to apply in sitemaps. Use with --sitemap-find
+  -x, --sitemap-exclude <pattern>  a pattern to find in sitemaps and exclude any url that matches
+  -j, --json                       Output results as JSON
+  -T, --threshold <number>         permit this number of errors, warnings, or notices, otherwise fail with exit code 2
 ```
 
 ### Configuration
