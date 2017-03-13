@@ -716,23 +716,23 @@ describe('lib/action', function() {
 	describe('wait-for action', function() {
 		var action;
 
-		beforeEach(function () {
-			action = buildAction.allowedActions.find(function (allowedAction) {
+		beforeEach(function() {
+			action = buildAction.allowedActions.find(function(allowedAction) {
 				return allowedAction.name === 'wait-for';
 			});
 		});
 
-		it('should have a name property', function () {
+		it('should have a name property', function() {
 			assert.strictEqual(action.name, 'wait-for');
 		});
 
-		it('should have a match property', function () {
+		it('should have a match property', function() {
 			assert.instanceOf(action.match, RegExp);
 		});
 
-		describe('.match', function () {
+		describe('.match', function() {
 
-			it('should match all of the expected action strings', function () {
+			it('should match all of the expected action strings', function() {
 				assert.deepEqual('wait for .foo to be added'.match(action.match), [
 					'wait for .foo to be added',
 					undefined,
@@ -821,7 +821,7 @@ describe('lib/action', function() {
 
 		});
 
-		it('should have a build method', function () {
+		it('should have a build method', function() {
 			assert.isFunction(action.build);
 		});
 
