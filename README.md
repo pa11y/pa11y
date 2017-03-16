@@ -44,7 +44,7 @@ Table Of Contents
 - [Configuration](#configuration)
 - [Actions](#actions)
 - [Examples](#examples)
-- [Common Questions](#common-questions)
+- [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [License](#license)
