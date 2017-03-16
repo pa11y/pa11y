@@ -1,0 +1,9 @@
+{
+	"actions": [
+		"click element #link",
+		"wait for path to be /link-target"
+	],
+	"ignore": [
+		"notice"
+	]
+}

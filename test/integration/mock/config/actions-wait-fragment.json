@@ -1,0 +1,9 @@
+{
+	"actions": [
+		"click element #toggler",
+		"wait for fragment to be #target"
+	],
+	"ignore": [
+		"notice"
+	]
+}

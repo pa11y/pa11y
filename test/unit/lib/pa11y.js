@@ -7,9 +7,13 @@ var path = require('path');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function() {
-	var extend, injectScriptPath, pa11y, phantom, pkg, truffler, trufflerPkg, window;
+	var buildAction, extend, injectScriptPath, pa11y, phantom, pkg, truffler, trufflerPkg, window;
 
 	beforeEach(function() {
+
+		buildAction = sinon.stub().returns(sinon.stub().yieldsAsync());
+		buildAction.isValidAction = sinon.stub();
+		mockery.registerMock('./action', buildAction);
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
@@ -44,6 +48,10 @@ describe('lib/pa11y', function() {
 
 		beforeEach(function() {
 			defaults = pa11y.defaults;
+		});
+
+		it('should have an `actions` property', function() {
+			assert.deepEqual(defaults.actions, []);
 		});
 
 		it('should have a `beforeScript` property', function() {
@@ -100,6 +108,10 @@ describe('lib/pa11y', function() {
 
 		it('should have a `phantom.parameters[\'ignore-ssl-errors\']` property', function() {
 			assert.strictEqual(defaults.phantom.parameters['ignore-ssl-errors'], 'true');
+		});
+
+		it('should have a `screenCapture` property', function() {
+			assert.strictEqual(defaults.screenCapture, null);
 		});
 
 		it('should have a `standard` property', function() {
@@ -221,6 +233,29 @@ describe('lib/pa11y', function() {
 			});
 		});
 
+		it('should not call the `beforeScript` function if `options.action` is set', function(done) {
+			options = {
+				actions: [
+					'foo'
+				],
+				beforeScript: sinon.stub().yieldsAsync(),
+				log: {
+					debug: sinon.spy(),
+					info: sinon.spy()
+				}
+			};
+
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.notCalled(options.beforeScript);
+				assert.neverCalledWith(options.log.debug, 'Running beforeScript');
+				assert.calledWith(options.log.info, 'beforeScript cannot be used in combination with actions, ignoring beforeScript');
+				done();
+			});
+		});
+
 		it('should log that a script is running before testing starts if configured to', function(done) {
 			options = {
 				beforeScript: sinon.stub().yieldsAsync(),
@@ -233,6 +268,64 @@ describe('lib/pa11y', function() {
 			testFunction = truffler.firstCall.args[1];
 			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
 				assert.calledWith(options.log.debug, 'Running beforeScript');
+				done();
+			});
+		});
+
+		it('should build action functions if `options.action` is set, and call each of them in series', function(done) {
+			options = {
+				actions: [
+					'foo',
+					'bar'
+				],
+				log: {
+					info: sinon.spy()
+				}
+			};
+
+			truffler.reset();
+			pa11y(options);
+
+			var builtAction1 = sinon.stub().yieldsAsync();
+			var builtAction2 = sinon.stub().yieldsAsync();
+			buildAction.withArgs(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'foo').returns(builtAction1);
+			buildAction.withArgs(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'bar').returns(builtAction2);
+
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.calledWith(options.log.info, 'Running actions');
+				assert.calledTwice(buildAction);
+				assert.calledWithExactly(buildAction.firstCall, phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'foo');
+				assert.calledWithExactly(buildAction.secondCall, phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'bar');
+				assert.calledOnce(builtAction1);
+				assert.calledOnce(builtAction2);
+				assert.calledWith(options.log.info, 'Finished running actions');
+				done();
+			});
+		});
+
+		it('should callback with an error if an action errors', function(done) {
+			options = {
+				actions: [
+					'foo'
+				],
+				log: {
+					info: sinon.spy()
+				}
+			};
+
+			truffler.reset();
+			pa11y(options);
+
+			var expectedError = new Error('...');
+			var builtAction = sinon.stub().yieldsAsync(expectedError);
+			buildAction.returns(builtAction);
+
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function(error) {
+				assert.isNotNull(error);
+				assert.strictEqual(error, expectedError);
+				assert.neverCalledWith(options.log.info, 'Finished running actions');
 				done();
 			});
 		});
@@ -340,6 +433,7 @@ describe('lib/pa11y', function() {
 				],
 				standard: 'Section508',
 				wait: 0,
+				verifyPage: null,
 				rootElement: null
 			});
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
@@ -396,6 +490,46 @@ describe('lib/pa11y', function() {
 			});
 		});
 
+		it('should create a screen capture if one is requested', function(done) {
+			options = {
+				screenCapture: 'foo.png',
+				log: {
+					info: sinon.spy()
+				}
+			};
+			truffler.reset();
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.calledWith(options.log.info, 'Capturing screen, saving to "' + options.screenCapture + '"');
+				assert.calledOnce(phantom.mockPage.render);
+				assert.calledWith(phantom.mockPage.render, options.screenCapture);
+				done();
+			});
+		});
+
+		it('should log an error if the screen capture errors', function(done) {
+			var screenCaptureError = new Error('screen-capture-error');
+			options = {
+				screenCapture: 'foo.png',
+				log: {
+					error: sinon.spy(),
+					info: sinon.spy()
+				}
+			};
+			truffler.reset();
+			phantom.mockPage.render.reset();
+			phantom.mockPage.render.yieldsAsync(screenCaptureError);
+			pa11y(options);
+			testFunction = truffler.firstCall.args[1];
+			testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, function() {
+				assert.calledOnce(phantom.mockPage.render);
+				assert.calledWith(phantom.mockPage.render, options.screenCapture);
+				assert.calledWith(options.log.error, 'Error capturing screen: ' + screenCaptureError.message);
+				done();
+			});
+		});
+
 		it('should callback with the expected results', function() {
 			assert.strictEqual(runResults, expectedResults.messages);
 		});
@@ -445,6 +579,12 @@ describe('lib/pa11y', function() {
 				done();
 			});
 		});
+
+	});
+
+	it('should have a `validateAction` method which aliases actions.isValidAction', function() {
+		assert.isFunction(pa11y.validateAction);
+		assert.strictEqual(pa11y.validateAction, buildAction.isValidAction);
 	});
 
 });

@@ -42,6 +42,7 @@ Table Of Contents
 - [Command-Line Interface](#command-line-interface)
 - [JavaScript Interface](#javascript-interface)
 - [Configuration](#configuration)
+- [Actions](#actions)
 - [Examples](#examples)
 - [Common Questions](#common-questions)
 - [Contributing](#contributing)
@@ -102,9 +103,11 @@ Usage: pa11y [options] <url>
     -p, --port <port>             the port to run PhantomJS on
     -t, --timeout <ms>            the timeout in milliseconds
     -w, --wait <ms>               the time to wait before running tests in milliseconds
+    -v, --verify-page <string>    HTML string to verify is present in the page source HTML
     -d, --debug                   output debug messages
     -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
     -e, --phantomjs <path>        the path to the phantomjs executable
+    -S, --screen-capture <path>    a path to save a screen capture of the page to
 ```
 
 ### Running Tests
@@ -293,6 +296,17 @@ var htmlReporter = require('pa11y/reporter/html');
 var html = htmlReporter.process(results, url);
 ```
 
+### Validating Actions
+
+Pa11y exposes a function which allows you to validate [action](#actions) strings before attempting to use them.
+
+This function accepts an action string and returns a boolean indicating whether it matches one of the actions that Pa11y supports:
+
+```js
+pa11y.validateAction('click element #submit');  // true
+pa11y.validateAction('open the pod bay doors'); // false
+```
+
 
 Configuration
 -------------
@@ -324,6 +338,25 @@ test.run('http://www.nature.com/', {
 
 Below is a reference of all the options that are available:
 
+### `actions` (array) **BETA**
+
+Actions to be run before Pa11y tests the page. There are quite a few different actions available in Pa11y, the [Actions documentation](#actions) outlines each of them.
+
+**Note:** actions are currently in a beta state and the API may change while we gather feedback.
+
+```js
+pa11y({
+    actions: [
+        'set field #username to exampleUser',
+        'set field #password to password1234',
+        'click element #submit',
+        'wait for path to be /myaccount'
+    ]
+});
+```
+
+Defaults to an empty array.
+
 ### `allowedStandards` (array)
 
 The accessibility standards that are allowed to be used. This can be modified to allow for custom HTML CodeSniffer standards.
@@ -338,7 +371,9 @@ Defaults to `Section508`, `WCAG2A`, `WCAG2AA`, and `WCAG2AAA`.
 
 ### `beforeScript` (function)
 
-A function to be run before Pa11y tests the page. The function accepts three parameters;
+**Note:** unless you're doing something particularly complicated, it's much easier and less error prone to use [actions](#actions) rather than `beforeScript`. If you specify both, the `beforeScript` will be dropped with a warning.
+
+A function to be run before Pa11y tests the page. The function accepts three parameters:
 
 - `page` is the phantomjs page object, [documentation for the phantom bridge can be found here][phantom-node-options]
 - `options` is the finished options object used to configure pa11y
@@ -347,10 +382,10 @@ A function to be run before Pa11y tests the page. The function accepts three par
 ```js
 pa11y({
     beforeScript: function(page, options, next) {
-		// Make changes to the page
-		// When finished call next to continue running Pa11y tests
-		next();
-	}
+        // Make changes to the page
+        // When finished call next to continue running Pa11y tests
+        next();
+    }
 });
 ```
 
@@ -363,7 +398,7 @@ Elements matching this selector will be hidden from testing by styling them with
 
 ```js
 pa11y({
-	hideElements: '.advert, #modal, div[aria-role=presentation]'
+    hideElements: '.advert, #modal, div[aria-role=presentation]'
 });
 ```
 
@@ -513,6 +548,18 @@ pa11y({
 ```
 Defaults to `null`, meaning the full document will be tested.
 
+### `screenCapture` (string)
+
+A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
+
+```js
+pa11y({
+    screenCapture: __dirname + '/my-screen-capture.png'
+});
+```
+
+Defaults to `null`, meaning the screen will not be captured.
+
 ### `standard` (string)
 
 The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA` (or match one of the standards in the [`allowedStandards`](#allowedstandards-array) option).
@@ -549,6 +596,98 @@ pa11y({
 
 Defaults to `0`.
 
+### `verifyPage` (string)
+
+HTML string to verify is present in the page source HTML. Could be used to ascertain that intended page is being tested (as opposed to error page) by using `<title>` tags and content (as below), or that a specific element is present.
+
+```js
+pa11y({
+    verifyPage: '<title>Nature Research: science journals, jobs, information and services.</title>'
+});
+```
+
+Defaults to `null`.
+
+
+Actions
+-------
+
+Actions are additional interactions that you can make Pa11y perform before the tests are run. They allow you to do things like click on a button, enter a value in a form, wait for a redirect, or wait for the URL fragment to change:
+
+```js
+pa11y({
+    actions: [
+        'click element #tab-1',
+        'set field #fullname to John Doe',
+        'check field #terms-and-conditions',
+        'uncheck field #subscribe-to-marketing',
+        'wait for fragment to be #page-2',
+        'wait for path to not be /login',
+        'wait for url to be https://example.com/'
+    ]
+});
+```
+
+Below is a reference of all the available actions and what they do on the page. Some of these take time to complete so you may need to increase the `timeout` option if you have a large set of actions.
+
+### Click Element
+
+This allows you to click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
+
+```js
+pa11y({
+    actions: [
+        'click element #tab-1'
+    ]
+});
+```
+
+### Set Field Value
+
+This allows you to set the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `set field <selector> to <value>`. E.g.
+
+```js
+pa11y({
+    actions: [
+        'set field #fullname to John Doe'
+    ]
+});
+```
+
+### Check/Uncheck Field
+
+This allows you to check or uncheck checkbox and radio inputs by passing in a CSS selector. This action takes the form `check field <selector>` or `uncheck field <selector>`. E.g.
+
+```js
+pa11y({
+    actions: [
+        'check field #terms-and-conditions',
+        'uncheck field #subscribe-to-marketing'
+    ]
+});
+```
+
+### Wait For Fragment/Path/URL
+
+This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. You can also wait until the page does **not** have a given fragment, path, or URL using the `to not be` syntax. This action takes one of the forms:
+
+  - `wait for fragment to be <fragment>` (including the preceding `#`)
+  - `wait for fragment to not be <fragment>` (including the preceding `#`)
+  - `wait for path to be <path>` (including the preceding `/`)
+  - `wait for path to not be <path>` (including the preceding `/`)
+  - `wait for url to be <url>`
+  - `wait for url to not be <url>`
+
+E.g.
+
+```js
+pa11y({
+    actions: [
+        'wait for path to be /login'
+    ]
+});
+```
+
 
 Examples
 --------
@@ -576,6 +715,10 @@ Use [async][async] to run Pa11y on multiple URLs in parallel, with a configurabl
 ```
 node example/multiple-concurrent
 ```
+
+### Actions Example
+
+Step through some actions before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/actions/index.js).
 
 ### Before Script Example
 
@@ -618,44 +761,20 @@ pa11y({
 
 ### How can Pa11y log in if my site has a log in form?
 
-Use the `beforeScript` option either in your JS code or in your config file to input login details and submit the form.
-Once the form has been submitted you will also have to wait until the page you want to test has loaded before calling `next` to run Pa11y.
+Use the [`actions`](#actions) option to specify a series of actions to execute before Pa11y runs the tests:
 
 ```js
 pa11y({
-	beforeScript: function(page, options, next) {
-		var waitUntil = function(condition, retries, waitOver) {
-			page.evaluate(condition, function(error, result) {
-				if (result || retries < 1) {
-					waitOver();
-				} else {
-					retries -= 1;
-					setTimeout(function() {
-						waitUntil(condition, retries, waitOver);
-					}, 200);
-				}
-			});
-		};
-
-		page.evaluate(function() {
-			var user = document.querySelector('#username');
-			var password = document.querySelector('#password');
-			var submit = document.querySelector('#submit');
-
-			user.value = 'exampleUser';
-			password.value = 'password1234';
-
-			submit.click();
-
-		}, function() {
-
-			waitUntil(function() {
-				return window.location.href === 'http://example.com/myaccount';
-			}, 20, next);
-		});
-	}
+    actions: [
+        'set field #username to exampleUser',
+        'set field #password to password1234',
+        'click element #submit',
+        'wait for path to be /myaccount'
+    ]
 });
 ```
+
+You can also use the `beforeScript` option for this, but it can be complicated and error-prone. See the [`beforeScript` example] for more information.
 
 ### How can I use Pa11y with a proxy server?
 
@@ -677,7 +796,7 @@ These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can b
 
 ### How can I simulate a user interaction before running Pa11y?
 
-Use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
+For simple interactions, we recommend using [actions](#actions). For more complex interactions, use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
 
 In this example, additional content is loaded via ajax when a button is clicked.
 Once the content is loaded the `aria-hidden` attribute switches from `true` to `false`.
@@ -754,7 +873,7 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 4             | N/A                | 4+               | N/A              |
-| :hourglass:     | 3             | 3.8                | 0.12–6           | 2016-12-05       |
+| :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
 
@@ -764,8 +883,8 @@ If you're opening issues related to these, please mention the version that the i
 License
 -------
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
-Copyright &copy; 2016, Springer Nature
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].<br/>
+Copyright &copy; 2013–2017, Team Pa11y
 
 
 
@@ -786,14 +905,12 @@ Copyright &copy; 2016, Springer Nature
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
-[info-coverage]: https://coveralls.io/github/pa11y/pa11y
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
-[shield-coverage]: https://img.shields.io/coveralls/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg

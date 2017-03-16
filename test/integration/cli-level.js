@@ -1,5 +1,3 @@
-// jshint maxstatements: false
-// jscs:disable maximumLineLength
 'use strict';
 
 var assert = require('proclaim');
@@ -76,7 +74,7 @@ describe('Pa11y CLI Level', function() {
 			});
 			assert.deepEqual(this.lastJsonResponse[1], {
 				code: 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2',
-				context: '<html><head>\n\n    <meta charset="utf-...</html>',
+				context: '<html><head>\n\n\t<meta charset="utf-8">...</html>',
 				message: 'The html element should have a lang or xml:lang attribute which describes the language of the document.',
 				selector: 'html',
 				type: 'error',

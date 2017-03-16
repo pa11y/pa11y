@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "4.2.0",
+  "version": "4.7.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -8,7 +8,7 @@
     "cli",
     "report"
   ],
-  "author": "Nature Publishing Group",
+  "author": "Team Pa11y",
   "contributors": [
     "Rowan Manning (http://rowanmanning.com/)",
     "Whymarrh Whitby (http://whymarrh.com/)",
@@ -50,7 +50,7 @@
   },
   "main": "./lib/pa11y.js",
   "bin": {
-    "pa11y": "./bin/pa11y"
+    "pa11y": "./bin/pa11y.js"
   },
   "scripts": {
     "test": "make ci"

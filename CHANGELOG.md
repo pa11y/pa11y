@@ -1,6 +1,32 @@
 
 # Changelog
 
+## 4.7.0 (2017-03-08)
+
+  * Add the ability to screen capture the tested page
+  * Move the main bin to a .js file
+  * Clean up coveralls
+
+## 4.6.0 (2017-01-30)
+
+  * Add negation to the "wait for..." actions
+
+## 4.5.0 (2017-01-25)
+
+  * Expose action validation for use in dependent projects
+
+## 4.4.0 (2017-01-19)
+
+  * Add support for actions
+
+## 4.3.0 (2016-12-15)
+
+  * Add a `verifyPage` option, and a `--verify-page` flag
+  * Switch from JSHint/JSCS to ESLint
+  * Add a contributing guide
+  * Update dependencies
+    * istanbul: ~0.3 to ~0.4
+
 ## 4.2.0 (2016-11-25)
 
   * Display the page title in the logs to help with debugging
