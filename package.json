@@ -42,9 +42,9 @@
   },
   "devDependencies": {
     "eslint": "^3.11.1",
-    "istanbul": "~0.4",
     "mocha": "^3",
     "mockery": "~1.4",
+    "nyc": "^10.1.2",
     "proclaim": "^3",
     "sinon": "^1"
   },
