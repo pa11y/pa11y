@@ -731,7 +731,7 @@ Inject a script before Pa11y runs. This example logs into a fictional site then 
 Common Questions and Troubleshooting
 ------------------------------------
 
-See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems. 
+See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
 
 Contributing
@@ -739,10 +739,22 @@ Contributing
 
 There are many ways to contribute to Pa11y, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
 
-If you're ready to contribute some code, clone this repo locally and commit on a separate branch. Please write unit tests for your changes, and check that everything works by running the following before opening a pull-request:
+If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
+
+Please write unit tests for your code, and check that everything works by running the following before opening a <abbr title="pull request">PR</abbr>:
 
 ```sh
 make ci
+```
+
+You can also run verifications and tests individually:
+
+```sh
+make verify              # Verify all of the code (JSHint/JSCS)
+make test                # Run all tests
+make test-unit           # Run the unit tests
+make test-unit-coverage  # Run the unit tests with coverage
+make test-integration    # Run the integration tests
 ```
 
 
@@ -795,6 +807,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-4–7-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg
