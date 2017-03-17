@@ -144,7 +144,7 @@ Create an issue
 
 If all else fails, [create an issue][new-issue] and we'll help you.
 
-Please include your Node.js, Phantom, and Pa11y version numbers, and your operating system.
+Please include your Node.js, PhantomJS, and Pa11y version numbers, as well as your operating system. It may be useful to run `pa11y --environment` – this outputs all the details we need to know about your machine to help us debug your issue.
 
 [actions]: https://github.com/pa11y/pa11y#actions
 [beforeScript]: https://github.com/pa11y/pa11y/tree/master/example/before-script

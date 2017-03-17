@@ -14,6 +14,10 @@ function configureProgram(program) {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option(
+			'-n, --environment',
+			'output details about the environment Pa11y will run in'
+		)
+		.option(
 			'-s, --standard <name>',
 			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA'
 		)
@@ -88,6 +92,10 @@ function configureProgram(program) {
 }
 
 function runProgram(program) {
+	if (program.environment) {
+		outputEnvironmentInfo();
+		process.exit(0);
+	}
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
@@ -197,4 +205,23 @@ function isWarningOrError(result) {
 
 function collectIgnoreOptions(val, array) {
 	return array.concat(val.split(';'));
+}
+
+function outputEnvironmentInfo() {
+	var versions = {
+		pa11y: pkg.version,
+		node: process.version.replace('v', ''),
+		npm: '[unavailable]',
+		phantom: require('phantomjs-prebuilt').version,
+		os: require('os').release()
+	};
+	try {
+		versions.npm = require('child_process').execSync('npm -v').toString().trim();
+	} catch (error) {}
+
+	console.log('Pa11y:      ' + versions.pa11y);
+	console.log('Node.js:    ' + versions.node);
+	console.log('npm:        ' + versions.npm);
+	console.log('PhantomJS:  ' + versions.phantom);
+	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
 }
