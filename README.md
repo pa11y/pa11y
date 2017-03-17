@@ -71,7 +71,9 @@ Depending on your flavour of Linux, you should be able to use a package manager 
 
 ### Windows
 
-Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+On Windows 10, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
+
+Windows 7 and below users approach with caution – we've been able to get Pa11y running but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start. If you have had a better experience than this then please do share!
 
 
 Command-Line Interface
