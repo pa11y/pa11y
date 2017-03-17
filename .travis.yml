@@ -5,13 +5,14 @@ matrix:
   include:
 
     # Run linter once
-    - node_js: '6'
+    - node_js: '7'
       env: LINT=true
 
     # Run tests
     - node_js: '4'
     - node_js: '5'
     - node_js: '6'
+    - node_js: '7'
 
 # Restrict builds on branches
 branches:
