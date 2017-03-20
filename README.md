@@ -750,7 +750,7 @@ make ci
 You can also run verifications and tests individually:
 
 ```sh
-make verify              # Verify all of the code (JSHint/JSCS)
+make verify              # Verify all of the code (ESLint)
 make test                # Run all tests
 make test-unit           # Run the unit tests
 make test-unit-coverage  # Run the unit tests with coverage
@@ -788,7 +788,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [1.x]: https://github.com/pa11y/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
-[jscs]: http://jscs.info/
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/

@@ -64,19 +64,19 @@ verify-javascript: verify-eslint verify-jshint verify-jscs
 	@$(TASK_DONE)
 
 verify-dust:
-	@if [ -e .dustmiterc ]; then dustmite --path ./view && $(TASK_DONE); fi
+	@if [ -e .dustmiterc* ]; then dustmite --path ./view && $(TASK_DONE); fi
 
 verify-eslint:
-	@if [ -e .eslintrc ]; then eslint . && $(TASK_DONE); fi
+	@if [ -e .eslintrc* ]; then eslint . && $(TASK_DONE); fi
 
 verify-jshint:
-	@if [ -e .jshintrc ]; then jshint . && $(TASK_DONE); fi
+	@if [ -e .jshintrc* ]; then jshint . && $(TASK_DONE); fi
 
 verify-jscs:
-	@if [ -e .jscsrc ]; then jscs . && $(TASK_DONE); fi
+	@if [ -e .jscsrc* ]; then jscs . && $(TASK_DONE); fi
 
 verify-spaces:
-	@if [ -e .editorconfig ] && [ -x $(NPM_BIN)/lintspaces ]; then \
+	@if [ -e .editorconfig* ] && [ -x $(NPM_BIN)/lintspaces ]; then \
 		git ls-files | xargs lintspaces -e .editorconfig && $(TASK_DONE); \
 	fi
 

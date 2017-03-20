@@ -1,10 +1,11 @@
-/* eslint-disable one-var, max-len, max-statements */
 'use strict';
 
 var assert = require('proclaim');
 
 describe('lib/inject', function() {
-	var inject, options, window;
+	var inject;
+	var options;
+	var window;
 
 	beforeEach(function() {
 		window = require('../mock/window');
@@ -237,7 +238,7 @@ describe('lib/inject', function() {
 				},
 				{
 					code: 'baz-code',
-					context: '<element with=\"loads of attributes\" that=\"push the total outerHTML length\" to=\"more than we really want to send back to Node.js\" this=\"is getting kind of silly now, I really want to stop writing dummy text to push the length of this element out\">baz ...',
+					context: '<element with="loads of attributes" that="push the total outerHTML length" to="more than we really want to send back to Node.js" this="is getting kind of silly now, I really want to stop writing dummy text to push the length of this element out">baz ...',
 					message: 'baz message',
 					selector: '',
 					type: 'notice',
@@ -563,4 +564,3 @@ describe('lib/inject', function() {
 	});
 
 });
-/* eslint-enable one-var, max-len, max-statements */

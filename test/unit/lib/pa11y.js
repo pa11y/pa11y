@@ -1,4 +1,3 @@
-/* eslint-disable one-var, max-len, max-statements */
 'use strict';
 
 var assert = require('proclaim');
@@ -7,7 +6,15 @@ var path = require('path');
 var sinon = require('sinon');
 
 describe('lib/pa11y', function() {
-	var buildAction, extend, injectScriptPath, pa11y, phantom, pkg, truffler, trufflerPkg, window;
+	var buildAction;
+	var extend;
+	var injectScriptPath;
+	var pa11y;
+	var phantom;
+	var pkg;
+	var truffler;
+	var trufflerPkg;
+	var window;
 
 	beforeEach(function() {
 
@@ -59,7 +66,7 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should have an `htmlcs` property', function() {
-			assert.strictEqual(defaults.htmlcs, path.resolve(__dirname + '/../../..') + '/lib/vendor/HTMLCS.js');
+			assert.strictEqual(defaults.htmlcs, path.resolve(path.join(__dirname, '/../../..')) + '/lib/vendor/HTMLCS.js');
 		});
 
 		it('should have an `ignore` property', function() {
@@ -125,7 +132,8 @@ describe('lib/pa11y', function() {
 	});
 
 	describe('.pa11y(options)', function() {
-		var instance, options;
+		var instance;
+		var options;
 
 		beforeEach(function() {
 			options = {
@@ -181,7 +189,10 @@ describe('lib/pa11y', function() {
 	});
 
 	describe('Truffler test function', function() {
-		var expectedResults, options, runResults, testFunction;
+		var expectedResults;
+		var options;
+		var runResults;
+		var testFunction;
 
 		beforeEach(function(done) {
 			options = {
@@ -440,7 +451,8 @@ describe('lib/pa11y', function() {
 		});
 
 		describe('evaluated function()', function() {
-			var evaluatedFunction, returnValue;
+			var evaluatedFunction;
+			var returnValue;
 
 			beforeEach(function() {
 				global.window = window;
@@ -552,7 +564,9 @@ describe('lib/pa11y', function() {
 	});
 
 	describe('testPage function', function() {
-		var expectedResults, options, testFunction;
+		var expectedResults;
+		var options;
+		var testFunction;
 
 		beforeEach(function(done) {
 			options = {
@@ -588,4 +602,3 @@ describe('lib/pa11y', function() {
 	});
 
 });
-/* eslint-enable one-var, max-len, max-statements */

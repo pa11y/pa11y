@@ -3,7 +3,8 @@
 var assert = require('proclaim');
 var describeCliCall = require('./helper/describe-cli-call');
 var fs = require('fs');
-var screenCapturePath = __dirname + '/tmp/test.png';
+var path = require('path');
+var screenCapturePath = path.join(__dirname, '/tmp/test.png');
 
 describe('Pa11y CLI Screen Capture', function() {
 

@@ -1,4 +1,3 @@
-/* eslint-disable one-var, max-len, max-statements */
 'use strict';
 
 var assert = require('proclaim');
@@ -981,4 +980,3 @@ describe('lib/action', function() {
 
 
 });
-/* eslint-enable one-var, max-len, max-statements */
