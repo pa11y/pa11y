@@ -16,7 +16,7 @@ describe('Pa11y CLI environment', function() {
 			assert.match(this.lastOutput, /node\.js:\s+\d+\.\d+\.\d+/i);
 			assert.match(this.lastOutput, /npm:\s+\d+\.\d+\.\d+/i);
 			assert.match(this.lastOutput, /phantomjs:\s+\d+\.\d+\.\d+/i);
-			assert.match(this.lastOutput, /os:\s+[^\)]+\s\([^\)]+\)/i);
+			assert.match(this.lastOutput, /os:\s+[^(]+\s\([^)]+\)/i);
 		});
 
 	});

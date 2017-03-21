@@ -1,4 +1,3 @@
-/* eslint-disable max-len, max-statements */
 'use strict';
 
 var extend = require('node.extend');
@@ -11,10 +10,10 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 	describe('call with url "' + urlPath + '"' + (cliArguments.length ? ' and arguments "' + cliArguments.join(' ') + '"' : ''), function() {
 		before(function(done) {
 
-			var self = this;
-			self.lastStdout = '';
-			self.lastStderr = '';
-			self.lastOutput = '';
+			var that = this;
+			that.lastStdout = '';
+			that.lastStderr = '';
+			that.lastOutput = '';
 			environment = extend(true, environment, process.env);
 
 			cliArguments.push('localhost:' + this.port + urlPath);
@@ -27,19 +26,19 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 				env: environment
 			});
 			child.stdout.on('data', function(data) {
-				self.lastStdout += data;
-				self.lastOutput += data;
+				that.lastStdout += data;
+				that.lastOutput += data;
 			});
 			child.stderr.on('data', function(data) {
-				self.lastStderr += data;
-				self.lastOutput += data;
+				that.lastStderr += data;
+				that.lastOutput += data;
 			});
 			child.on('close', function(code) {
-				self.lastJsonResponse = null;
+				that.lastJsonResponse = null;
 				try {
-					self.lastJsonResponse = JSON.parse(self.lastOutput);
+					that.lastJsonResponse = JSON.parse(that.lastOutput);
 				} catch (error) {}
-				self.lastExitCode = code;
+				that.lastExitCode = code;
 				done();
 			});
 

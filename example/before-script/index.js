@@ -21,7 +21,7 @@ var test = pa11y({
 	beforeScript: function(page, options, next) {
 
 		// An example function that can be used to make sure changes have been confirmed before continuing to run Pa11y
-		var waitUntil = function(condition, retries, waitOver) {
+		function waitUntil(condition, retries, waitOver) {
 			page.evaluate(condition, function(error, result) {
 				if (result || retries < 1) {
 					// Once the changes have taken place continue with Pa11y testing
@@ -33,7 +33,7 @@ var test = pa11y({
 					}, 200);
 				}
 			});
-		};
+		}
 
 		// The script to manipulate the page must be run with page.evaluate to be run within the context of the page
 		page.evaluate(function() {

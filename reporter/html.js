@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 
 module.exports = {
 	begin: emptyFunction,
@@ -22,7 +23,7 @@ function reportResults(results, url) {
 }
 
 function buildHtml(results, url) {
-	var renderMain = template(__dirname + '/html/report.html');
+	var renderMain = template(path.join(__dirname, '/html/report.html'));
 	return renderMain({
 		date: new Date(),
 		errorCount: results.filter(isError).length,
@@ -34,7 +35,7 @@ function buildHtml(results, url) {
 }
 
 function buildResultsHtml(results) {
-	var renderResult = template(__dirname + '/html/result.html');
+	var renderResult = template(path.join(__dirname, '/html/result.html'));
 	return results.map(function(result) {
 		result.typeLabel = upperCaseFirst(result.type);
 		return renderResult(result);

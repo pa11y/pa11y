@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use strict';
 
 var assert = require('proclaim');
@@ -19,4 +18,3 @@ describe('Pa11y CLI Reporter (CSV)', function() {
 	});
 
 });
-/* eslint-enable max-len */
