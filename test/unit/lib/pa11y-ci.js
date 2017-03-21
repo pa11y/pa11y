@@ -1,4 +1,4 @@
-// jscs:disable maximumLineLength
+/* eslint max-len: 'off' */
 'use strict';
 
 const assert = require('proclaim');

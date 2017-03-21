@@ -116,7 +116,9 @@ function loadConfig(configPath) {
 				return reject(new Error(`The config file "${configPath}" could not be loaded`));
 			}
 		} catch (error) {
-			return reject(new Error(`There was a problem loading "${configPath}":\n${error.stack}`));
+			return reject(
+				new Error(`There was a problem loading "${configPath}":\n${error.stack}`)
+			);
 		}
 		resolve(defaultConfig(config || {}));
 	});
@@ -185,9 +187,17 @@ function defaultConfig(config) {
 // URLs, and add them to an existing config object
 function loadSitemapIntoConfig(program, config) {
 	const sitemapUrl = program.sitemap;
-	const sitemapFind = (program.sitemapFind ? new RegExp(program.sitemapFind, 'gi') : null);
+	const sitemapFind = (
+		program.sitemapFind ?
+		new RegExp(program.sitemapFind, 'gi') :
+		null
+	);
 	const sitemapReplace = program.sitemapReplace || '';
-	const sitemapExclude = (program.sitemapExclude ? new RegExp(program.sitemapExclude, 'gi') : null);
+	const sitemapExclude = (
+		program.sitemapExclude ?
+		new RegExp(program.sitemapExclude, 'gi') :
+		null
+	);
 
 	return Promise.resolve()
 		.then(() => {

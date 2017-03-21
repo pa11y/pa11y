@@ -28,11 +28,11 @@
     "wordwrap": "^1"
   },
   "devDependencies": {
+    "eslint": "^3.18.0",
     "istanbul": "^0.4",
-    "jscs": "^2",
-    "jshint": "^2",
     "mocha": "^2",
     "mockery": "^1",
+    "pa11y-lint-config": "^1.0.0",
     "proclaim": "^3",
     "sinon": "^1",
     "sinon-as-promised": "^4"
