@@ -374,7 +374,7 @@ describe('lib/pa11y', function() {
 					htmlcs: 'http://foo.com/HTMLCS.js'
 				};
 				truffler.reset();
-				phantom.mockPage.injectJs.reset();
+				phantom.mockPage.injectJs.resetHistory();
 				pa11y(options);
 				testFunction = truffler.firstCall.args[1];
 				testFunction(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, done);
