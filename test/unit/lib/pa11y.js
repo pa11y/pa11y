@@ -445,7 +445,8 @@ describe('lib/pa11y', function() {
 				standard: 'Section508',
 				wait: 0,
 				verifyPage: null,
-				rootElement: null
+				rootElement: null,
+				rules: []
 			});
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
 		});

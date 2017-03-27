@@ -148,7 +148,7 @@ function processOptions(program) {
 		standard: program.standard,
 		timeout: program.timeout,
 		wait: program.wait,
-		verifyPage: program.verifyPage,
+		verifyPage: program.verifyPage
 	});
 
 	if (!program.debug) {
