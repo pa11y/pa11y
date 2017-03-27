@@ -111,6 +111,7 @@ Usage: pa11y [options] <url>
     -H, --htmlcs <url>             the URL or path to source HTML_CodeSniffer from
     -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
+    -A, --add-rule <rule>          WCAG 2.0 rules from a different standard to include, a repeatable value or separated by semi-colons
 ```
 
 ### Running Tests
