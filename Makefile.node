@@ -1,0 +1,125 @@
+#
+# Node.js Makefile
+# ================
+#
+# Do not update this file manually – it's maintained separately on GitHub:
+# https://github.com/rowanmanning/makefiles/blob/master/Makefile.node
+#
+# To update to the latest version, run `make update-makefile`.
+#
+
+
+# Meta tasks
+# ----------
+
+.PHONY: test
+
+
+# Useful variables
+# ----------------
+
+NPM_BIN = ./node_modules/.bin
+export PATH := $(NPM_BIN):$(PATH)
+export EXPECTED_COVERAGE := 90
+export INTEGRATION_TIMEOUT := 5000
+export INTEGRATION_SLOW := 4000
+
+
+# Output helpers
+# --------------
+
+TASK_DONE = echo "✓ $@ done"
+
+
+# Group tasks
+# -----------
+
+all: install ci
+ci: verify test
+
+
+# Install tasks
+# -------------
+
+clean:
+	@git clean -fxd
+	@$(TASK_DONE)
+
+install: node_modules
+	@$(TASK_DONE)
+
+node_modules: package.json
+	@npm prune --production=false
+	@npm install
+	@$(TASK_DONE)
+
+
+# Verify tasks
+# ------------
+
+verify: verify-javascript verify-dust verify-spaces
+	@$(TASK_DONE)
+
+verify-javascript: verify-eslint verify-jshint verify-jscs
+	@$(TASK_DONE)
+
+verify-dust:
+	@if [ -e .dustmiterc* ]; then dustmite --path ./view && $(TASK_DONE); fi
+
+verify-eslint:
+	@if [ -e .eslintrc* ]; then eslint . && $(TASK_DONE); fi
+
+verify-jshint:
+	@if [ -e .jshintrc* ]; then jshint . && $(TASK_DONE); fi
+
+verify-jscs:
+	@if [ -e .jscsrc* ]; then jscs . && $(TASK_DONE); fi
+
+verify-spaces:
+	@if [ -e .editorconfig* ] && [ -x $(NPM_BIN)/lintspaces ]; then \
+		git ls-files | xargs lintspaces -e .editorconfig && $(TASK_DONE); \
+	fi
+
+verify-coverage:
+	@if [ -d coverage ]; then \
+		if [ -x $(NPM_BIN)/nyc ]; then \
+			nyc check-coverage --lines $(EXPECTED_COVERAGE) --functions $(EXPECTED_COVERAGE) --branches $(EXPECTED_COVERAGE) && $(TASK_DONE); \
+		else \
+			if [ -x $(NPM_BIN)/istanbul ]; then \
+				istanbul check-coverage --statement $(EXPECTED_COVERAGE) --branch $(EXPECTED_COVERAGE) --function $(EXPECTED_COVERAGE) && $(TASK_DONE); \
+			fi \
+		fi \
+	fi
+
+# Test tasks
+# ----------
+
+test: test-unit-coverage verify-coverage test-integration
+	@$(TASK_DONE)
+
+test-unit:
+	@if [ -d test/unit ]; then mocha test/unit --recursive && $(TASK_DONE); fi
+
+test-unit-coverage:
+	@if [ -d test/unit ]; then \
+		if [ -x $(NPM_BIN)/nyc ]; then \
+			nyc --reporter=text --reporter=html $(NPM_BIN)/_mocha test/unit --recursive && $(TASK_DONE); \
+		else \
+			if [ -x $(NPM_BIN)/istanbul ]; then \
+				istanbul cover $(NPM_BIN)/_mocha -- test/unit --recursive && $(TASK_DONE); \
+			else \
+				make test-unit; \
+			fi \
+		fi \
+	fi
+
+test-integration:
+	@if [ -d test/integration ]; then mocha test/integration --timeout $(INTEGRATION_TIMEOUT) --slow $(INTEGRATION_SLOW) && $(TASK_DONE); fi
+
+
+# Tooling tasks
+# -------------
+
+update-makefile:
+	@curl -s https://raw.githubusercontent.com/rowanmanning/makefiles/master/Makefile.node > Makefile.node
+	@$(TASK_DONE)

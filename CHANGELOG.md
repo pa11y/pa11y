@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 4.8.0 (2017-03-17)
+
+  * Add the `--environment` flag for easier debugging
+  * Update the Windows requirements to include Windows 10
+  * Update the trouble-shooting guide and common questions
+
 ## 4.7.0 (2017-03-08)
 
   * Add the ability to screen capture the tested page

@@ -44,7 +44,7 @@ Table Of Contents
 - [Configuration](#configuration)
 - [Actions](#actions)
 - [Examples](#examples)
-- [Common Questions](#common-questions)
+- [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [License](#license)
@@ -71,7 +71,9 @@ Depending on your flavour of Linux, you should be able to use a package manager 
 
 ### Windows
 
-Windows users approach with caution – we've been able to get Pa11y running (Windows 7, Node 4) but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start.
+On Windows 10, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
+
+Windows 7 and below users approach with caution – we've been able to get Pa11y running but only after installing Visual Studio and the Windows SDK (as well as Git, and Python). The [Windows installation instructions for node-gyp][windows-install] are a good place to start. If you have had a better experience than this then please do share!
 
 
 Command-Line Interface
@@ -90,23 +92,24 @@ Usage: pa11y [options] <url>
 
   Options:
 
-    -h, --help                    output usage information
-    -V, --version                 output the version number
-    -s, --standard <name>         the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>     the reporter to use: cli (default), csv, html, json
-    -l, --level <level>           the level of message to fail on (exit with code 2): error, warning, notice
-    -T, --threshold <number>        permit this number of errors, warnings, or notices, otherwise fail with exit code 2
-    -i, --ignore <ignore>         types and codes of messages to ignore, a repeatable value or separated by semi-colons
-    -E, --hide-elements <hide>    a CSS selector to hide elements from testing, selectors can be comma separated
-    -R, --root-element <element>  the root element for testing a subset of the document
-    -c, --config <path>           a JSON or JavaScript config file
-    -p, --port <port>             the port to run PhantomJS on
-    -t, --timeout <ms>            the timeout in milliseconds
-    -w, --wait <ms>               the time to wait before running tests in milliseconds
-    -v, --verify-page <string>    HTML string to verify is present in the page source HTML
-    -d, --debug                   output debug messages
-    -H, --htmlcs <url>            the URL or path to source HTML_CodeSniffer from
-    -e, --phantomjs <path>        the path to the phantomjs executable
+    -h, --help                     output usage information
+    -V, --version                  output the version number
+    -n, --environment              output details about the environment Pa11y will run in
+    -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
+    -r, --reporter <reporter>      the reporter to use: cli (default), csv, html, json
+    -l, --level <level>            the level of message to fail on (exit with code 2): error, warning, notice
+    -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
+    -i, --ignore <ignore>          types and codes of messages to ignore, a repeatable value or separated by semi-colons
+    -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
+    -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
+    -c, --config <path>            a JSON or JavaScript config file
+    -p, --port <port>              the port to run PhantomJS on
+    -t, --timeout <ms>             the timeout in milliseconds
+    -w, --wait <ms>                the time to wait before running tests in milliseconds
+    -v, --verify-page <string>     HTML string to verify is present in the page source HTML
+    -d, --debug                    output debug messages
+    -H, --htmlcs <url>             the URL or path to source HTML_CodeSniffer from
+    -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
 ```
 
@@ -725,130 +728,10 @@ Step through some actions before Pa11y runs. This example logs into a fictional 
 Inject a script before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/before-script/index.js).
 
 
-Common Questions
-----------------
+Common Questions and Troubleshooting
+------------------------------------
 
-Common questions about Pa11y are answered here.
-
-### How do I set cookies on a tested page?
-
-Use the `page.headers` option either in your JS code or in your config file:
-
-```js
-pa11y({
-    page: {
-        headers: {
-            Cookie: 'foo=bar'
-        }
-    }
-});
-```
-
-### How can Pa11y log in if my site's behind basic auth?
-
-Use the `page.settings` option either in your JS code or in your config file to set a username and password:
-
-```js
-pa11y({
-    page: {
-        settings: {
-            userName: 'nature',
-            password: 'say the magic word'
-        }
-    }
-});
-```
-
-### How can Pa11y log in if my site has a log in form?
-
-Use the [`actions`](#actions) option to specify a series of actions to execute before Pa11y runs the tests:
-
-```js
-pa11y({
-    actions: [
-        'set field #username to exampleUser',
-        'set field #password to password1234',
-        'click element #submit',
-        'wait for path to be /myaccount'
-    ]
-});
-```
-
-You can also use the `beforeScript` option for this, but it can be complicated and error-prone. See the [`beforeScript` example] for more information.
-
-### How can I use Pa11y with a proxy server?
-
-Use the `phantom.parameters` option either in your JS code or in your config file:
-
-```js
-pa11y({
-    phantom: {
-        parameters: {
-            'proxy': '1.2.3.4:8080',
-            'proxy-type': 'http',
-            'proxy-auth': 'username:password'
-        }
-    }
-});
-```
-
-These match PhantomJS [command-line parameters][phantom-cli]. `proxy-type` can be set to `http`, `socks5`, or `none`.
-
-### How can I simulate a user interaction before running Pa11y?
-
-For simple interactions, we recommend using [actions](#actions). For more complex interactions, use the `beforeScript` option either in your JS code or in your config file to simulate the interactions before running Pa11y.
-
-In this example, additional content is loaded via ajax when a button is clicked.
-Once the content is loaded the `aria-hidden` attribute switches from `true` to `false`.
-
-```js
-pa11y({
-	beforeScript: function(page, options, next) {
-		var waitUntil = function(condition, retries, waitOver) {
-			page.evaluate(condition, function(error, result) {
-				if (result || retries < 1) {
-					waitOver();
-				} else {
-					retries -= 1;
-					setTimeout(function() {
-						waitUntil(condition, retries, waitOver);
-					}, 200);
-				}
-			});
-		};
-
-		page.evaluate(function() {
-			var ajaxButton = document.querySelector('#loadContent');
-			var dynamicContent = document.querySelector('#content');
-
-			ajaxButton.click();
-
-		}, function() {
-
-			waitUntil(function() {
-				return dynamicContent.getAttribute('aria-hidden') === 'false';
-			}, 20, next);
-		});
-	}
-});
-```
-
-### Why does Pa11y give different results to HTML CodeSniffer bookmarklet ?
-
-Pa11y uses PhantomJS as a headless web browser to load the DOM content and can only analyze what is provided.
-If parts of the DOM are been loaded after the document is first generated, you may get results that differ from the bookmarklet which runs in the browser and can test against the complete DOM.
-
-If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
-
-We are aware of an issue with regard to iframe content, PhantomJS doesn't automatically provide access to the inner content of iframes, and so Pa11y doesn't currently support testing against iframe content from a parent page context.
-Any page that makes use of iframes, e.g. for displaying ads, may show different results on Pa11y than those when running HTML_CodeSniffer in the browser.
-
-If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
-
-
-### Is Pa11y testing the contrast of the hover state ?
-
-Pa11y doesn't check the hover state. Instead, you must test the contrast of the hover state for links manually.
+See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
 
 Contributing
@@ -856,10 +739,22 @@ Contributing
 
 There are many ways to contribute to Pa11y, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
 
-If you're ready to contribute some code, clone this repo locally and commit on a separate branch. Please write unit tests for your changes, and check that everything works by running the following before opening a pull-request:
+If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
+
+Please write unit tests for your code, and check that everything works by running the following before opening a <abbr title="pull request">PR</abbr>:
 
 ```sh
 make ci
+```
+
+You can also run verifications and tests individually:
+
+```sh
+make verify              # Verify all of the code (ESLint)
+make test                # Run all tests
+make test-unit           # Run the unit tests
+make test-unit-coverage  # Run the unit tests with coverage
+make test-integration    # Run the integration tests
 ```
 
 
@@ -893,7 +788,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [1.x]: https://github.com/pa11y/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
-[jscs]: http://jscs.info/
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
@@ -912,6 +806,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-4–7-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg

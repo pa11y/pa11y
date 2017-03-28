@@ -1,4 +1,3 @@
-/* eslint-disable one-var, max-len, max-statements */
 'use strict';
 
 var assert = require('proclaim');
@@ -694,7 +693,7 @@ describe('lib/action', function() {
 				describe('returned function', function() {
 
 					beforeEach(function(done) {
-						page.evaluate.reset();
+						page.evaluate.resetHistory();
 						returnedValue(done);
 					});
 
@@ -1060,7 +1059,7 @@ describe('lib/action', function() {
 				describe('handles negation appropriately', function() {
 
 					beforeEach(function(done) {
-						page.evaluate.reset();
+						page.evaluate.resetHistory();
 						matches = 'wait for url to not be https://portal.com/login'.match(action.match);
 						returnedValue = action.build({}, page, options, matches);
 						returnedValue(done);
@@ -1114,4 +1113,3 @@ describe('lib/action', function() {
 
 
 });
-/* eslint-enable one-var, max-len, max-statements */
