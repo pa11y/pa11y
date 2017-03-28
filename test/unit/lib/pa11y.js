@@ -70,7 +70,11 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should have an `ignore` property', function() {
-			assert.isArray(defaults.ignore);
+			assert.deepEqual(defaults.ignore, []);
+		});
+
+		it('should have a `rules` property', function() {
+			assert.deepEqual(defaults.rules, []);
 		});
 
 		it('should have a `log` property', function() {
