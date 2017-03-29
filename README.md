@@ -552,6 +552,18 @@ pa11y({
 ```
 Defaults to `null`, meaning the full document will be tested.
 
+### `rules` (array)
+
+An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: THese won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset](https://github.com/squizlabs/HTML_CodeSniffer/blob/master/Standards/WCAG2AAA/ruleset.js) .
+
+```js
+pa11y({
+    rules: [
+        'Principle1.Guideline1_3.1_3_1_AAA'
+    ]
+});
+```
+
 ### `screenCapture` (string)
 
 A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
