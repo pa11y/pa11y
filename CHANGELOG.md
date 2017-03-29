@@ -1,6 +1,25 @@
 
 # Changelog
 
+## 4.9.0 (2017-03-28)
+
+  * Add the ability to add additional WCAG rules to the selected standard
+  * Update dependencies
+    * async: ~1.4 to ^2.2.0
+    * bfj: ~1.2 to ^2.1.2
+    * chalk: ~1.1 to ^1.1.3
+    * commander: ~2.8 to ^2.9.0
+    * lower-case: ~1.1 to ^1.1.4
+    * node.extend: ~1.1 to ^1.1.6
+    * once: ~1.3 to ^1.4.0
+    * truffler: ~3.0 to ^3.0.1
+    * mocha: ^3 to ^3.2.0
+    * mockery: ~1.4 to ^2.0.0
+    * proclaim: ^3 to ^3.4.4
+    * sinon: ^1 to ^2.1.0
+  * Use the standard Pa11y lint config
+  * Update the tooling for consistency with other projects
+
 ## 4.8.0 (2017-03-17)
 
   * Add the `--environment` flag for easier debugging
