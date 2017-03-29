@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 4.9.0 (2017-03-28)
+## 4.9.0 (2017-03-29)
 
   * Add the ability to add additional WCAG rules to the selected standard
   * Update dependencies
