@@ -15,8 +15,8 @@ var test = pa11y({
 
 });
 
-// Test http://nature.com/
-test.run('nature.com', function(error, result) {
+// Test http://example.com/
+test.run('example.com', function(error, result) {
 	if (error) {
 		return console.error(error.message);
 	}

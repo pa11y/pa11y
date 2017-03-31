@@ -22,11 +22,11 @@ var test = pa11y({
 // https://github.com/caolan/async
 async.series({
 
-	// Test the Nature home page
-	home: test.run.bind(test, 'http://nature.com/'),
+	// Test the first url
+	home: test.run.bind(test, 'http://example.com/'),
 
-	// Test the Nature Plants home page
-	plants: test.run.bind(test, 'http://nature.com/nplants/')
+	// Test second url
+	plants: test.run.bind(test, 'http://example.com/otherpage/')
 
 }, function(error, results) {
 	if (error) {
