@@ -20,7 +20,7 @@ function reportResults(results) {
 }
 
 function buildCsv(results) {
-	return ['"type","code","message","context","selector"']
+	return [["type","code","message","context","selector"].join('\t')]
 		.concat(results.map(buildCsvRow))
 		.join('\n');
 }
