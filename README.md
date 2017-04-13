@@ -96,7 +96,7 @@ Usage: pa11y [options] <url>
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>      the reporter to use: cli (default), csv, html, json
+    -r, --reporter <reporter>      the reporter to use: cli (default), csv, tsv, html, json
     -l, --level <level>            the level of message to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of messages to ignore, a repeatable value or separated by semi-colons
@@ -132,6 +132,12 @@ Run a test with CSV reporting and save to a file:
 
 ```
 pa11y --reporter csv http://example.com > report.csv
+```
+
+Run a test with TSV reporting and save to a file:
+
+```
+pa11y --reporter tsv http://example.com > report.tsv
 ```
 
 Run Pa11y with the Section508 ruleset:
@@ -192,6 +198,7 @@ The command-line tool can report test results in a few different ways using the 
 
   - `cli`: output test results in a human-readable format
   - `csv`: output test results as comma-separated values
+  - `tsv`: output test results as tab-separated values
   - `html`: output test results as an HTML document
   - `json`: output test results as a JSON array
   - `markdown`: output test results as a Markdown document
@@ -291,7 +298,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 ]
 ```
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
+If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
 
 ```js
 // Assuming you've already run tests, and the results
