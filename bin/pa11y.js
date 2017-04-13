@@ -23,7 +23,7 @@ function configureProgram(program) {
 		)
 		.option(
 			'-r, --reporter <reporter>',
-			'the reporter to use: cli (default), csv, html, json',
+			'the reporter to use: cli (default), csv, tsv, html, json',
 			'cli'
 		)
 		.option(
