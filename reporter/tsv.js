@@ -6,7 +6,7 @@ module.exports = {
 	debug: emptyFunction,
 	info: emptyFunction,
 	results: reportResults,
-	process: buildCsv
+	process: buildTsv
 };
 
 function emptyFunction() {}
@@ -16,16 +16,16 @@ function reportError(message) {
 }
 
 function reportResults(results) {
-	console.log(buildCsv(results));
+	console.log(buildTsv(results));
 }
 
-function buildCsv(results) {
+function buildTsv(results) {
 	return [["type","code","message","context","selector"].join('\t')]
-		.concat(results.map(buildCsvRow))
+		.concat(results.map(buildTsvRow))
 		.join('\n');
 }
 
-function buildCsvRow(result) {
+function buildTsvRow(result) {
 	return [
 		JSON.stringify(result.type),
 		JSON.stringify(result.code),
