@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 4.10.0 (2017-04-18)
+
+  * Update example URLs across the project for clarity
+  * Add a TSV reporter
+
 ## 4.9.0 (2017-03-29)
 
   * Add the ability to add additional WCAG rules to the selected standard
