@@ -29,9 +29,9 @@
   },
   "devDependencies": {
     "eslint": "^3.18.0",
-    "istanbul": "^0.4",
     "mocha": "^2",
     "mockery": "^1",
+    "nyc": "^10.2.0",
     "pa11y-lint-config": "^1.0.0",
     "proclaim": "^3",
     "sinon": "^1",
