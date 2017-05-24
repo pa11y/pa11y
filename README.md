@@ -664,6 +664,7 @@ pa11y({
     ]
 });
 ```
+You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types. 
 
 ### Set Field Value
 
