@@ -16,6 +16,11 @@ If parts of the DOM are been loaded after the document is first generated, you m
 
 If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
 
+### Why does Pa11y give different results each time it runs?
+This could be a number of things, but indicates that the content of your page changes in some way on each load. If you include advertising on your page then you can expect to see differing results, and sometimes your JavaScript may not have had time to execute before the Pa11y test runs.
+
+To debug this, you can use the `--screen-capture` flag or [`screenCapture` option](https://github.com/pa11y/pa11y#screencapture-string) and compare the output for the differing test runs.
+
 ### Pa11y ignores the contents of iframes
 Pa11y doesn't currently support testing against iframe content from a parent page context. Any page that makes use of iframes, e.g. for displaying ads, may show different error, warning, and notice counts in Pa11y compared to the HTML_CodeSniffer browser bookmarklet.
 
