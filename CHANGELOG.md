@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.2.0 (2017-06-02)
+
+  * Add the ability to make Pa11y CI perform POST requests
+  * Documentation and linting updates
+
 ## 1.1.1 (2017-03-13)
 
   * Update readme to document `--sitemap-exclude`
