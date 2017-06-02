@@ -77,6 +77,25 @@ pa11y({
 
 You can also use the `beforeScript` option for this, but it can be complicated and error-prone. See the [`beforeScript` example][beforeScript] for more information.
 
+### How do I make Pa11y use POST requests?
+
+You can use a few `page.settings` options, either in your JS code or in your config file. The example below simulates submitting a form:
+
+```js
+pa11y({
+    page: {
+        settings: {
+            operation: 'POST',
+            encoding: 'utf8',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: 'greeting=hello&subject=world'
+        }
+    }
+});
+```
+
 ### How can I use Pa11y with a proxy server?
 
 Use the `phantom.parameters` option either in your JS code or in your config file:
