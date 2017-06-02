@@ -211,8 +211,8 @@ describe('lib/pa11y-ci', () => {
 
 			beforeEach(() => {
 
-				log.error.reset();
-				log.info.reset();
+				log.error = sinon.spy();
+				log.info = sinon.spy();
 
 				pa11y.mockTestRunner.run.reset();
 				pa11y.mockTestRunner.run.withArgs('foo-url').yieldsAsync(null, []);
@@ -252,8 +252,8 @@ describe('lib/pa11y-ci', () => {
 
 			beforeEach(() => {
 
-				log.error.reset();
-				log.info.reset();
+				log.error = sinon.spy();
+				log.info = sinon.spy();
 
 				userUrls = [
 					{
