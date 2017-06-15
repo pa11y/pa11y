@@ -26,6 +26,17 @@ Pa11y doesn't currently support testing against iframe content from a parent pag
 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
 
+### PhantomJS fails to run and returns exit code 127
+
+Pa11y spins up a PhantomJS instance to render the page, then injects HTML_Codesniffer into it and returns a report based on its findings. If PhantomJS cannot run due to broken executable, missing libraries or dependencies, or any other internal error that prevents it from running at all, it will return an exit code of 127.
+
+If this happens, running the phantomjs executable will usually provide more useful information, for example:
+
+```
+./node_modules/phantomjs/lib/phantom/bin/phantomjs: error while loading shared libraries: libfontconfig.so.1: cannot open shared object file: No such file or directory
+```
+
+We don't maintain PhantomJS, but there's a good chance someone has found the same problem before, so you can try to search in the PhantomJS repo for a solution. For example, for the error above, the fix would be to install the missing library, as shown in [phantomjs#10904](https://github.com/ariya/phantomjs/issues/10904) and [phantomjs#13597](https://github.com/ariya/phantomjs/issues/13597).
 
 Common Questions
 ----
