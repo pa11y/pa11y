@@ -712,7 +712,7 @@ describe('lib/action', function() {
 		});
 
 	});
-
+// FRANK
 	describe('wait-for action', function() {
 		var action;
 
@@ -827,20 +827,234 @@ describe('lib/action', function() {
 
 		describe('.build(browser, page, options, matches)', function() {
 			var matches;
+			var options;
 			var page;
 			var returnedValue;
 
 			beforeEach(function() {
+				options = {
+					log: {
+						debug: sinon.spy()
+					}
+				};
 				page = {
 					evaluate: sinon.stub().callsArgWithAsync(2, null, true)
 				};
 				matches = 'wait for element .foo to be added'.match(action.match);
-				returnedValue = action.build({}, page, {}, matches);
+				returnedValue = action.build({}, page, options, matches);
 			});
 
 			it('returns a function', function() {
 				assert.isFunction(returnedValue);
 			});
+
+			describe('returned function', function() {
+
+				beforeEach(function(done) {
+					returnedValue(done);
+				});
+
+				it('calls `page.evaluate` with a function and some action options', function() {
+					assert.calledOnce(page.evaluate);
+					assert.isFunction(page.evaluate.firstCall.args[0]);
+					assert.deepEqual(page.evaluate.firstCall.args[1], {
+						state: matches[4],
+						selector: matches[2]
+					});
+				});
+
+				it('logs that the program is waiting', function() {
+					assert.calledWith(options.log.debug, '  … waiting ("true")');
+				});
+
+				describe('evaluate function', function() {
+					var element;
+					var evaluateFunction;
+
+					beforeEach(function() {
+						evaluateFunction = page.evaluate.firstCall.args[0];
+					});
+
+					afterEach(function() {
+						delete global.window;
+					});
+
+					describe('when the state action option is "added"', function() {
+
+						beforeEach(function() {
+							evaluateFunction = page.evaluate.firstCall.args[0];
+							element = {};
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+							returnedValue = evaluateFunction({
+								state: 'added',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `true`', function() {
+							assert.isTrue(returnedValue);
+						});
+					}); // state "added"
+
+					describe('when the state action option is "removed"', function() {
+
+						beforeEach(function() {
+							evaluateFunction = page.evaluate.firstCall.args[0];
+							element = {};
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+							returnedValue = evaluateFunction({
+								state: 'removed',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `true`', function() {
+							assert.isTrue(returnedValue);
+						});
+					}); // state "removed"
+
+					describe('when the state action option is "added" but without element', function() {
+
+						beforeEach(function() {
+							evaluateFunction = page.evaluate.firstCall.args[0];
+							element = false;
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+							returnedValue = evaluateFunction({
+								state: 'added',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `false`', function() {
+							assert.isFalse(returnedValue);
+						});
+					}); // state "added" without element
+
+
+/*
+					describe('when the state action option is "removed" but without element', function() {
+
+						var caughtError;
+
+						beforeEach(function(done) {
+							evaluateFunction = page.evaluate.firstCall.args[0];
+							element = null;
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+
+							returnedValue = evaluateFunction({
+								state: 'removed',
+								selector: '.foo'
+							}, function() {
+								done();
+							});
+
+
+							//returnedValue(function(error) {
+							//	caughtError = error;
+							//	done();
+							//});
+
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `false`', function() {
+							assert.isFalse(returnedValue);
+						});
+
+						it('calls back with an error', function() {
+							assert.instanceOf(caughtError, Error);
+							assert.strictEqual(caughtError.message, 'Failed action: no element matching selector "foo"');
+						});
+
+					}); // state "removed" without element
+*/
+
+
+//////////////////////////////////////
+
+				}); // evaluate function
+
+				describe('when `page.evaluate` calls back with a result that doesn\'t match the expected value', function() {
+					beforeEach(function(done) {
+						sinon.stub(global, 'setTimeout').yieldsAsync();
+						page.evaluate.callsArgWithAsync(2, null, false);
+						page.evaluate.onCall(2).callsArgWithAsync(2, null, true);
+						returnedValue(done);
+					});
+
+					afterEach(function() {
+						global.setTimeout.restore();
+					});
+
+					it('sets a timeout', function() {
+						assert.called(global.setTimeout);
+						assert.isFunction(global.setTimeout.firstCall.args[0]);
+						assert.strictEqual(global.setTimeout.firstCall.args[1], 200);
+					});
+
+					it('calls page.evaluate until it calls back with the expected value', function() {
+						assert.calledThrice(page.evaluate);
+						assert.calledThrice(options.log.debug);
+						
+						/*
+						TODO
+						assert.calledWith(options.log.debug.firstCall, '  … waiting ("false")');
+						assert.calledWith(options.log.debug.secondCall, '  … waiting ("false")');
+						assert.calledWith(options.log.debug.thirdCall, '  … waiting ("true")');
+						*/
+					});
+
+				}); // evaluate with waiting
+
+
+			}); // returned function
+
+// FRANK3
+
+
 
 		});
 
@@ -1011,7 +1225,7 @@ describe('lib/action', function() {
 					afterEach(function() {
 						delete global.window;
 					});
-
+// FRANK2
 					describe('when the subject action option is "fragment"', function() {
 
 						beforeEach(function() {
