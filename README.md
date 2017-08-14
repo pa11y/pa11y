@@ -30,6 +30,10 @@ test.run('example.com', function (error, results) {
 
 ---
 
+## Latest news from Pa11y
+
+💭 We'd like to find out how you use Pa11y and what you think about it. Please [fill in our survey][survey] to let us know your thoughts!
+
 ✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
 ---
@@ -818,6 +822,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
+[survey]: https://goo.gl/forms/AiMDJR2IuaqX4iD03
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y
