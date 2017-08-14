@@ -189,7 +189,7 @@ or by using the flag multiple times:
 pa11y --ignore warning --ignore notice http://example.com
 ```
 
-Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
 
 ```
 pa11y --threshold 10 http://example.com
