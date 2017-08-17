@@ -64,7 +64,7 @@ Table Of Contents
 Requirements
 ------------
 
-Pa11y requires [Node.js][node] 4+ to run.
+Pa11y requires [Node.js][node] 8+ to run. If you need support for older versions of Node.js, then please use [Pa11y 4.x][4.x].
 
 ### OS X
 
@@ -676,7 +676,7 @@ pa11y({
     ]
 });
 ```
-You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types. 
+You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types.
 
 ### Set Field Value
 
@@ -831,7 +831,8 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
-| :heart:         | 4             | N/A                | 4+               | N/A              |
+| :heart:         | 5             | N/A                | 8+               | N/A              |
+| :heart:         | 4             | N/A                | 4–8              | N/A              |
 | :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
@@ -848,8 +849,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 
 
 [1.0-json-reporter]: https://github.com/pa11y/reporter-1.0-json
-[2.x]: https://github.com/pa11y/pa11y/tree/2.x
-[1.x]: https://github.com/pa11y/pa11y/tree/1.x
+[4.x]: https://github.com/pa11y/pa11y/tree/4.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
 [migration-5]: https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50
