@@ -18,6 +18,7 @@ matrix:
 branches:
   only:
     - master
+    - /^\d+\.x$/
     - /^\d+\.\d+\.\d+$/
 
 # Build script
