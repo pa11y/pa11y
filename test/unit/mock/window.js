@@ -1,9 +1,7 @@
-'use strict';
 
-var sinon = require('sinon');
+const sinon = require('sinon');
 
 module.exports = {
-	callPhantom: sinon.spy(),
 	document: {
 		documentElement: {
 			outerHTML: '<title>Foo</title>'

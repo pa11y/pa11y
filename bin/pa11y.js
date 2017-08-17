@@ -56,32 +56,17 @@ function configureProgram(program) {
 			'./pa11y.json'
 		)
 		.option(
-			'-p, --port <port>',
-			'the port to run PhantomJS on'
-		)
-		.option(
 			'-t, --timeout <ms>',
-			'the timeout in milliseconds'
+			'the timeout in milliseconds',
+			Number
 		)
 		.option(
 			'-w, --wait <ms>',
 			'the time to wait before running tests in milliseconds'
 		)
 		.option(
-			'-v, --verify-page <string>',
-			'HTML string to verify is present in the page source HTML'
-		)
-		.option(
 			'-d, --debug',
 			'output debug messages'
-		)
-		.option(
-			'-H, --htmlcs <url>',
-			'the URL or path to source HTML_CodeSniffer from'
-		)
-		.option(
-			'-e, --phantomjs <path>',
-			'the path to the phantomjs executable'
 		)
 		.option(
 			'-S, --screen-capture <path>',
@@ -97,7 +82,7 @@ function configureProgram(program) {
 	program.url = program.args[0];
 }
 
-function runProgram(program) {
+async function runProgram(program) {
 	if (program.environment) {
 		outputEnvironmentInfo();
 		process.exit(0);
@@ -108,19 +93,13 @@ function runProgram(program) {
 	var options = processOptions(program);
 	options.log.begin(program.url);
 	try {
-		var test = pa11y(options);
-		test.run(program.url, function(error, results) {
-			if (error) {
-				options.log.error(error.stack);
-				process.exit(1);
-			}
-			if (reportShouldFail(program.level, results, program.threshold)) {
-				process.once('exit', function() {
-					process.exit(2);
-				});
-			}
-			options.log.results(results, program.url);
-		});
+		const pa11yReport = await pa11y(program.url, options);
+		if (reportShouldFail(program.level, pa11yReport.messages, program.threshold)) {
+			process.once('exit', function() {
+				process.exit(2);
+			});
+		}
+		options.log.results(pa11yReport.messages, program.url);
 	} catch (error) {
 		options.log.error(error.stack);
 		process.exit(1);
@@ -128,27 +107,16 @@ function runProgram(program) {
 }
 
 function processOptions(program) {
-	var options = extend(true, {}, loadConfig(program.config), {
+	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
-		htmlcs: program.htmlcs,
-		ignore: program.ignore,
+		ignore: (program.ignore.length ? program.ignore : undefined),
 		log: loadReporter(program.reporter),
-		page: {
-			settings: {
-				resourceTimeout: program.timeout
-			}
-		},
-		phantom: {
-			path: program.phantomjs,
-			port: program.port
-		},
 		rootElement: program.rootElement,
-		rules: program.addRule,
+		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
 		timeout: program.timeout,
-		wait: program.wait,
-		verifyPage: program.verifyPage
+		wait: program.wait
 	});
 
 	if (!program.debug) {
@@ -219,7 +187,6 @@ function outputEnvironmentInfo() {
 		pa11y: pkg.version,
 		node: process.version.replace('v', ''),
 		npm: '[unavailable]',
-		phantom: require('phantomjs-prebuilt').version,
 		os: require('os').release()
 	};
 	try {
@@ -229,6 +196,5 @@ function outputEnvironmentInfo() {
 	console.log('Pa11y:      ' + versions.pa11y);
 	console.log('Node.js:    ' + versions.node);
 	console.log('npm:        ' + versions.npm);
-	console.log('PhantomJS:  ' + versions.phantom);
 	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
 }

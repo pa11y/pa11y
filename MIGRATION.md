@@ -13,6 +13,24 @@ Table Of Contents
 - [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
 
 
+Migrating from 4.0 to 5.0
+-------------------------
+
+TEMPORARY LIST
+
+- rename page.settings.userAgent option to userAgent
+- rename page.headers option to headers
+- rename page.viewport option to viewport
+- remove page option
+- remove phantom option
+- remove allowedStandards option and CLI flag
+- remove verifyPage option and CLI flag
+- remove htmlcs option and CLI flag (maybe I have to add this back)
+- remove port CLI flag
+- scheme is required in URL now (might stop this)
+- default viewport is now width: 1280x1024
+
+
 Migrating from 3.0 to 4.0
 -------------------------
 

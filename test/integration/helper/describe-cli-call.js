@@ -16,7 +16,7 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 			that.lastOutput = '';
 			environment = extend(true, environment, process.env);
 
-			cliArguments.push('localhost:' + this.port + urlPath);
+			cliArguments.push('http://localhost:' + this.port + urlPath);
 			if (cliArguments.indexOf('--reporter') === -1 && cliArguments.indexOf('-r') === -1) {
 				cliArguments.push('--reporter', 'json');
 			}
