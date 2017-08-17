@@ -21,7 +21,7 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 				cliArguments.push('--reporter', 'json');
 			}
 
-			var child = spawn('../../bin/pa11y', cliArguments, {
+			var child = spawn('../../bin/pa11y.js', cliArguments, {
 				cwd: path.resolve(__dirname, '../'),
 				env: environment
 			});
