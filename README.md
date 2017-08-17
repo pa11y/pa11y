@@ -29,6 +29,7 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
   - [Default configuration](#default-configuration)
   - [URL configuration](#url-configuration)
   - [Sitemaps](#sitemaps)
+- [Tutorials and articles](#tutorials-and-articles)  
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -144,6 +145,13 @@ pa11y-ci --sitemap http://pa11y.org/sitemap.xml --sitemap-find pa11y.org --sitem
 The above would ensure that you run Pa11y CI against local URLs instead of the live site.
 
 If there are items in the sitemap that you'd like to exclude from the testing (for example PDFs) you can do so using the `--sitemap-exclude` flag.
+
+
+## Tutorials and articles
+
+Here are some useful articles written by Pa11y users and contributors:
+
+- [Automated accessibility testing with Travis and Pa11y CI](http://cruft.io/posts/automated-accessibility-testing-node-travis-ci-pa11y/)
 
 
 ## Contributing
