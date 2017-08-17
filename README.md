@@ -28,7 +28,7 @@ test.run('example.com', function (error, results) {
 });
 ```
 
-Need a GUI? Try [Koally](https://open-indy.github.io/Koa11y/)!
+Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
 
 ---
 
