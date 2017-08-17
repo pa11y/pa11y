@@ -1,6 +1,0 @@
-#!/usr/bin/env node
-'use strict';
-
-// This file is left in for backwards compatibility
-// It just aliases pa11y.js in the same folder
-require('./pa11y.js');
