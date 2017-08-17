@@ -28,6 +28,8 @@ test.run('example.com', function (error, results) {
 });
 ```
 
+Need a GUI? Try [Koally](https://open-indy.github.io/Koa11y/)!
+
 ---
 
 ## Latest news from Pa11y
@@ -49,6 +51,7 @@ Table Of Contents
 - [Actions](#actions)
 - [Examples](#examples)
 - [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
+- [Tutorials and articles](#tutorials-and-articles)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [License](#license)
@@ -757,6 +760,16 @@ Common Questions and Troubleshooting
 ------------------------------------
 
 See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
+
+
+Tutorials and articles
+------------------------------------
+
+Here are some useful articles written by Pa11y users and contributors:
+
+- [Accessibility Testing with Pa11y](https://bitsofco.de/pa11y/)
+- [Using actions in Pa11y](http://hollsk.co.uk/posts/view/using-actions-in-pa11y)
+- [Introduction to Accessibility Testing With Pa11y](http://cruft.io/posts/accessibility-testing-with-pa11y/)
 
 
 Contributing
