@@ -1,5 +1,6 @@
 
 const assert = require('proclaim');
+const createMockElement = require('../mock/element');
 const sinon = require('sinon');
 
 describe('lib/action', () => {
@@ -391,7 +392,7 @@ describe('lib/action', () => {
 				let originalDocument;
 
 				beforeEach(async () => {
-					mockElement = {};
+					mockElement = createMockElement();
 					originalDocument = global.document;
 					global.document = {
 						querySelector: sinon.stub().returns(mockElement)
@@ -878,11 +879,7 @@ describe('lib/action', () => {
 				let returnValue;
 
 				beforeEach(() => {
-					mockElement = {
-						offsetWidth: 0,
-						offsetHeight: 0,
-						getClientRects: sinon.stub().returns([])
-					};
+					mockElement = createMockElement();
 					originalDocument = global.document;
 					global.document = {
 						querySelector: sinon.stub().returns(null)

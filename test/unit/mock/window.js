@@ -7,7 +7,8 @@ module.exports = {
 			outerHTML: '<title>Foo</title>'
 		},
 		querySelector: sinon.stub().returns(null),
-		querySelectorAll: sinon.stub().returns([])
+		querySelectorAll: sinon.stub().returns([]),
+		title: 'mock-title'
 	},
 	/* eslint-disable camelcase */
 	HTMLCS: {
@@ -15,9 +16,13 @@ module.exports = {
 		process: sinon.stub().yieldsAsync()
 	},
 	HTMLCS_Section508: {
-		sniffs: []
+		sniffs: [
+			{
+				include: []
+			}
+		]
 	},
-	HTMLCS_WCAG2AA: {
+	'HTMLCS_mock-standard': {
 		sniffs: [
 			{
 				include: []
@@ -25,7 +30,13 @@ module.exports = {
 		]
 	},
 	HTMLCS_WCAG2AAA: {
-		sniffs: ['Principle1.Guideline1_3.1_3_1_AAA']
+		sniffs: [
+			'mock-sniff-1',
+			'mock-sniff-2'
+		]
+	},
+	Node: {
+		ELEMENT_NODE: 1
 	}
 	/* eslint-enable camelcase */
 };
