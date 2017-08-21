@@ -70,7 +70,11 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should have an `ignore` property', function() {
-			assert.isArray(defaults.ignore);
+			assert.deepEqual(defaults.ignore, []);
+		});
+
+		it('should have a `rules` property', function() {
+			assert.deepEqual(defaults.rules, []);
 		});
 
 		it('should have a `log` property', function() {
@@ -445,7 +449,8 @@ describe('lib/pa11y', function() {
 				standard: 'Section508',
 				wait: 0,
 				verifyPage: null,
-				rootElement: null
+				rootElement: null,
+				rules: []
 			});
 			assert.isFunction(phantom.mockPage.evaluate.firstCall.args[2]);
 		});

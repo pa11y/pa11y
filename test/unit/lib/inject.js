@@ -13,7 +13,8 @@ describe('lib/inject', function() {
 			ignore: [],
 			rootElement: null,
 			standard: 'FOO-STANDARD',
-			wait: 0
+			wait: 0,
+			rules: []
 		};
 		inject = require('../../../lib/inject');
 	});
@@ -563,4 +564,39 @@ describe('lib/inject', function() {
 
 	});
 
+	describe('addRule flag', function() {
+		it('should not be taken into account when the set standard is Section508', function(done) {
+			options.standard = 'Section508';
+			options.rules = ['Principle1.Guideline1_3.1_3_1_AAA'];
+
+			inject(window, options, function(result) {
+				assert.isUndefined(result.error);
+				assert.isUndefined(window.HTMLCS_Section508.sniffs.include);
+				assert.lengthEquals(window.HTMLCS_Section508.sniffs, 0);
+				done();
+			});
+		});
+
+		it('should add the rule to the current HTMLCS standard when the rule is valid', function(done) {
+			options.standard = 'WCAG2AA';
+			options.rules = ['Principle1.Guideline1_3.1_3_1_AAA'];
+
+			inject(window, options, function() {
+				assert.isDefined(window.HTMLCS_WCAG2AA.sniffs[0].include);
+				assert.lengthEquals(window.HTMLCS_WCAG2AA.sniffs[0].include, 1);
+				done();
+			});
+		});
+
+		it('should error when the rule is invalid', function(done) {
+			options.standard = 'WCAG2AA';
+			options.rules = ['Principle1.Guideline1_3.1_3_1_AA'];
+
+			inject(window, options, function(result) {
+				assert.isDefined(result.error);
+				assert.strictEqual(result.error, 'Principle1.Guideline1_3.1_3_1_AA is not a valid WCAG 2.0 rule');
+				done();
+			});
+		});
+	});
 });

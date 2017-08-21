@@ -23,7 +23,7 @@ function configureProgram(program) {
 		)
 		.option(
 			'-r, --reporter <reporter>',
-			'the reporter to use: cli (default), csv, html, json',
+			'the reporter to use: cli (default), csv, tsv, html, json',
 			'cli'
 		)
 		.option(
@@ -39,7 +39,7 @@ function configureProgram(program) {
 		.option(
 			'-i, --ignore <ignore>',
 			'types and codes of messages to ignore, a repeatable value or separated by semi-colons',
-			collectIgnoreOptions,
+			collectOptions,
 			[]
 		)
 		.option(
@@ -86,6 +86,12 @@ function configureProgram(program) {
 		.option(
 			'-S, --screen-capture <path>',
 			'a path to save a screen capture of the page to'
+		)
+		.option(
+			'-A, --add-rule <rule>',
+			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons',
+			collectOptions,
+			[]
 		)
 		.parse(process.argv);
 	program.url = program.args[0];
@@ -137,6 +143,7 @@ function processOptions(program) {
 			port: program.port
 		},
 		rootElement: program.rootElement,
+		rules: program.addRule,
 		screenCapture: program.screenCapture,
 		standard: program.standard,
 		timeout: program.timeout,
@@ -203,7 +210,7 @@ function isWarningOrError(result) {
 	return (result.type === 'warning' || result.type === 'error');
 }
 
-function collectIgnoreOptions(val, array) {
+function collectOptions(val, array) {
 	return array.concat(val.split(';'));
 }
 
