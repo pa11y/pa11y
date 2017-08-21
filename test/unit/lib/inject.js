@@ -1,13 +1,12 @@
-'use strict';
 
-var assert = require('proclaim');
+const assert = require('proclaim');
 
-describe('lib/inject', function() {
-	var inject;
-	var options;
-	var window;
+describe('lib/inject', () => {
+	let inject;
+	let options;
+	let window;
 
-	beforeEach(function() {
+	beforeEach(() => {
 		window = require('../mock/window');
 		options = {
 			ignore: [],
@@ -19,19 +18,19 @@ describe('lib/inject', function() {
 		inject = require('../../../lib/inject');
 	});
 
-	it('should be a function', function() {
+	it('should be a function', () => {
 		assert.isFunction(inject);
 	});
 
-	it('should process the page with HTML CodeSniffer', function(done) {
-		inject(window, options, function() {
+	it('should process the page with HTML CodeSniffer', done => {
+		inject(window, options, () => {
 			assert.calledOnce(window.HTMLCS.process);
 			assert.calledWith(window.HTMLCS.process, 'FOO-STANDARD', window.document);
 			done();
 		});
 	});
 
-	it('should return result with messages and documentTitle properties', function(done) {
+	it('should return result with messages and documentTitle properties', done => {
 		window.HTMLCS.getMessages.returns([]);
 		inject(window, options, function(result) {
 			assert.isDefined(result.messages);
@@ -40,7 +39,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should ignore messages when they are a child of `options.hideElements`', function(done) {
+	it('should ignore messages when they are a child of `options.hideElements`', done => {
 		options.hideElements = '.hide';
 		window.document.querySelectorAll.returns([
 			{
@@ -52,7 +51,7 @@ describe('lib/inject', function() {
 				code: 'foo-code',
 				element: {
 					parentNode: null,
-					isEqualNode: function() {
+					isEqualNode: () => {
 						return false;
 					},
 					innerHTML: 'outside hideElements',
@@ -65,11 +64,11 @@ describe('lib/inject', function() {
 				code: 'foo-code',
 				element: {
 					parentNode: {
-						isEqualNode: function() {
+						isEqualNode: () => {
 							return true;
 						}
 					},
-					isEqualNode: function() {
+					isEqualNode: () => {
 						return false;
 					},
 					innerHTML: 'inside hideElements',
@@ -95,7 +94,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should ignore messages when the element is in `options.hideElements`', function(done) {
+	it('should ignore messages when the element is in `options.hideElements`', done => {
 		options.hideElements = '#hide,.hidden';
 		window.document.querySelectorAll.returns([
 			{
@@ -114,7 +113,7 @@ describe('lib/inject', function() {
 				code: 'foo-code',
 				element: {
 					parentNode: null,
-					isEqualNode: function() {
+					isEqualNode: () => {
 						return true;
 					},
 					innerHTML: 'Is a hidden Element',
@@ -127,7 +126,7 @@ describe('lib/inject', function() {
 				code: 'foo-code',
 				element: {
 					parentNode: null,
-					isEqualNode: function() {
+					isEqualNode: () => {
 						return true;
 					},
 					innerHTML: 'Is a hidden Element',
@@ -140,7 +139,7 @@ describe('lib/inject', function() {
 				code: 'foo-code',
 				element: {
 					parentNode: null,
-					isEqualNode: function() {
+					isEqualNode: () => {
 						return false;
 					},
 					innerHTML: 'Is a NOT hidden Element',
@@ -166,19 +165,19 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should wait before processing the page if `options.wait` is set', function(done) {
+	it('should wait before processing the page if `options.wait` is set', done => {
 		// Note: this test isn't particularly reliable, revisit some time
-		var start = Date.now();
+		const start = Date.now();
 		options.wait = 10;
-		inject(window, options, function() {
-			var end = Date.now() - start;
+		inject(window, options, () => {
+			const end = Date.now() - start;
 			assert.greaterThanOrEqual(end, 10);
 			done();
 		});
 	});
 
-	it('should get the HTML CodeSniffer messages after processing the page', function(done) {
-		inject(window, options, function() {
+	it('should get the HTML CodeSniffer messages after processing the page', done => {
+		inject(window, options, () => {
 			assert.calledOnce(window.HTMLCS.getMessages);
 			assert.callOrder(
 				window.HTMLCS.process,
@@ -188,7 +187,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should callback with the messages reformatted for pa11y', function(done) {
+	it('should callback with the messages reformatted for pa11y', done => {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'foo-code',
@@ -250,7 +249,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should ignore messages when their code appears in `options.ignore`', function(done) {
+	it('should ignore messages when their code appears in `options.ignore`', done => {
 		options.ignore.push('foo-code');
 		window.HTMLCS.getMessages.returns([
 			{
@@ -288,7 +287,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should ignore messages when their type appears in `options.ignore`', function(done) {
+	it('should ignore messages when their type appears in `options.ignore`', done => {
 		options.ignore.push('warning');
 		window.HTMLCS.getMessages.returns([
 			{
@@ -326,7 +325,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should ignore messages when they are NOT a child of `options.rootElement`', function(done) {
+	it('should ignore messages when they are NOT a child of `options.rootElement`', done => {
 		options.rootElement = '[data-test=true]';
 		window.document.querySelector.returns('<element data-test="true">parent</element>');
 		window.HTMLCS.getMessages.returns([
@@ -367,7 +366,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should handle malformed messages and elements', function(done) {
+	it('should handle malformed messages and elements', done => {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'foo-code',
@@ -392,15 +391,15 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements with IDs', function(done) {
-		var element = {
+	it('should generate CSS selectors for elements with IDs', done => {
+		const element = {
 			id: 'foo',
 			nodeType: 1
 		};
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'foo-code',
-				element: element,
+				element,
 				msg: 'foo message',
 				type: 1
 			}
@@ -413,15 +412,15 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements with IDs', function(done) {
-		var element = {
+	it('should generate CSS selectors for elements with IDs', done => {
+		const element = {
 			id: 'foo',
 			nodeType: 1
 		};
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'code',
-				element: element,
+				element,
 				msg: 'message',
 				type: 1
 			}
@@ -434,8 +433,8 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements whose parents have IDs and are unique children', function(done) {
-		var element = {
+	it('should generate CSS selectors for elements whose parents have IDs and are unique children', done => {
+		const element = {
 			nodeType: 1,
 			tagName: 'BAR',
 			parentNode: {
@@ -457,7 +456,7 @@ describe('lib/inject', function() {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'code',
-				element: element,
+				element,
 				msg: 'message',
 				type: 1
 			}
@@ -470,8 +469,8 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements whose parents have IDs and are not unique children', function(done) {
-		var element = {
+	it('should generate CSS selectors for elements whose parents have IDs and are not unique children', done => {
+		const element = {
 			nodeType: 1,
 			tagName: 'BAR',
 			parentNode: {
@@ -493,7 +492,7 @@ describe('lib/inject', function() {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'code',
-				element: element,
+				element,
 				msg: 'message',
 				type: 1
 			}
@@ -506,8 +505,8 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should generate CSS selectors for elements whose parents have no IDs', function(done) {
-		var element = {
+	it('should generate CSS selectors for elements whose parents have no IDs', done => {
+		const element = {
 			nodeType: 1,
 			tagName: 'BAR',
 			parentNode: {
@@ -521,7 +520,7 @@ describe('lib/inject', function() {
 		window.HTMLCS.getMessages.returns([
 			{
 				code: 'code',
-				element: element,
+				element,
 				msg: 'message',
 				type: 1
 			}
@@ -534,7 +533,7 @@ describe('lib/inject', function() {
 		});
 	});
 
-	it('should callback with an error message if HTML CodeSniffer throws', function(done) {
+	it('should callback with an error message if HTML CodeSniffer throws', done => {
 		window.HTMLCS.process.throws(new Error('Oopsie'));
 		inject(window, options, function(result) {
 			assert.isDefined(result.error);
@@ -543,9 +542,9 @@ describe('lib/inject', function() {
 		});
 	});
 
-	describe('verifyPage flag', function() {
+	describe('verifyPage flag', () => {
 
-		it('should not error when verifyPage value exists in HTML', function(done) {
+		it('should not error when verifyPage value exists in HTML', done => {
 			options.verifyPage = '<title>Foo</title>';
 			inject(window, options, function(result) {
 				assert.isUndefined(result.error);
@@ -553,7 +552,7 @@ describe('lib/inject', function() {
 			});
 		});
 
-		it('should error when verifyPage value does not exist in HTML', function(done) {
+		it('should error when verifyPage value does not exist in HTML', done => {
 			options.verifyPage = '<title>Bar</title>';
 			inject(window, options, function(result) {
 				assert.isDefined(result.error);
@@ -564,8 +563,8 @@ describe('lib/inject', function() {
 
 	});
 
-	describe('addRule flag', function() {
-		it('should not be taken into account when the set standard is Section508', function(done) {
+	describe('addRule flag', () => {
+		it('should not be taken into account when the set standard is Section508', done => {
 			options.standard = 'Section508';
 			options.rules = ['Principle1.Guideline1_3.1_3_1_AAA'];
 
@@ -577,18 +576,18 @@ describe('lib/inject', function() {
 			});
 		});
 
-		it('should add the rule to the current HTMLCS standard when the rule is valid', function(done) {
+		it('should add the rule to the current HTMLCS standard when the rule is valid', done => {
 			options.standard = 'WCAG2AA';
 			options.rules = ['Principle1.Guideline1_3.1_3_1_AAA'];
 
-			inject(window, options, function() {
+			inject(window, options, () => {
 				assert.isDefined(window.HTMLCS_WCAG2AA.sniffs[0].include);
 				assert.lengthEquals(window.HTMLCS_WCAG2AA.sniffs[0].include, 1);
 				done();
 			});
 		});
 
-		it('should error when the rule is invalid', function(done) {
+		it('should error when the rule is invalid', done => {
 			options.standard = 'WCAG2AA';
 			options.rules = ['Principle1.Guideline1_3.1_3_1_AA'];
 

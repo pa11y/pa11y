@@ -1,10 +1,9 @@
-'use strict';
 
-var assert = require('proclaim');
-var sinon = require('sinon');
+const assert = require('proclaim');
+const sinon = require('sinon');
 
 describe('lib/action', function() {
-	var buildAction;
+	let buildAction;
 
 	beforeEach(function() {
 		buildAction = require('../../../lib/action');
@@ -23,12 +22,12 @@ describe('lib/action', function() {
 	});
 
 	describe('buildAction(browser, page, options, actionString)', function() {
-		var browser;
-		var mockActionRunner1;
-		var mockActionRunner2;
-		var options;
-		var page;
-		var returnedValue;
+		let browser;
+		let mockActionRunner1;
+		let mockActionRunner2;
+		let options;
+		let page;
+		let returnedValue;
 
 		beforeEach(function() {
 			browser = {
@@ -58,7 +57,7 @@ describe('lib/action', function() {
 		});
 
 		it('calls the build function that matches the given `actionString`', function() {
-			var action = buildAction.allowedActions[1];
+			const action = buildAction.allowedActions[1];
 			assert.notCalled(buildAction.allowedActions[0].build);
 			assert.calledOnce(action.build);
 			assert.calledWith(action.build, browser, page, options);
@@ -101,7 +100,7 @@ describe('lib/action', function() {
 			});
 
 			describe('returned function', function() {
-				var caughtError;
+				let caughtError;
 
 				beforeEach(function(done) {
 					returnedValue(function(error) {
@@ -132,7 +131,7 @@ describe('lib/action', function() {
 		});
 
 		describe('when the action runner calls back with an error', function() {
-			var actionRunnerError;
+			let actionRunnerError;
 
 			beforeEach(function() {
 				options.log.debug.reset();
@@ -143,7 +142,7 @@ describe('lib/action', function() {
 			});
 
 			describe('returned function', function() {
-				var caughtError;
+				let caughtError;
 
 				beforeEach(function(done) {
 					returnedValue(function(error) {
@@ -195,7 +194,7 @@ describe('lib/action', function() {
 	});
 
 	describe('click-element action', function() {
-		var action;
+		let action;
 
 		beforeEach(function() {
 			action = buildAction.allowedActions.find(function(allowedAction) {
@@ -238,9 +237,9 @@ describe('lib/action', function() {
 		});
 
 		describe('.build(browser, page, options, matches)', function() {
-			var matches;
-			var page;
-			var returnedValue;
+			let matches;
+			let page;
+			let returnedValue;
 
 			beforeEach(function() {
 				page = {
@@ -269,8 +268,8 @@ describe('lib/action', function() {
 				});
 
 				describe('evaluate function', function() {
-					var element;
-					var evaluateFunction;
+					let element;
+					let evaluateFunction;
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
@@ -325,7 +324,7 @@ describe('lib/action', function() {
 				});
 
 				describe('when `page.evaluate` calls back with a falsy result', function() {
-					var caughtError;
+					let caughtError;
 
 					beforeEach(function(done) {
 						page.evaluate.callsArgWithAsync(2, null, false);
@@ -350,7 +349,7 @@ describe('lib/action', function() {
 	});
 
 	describe('set-field-value action', function() {
-		var action;
+		let action;
 
 		beforeEach(function() {
 			action = buildAction.allowedActions.find(function(allowedAction) {
@@ -396,9 +395,9 @@ describe('lib/action', function() {
 		});
 
 		describe('.build(browser, page, options, matches)', function() {
-			var matches;
-			var page;
-			var returnedValue;
+			let matches;
+			let page;
+			let returnedValue;
 
 			beforeEach(function() {
 				page = {
@@ -428,8 +427,8 @@ describe('lib/action', function() {
 				});
 
 				describe('evaluate function', function() {
-					var element;
-					var evaluateFunction;
+					let element;
+					let evaluateFunction;
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
@@ -484,7 +483,7 @@ describe('lib/action', function() {
 				});
 
 				describe('when `page.evaluate` calls back with a falsy result', function() {
-					var caughtError;
+					let caughtError;
 
 					beforeEach(function(done) {
 						page.evaluate.callsArgWithAsync(2, null, false);
@@ -509,7 +508,7 @@ describe('lib/action', function() {
 	});
 
 	describe('check-field action', function() {
-		var action;
+		let action;
 
 		beforeEach(function() {
 			action = buildAction.allowedActions.find(function(allowedAction) {
@@ -555,9 +554,9 @@ describe('lib/action', function() {
 		});
 
 		describe('.build(browser, page, options, matches)', function() {
-			var matches;
-			var page;
-			var returnedValue;
+			let matches;
+			let page;
+			let returnedValue;
 
 			beforeEach(function() {
 				page = {
@@ -587,8 +586,8 @@ describe('lib/action', function() {
 				});
 
 				describe('evaluate function', function() {
-					var element;
-					var evaluateFunction;
+					let element;
+					let evaluateFunction;
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
@@ -663,7 +662,7 @@ describe('lib/action', function() {
 				});
 
 				describe('when `page.evaluate` calls back with a falsy result', function() {
-					var caughtError;
+					let caughtError;
 
 					beforeEach(function(done) {
 						page.evaluate.callsArgWithAsync(2, null, false);
@@ -1158,7 +1157,7 @@ describe('lib/action', function() {
 	});
 
 	describe('wait-for-url action', function() {
-		var action;
+		let action;
 
 		beforeEach(function() {
 			action = buildAction.allowedActions.find(function(allowedAction) {
@@ -1263,10 +1262,10 @@ describe('lib/action', function() {
 		});
 
 		describe('.build(browser, page, options, matches)', function() {
-			var matches;
-			var options;
-			var page;
-			var returnedValue;
+			let matches;
+			let options;
+			let page;
+			let returnedValue;
 
 			beforeEach(function() {
 				options = {
@@ -1306,7 +1305,7 @@ describe('lib/action', function() {
 				});
 
 				describe('evaluate function', function() {
-					var evaluateFunction;
+					let evaluateFunction;
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];

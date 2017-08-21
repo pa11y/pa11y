@@ -17,7 +17,9 @@ describe.only('lib/pa11y', () => {
 		pa11yResults = {
 			mockResults: true
 		};
+		/* eslint-disable no-underscore-dangle */
 		global._runPa11y = sinon.stub().returns(pa11yResults);
+		/* eslint-enable no-underscore-dangle */
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
@@ -37,7 +39,9 @@ describe.only('lib/pa11y', () => {
 	});
 
 	afterEach(() => {
+		/* eslint-disable no-underscore-dangle */
 		delete global._runPa11y;
+		/* eslint-enable no-underscore-dangle */
 	});
 
 	it('is a function', () => {
@@ -132,8 +136,10 @@ describe.only('lib/pa11y', () => {
 			});
 
 			it('calls `_runPa11y` with the passed in options', () => {
+				/* eslint-disable no-underscore-dangle */
 				assert.calledOnce(global._runPa11y);
 				assert.calledWithExactly(global._runPa11y, options);
+				/* eslint-enable no-underscore-dangle */
 			});
 
 			it('returns the return value of `_runPa11y`', () => {
@@ -158,7 +164,7 @@ describe.only('lib/pa11y', () => {
 			beforeEach(async () => {
 				headlessChromeError = new Error('headless chrome error');
 				puppeteer.mockBrowser.close.reset();
-				puppeteer.mockPage.goto.rejects(headlessChromeError)
+				puppeteer.mockPage.goto.rejects(headlessChromeError);
 				try {
 					await pa11y('mock-url');
 				} catch (error) {
@@ -181,14 +187,13 @@ describe.only('lib/pa11y', () => {
 
 	describe('pa11y(options)', () => {
 		let options;
-		let resolvedValue;
 
 		beforeEach(async () => {
 			options = {
 				url: 'mock-url',
 				mockOptions: true
 			};
-			resolvedValue = await pa11y(options);
+			await pa11y(options);
 		});
 
 		it('defaults the options object with `pa11y.defaults`', () => {
@@ -303,13 +308,12 @@ describe.only('lib/pa11y', () => {
 
 	describe('pa11y(url, options)', () => {
 		let options;
-		let resolvedValue;
 
 		beforeEach(async () => {
 			options = {
 				mockOptions: true
 			};
-			resolvedValue = await pa11y('mock-url', options);
+			await pa11y('mock-url', options);
 		});
 
 		it('defaults the options object with `pa11y.defaults`', () => {

@@ -1,17 +1,17 @@
 'use strict';
 
-var fs = require('fs');
-var http = require('http');
-var parseUrl = require('url').parse;
-var path = require('path');
+const fs = require('fs');
+const http = require('http');
+const parseUrl = require('url').parse;
+const path = require('path');
 
 module.exports = startWebsite;
 
 function startWebsite(port, done) {
-	var website = http.createServer(function(request, response) {
-		var url = parseUrl(request.url).pathname;
+	const website = http.createServer((request, response) => {
+		const url = parseUrl(request.url).pathname;
 		try {
-			var html = fs.readFileSync(path.join(__dirname, '/html/' + url + '.html'), 'utf-8');
+			let html = fs.readFileSync(`${__dirname}/html/${url}.html`, 'utf-8');
 			html = html.replace('{foo-header}', request.headers.foo);
 			response.writeHead(200, {
 				'Content-Type': 'text/html'
@@ -22,7 +22,7 @@ function startWebsite(port, done) {
 			response.end('Not found');
 		}
 	});
-	website.listen(port, function(error) {
+	website.listen(port, error => {
 		done(error, website);
 	});
 }
