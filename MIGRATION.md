@@ -29,6 +29,10 @@ TEMPORARY LIST
 - remove port CLI flag
 - scheme is required in URL now (might stop this)
 - default viewport is now width: 1280x1024
+- everything is now promise based:
+  - main lib
+  - actions
+- remove beforeScript option
 
 
 Migrating from 3.0 to 4.0

@@ -4,7 +4,7 @@ const mockery = require('mockery');
 const path = require('path');
 const sinon = require('sinon');
 
-describe.only('lib/pa11y', () => {
+describe('lib/pa11y', () => {
 	let extend;
 	let pa11y;
 	let pa11yResults;

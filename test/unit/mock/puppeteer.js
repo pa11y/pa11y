@@ -11,13 +11,17 @@ const mockBrowser = puppeteer.mockBrowser = {
 };
 
 const mockPage = puppeteer.mockPage = {
+	click: sinon.stub().resolves(),
 	evaluate: sinon.stub().resolves(),
+	focus: sinon.stub().resolves(),
 	goto: sinon.stub().resolves(),
 	injectFile: sinon.stub().resolves(),
 	screenshot: sinon.stub().resolves(),
 	setExtraHTTPHeaders: sinon.stub().resolves(),
 	setUserAgent: sinon.stub().resolves(),
-	setViewport: sinon.stub().resolves()
+	setViewport: sinon.stub().resolves(),
+	type: sinon.stub().resolves(),
+	waitForFunction: sinon.stub().resolves()
 };
 
 puppeteer.launch.resolves(mockBrowser);
