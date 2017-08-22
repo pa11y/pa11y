@@ -31,28 +31,28 @@ describe('Pa11y CLI Selectors', function() {
 				typeCode: 1
 			});
 			assert.deepEqual(this.lastJsonResponse[2], {
-				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-				context: '<b>World</b>',
-				message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-				selector: 'html > body > p:nth-child(1) > b',
+				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H42',
+				context: '<p><b>Hello World!</b></p>',
+				message: 'Heading markup should be used if this content is intended as a heading.',
+				selector: 'html > body > p:nth-child(1)',
 				type: 'warning',
 				typeCode: 2
 			});
 			assert.deepEqual(this.lastJsonResponse[3], {
-				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-				context: '<b>foo</b>',
-				message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-				selector: '#foo > b',
+				code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H67.2',
+				context: '<img alt="">',
+				message: 'Img element is marked so that it is ignored by Assistive Technology.',
+				selector: '#foo > img',
 				type: 'warning',
 				typeCode: 2
 			});
 			assert.deepEqual(this.lastJsonResponse[4], {
-				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-				context: '<b id="bar">bar</b>',
-				message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-				selector: '#bar',
-				type: 'warning',
-				typeCode: 2
+				code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.G73,G74',
+				context: '<img alt="">',
+				message: 'If this image cannot be fully described in a short text alternative, ensure a long text alternative is also available, such as in the body text or through a link.',
+				selector: '#foo > img',
+				type: 'notice',
+				typeCode: 3
 			});
 		});
 
