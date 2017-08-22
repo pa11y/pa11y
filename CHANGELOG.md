@@ -1,6 +1,13 @@
 
 # Changelog
 
+## 4.11.0 (2017-06-02)
+
+  * Add the ability to make Pa11y perform POST requests
+  * Documentation improvements
+  * Update dependencies
+    * truffler: ^3.0.1 to ^3.1.0
+
 ## 4.10.0 (2017-04-18)
 
   * Update example URLs across the project for clarity

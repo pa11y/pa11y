@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -38,7 +38,7 @@
     "node.extend": "^1.1.6",
     "once": "^1.4.0",
     "phantomjs-prebuilt": "^2.1.12",
-    "truffler": "^3.0.1"
+    "truffler": "^3.1.0"
   },
   "devDependencies": {
     "eslint": "^3.18.0",

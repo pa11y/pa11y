@@ -28,7 +28,13 @@ test.run('example.com', function (error, results) {
 });
 ```
 
+Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
+
 ---
+
+## Latest news from Pa11y
+
+💭 We'd like to find out how you use Pa11y and what you think about it. Please [fill in our survey][survey] to let us know your thoughts!
 
 ✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
@@ -45,6 +51,7 @@ Table Of Contents
 - [Actions](#actions)
 - [Examples](#examples)
 - [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
+- [Tutorials and articles](#tutorials-and-articles)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [License](#license)
@@ -185,7 +192,7 @@ or by using the flag multiple times:
 pa11y --ignore warning --ignore notice http://example.com
 ```
 
-Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
 
 ```
 pa11y --threshold 10 http://example.com
@@ -664,6 +671,7 @@ pa11y({
     ]
 });
 ```
+You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types. 
 
 ### Set Field Value
 
@@ -754,6 +762,16 @@ Common Questions and Troubleshooting
 See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
 
+Tutorials and articles
+------------------------------------
+
+Here are some useful articles written by Pa11y users and contributors:
+
+- [Accessibility Testing with Pa11y](https://bitsofco.de/pa11y/)
+- [Using actions in Pa11y](http://hollsk.co.uk/posts/view/using-actions-in-pa11y)
+- [Introduction to Accessibility Testing With Pa11y](http://cruft.io/posts/accessibility-testing-with-pa11y/)
+
+
 Contributing
 ------------
 
@@ -817,6 +835,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
+[survey]: https://goo.gl/forms/AiMDJR2IuaqX4iD03
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y

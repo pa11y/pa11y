@@ -44,10 +44,10 @@ describe('Pa11y CLI Level', function() {
 				typeCode: 3
 			});
 			assert.deepEqual(this.lastJsonResponse[1], {
-				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-				context: '<b>World</b>',
-				message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-				selector: 'html > body > p > b',
+				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H42',
+				context: '<p><b>Hello World!</b></p>',
+				message: 'Heading markup should be used if this content is intended as a heading.',
+				selector: 'html > body > p',
 				type: 'warning',
 				typeCode: 2
 			});
@@ -81,10 +81,10 @@ describe('Pa11y CLI Level', function() {
 				typeCode: 1
 			});
 			assert.deepEqual(this.lastJsonResponse[2], {
-				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-				context: '<b>World</b>',
-				message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-				selector: 'html > body > p > b',
+				code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H42',
+				context: '<p><b>Hello World!</b></p>',
+				message: 'Heading markup should be used if this content is intended as a heading.',
+				selector: 'html > body > p',
 				type: 'warning',
 				typeCode: 2
 			});
