@@ -11,6 +11,7 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 		before(function(done) {
 
 			var that = this;
+			var child;
 			that.lastStdout = '';
 			that.lastStderr = '';
 			that.lastOutput = '';
@@ -21,7 +22,7 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 				cliArguments.push('--reporter', 'json');
 			}
 
-			var child = spawn('../../bin/pa11y', cliArguments, {
+			child = spawn('../../bin/pa11y', cliArguments, {
 				cwd: path.resolve(__dirname, '../'),
 				env: environment
 			});

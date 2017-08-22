@@ -20,7 +20,8 @@ var test = pa11y({
 	// beforeScript accepts three parameters, the page object, the pa11y options and a callback
 	beforeScript: function(page, options, next) {
 
-		// An example function that can be used to make sure changes have been confirmed before continuing to run Pa11y
+		// An example function that can be used to make sure changes have been confirmed
+		// before continuing to run Pa11y
 		function waitUntil(condition, retries, waitOver) {
 			page.evaluate(condition, function(error, result) {
 				if (result || retries < 1) {
@@ -35,7 +36,8 @@ var test = pa11y({
 			});
 		}
 
-		// The script to manipulate the page must be run with page.evaluate to be run within the context of the page
+		// The script to manipulate the page must be run with page.evaluate to be run
+		// within the context of the page
 		page.evaluate(function() {
 			var user = document.querySelector('#username');
 			var password = document.querySelector('#password');
