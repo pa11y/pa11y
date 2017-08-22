@@ -19,7 +19,9 @@ module.exports = {
 	process: emptyFunction
 };
 
+/* eslint-disable no-empty-function */
 function emptyFunction() {}
+/* eslint-enable no-empty-function */
 
 function reportBegin() {
 	console.log(chalk.cyan.underline('Welcome to Pa11y'));
