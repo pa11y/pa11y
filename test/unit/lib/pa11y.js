@@ -288,9 +288,6 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should build action functions if `options.action` is set, and call each of them in series', function(done) {
-			var builtAction1 = sinon.stub().yieldsAsync();
-			var builtAction2 = sinon.stub().yieldsAsync();
-
 			options = {
 				actions: [
 					'foo',
@@ -304,6 +301,8 @@ describe('lib/pa11y', function() {
 			truffler.reset();
 			pa11y(options);
 
+			var builtAction1 = sinon.stub().yieldsAsync();
+			var builtAction2 = sinon.stub().yieldsAsync();
 			buildAction.withArgs(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'foo').returns(builtAction1);
 			buildAction.withArgs(phantom.mockBrowser, phantom.mockPage, extend.secondCall.returnValue, 'bar').returns(builtAction2);
 
@@ -321,9 +320,6 @@ describe('lib/pa11y', function() {
 		});
 
 		it('should callback with an error if an action errors', function(done) {
-			var expectedError = new Error('...');
-			var builtAction = sinon.stub().yieldsAsync(expectedError);
-
 			options = {
 				actions: [
 					'foo'
@@ -336,6 +332,8 @@ describe('lib/pa11y', function() {
 			truffler.reset();
 			pa11y(options);
 
+			var expectedError = new Error('...');
+			var builtAction = sinon.stub().yieldsAsync(expectedError);
 			buildAction.returns(builtAction);
 
 			testFunction = truffler.firstCall.args[1];

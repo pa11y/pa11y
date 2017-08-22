@@ -1393,23 +1393,10 @@ describe('lib/action', function() {
 
 					});
 
-					describe('when the subject action option is "foobar"', function() {
-
-						beforeEach(function() {
-							returnedValue = evaluateFunction({
-								subject: 'foobar'
-							});
-						});
-
-						it('returns `window.location.href`', function() {
-							assert.strictEqual(returnedValue, undefined);
-						});
-
-					});
-
 				});
 
 				describe('handles negation appropriately', function() {
+
 					beforeEach(function(done) {
 						page.evaluate.resetHistory();
 						matches = 'wait for url to not be https://portal.com/login'.match(action.match);
@@ -1431,6 +1418,7 @@ describe('lib/action', function() {
 			});
 
 			describe('when `page.evaluate` calls back with a result that doesn\'t match the expected value', function() {
+
 				beforeEach(function(done) {
 					sinon.stub(global, 'setTimeout').yieldsAsync();
 					page.evaluate.callsArgWithAsync(2, null, 'bar');
