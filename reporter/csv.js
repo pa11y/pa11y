@@ -9,7 +9,9 @@ module.exports = {
 	process: buildCsv
 };
 
+/* eslint-disable no-empty-function */
 function emptyFunction() {}
+/* eslint-enable no-empty-function */
 
 function reportError(message) {
 	console.error(message);
