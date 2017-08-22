@@ -761,6 +761,13 @@ describe('lib/action', function() {
 					undefined,
 					'/foo'
 				]);
+				assert.deepEqual('wait for host to be example.com'.match(action.match), [
+					'wait for host to be example.com',
+					'host',
+					' to be',
+					undefined,
+					'example.com'
+				]);
 				assert.deepEqual('wait for url to be https://example.com/'.match(action.match), [
 					'wait for url to be https://example.com/',
 					'url',
@@ -795,6 +802,13 @@ describe('lib/action', function() {
 					' to not be',
 					'not ',
 					'https://example.com/login'
+				]);
+				assert.deepEqual('wait for host to not be example.com'.match(action.match), [
+					'wait for host to not be example.com',
+					'host',
+					' to not be',
+					'not ',
+					'example.com'
 				]);
 			});
 
@@ -917,6 +931,20 @@ describe('lib/action', function() {
 
 						it('returns `window.location.href`', function() {
 							assert.strictEqual(returnedValue, global.window.location.href);
+						});
+
+					});
+
+					describe('when the subject action option is "host"', function() {
+
+						beforeEach(function() {
+							returnedValue = evaluateFunction({
+								subject: 'host'
+							});
+						});
+
+						it('returns `window.location.host`', function() {
+							assert.strictEqual(returnedValue, global.window.location.host);
 						});
 
 					});
