@@ -11,6 +11,7 @@ describe('lib/pa11y', () => {
 	let pkg;
 	let promiseTimeout;
 	let puppeteer;
+	let runAction;
 
 	beforeEach(() => {
 
@@ -20,6 +21,9 @@ describe('lib/pa11y', () => {
 		/* eslint-disable no-underscore-dangle */
 		global._runPa11y = sinon.stub().returns(pa11yResults);
 		/* eslint-enable no-underscore-dangle */
+
+		runAction = require('../mock/action');
+		mockery.registerMock('./action', runAction);
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
@@ -300,6 +304,45 @@ describe('lib/pa11y', () => {
 					['foo', 'bar'],
 					['bar', 'baz']
 				]);
+			});
+
+		});
+
+		describe('when `options.actions` is set', () => {
+
+			beforeEach(async () => {
+				extend.reset();
+				options.actions = [
+					'mock-action-1',
+					'mock-action-2'
+				];
+				await pa11y(options);
+			});
+
+			it('calls runAction with each action', () => {
+				assert.calledTwice(runAction);
+				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-1');
+				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-2');
+			});
+
+			describe('when an action rejects', () => {
+				let actionError;
+				let rejectedError;
+
+				beforeEach(async () => {
+					actionError = new Error('action error');
+					runAction.rejects(actionError);
+					try {
+						await pa11y(options);
+					} catch (error) {
+						rejectedError = error;
+					}
+				});
+
+				it('rejects with the action error', () => {
+					assert.strictEqual(rejectedError, actionError);
+				});
+
 			});
 
 		});
