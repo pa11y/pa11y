@@ -13,7 +13,7 @@ Pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sn
 On the command line:
 
 ```sh
-pa11y nature.com
+pa11y example.com
 ```
 
 In JavaScript:
@@ -23,12 +23,18 @@ var pa11y = require('pa11y');
 
 var test = pa11y(options);
 
-test.run('nature.com', function (error, results) {
+test.run('example.com', function (error, results) {
     /* ... */
 });
 ```
 
+Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
+
 ---
+
+## Latest news from Pa11y
+
+💭 We'd like to find out how you use Pa11y and what you think about it. Please [fill in our survey][survey] to let us know your thoughts!
 
 ✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
@@ -45,6 +51,7 @@ Table Of Contents
 - [Actions](#actions)
 - [Examples](#examples)
 - [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
+- [Tutorials and articles](#tutorials-and-articles)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [License](#license)
@@ -96,7 +103,7 @@ Usage: pa11y [options] <url>
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>      the reporter to use: cli (default), csv, html, json
+    -r, --reporter <reporter>      the reporter to use: cli (default), csv, tsv, html, json
     -l, --level <level>            the level of message to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of messages to ignore, a repeatable value or separated by semi-colons
@@ -111,6 +118,7 @@ Usage: pa11y [options] <url>
     -H, --htmlcs <url>             the URL or path to source HTML_CodeSniffer from
     -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
+    -A, --add-rule <rule>          WCAG 2.0 rules from a different standard to include, a repeatable value or separated by semi-colons
 ```
 
 ### Running Tests
@@ -118,7 +126,7 @@ Usage: pa11y [options] <url>
 Run an accessibility test against a URL:
 
 ```
-pa11y http://nature.com
+pa11y http://example.com
 ```
 
 Run an accessibility test against a file (absolute paths only, not relative):
@@ -130,13 +138,19 @@ pa11y file:///path/to/your/file.html
 Run a test with CSV reporting and save to a file:
 
 ```
-pa11y --reporter csv http://nature.com > report.csv
+pa11y --reporter csv http://example.com > report.csv
+```
+
+Run a test with TSV reporting and save to a file:
+
+```
+pa11y --reporter tsv http://example.com > report.tsv
 ```
 
 Run Pa11y with the Section508 ruleset:
 
 ```
-pa11y --standard Section508 http://nature.com
+pa11y --standard Section508 http://example.com
 ```
 
 ### Exit Codes
@@ -159,7 +173,7 @@ By default, only accessibility issues with a type of `error` will exit with a co
 The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
 ```
-pa11y --config ./path/to/config.json http://nature.com
+pa11y --config ./path/to/config.json http://example.com
 ```
 
 For more information on configuring Pa11y, see the [configuration documentation](#configuration).
@@ -169,19 +183,19 @@ For more information on configuring Pa11y, see the [configuration documentation]
 The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```
-pa11y --ignore "warning;notice" http://nature.com
+pa11y --ignore "warning;notice" http://example.com
 ```
 
 or by using the flag multiple times:
 
 ```
-pa11y --ignore warning --ignore notice http://nature.com
+pa11y --ignore warning --ignore notice http://example.com
 ```
 
-Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 11 errors.
+Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
 
 ```
-pa11y --threshold 10 http://nature.com
+pa11y --threshold 10 http://example.com
 ```
 
 
@@ -191,6 +205,7 @@ The command-line tool can report test results in a few different ways using the 
 
   - `cli`: output test results in a human-readable format
   - `csv`: output test results as comma-separated values
+  - `tsv`: output test results as tab-separated values
   - `html`: output test results as an HTML document
   - `json`: output test results as a JSON array
   - `markdown`: output test results as a Markdown document
@@ -198,7 +213,7 @@ The command-line tool can report test results in a few different ways using the 
 You can also write and publish your own reporters. Pa11y looks for reporters in the core library, your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```
-pa11y --reporter rainbows http://nature.com
+pa11y --reporter rainbows http://example.com
 ```
 
 The following locations will be checked:
@@ -254,7 +269,7 @@ var test = pa11y(options);
 The `test.run` function can then be used to run your test function against a URL:
 
 ```js
-test.run('http://www.nature.com/', function(error, results) {
+test.run('http://www.example.com/', function(error, results) {
     // ...
 });
 ```
@@ -290,7 +305,7 @@ The results that get passed into your test callback come from HTML CodeSniffer, 
 ]
 ```
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
+If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
 
 ```js
 // Assuming you've already run tests, and the results
@@ -327,10 +342,10 @@ var test = pa11y({
 });
 
 // Run a test with the Foo header set to "bar"
-test.run('http://www.nature.com/', function(error, results) { /* ... */ });
+test.run('http://www.example.com/', function(error, results) { /* ... */ });
 
 // Run a test with the Foo header overridden
-test.run('http://www.nature.com/', {
+test.run('http://www.example.com/', {
     page: {
         headers: {
             Foo: 'hello'
@@ -551,6 +566,18 @@ pa11y({
 ```
 Defaults to `null`, meaning the full document will be tested.
 
+### `rules` (array)
+
+An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: THese won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset](https://github.com/squizlabs/HTML_CodeSniffer/blob/master/Standards/WCAG2AAA/ruleset.js) .
+
+```js
+pa11y({
+    rules: [
+        'Principle1.Guideline1_3.1_3_1_AAA'
+    ]
+});
+```
+
 ### `screenCapture` (string)
 
 A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
@@ -644,6 +671,7 @@ pa11y({
     ]
 });
 ```
+You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types. 
 
 ### Set Field Value
 
@@ -734,6 +762,16 @@ Common Questions and Troubleshooting
 See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
 
+Tutorials and articles
+------------------------------------
+
+Here are some useful articles written by Pa11y users and contributors:
+
+- [Accessibility Testing with Pa11y](https://bitsofco.de/pa11y/)
+- [Using actions in Pa11y](http://hollsk.co.uk/posts/view/using-actions-in-pa11y)
+- [Introduction to Accessibility Testing With Pa11y](http://cruft.io/posts/accessibility-testing-with-pa11y/)
+
+
 Contributing
 ------------
 
@@ -797,6 +835,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
+[survey]: https://goo.gl/forms/AiMDJR2IuaqX4iD03
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y

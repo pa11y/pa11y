@@ -16,11 +16,27 @@ If parts of the DOM are been loaded after the document is first generated, you m
 
 If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
 
+### Why does Pa11y give different results each time it runs?
+This could be a number of things, but indicates that the content of your page changes in some way on each load. If you include advertising on your page then you can expect to see differing results, and sometimes your JavaScript may not have had time to execute before the Pa11y test runs.
+
+To debug this, you can use the `--screen-capture` flag or [`screenCapture` option](https://github.com/pa11y/pa11y#screencapture-string) and compare the output for the differing test runs.
+
 ### Pa11y ignores the contents of iframes
 Pa11y doesn't currently support testing against iframe content from a parent page context. Any page that makes use of iframes, e.g. for displaying ads, may show different error, warning, and notice counts in Pa11y compared to the HTML_CodeSniffer browser bookmarklet.
 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
 
+### PhantomJS fails to run and returns exit code 127
+
+Pa11y spins up a PhantomJS instance to render the page, then injects HTML_Codesniffer into it and returns a report based on its findings. If PhantomJS cannot run due to broken executable, missing libraries or dependencies, or any other internal error that prevents it from running at all, it will return an exit code of 127.
+
+If this happens, running the phantomjs executable will usually provide more useful information, for example:
+
+```
+./node_modules/phantomjs/lib/phantom/bin/phantomjs: error while loading shared libraries: libfontconfig.so.1: cannot open shared object file: No such file or directory
+```
+
+We don't maintain PhantomJS, but there's a good chance someone has found the same problem before, so you can try to search in the PhantomJS repo for a solution. For example, for the error above, the fix would be to install the missing library, as shown in [phantomjs#10904](https://github.com/ariya/phantomjs/issues/10904) and [phantomjs#13597](https://github.com/ariya/phantomjs/issues/13597).
 
 Common Questions
 ----
@@ -71,6 +87,25 @@ pa11y({
 ```
 
 You can also use the `beforeScript` option for this, but it can be complicated and error-prone. See the [`beforeScript` example][beforeScript] for more information.
+
+### How do I make Pa11y use POST requests?
+
+You can use a few `page.settings` options, either in your JS code or in your config file. The example below simulates submitting a form:
+
+```js
+pa11y({
+    page: {
+        settings: {
+            operation: 'POST',
+            encoding: 'utf8',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: 'greeting=hello&subject=world'
+        }
+    }
+});
+```
 
 ### How can I use Pa11y with a proxy server?
 
