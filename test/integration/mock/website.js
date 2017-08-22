@@ -10,8 +10,9 @@ module.exports = startWebsite;
 function startWebsite(port, done) {
 	var website = http.createServer(function(request, response) {
 		var url = parseUrl(request.url).pathname;
+		var html;
 		try {
-			var html = fs.readFileSync(path.join(__dirname, '/html/' + url + '.html'), 'utf-8');
+			html = fs.readFileSync(path.join(__dirname, '/html/' + url + '.html'), 'utf-8');
 			html = html.replace('{foo-header}', request.headers.foo);
 			response.writeHead(200, {
 				'Content-Type': 'text/html'
