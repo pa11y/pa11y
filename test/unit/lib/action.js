@@ -849,15 +849,9 @@ describe('lib/action', function() {
 			});
 
 			describe('returned function', function() {
-				var caughtError;
-
 				beforeEach(function(done) {
-					returnedValue(function(error) {
-						caughtError = error;
-						done();
-					});
+					returnedValue(done);
 				});
-
 				it('calls `page.evaluate` with a function and some action options', function() {
 					assert.calledOnce(page.evaluate);
 					assert.isFunction(page.evaluate.firstCall.args[0]);
@@ -908,7 +902,7 @@ describe('lib/action', function() {
 						it('returns `true`', function() {
 							assert.isTrue(returnedValue);
 						});
-					}); // state "added"
+					});
 
 					describe('when the state action option is "removed"', function() {
 
@@ -931,7 +925,7 @@ describe('lib/action', function() {
 						it('returns `true`', function() {
 							assert.isTrue(returnedValue);
 						});
-					}); // state "removed"
+					});
 
 					describe('when the state action option is "added" but without element', function() {
 
@@ -958,7 +952,7 @@ describe('lib/action', function() {
 						it('returns `false`', function() {
 							assert.isFalse(returnedValue);
 						});
-					}); // state "added" without element
+					});
 
 					describe('when the state action option is "removed" but without element', function() {
 						beforeEach(function() {
@@ -982,7 +976,7 @@ describe('lib/action', function() {
 							assert.calledWithExactly(document.querySelector, '.foo');
 							assert.isFalse(returnedValue);
 						});
-					}); // state "removed" without element
+					});
 
 					describe('when the state action option is visible', function() {
 						beforeEach(function() {
@@ -1071,7 +1065,7 @@ describe('lib/action', function() {
 						});
 					});
 
-				}); // evaluate function
+				});
 			});
 
 			describe('when `page.evaluate` calls back with a result that doesn\'t match the expected value', function() {
@@ -1314,7 +1308,7 @@ describe('lib/action', function() {
 					afterEach(function() {
 						delete global.window;
 					});
-// FRANK2
+
 					describe('when the subject action option is "fragment"', function() {
 
 						beforeEach(function() {

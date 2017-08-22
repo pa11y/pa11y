@@ -92,6 +92,9 @@ function configureProgram(program) {
 }
 
 function runProgram(program) {
+	var options;
+	var test;
+
 	if (program.environment) {
 		outputEnvironmentInfo();
 		process.exit(0);
@@ -99,10 +102,10 @@ function runProgram(program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	var options = processOptions(program);
+	options = processOptions(program);
 	options.log.begin(program.url);
 	try {
-		var test = pa11y(options);
+		test = pa11y(options);
 		test.run(program.url, function(error, results) {
 			if (error) {
 				options.log.error(error.stack);
@@ -145,6 +148,7 @@ function processOptions(program) {
 	});
 
 	if (!program.debug) {
+		/* eslint-disable no-empty-function */
 		options.log.debug = function() {};
 	}
 	return options;
