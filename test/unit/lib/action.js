@@ -713,6 +713,450 @@ describe('lib/action', function() {
 
 	});
 
+	describe('wait-for-element-state action', function() {
+		var action;
+
+		beforeEach(function() {
+			action = buildAction.allowedActions.find(function(allowedAction) {
+				return allowedAction.name === 'wait-for-element-state';
+			});
+		});
+
+		it('should have a name property', function() {
+			assert.strictEqual(action.name, 'wait-for-element-state');
+		});
+
+		it('should have a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('should match all of the expected action strings', function() {
+				assert.deepEqual('wait for .foo to be added'.match(action.match), [
+					'wait for .foo to be added',
+					undefined,
+					'.foo',
+					' to be',
+					'added'
+				]);
+				assert.deepEqual('wait for element .foo to be added'.match(action.match), [
+					'wait for element .foo to be added',
+					' element',
+					'.foo',
+					' to be',
+					'added'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be added'.match(action.match), [
+					'wait for element .foo .bar to be added',
+					' element',
+					'.foo .bar',
+					' to be',
+					'added'
+				]);
+				assert.deepEqual('wait for .foo to be removed'.match(action.match), [
+					'wait for .foo to be removed',
+					undefined,
+					'.foo',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for element .foo to be removed'.match(action.match), [
+					'wait for element .foo to be removed',
+					' element',
+					'.foo',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be removed'.match(action.match), [
+					'wait for element .foo .bar to be removed',
+					' element',
+					'.foo .bar',
+					' to be',
+					'removed'
+				]);
+				assert.deepEqual('wait for .foo to be visible'.match(action.match), [
+					'wait for .foo to be visible',
+					undefined,
+					'.foo',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for element .foo to be visible'.match(action.match), [
+					'wait for element .foo to be visible',
+					' element',
+					'.foo',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be visible'.match(action.match), [
+					'wait for element .foo .bar to be visible',
+					' element',
+					'.foo .bar',
+					' to be',
+					'visible'
+				]);
+				assert.deepEqual('wait for .foo to be hidden'.match(action.match), [
+					'wait for .foo to be hidden',
+					undefined,
+					'.foo',
+					' to be',
+					'hidden'
+				]);
+				assert.deepEqual('wait for element .foo to be hidden'.match(action.match), [
+					'wait for element .foo to be hidden',
+					' element',
+					'.foo',
+					' to be',
+					'hidden'
+				]);
+				assert.deepEqual('wait for element .foo .bar to be hidden'.match(action.match), [
+					'wait for element .foo .bar to be hidden',
+					' element',
+					'.foo .bar',
+					' to be',
+					'hidden'
+				]);
+			});
+
+		});
+
+		it('should have a build method', function() {
+			assert.isFunction(action.build);
+		});
+
+		describe('.build(browser, page, options, matches)', function() {
+			var matches;
+			var options;
+			var page;
+			var returnedValue;
+
+			beforeEach(function() {
+				options = {
+					log: {
+						debug: sinon.spy()
+					}
+				};
+				page = {
+					evaluate: sinon.stub().callsArgWithAsync(2, null, true)
+				};
+				matches = 'wait for element .foo to be added'.match(action.match);
+				returnedValue = action.build({}, page, options, matches);
+			});
+
+			it('returns a function', function() {
+				assert.isFunction(returnedValue);
+			});
+
+			describe('returned function', function() {
+				beforeEach(function(done) {
+					returnedValue(done);
+				});
+				it('calls `page.evaluate` with a function and some action options', function() {
+					assert.calledOnce(page.evaluate);
+					assert.isFunction(page.evaluate.firstCall.args[0]);
+					assert.deepEqual(page.evaluate.firstCall.args[1], {
+						state: matches[4],
+						selector: matches[2]
+					});
+				});
+
+				it('logs that the program is waiting', function() {
+					assert.calledWith(options.log.debug, '  … waiting ("true")');
+				});
+
+				describe('evaluate function', function() {
+					var element;
+					var evaluateFunction;
+
+					beforeEach(function() {
+						evaluateFunction = page.evaluate.firstCall.args[0];
+						element = {};
+						global.document = {
+							querySelector: sinon.stub().returns(element)
+						};
+					});
+
+					afterEach(function() {
+						delete global.window;
+					});
+
+					describe('when the state action option is "added"', function() {
+
+						beforeEach(function() {
+							returnedValue = evaluateFunction({
+								state: 'added',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `true`', function() {
+							assert.isTrue(returnedValue);
+						});
+					});
+
+					describe('when the state action option is "removed"', function() {
+
+						beforeEach(function() {
+							returnedValue = evaluateFunction({
+								state: 'removed',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `true`', function() {
+							assert.isTrue(returnedValue);
+						});
+					});
+
+					describe('when the state action option is "added" but without element', function() {
+
+						beforeEach(function() {
+							element = false;
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+							returnedValue = evaluateFunction({
+								state: 'added',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+						});
+
+						it('returns `false`', function() {
+							assert.isFalse(returnedValue);
+						});
+					});
+
+					describe('when the state action option is "removed" but without element', function() {
+						beforeEach(function() {
+							element = null;
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+
+							returnedValue = evaluateFunction({
+								state: 'removed',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+							assert.isFalse(returnedValue);
+						});
+					});
+
+					describe('when the state action option is visible', function() {
+						beforeEach(function() {
+							element = {
+								offsetWidth: 10
+							};
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+
+							returnedValue = evaluateFunction({
+								state: 'visible',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+							assert.isTrue(returnedValue);
+						});
+					});
+
+					describe('when the state action option is hidden and element exists', function() {
+						beforeEach(function() {
+							element = {
+								offsetWidth: 0,
+								getClientRects: sinon.stub().returns([{
+									bottom: 61,
+									height: 17,
+									left: 835.03125,
+									right: 849.609375,
+									top: 44,
+									width: 14.578125
+								}])
+							};
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+
+							returnedValue = evaluateFunction({
+								state: 'hidden',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+							assert.isTrue(returnedValue);
+						});
+					});
+
+					describe('when the state action option is hidden and element is not visible', function() {
+						beforeEach(function() {
+							element = {
+								offsetWidth: 0,
+								getClientRects: sinon.stub().returns([])
+							};
+							global.document = {
+								querySelector: sinon.stub().returns(element)
+							};
+
+							returnedValue = evaluateFunction({
+								state: 'hidden',
+								selector: '.foo'
+							});
+						});
+
+						afterEach(function() {
+							delete global.document;
+						});
+
+						it('selects an element with the given selector', function() {
+							assert.calledOnce(document.querySelector);
+							assert.calledWithExactly(document.querySelector, '.foo');
+							assert.isFalse(returnedValue);
+						});
+					});
+
+				});
+			});
+
+			describe('when `page.evaluate` calls back with a result that doesn\'t match the expected value', function() {
+				beforeEach(function(done) {
+					sinon.stub(global, 'setTimeout').yieldsAsync();
+					page.evaluate.callsArgWithAsync(2, null, false);
+					page.evaluate.onCall(2).callsArgWithAsync(2, null, true);
+					returnedValue(done);
+				});
+
+				afterEach(function() {
+					global.setTimeout.restore();
+				});
+
+				it('sets a timeout', function() {
+					assert.called(global.setTimeout);
+					assert.isFunction(global.setTimeout.firstCall.args[0]);
+					assert.strictEqual(global.setTimeout.firstCall.args[1], 200);
+				});
+
+				it('calls page.evaluate until it calls back with the expected value', function() {
+					assert.calledThrice(page.evaluate);
+					assert.calledThrice(options.log.debug);
+
+					assert.calledWith(options.log.debug.firstCall, '  … waiting ("false")');
+					assert.calledWith(options.log.debug.secondCall, '  … waiting ("false")');
+					assert.calledWith(options.log.debug.thirdCall, '  … waiting ("true")');
+				});
+			});
+
+			describe('when `page.evaluate` times out', function() {
+				var caughtError;
+
+				beforeEach(function(done) {
+					sinon.stub(global, 'setTimeout').yieldsAsync();
+					page.evaluate.callsArgWithAsync(2, null, false);
+					page.evaluate.onCall(11).callsArgWithAsync(2, null, true);
+					returnedValue(function(error) {
+						caughtError = error;
+						done();
+					});
+				});
+
+				afterEach(function() {
+					global.setTimeout.restore();
+				});
+
+				it('throws an error after 10 retries', function() {
+					assert.strictEqual(caughtError.message, 'Failed action: element ".foo" failed to be added');
+				});
+			});
+
+		});
+
+		describe('.build(browser, page, options, matches)', function() {
+			var matches;
+			var options;
+			var page;
+			var returnedValue;
+
+			beforeEach(function() {
+				options = {
+					log: {
+						debug: sinon.spy()
+					}
+				};
+				page = {
+					evaluate: sinon.stub().callsArgWithAsync(2, null, true)
+				};
+				matches = 'wait for element .foo to be visible'.match(action.match);
+				returnedValue = action.build({}, page, options, matches);
+			});
+
+			describe('when `page.evaluate` is called and state is added and result is true', function() {
+				beforeEach(function(done) {
+					sinon.stub(global, 'setTimeout').yieldsAsync();
+					page.evaluate.callsArgWithAsync(2, null, true);
+					returnedValue(done);
+				});
+
+				afterEach(function() {
+					global.setTimeout.restore();
+				});
+
+				it('does not wait', function() {
+					assert.isFalse(global.setTimeout.called);
+				});
+			});
+		});
+	});
+
 	describe('wait-for-url action', function() {
 		var action;
 
