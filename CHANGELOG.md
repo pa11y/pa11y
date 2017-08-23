@@ -1,6 +1,15 @@
 
 # Changelog
 
+## 4.12.0 (2017-08-23)
+
+  * Add the `wait-for-element-state` action
+  * Update the `wait-for-url` action to support waiting for hostname
+  * Update dependencies
+    * HTML CodeSniffer: 2.0.7 to 2.1.0
+  * Lots of updates to the README and trouble-shooting guide
+  * Support Node.js 8.x
+
 ## 4.11.0 (2017-06-02)
 
   * Add the ability to make Pa11y perform POST requests
