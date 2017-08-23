@@ -375,6 +375,11 @@ describe('lib/pa11y', () => {
 
 	});
 
+	it('has an `isValidAction` method which aliases `action.isValidAction`', () => {
+		assert.isFunction(pa11y.isValidAction);
+		assert.strictEqual(pa11y.isValidAction, runAction.isValidAction);
+	});
+
 	it('has a `defaults` property', () => {
 		assert.isObject(pa11y.defaults);
 	});
