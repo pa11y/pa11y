@@ -713,17 +713,17 @@ describe('lib/action', function() {
 
 	});
 
-	describe('wait-for action', function() {
+	describe('wait-for-element-state action', function() {
 		var action;
 
 		beforeEach(function() {
 			action = buildAction.allowedActions.find(function(allowedAction) {
-				return allowedAction.name === 'wait-for';
+				return allowedAction.name === 'wait-for-element-state';
 			});
 		});
 
 		it('should have a name property', function() {
-			assert.strictEqual(action.name, 'wait-for');
+			assert.strictEqual(action.name, 'wait-for-element-state');
 		});
 
 		it('should have a match property', function() {
