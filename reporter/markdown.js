@@ -46,9 +46,9 @@ function buildResultsMarkdown(results) {
 function buildResultMarkdown(result) {
 	return `
 		* ${typeStarts[result.type]}${result.message}
-		  * ${result.code}
-		  * ${result.selector.replace(/\s+/g, ' ')}
-		  * \`${result.context.replace(/\s+/g, ' ')}\`
+		 * ${result.code}
+		 * ${result.selector.replace(/\s+/g, ' ')}
+		 * \`${result.context.replace(/\s+/g, ' ')}\`
 	`.replace(/\t+/g, '');
 }
 
