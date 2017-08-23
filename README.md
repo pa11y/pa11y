@@ -714,7 +714,28 @@ E.g.
 ```js
 pa11y({
     actions: [
+        'click element #login-link',
         'wait for path to be /login'
+    ]
+});
+```
+
+### Wait For Element State
+
+This allows you to pause the test until an element on the page (matching a CSS selector) is either added, removed, visible, or hidden. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. This action takes one of the forms:
+
+  - `wait for element <selector> to be added`
+  - `wait for element <selector> to be removed`
+  - `wait for element <selector> to be visible`
+  - `wait for element <selector> to be hidden`
+
+E.g.
+
+```js
+pa11y({
+    actions: [
+        'click element #tab-2',
+        'wait for element #tab-1 to be hidden'
     ]
 });
 ```
