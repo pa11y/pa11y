@@ -1,7 +1,5 @@
-'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
 
 module.exports = {
 	begin: emptyFunction,
@@ -23,32 +21,32 @@ function reportResults(results, url) {
 }
 
 function buildHtml(results, url) {
-	var renderMain = template(path.join(__dirname, '/html/report.html'));
+	const renderMain = template(`${__dirname}/html/report.html`);
 	return renderMain({
 		date: new Date(),
 		errorCount: results.filter(isError).length,
 		warningCount: results.filter(isWarning).length,
 		noticeCount: results.filter(isNotice).length,
 		results: buildResultsHtml(results),
-		url: url
+		url
 	});
 }
 
 function buildResultsHtml(results) {
-	var renderResult = template(path.join(__dirname, '/html/result.html'));
-	return results.map(function(result) {
+	const renderResult = template(`${__dirname}/html/result.html`);
+	return results.map(result => {
 		result.typeLabel = upperCaseFirst(result.type);
 		return renderResult(result);
 	}).join('');
 }
 
 function template(filePath) {
-	var content = fs.readFileSync(filePath, 'utf-8');
+	const content = fs.readFileSync(filePath, 'utf-8');
 	return function(context) {
-		var output = content;
-		Object.keys(context).forEach(function(key) {
-			output = output.replace(new RegExp('\\{' + key + '\\}', 'g'), escapeHtml(context[key]));
-			output = output.replace(new RegExp('\\{' + key + '\\|raw\\}', 'g'), context[key]);
+		let output = content;
+		Object.keys(context).forEach(key => {
+			output = output.replace(new RegExp(`\\{${key}\\}`, 'g'), escapeHtml(context[key]));
+			output = output.replace(new RegExp(`\\{${key}\\|raw\\}`, 'g'), context[key]);
 		});
 		return output.replace(/\s+/g, ' ').trim();
 	};

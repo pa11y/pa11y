@@ -1,6 +1,5 @@
-'use strict';
 
-var typeStarts = {
+const typeStarts = {
 	error: '__Error:__ ',
 	notice: '__Notice:__ ',
 	unknown: '',
@@ -27,9 +26,9 @@ function reportResults(results, url) {
 }
 
 function buildMarkdown(results, url) {
-	var lines = [
+	const lines = [
 		'# Welcome to Pa11y\n',
-		'## Results for ' + url + ':'
+		`## Results for ${url}:`
 	];
 	if (results.length === 0) {
 		lines.push('\n * No errors found!');
@@ -45,25 +44,23 @@ function buildResultsMarkdown(results) {
 }
 
 function buildResultMarkdown(result) {
-	return [
-		'* ' + typeStarts[result.type] + result.message,
-		' * ' + result.code,
-		' * ' + result.selector.replace(/\s+/g, ' '),
-		' * `' + result.context.replace(/\s+/g, ' ') + '`'
-	].join('\n') + '\n\n';
+	return `
+		* ${typeStarts[result.type]}${result.message}
+		  * ${result.code}
+		  * ${result.selector.replace(/\s+/g, ' ')}
+		  * \`${result.context.replace(/\s+/g, ' ')}\`
+	`.replace(/\t+/g, '');
 }
 
 function buildTotalsMarkdown(results) {
-	var totalErrors = results.filter(isError).length;
-	var totalNotices = results.filter(isNotice).length;
-	var totalWarnings = results.filter(isWarning).length;
-
-	return [
-		'## Summary:',
-		'* ' + totalErrors + ' Errors',
-		'* ' + totalWarnings + ' Warnings',
-		'* ' + totalNotices + ' Notices'
-	].join('\n') + '\n';
+	const totalErrors = results.filter(isError).length;
+	const totalNotices = results.filter(isNotice).length;
+	const totalWarnings = results.filter(isWarning).length;
+	return `## Summary:
+		* ${totalErrors} Errors
+		* ${totalWarnings} Warnings
+		* ${totalNotices} Notices
+	`.replace(/\t+/g, '');
 }
 
 function isError(result) {
