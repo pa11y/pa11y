@@ -3,9 +3,16 @@ const assert = require('proclaim');
 const describeCliCall = require('./helper/describe-cli-call');
 const fs = require('fs');
 const path = require('path');
-const screenCapturePath = path.join(__dirname, '/tmp/test.png');
+const screenCaptureDirectory = path.join(__dirname, '/tmp');
+const screenCapturePath = path.join(screenCaptureDirectory, '/test.png');
 
 describe('Pa11y CLI Screen Capture', function() {
+
+	before(function(done) {
+		fs.mkdir(screenCaptureDirectory, () => {
+			done();
+		});
+	});
 
 	describeCliCall('/notices', ['--screen-capture', screenCapturePath], {}, function() {
 
