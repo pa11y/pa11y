@@ -73,9 +73,9 @@ describe('lib/pa11y', () => {
 			assert.strictEqual(promiseTimeout.firstCall.args[2], `Pa11y timed out (${pa11y.defaults.timeout}ms)`);
 		});
 
-		it('launches puppeteer', () => {
+		it('launches puppeteer with `options.chromeLaunchConfig`', () => {
 			assert.calledOnce(puppeteer.launch);
-			assert.calledWithExactly(puppeteer.launch);
+			assert.calledWithExactly(puppeteer.launch, pa11y.defaults.chromeLaunchConfig);
 		});
 
 		it('creates a new page', () => {
@@ -386,10 +386,14 @@ describe('lib/pa11y', () => {
 
 	describe('.defaults', () => {
 
-		// TODO Chrome path and config
-
 		it('has an `actions` property', () => {
 			assert.deepEqual(pa11y.defaults.actions, []);
+		});
+
+		it('has a `chromeLaunchConfig` property', () => {
+			assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
+				ignoreHTTPSErrors: true
+			});
 		});
 
 		it('has a `headers` property', () => {
