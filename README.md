@@ -867,6 +867,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-4–7-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-4–8-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg
