@@ -33,6 +33,7 @@ TEMPORARY LIST
   - main lib
   - actions
 - remove beforeScript option
+- wait-for-element-state action no longer has a maximum number of retries
 
 
 Migrating from 3.0 to 4.0
