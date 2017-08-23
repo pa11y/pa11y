@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 4.12.1 (2017-08-23)
+
+  * Roll back dependencies
+    * HTML CodeSniffer: 2.1.0 to 2.0.7
+
 ## 4.12.0 (2017-08-23)
 
   * Add the `wait-for-element-state` action
