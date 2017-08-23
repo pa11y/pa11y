@@ -1,16 +1,15 @@
 #!/usr/bin/env node
-'use strict';
 
-var extend = require('node.extend');
-var path = require('path');
-var pkg = require('../package.json');
-var program = require('commander');
-var pa11y = require('../lib/pa11y');
+const extend = require('node.extend');
+const path = require('path');
+const pkg = require('../package.json');
+const program = require('commander');
+const pa11y = require('../lib/pa11y');
 
-configureProgram(program);
-runProgram(program);
+configureProgram();
+runProgram();
 
-function configureProgram(program) {
+function configureProgram() {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option(
@@ -82,7 +81,7 @@ function configureProgram(program) {
 	program.url = program.args[0];
 }
 
-async function runProgram(program) {
+async function runProgram() {
 	if (program.environment) {
 		outputEnvironmentInfo();
 		process.exit(0);
@@ -90,12 +89,12 @@ async function runProgram(program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	var options = processOptions(program);
+	const options = processOptions();
 	options.log.begin(program.url);
 	try {
 		const pa11yReport = await pa11y(program.url, options);
 		if (reportShouldFail(program.level, pa11yReport.messages, program.threshold)) {
-			process.once('exit', function() {
+			process.once('exit', () => {
 				process.exit(2);
 			});
 		}
@@ -106,7 +105,7 @@ async function runProgram(program) {
 	}
 }
 
-function processOptions(program) {
+function processOptions() {
 	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
@@ -120,7 +119,7 @@ function processOptions(program) {
 	});
 
 	if (!program.debug) {
-		options.log.debug = function() {};
+		options.log.debug = () => {};
 	}
 	return options;
 }
@@ -128,19 +127,19 @@ function processOptions(program) {
 function loadConfig(filePath) {
 	return requireFirst([
 		filePath,
-		filePath.replace(/^\.\//, process.cwd() + '/'),
-		process.cwd() + '/' + filePath
+		filePath.replace(/^\.\//, `${process.cwd()}/`),
+		`${process.cwd()}/${filePath}`
 	], {});
 }
 
 function loadReporter(name) {
-	var reporter = requireFirst([
-		'../reporter/' + name,
-		'pa11y-reporter-' + name,
+	const reporter = requireFirst([
+		`../reporter/${name}`,
+		`pa11y-reporter-${name}`,
 		path.join(process.cwd(), name)
 	], null);
 	if (!reporter) {
-		console.error('Reporter "' + name + '" could not be found');
+		console.error(`Reporter "${name}" could not be found`);
 		process.exit(1);
 	}
 	return reporter;
@@ -183,7 +182,7 @@ function collectOptions(val, array) {
 }
 
 function outputEnvironmentInfo() {
-	var versions = {
+	const versions = {
 		pa11y: pkg.version,
 		node: process.version.replace('v', ''),
 		npm: '[unavailable]',
@@ -193,8 +192,8 @@ function outputEnvironmentInfo() {
 		versions.npm = require('child_process').execSync('npm -v').toString().trim();
 	} catch (error) {}
 
-	console.log('Pa11y:      ' + versions.pa11y);
-	console.log('Node.js:    ' + versions.node);
-	console.log('npm:        ' + versions.npm);
-	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
+	console.log(`Pa11y:      ${versions.pa11y}`);
+	console.log(`Node.js:    ${versions.node}`);
+	console.log(`npm:        ${versions.npm}`);
+	console.log(`OS:         ${versions.os} (${process.platform})`);
 }
