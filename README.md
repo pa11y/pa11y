@@ -99,7 +99,6 @@ Usage: pa11y [options] <url>
 
   Options:
 
-    -h, --help                     output usage information
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
@@ -110,15 +109,12 @@ Usage: pa11y [options] <url>
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
-    -p, --port <port>              the port to run PhantomJS on
     -t, --timeout <ms>             the timeout in milliseconds
     -w, --wait <ms>                the time to wait before running tests in milliseconds
-    -v, --verify-page <string>     HTML string to verify is present in the page source HTML
     -d, --debug                    output debug messages
-    -H, --htmlcs <url>             the URL or path to source HTML_CodeSniffer from
-    -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
-    -A, --add-rule <rule>          WCAG 2.0 rules from a different standard to include, a repeatable value or separated by semi-colons
+    -A, --add-rule <rule>          WCAG 2.0 rules to include, a repeatable value or separated by semi-colons
+    -h, --help                     output usage information
 ```
 
 ### Running Tests

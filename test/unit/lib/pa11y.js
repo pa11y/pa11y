@@ -161,7 +161,7 @@ describe('lib/pa11y', () => {
 			assert.strictEqual(resolvedValue, pa11yResults);
 		});
 
-		describe('when headless Chrome errors', () => {
+		describe('when Headless Chrome errors', () => {
 			let headlessChromeError;
 			let rejectedError;
 
