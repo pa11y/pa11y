@@ -1,27 +1,27 @@
-'use strict';
 
-var extend = require('node.extend');
-var path = require('path');
-var spawn = require('child_process').spawn;
+const extend = require('node.extend');
+const path = require('path');
+const spawn = require('child_process').spawn;
 
 module.exports = describeCliCall;
 
 function describeCliCall(urlPath, cliArguments, environment, testFunction) {
-	describe('call with url "' + urlPath + '"' + (cliArguments.length ? ' and arguments "' + cliArguments.join(' ') + '"' : ''), function() {
+	const argumentString = (cliArguments.length ? ` and arguments "${cliArguments.join(' ')}"` : '');
+	describe(`call with url "${urlPath}"${argumentString}`, function() {
 		before(function(done) {
 
-			var that = this;
+			const that = this;
 			that.lastStdout = '';
 			that.lastStderr = '';
 			that.lastOutput = '';
 			environment = extend(true, environment, process.env);
 
-			cliArguments.push('http://localhost:' + this.port + urlPath);
+			cliArguments.push(`http://localhost:${this.port}${urlPath}`);
 			if (cliArguments.indexOf('--reporter') === -1 && cliArguments.indexOf('-r') === -1) {
 				cliArguments.push('--reporter', 'json');
 			}
 
-			var child = spawn('../../bin/pa11y.js', cliArguments, {
+			const child = spawn('../../bin/pa11y.js', cliArguments, {
 				cwd: path.resolve(__dirname, '../'),
 				env: environment
 			});
@@ -46,4 +46,3 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 		testFunction.call(this);
 	});
 }
-/* eslint-enable max-len, max-statements */

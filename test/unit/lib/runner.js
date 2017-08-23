@@ -321,7 +321,7 @@ describe('lib/runner', () => {
 			});
 
 			it('rejects with that error', () => {
-				assert.strictEqual(rejectedError, htmlCodeSnifferError)
+				assert.strictEqual(rejectedError, htmlCodeSnifferError);
 			});
 
 		});
@@ -614,7 +614,7 @@ describe('lib/runner', () => {
 				});
 
 				it('does not add the rules to the current standard', () => {
-					assert.deepEqual(window['HTMLCS_Section508'].sniffs[0].include, []);
+					assert.deepEqual(window.HTMLCS_Section508.sniffs[0].include, []);
 				});
 
 			});

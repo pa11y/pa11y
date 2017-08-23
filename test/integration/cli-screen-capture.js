@@ -1,10 +1,9 @@
-'use strict';
 
-var assert = require('proclaim');
-var describeCliCall = require('./helper/describe-cli-call');
-var fs = require('fs');
-var path = require('path');
-var screenCapturePath = path.join(__dirname, '/tmp/test.png');
+const assert = require('proclaim');
+const describeCliCall = require('./helper/describe-cli-call');
+const fs = require('fs');
+const path = require('path');
+const screenCapturePath = path.join(__dirname, '/tmp/test.png');
 
 describe('Pa11y CLI Screen Capture', function() {
 
