@@ -648,6 +648,7 @@ Actions are additional interactions that you can make Pa11y perform before the t
 pa11y({
     actions: [
         'click element #tab-1',
+        'wait for element #tab-1-content to be visible',
         'set field #fullname to John Doe',
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing',
