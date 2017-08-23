@@ -1,18 +1,17 @@
 // An example of executing some actions before Pa11y runs.
 // This example logs in to a fictional site then waits
 // until the account page has loaded before running Pa11y.
-'use strict';
 
-var pa11y = require('../..');
+const pa11y = require('../..');
 
-// Create a test instance with some default options
-var test = pa11y({
+// Test http://example.com/
+pa11y('http://example.com/', {
 
 	// Log what's happening to the console
 	log: {
-		debug: console.log.bind(console),
-		error: console.error.bind(console),
-		info: console.log.bind(console)
+		debug: console.log,
+		error: console.error,
+		info: console.log
 	},
 
 	// Run some actions before the tests
@@ -23,12 +22,10 @@ var test = pa11y({
 		'wait for url to be http://example.com/myaccount'
 	]
 
-});
-
-// Test http://example.com/
-test.run('example.com', function(error, result) {
-	if (error) {
-		return console.error(error.message);
-	}
+})
+.then(result => {
 	console.log(result);
+})
+.catch(error => {
+	console.error(error.message);
 });

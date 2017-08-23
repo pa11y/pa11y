@@ -1,37 +1,25 @@
 // An example of running Pa11y on multiple URLS
-// in series
-'use strict';
 
-var async = require('async');
-var pa11y = require('../..');
+const pa11y = require('../..');
 
-// Create a test instance with some default options
-var test = pa11y({
-
-	// Log what's happening to the console
+// Put together some options to use in each test
+const options = {
 	log: {
-		debug: console.log.bind(console),
-		error: console.error.bind(console),
-		info: console.log.bind(console)
+		debug: console.log,
+		error: console.error,
+		info: console.log
 	}
+};
 
-});
-
-
-// Use the async library to run multiple tests in series
-// https://github.com/caolan/async
-async.series({
-
-	// Test the first url
-	home: test.run.bind(test, 'http://example.com/'),
-
-	// Test second url
-	plants: test.run.bind(test, 'http://example.com/otherpage/')
-
-}, function(error, results) {
-	if (error) {
-		return console.error(error.message);
-	}
-	console.log(results.home);
-	console.log(results.plants);
+// Run tests against multiple URLs
+Promise.all([
+	pa11y('http://example.com/', options),
+	pa11y('http://example.com/otherpage/', options)
+])
+.then(results => {
+	console.log(results[0]); // Results for the first URL
+	console.log(results[1]); // Results for the second URL
+})
+.catch(error => {
+	console.error(error.message);
 });
