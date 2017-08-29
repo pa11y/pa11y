@@ -57,7 +57,6 @@ Configuration options have had an update between 4.0 and 5.0:
 
 ### Miscellaneous Changes
 
-  - A full scheme is now required in Pa11y URLs, you can no longer run `pa11y example.com`, you need to use `pa11y http://example.com/` (TODO reconsider this)
   - The default viewport dimensions for Pa11y have been changed from `1024x768` to `1280x1024`
   - The `wait-for-element-state` action no longer has a maximum number of retries – it will retry until Pa11y times out
   - The "multiple-concurrent" example has been removed in favour of a single "multiple" example

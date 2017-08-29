@@ -126,7 +126,7 @@ pa11y http://example.com
 Run an accessibility test against a file (absolute paths only, not relative):
 
 ```
-pa11y file:///path/to/your/file.html
+pa11y ./path/to/your/file.html
 ```
 
 Run a test with CSV reporting and save to a file:

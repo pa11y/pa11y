@@ -57,7 +57,7 @@ describe('lib/pa11y', () => {
 		let resolvedValue;
 
 		beforeEach(async () => {
-			resolvedValue = await pa11y('mock-url');
+			resolvedValue = await pa11y('https://mock-url/');
 		});
 
 		it('defaults an empty options object with `pa11y.defaults`', () => {
@@ -96,7 +96,7 @@ describe('lib/pa11y', () => {
 
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'mock-url', {
+			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle'
 			});
 		});
@@ -162,6 +162,49 @@ describe('lib/pa11y', () => {
 			assert.strictEqual(resolvedValue, pa11yResults);
 		});
 
+		describe('when `url` does not have a scheme', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.goto.reset();
+				resolvedValue = await pa11y('mock-url');
+			});
+
+			it('navigates to `url` with an `http` scheme added', () => {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWith(puppeteer.mockPage.goto, 'http://mock-url');
+			});
+
+		});
+
+		describe('when `url` does not have a scheme and starts with a slash', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.goto.reset();
+				resolvedValue = await pa11y('/mock-path');
+			});
+
+			it('navigates to `url` with an `file` scheme added', () => {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWith(puppeteer.mockPage.goto, 'file:///mock-path');
+			});
+
+		});
+
+		describe('when `url` does not have a scheme and starts with a period', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.goto.reset();
+				resolvedValue = await pa11y('./mock-path');
+			});
+
+			it('navigates to `url` with an `file` scheme added and a resolved path', () => {
+				const resolvedPath = path.resolve(process.cwd(), './mock-path');
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWith(puppeteer.mockPage.goto, `file://${resolvedPath}`);
+			});
+
+		});
+
 		describe('when Headless Chrome errors', () => {
 			let headlessChromeError;
 			let rejectedError;
@@ -171,7 +214,7 @@ describe('lib/pa11y', () => {
 				puppeteer.mockBrowser.close.reset();
 				puppeteer.mockPage.goto.rejects(headlessChromeError);
 				try {
-					await pa11y('mock-url');
+					await pa11y('https://mock-url/');
 				} catch (error) {
 					rejectedError = error;
 				}
@@ -195,7 +238,7 @@ describe('lib/pa11y', () => {
 
 		beforeEach(async () => {
 			options = {
-				url: 'mock-url',
+				url: 'https://mock-url/',
 				mockOptions: true
 			};
 			await pa11y(options);
@@ -210,7 +253,7 @@ describe('lib/pa11y', () => {
 
 		it('navigates to `options.url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'mock-url', {
+			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle'
 			});
 		});
@@ -357,7 +400,7 @@ describe('lib/pa11y', () => {
 			options = {
 				mockOptions: true
 			};
-			await pa11y('mock-url', options);
+			await pa11y('https://mock-url/', options);
 		});
 
 		it('defaults the options object with `pa11y.defaults`', () => {
@@ -369,7 +412,7 @@ describe('lib/pa11y', () => {
 
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'mock-url', {
+			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle'
 			});
 		});
