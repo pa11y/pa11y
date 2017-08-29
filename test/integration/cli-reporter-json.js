@@ -1,7 +1,7 @@
 'use strict';
 
-var assert = require('proclaim');
-var describeCliCall = require('./helper/describe-cli-call');
+const assert = require('proclaim');
+const describeCliCall = require('./helper/describe-cli-call');
 
 describe('Pa11y CLI Reporter (JSON)', function() {
 
@@ -12,7 +12,16 @@ describe('Pa11y CLI Reporter (JSON)', function() {
 		});
 
 		it('should respond with the expected output', function() {
-			assert.include(this.lastStdout, '[{"code":"WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2","context":"<title>Page Title</title>","message":"Check that the title element describes the document.","selector":"html > head > title","type":"notice","typeCode":3}]');
+			assert.deepEqual(JSON.parse(this.lastStdout), [
+				{
+					code: 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2',
+					context: '<title>Page Title</title>',
+					message: 'Check that the title element describes the document.',
+					selector: 'html > head > title',
+					type: 'notice',
+					typeCode: 3
+				}
+			]);
 		});
 
 	});

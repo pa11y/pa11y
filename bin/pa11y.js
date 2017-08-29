@@ -1,17 +1,16 @@
 #!/usr/bin/env node
 'use strict';
 
-var extend = require('node.extend');
-var path = require('path');
-var pkg = require('../package.json');
-var program = require('commander');
-var pa11y = require('../lib/pa11y');
-var semver = require('semver');
+const extend = require('node.extend');
+const path = require('path');
+const pkg = require('../package.json');
+const program = require('commander');
+const pa11y = require('../lib/pa11y');
 
-configureProgram(program);
-runProgram(program);
+configureProgram();
+runProgram();
 
-function configureProgram(program) {
+function configureProgram() {
 	program.version(pkg.version)
 		.usage('[options] <url>')
 		.option(
@@ -57,32 +56,17 @@ function configureProgram(program) {
 			'./pa11y.json'
 		)
 		.option(
-			'-p, --port <port>',
-			'the port to run PhantomJS on'
-		)
-		.option(
 			'-t, --timeout <ms>',
-			'the timeout in milliseconds'
+			'the timeout in milliseconds',
+			Number
 		)
 		.option(
 			'-w, --wait <ms>',
 			'the time to wait before running tests in milliseconds'
 		)
 		.option(
-			'-v, --verify-page <string>',
-			'HTML string to verify is present in the page source HTML'
-		)
-		.option(
 			'-d, --debug',
 			'output debug messages'
-		)
-		.option(
-			'-H, --htmlcs <url>',
-			'the URL or path to source HTML_CodeSniffer from'
-		)
-		.option(
-			'-e, --phantomjs <path>',
-			'the path to the phantomjs executable'
 		)
 		.option(
 			'-S, --screen-capture <path>',
@@ -98,7 +82,7 @@ function configureProgram(program) {
 	program.url = program.args[0];
 }
 
-function runProgram(program) {
+async function runProgram() {
 	if (program.environment) {
 		outputEnvironmentInfo();
 		process.exit(0);
@@ -106,54 +90,37 @@ function runProgram(program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	var options = processOptions(program);
+	const options = processOptions();
 	options.log.begin(program.url);
 	try {
-		var test = pa11y(options);
-		test.run(program.url, function(error, results) {
-			if (error) {
-				options.log.error(error.stack);
-				process.exit(1);
-			}
-			if (reportShouldFail(program.level, results, program.threshold)) {
-				process.once('exit', function() {
-					process.exit(2);
-				});
-			}
-			options.log.results(results, program.url);
-		});
+		const pa11yReport = await pa11y(program.url, options);
+		if (reportShouldFail(program.level, pa11yReport.messages, program.threshold)) {
+			process.once('exit', () => {
+				process.exit(2);
+			});
+		}
+		options.log.results(pa11yReport.messages, program.url);
 	} catch (error) {
 		options.log.error(error.stack);
 		process.exit(1);
 	}
 }
 
-function processOptions(program) {
-	var options = extend(true, {}, loadConfig(program.config), {
+function processOptions() {
+	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
-		htmlcs: program.htmlcs,
-		ignore: program.ignore,
+		ignore: (program.ignore.length ? program.ignore : undefined),
 		log: loadReporter(program.reporter),
-		page: {
-			settings: {
-				resourceTimeout: program.timeout
-			}
-		},
-		phantom: {
-			path: program.phantomjs,
-			port: program.port
-		},
 		rootElement: program.rootElement,
-		rules: program.addRule,
+		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
 		timeout: program.timeout,
-		wait: program.wait,
-		verifyPage: program.verifyPage
+		wait: program.wait
 	});
 
 	if (!program.debug) {
-		options.log.debug = function() {};
+		options.log.debug = () => {};
 	}
 	return options;
 }
@@ -161,19 +128,19 @@ function processOptions(program) {
 function loadConfig(filePath) {
 	return requireFirst([
 		filePath,
-		filePath.replace(/^\.\//, process.cwd() + '/'),
-		process.cwd() + '/' + filePath
+		filePath.replace(/^\.\//, `${process.cwd()}/`),
+		`${process.cwd()}/${filePath}`
 	], {});
 }
 
 function loadReporter(name) {
-	var reporter = requireFirst([
-		'../reporter/' + name,
-		'pa11y-reporter-' + name,
+	const reporter = requireFirst([
+		`../reporter/${name}`,
+		`pa11y-reporter-${name}`,
 		path.join(process.cwd(), name)
 	], null);
 	if (!reporter) {
-		console.error('Reporter "' + name + '" could not be found');
+		console.error(`Reporter "${name}" could not be found`);
 		process.exit(1);
 	}
 	checkReporterCompatibility(name, reporter.supports, pkg.version);
@@ -227,20 +194,18 @@ function collectOptions(val, array) {
 }
 
 function outputEnvironmentInfo() {
-	var versions = {
+	const versions = {
 		pa11y: pkg.version,
 		node: process.version.replace('v', ''),
 		npm: '[unavailable]',
-		phantom: require('phantomjs-prebuilt').version,
 		os: require('os').release()
 	};
 	try {
 		versions.npm = require('child_process').execSync('npm -v').toString().trim();
 	} catch (error) {}
 
-	console.log('Pa11y:      ' + versions.pa11y);
-	console.log('Node.js:    ' + versions.node);
-	console.log('npm:        ' + versions.npm);
-	console.log('PhantomJS:  ' + versions.phantom);
-	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
+	console.log(`Pa11y:      ${versions.pa11y}`);
+	console.log(`Node.js:    ${versions.node}`);
+	console.log(`npm:        ${versions.npm}`);
+	console.log(`OS:         ${versions.os} (${process.platform})`);
 }
