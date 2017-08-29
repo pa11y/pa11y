@@ -25,7 +25,7 @@ Pa11y 5.0 switches from PhantomJS to [Headless Chrome](https://developers.google
 
 ### Node.js Support
 
-Pa11y 5.0 now only supports Node.js v8.0.0 and higher, you'll need to upgrade to be able to use the latest versions of Pa11y.
+Pa11y 5.0 only supports Node.js v8.0.0 and higher, you'll need to upgrade to be able to use the latest versions of Pa11y.
 
 ### Command-Line Interface
 
@@ -46,7 +46,7 @@ You no longer need to create a separate test function, now Pa11y is just one fun
 Configuration options have had an update between 4.0 and 5.0:
 
   - The `allowedStandards` option has been removed. This can still be set by manually adding entries to `pa11y.allowedStandards`
-  - The `beforeScript` option has been removed in favour of using actions
+  - The `beforeScript` option has been removed in favour of using actions (if the existing actions don't meet your needs, [please let us know](https://github.com/pa11y/pa11y/issues/228))
   - The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses (TODO reconsider this)
   - The `page` option has been removed, as this was specific to PhantomJS. You can set the following options to achieve the same results:
     - `page.headers` can now be set with a new `headers` option
