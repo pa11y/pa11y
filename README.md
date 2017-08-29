@@ -13,18 +13,16 @@ Pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sn
 On the command line:
 
 ```sh
-pa11y example.com
+pa11y http://example.com/
 ```
 
 In JavaScript:
 
 ```js
-var pa11y = require('pa11y');
+const pa11y = require('pa11y');
 
-var test = pa11y(options);
-
-test.run('example.com', function (error, results) {
-    /* ... */
+pa11y('http://example.com/').then((results) => {
+    // Do something with the results
 });
 ```
 
@@ -34,7 +32,7 @@ Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
 
 ## Latest news from Pa11y
 
-We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details. 
+We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details.
 
 If you'd like to try out the Pa11y 5.0 beta you can do so with
 
@@ -103,7 +101,6 @@ Usage: pa11y [options] <url>
 
   Options:
 
-    -h, --help                     output usage information
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
@@ -114,15 +111,12 @@ Usage: pa11y [options] <url>
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
-    -p, --port <port>              the port to run PhantomJS on
     -t, --timeout <ms>             the timeout in milliseconds
     -w, --wait <ms>                the time to wait before running tests in milliseconds
-    -v, --verify-page <string>     HTML string to verify is present in the page source HTML
     -d, --debug                    output debug messages
-    -H, --htmlcs <url>             the URL or path to source HTML_CodeSniffer from
-    -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
-    -A, --add-rule <rule>          WCAG 2.0 rules from a different standard to include, a repeatable value or separated by semi-colons
+    -A, --add-rule <rule>          WCAG 2.0 rules to include, a repeatable value or separated by semi-colons
+    -h, --help                     output usage information
 ```
 
 ### Running Tests
@@ -136,19 +130,13 @@ pa11y http://example.com
 Run an accessibility test against a file (absolute paths only, not relative):
 
 ```
-pa11y file:///path/to/your/file.html
+pa11y ./path/to/your/file.html
 ```
 
 Run a test with CSV reporting and save to a file:
 
 ```
 pa11y --reporter csv http://example.com > report.csv
-```
-
-Run a test with TSV reporting and save to a file:
-
-```
-pa11y --reporter tsv http://example.com > report.tsv
 ```
 
 Run Pa11y with the Section508 ruleset:
@@ -201,7 +189,6 @@ Pa11y can also ignore notices, warnings, and errors up to a threshold number. Th
 ```
 pa11y --threshold 10 http://example.com
 ```
-
 
 ### Reporters
 
@@ -257,52 +244,57 @@ npm install pa11y
 Require Pa11y:
 
 ```js
-var pa11y = require('pa11y');
+const pa11y = require('pa11y');
 ```
 
-Create a tester by initialising Pa11y with [some options](#configuration):
+Run Pa11y against a URL, the `pa11y` function returns a [Promise]:
 
 ```js
-var test = pa11y(options);
-```
-
-The `test.run` function can then be used to run your test function against a URL:
-
-```js
-test.run('http://www.example.com/', function(error, results) {
-    // ...
+pa11y('http://example.com/').then((results) => {
+    // Do something with the results
 });
 ```
 
-The results that get passed into your test callback come from HTML CodeSniffer, and look like this:
+Pa11y can also be run with [some options](#configuration):
 
 ```js
-[
-    {
-        code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
-        context: '<a href="http://example.com/"><img src="example.jpg" alt=""/></a>',
-        message: 'Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.',
-        selector: 'html > body > p:nth-child(1) > a',
-        type: 'error',
-        typeCode: 1
-    },
-    {
-        code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-        context: '<b>Hello World!</b>',
-        message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-        selector: '#content > b:nth-child(4)',
-        type: 'warning',
-        typeCode: 2
-    },
-    {
-        code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
-        context: '<a href="http://example.com/">Hello World!</a>',
-        message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
-        selector: 'html > body > ul > li:nth-child(2) > a',
-        type: 'notice',
-        typeCode: 3
-    }
-]
+pa11y('http://example.com/', {
+    // Options go here
+})
+```
+
+Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML CodeSniffer. It looks like this:
+
+```js
+{
+    documentTitle: 'The title of the page that was tested',
+    messages: [
+        {
+            code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
+            context: '<a href="http://example.com/"><img src="example.jpg" alt=""/></a>',
+            message: 'Img element is the only content of the link, but is missing alt text. The alt text should describe the purpose of the link.',
+            selector: 'html > body > p:nth-child(1) > a',
+            type: 'error',
+            typeCode: 1
+        },
+        {
+            code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
+            context: '<b>Hello World!</b>',
+            message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
+            selector: '#content > b:nth-child(4)',
+            type: 'warning',
+            typeCode: 2
+        },
+        {
+            code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
+            context: '<a href="http://example.com/">Hello World!</a>',
+            message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
+            selector: 'html > body > ul > li:nth-child(2) > a',
+            type: 'notice',
+            typeCode: 3
+        }
+    ]
+}
 ```
 
 If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
@@ -310,8 +302,8 @@ If you wish to transform these results with the command-line reporters, then you
 ```js
 // Assuming you've already run tests, and the results
 // are available in a `results` variable:
-var htmlReporter = require('pa11y/reporter/html');
-var html = htmlReporter.process(results, url);
+const htmlReporter = require('pa11y/reporter/html');
+const html = htmlReporter.process(results, url);
 ```
 
 ### Validating Actions
@@ -329,30 +321,7 @@ pa11y.validateAction('open the pod bay doors'); // false
 Configuration
 -------------
 
-Pa11y has lots of options you can use to change the way PhantomJS runs, or the way your page is loaded. Options can be set either on the Pa11y instance when it's created or the individual test runs. This allows you to set some defaults which can be overridden per-test:
-
-```js
-// Set the default Foo header to "bar"
-var test = pa11y({
-    page: {
-        headers: {
-            Foo: 'bar'
-        }
-    }
-});
-
-// Run a test with the Foo header set to "bar"
-test.run('http://www.example.com/', function(error, results) { /* ... */ });
-
-// Run a test with the Foo header overridden
-test.run('http://www.example.com/', {
-    page: {
-        headers: {
-            Foo: 'hello'
-        }
-    }
-}, function(error, results) { /* ... */ });
-```
+Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a config file used by the command-line interface.
 
 Below is a reference of all the options that are available:
 
@@ -363,7 +332,7 @@ Actions to be run before Pa11y tests the page. There are quite a few different a
 **Note:** actions are currently in a beta state and the API may change while we gather feedback.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'set field #username to exampleUser',
         'set field #password to password1234',
@@ -375,69 +344,57 @@ pa11y({
 
 Defaults to an empty array.
 
-### `allowedStandards` (array)
+### `chromeLaunchConfig` (object)
 
-The accessibility standards that are allowed to be used. This can be modified to allow for custom HTML CodeSniffer standards.
-
-```js
-pa11y({
-    allowedStandards: ['WCAG2AA', 'My Custom Standard']
-});
-```
-
-Defaults to `Section508`, `WCAG2A`, `WCAG2AA`, and `WCAG2AAA`.
-
-### `beforeScript` (function)
-
-**Note:** unless you're doing something particularly complicated, it's much easier and less error prone to use [actions](#actions) rather than `beforeScript`. If you specify both, the `beforeScript` will be dropped with a warning.
-
-A function to be run before Pa11y tests the page. The function accepts three parameters:
-
-- `page` is the phantomjs page object, [documentation for the phantom bridge can be found here][phantom-node-options]
-- `options` is the finished options object used to configure pa11y
-- `next` is a callback function
+Launch options for the Headless Chrome instance. [See the Puppeteer documentation for more information][puppeteer-launch].
 
 ```js
-pa11y({
-    beforeScript: function(page, options, next) {
-        // Make changes to the page
-        // When finished call next to continue running Pa11y tests
-        next();
+pa11y('http://example.com/', {
+    chromeLaunchConfig: {
+        executablePath: '/path/to/Chrome',
+        ignoreHTTPSErrors: false
     }
 });
 ```
 
-Defaults to `null`.
+Defaults to:
+
+```js
+{
+    ignoreHTTPSErrors: true
+}
+```
+
+### `headers` (object)
+
+A key-value map of request headers to send when testing a web page.
+
+```js
+pa11y('http://example.com/', {
+    headers: {
+        Cookie: 'foo=bar'
+    }
+});
+```
+
+Defaults to an empty object.
 
 ### `hideElements` (string)
 
-A CSS selector to hide elements from testing, selectors can be comma separated.
-Elements matching this selector will be hidden from testing by styling them with `visibility:hidden`.
+A CSS selector to hide elements from testing, selectors can be comma separated. Elements matching this selector will be hidden from testing by styling them with `visibility: hidden`.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     hideElements: '.advert, #modal, div[aria-role=presentation]'
 });
 ```
-
-### `htmlcs` (string)
-
-The path or URL to source HTML CodeSniffer from.
-
-```js
-pa11y({
-    htmlcs: 'http://squizlabs.github.io/HTML_CodeSniffer/build/HTMLCS.js'
-});
-```
-
-Defaults to a local copy of HTML CodeSniffer, found in [lib/vendor/HTMLCS.js](lib/vendor/HTMLCS.js).
 
 ### `ignore` (array)
 
 An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     ignore: [
         'notice',
         'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'
@@ -452,115 +409,23 @@ Defaults to an empty array.
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     log: {
-        debug: console.log.bind(console),
-        error: console.error.bind(console),
-        info: console.info.bind(console)
+        debug: console.log,
+        error: console.error,
+        info: console.info
     }
 });
 ```
 
 Each of these defaults to an empty function.
 
-### `page.headers` (object)
-
-A key-value map of request headers to send when testing a web page.
-
-```js
-pa11y({
-    page: {
-        headers: {
-            Cookie: 'foo=bar'
-        }
-    }
-});
-```
-
-Defaults to an empty object.
-
-### `page.settings` (object)
-
-A key-value map of settings to add to the PhantomJS page. For a full list of available settings, see the [PhantomJS page settings documentation][phantom-page-settings].
-
-```js
-pa11y({
-    page: {
-        settings: {
-            loadImages: false,
-            userName: 'nature',
-            password: 'say the magic word'
-        }
-    }
-});
-```
-
-Defaults to:
-
-```js
-{
-    userAgent: 'pa11y/<version> (truffler/<version>)'
-}
-```
-
-### `page.viewport` (object)
-
-The viewport width and height in pixels. The `viewport` object must have both `width` and `height` properties.
-
-```js
-pa11y({
-    page: {
-        viewport: {
-            width: 320,
-            height: 480
-        }
-    }
-});
-```
-
-Defaults to:
-
-```js
-{
-    width: 1024,
-    height: 768
-}
-```
-
-### `phantom` (object)
-
-A key-value map of settings to initialise PhantomJS with. This is passed directly into the `phantom` module – [documentation can be found here][phantom-node-options]. You can pass PhantomJS command-line parameters in the `phantom.parameters` option as key-value pairs.
-
-```js
-pa11y({
-    phantom: {
-        port: 1234,
-        parameters: {
-            'ignore-ssl-errors': 'false',
-            'ssl-protocol': 'tlsv1'
-        }
-    }
-});
-```
-
-Defaults to:
-
-```js
-{
-    parameters: {
-        'ignore-ssl-errors': 'true'
-    }
-}
-```
-
-If `phantom.port` is not specified, a random available port will be used.
-
 ### `rootElement` (element)
 
 The root element for testing a subset of the page opposed to the full document.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     rootElement: '#main'
 });
 ```
@@ -568,10 +433,10 @@ Defaults to `null`, meaning the full document will be tested.
 
 ### `rules` (array)
 
-An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: THese won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset](https://github.com/squizlabs/HTML_CodeSniffer/blob/master/Standards/WCAG2AAA/ruleset.js) .
+An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: These won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset].
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     rules: [
         'Principle1.Guideline1_3.1_3_1_AAA'
     ]
@@ -583,8 +448,8 @@ pa11y({
 A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
 
 ```js
-pa11y({
-    screenCapture: __dirname + '/my-screen-capture.png'
+pa11y('http://example.com/', {
+    screenCapture: `${__dirname}/my-screen-capture.png`
 });
 ```
 
@@ -592,10 +457,10 @@ Defaults to `null`, meaning the screen will not be captured.
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA` (or match one of the standards in the [`allowedStandards`](#allowedstandards-array) option).
+The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     standard: 'Section508'
 });
 ```
@@ -607,36 +472,60 @@ Defaults to `WCAG2AA`.
 The time in milliseconds that a test should be allowed to run before calling back with a timeout error.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     timeout: 500
 });
 ```
 
 Defaults to `30000`.
 
+### `userAgent` (string)
+
+The `User-Agent` header to send with Pa11y requests. This is helpful to identify Pa11y in your logs.
+
+```js
+pa11y('http://example.com/', {
+    userAgent: 'A11Y TESTS'
+});
+```
+
+Defaults to `pa11y/<version>`.
+
+### `viewport` (object)
+
+The viewport configuration. This can have any of the properties supported by the [puppeteer `setViewport` method][puppeteer-viewport].
+
+```js
+pa11y('http://example.com/', {
+    viewport: {
+        width: 320,
+        height: 480,
+        deviceScaleFactor: 2,
+        isMobile: true
+    }
+});
+```
+
+Defaults to:
+
+```js
+{
+    width: 1280,
+    height: 1024
+}
+```
+
 ### `wait` (number)
 
 The time in milliseconds to wait before running HTML CodeSniffer on the page.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     wait: 500
 });
 ```
 
 Defaults to `0`.
-
-### `verifyPage` (string)
-
-HTML string to verify is present in the page source HTML. Could be used to ascertain that intended page is being tested (as opposed to error page) by using `<title>` tags and content (as below), or that a specific element is present.
-
-```js
-pa11y({
-    verifyPage: '<title>Nature Research: science journals, jobs, information and services.</title>'
-});
-```
-
-Defaults to `null`.
 
 
 Actions
@@ -645,7 +534,7 @@ Actions
 Actions are additional interactions that you can make Pa11y perform before the tests are run. They allow you to do things like click on a button, enter a value in a form, wait for a redirect, or wait for the URL fragment to change:
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'click element #tab-1',
         'wait for element #tab-1-content to be visible',
@@ -666,7 +555,7 @@ Below is a reference of all the available actions and what they do on the page. 
 This allows you to click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'click element #tab-1'
     ]
@@ -679,7 +568,7 @@ You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/
 This allows you to set the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `set field <selector> to <value>`. E.g.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'set field #fullname to John Doe'
     ]
@@ -691,7 +580,7 @@ pa11y({
 This allows you to check or uncheck checkbox and radio inputs by passing in a CSS selector. This action takes the form `check field <selector>` or `uncheck field <selector>`. E.g.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing'
@@ -713,7 +602,7 @@ This allows you to pause the test until a condition is met, and the page has eit
 E.g.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'click element #login-link',
         'wait for path to be /login'
@@ -733,7 +622,7 @@ This allows you to pause the test until an element on the page (matching a CSS s
 E.g.
 
 ```js
-pa11y({
+pa11y('http://example.com/', {
     actions: [
         'click element #tab-2',
         'wait for element #tab-1 to be hidden'
@@ -747,35 +636,15 @@ Examples
 
 ### Basic Example
 
-Run Pa11y on a URL and output the results. [See the example](example/basic/index.js), or run it with:
-
-```
-node example/basic
-```
+Run Pa11y on a URL and output the results. [See the example](example/basic/index.js).
 
 ### Multiple Example
 
-Use [async][async] to run Pa11y on multiple URLs in series, and output the results. [See the example](example/multiple/index.js), or run it with:
-
-```
-node example/multiple
-```
-
-### Multiple Concurrent Example
-
-Use [async][async] to run Pa11y on multiple URLs in parallel, with a configurable concurrency. Then output the results. [See the example](example/multiple-concurrent/index.js), or run it with:
-
-```
-node example/multiple-concurrent
-```
+Run Pa11y on multiple URLs at once and output the results. [See the example](example/multiple/index.js).
 
 ### Actions Example
 
 Step through some actions before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/actions/index.js).
-
-### Before Script Example
-
-Inject a script before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/before-script/index.js).
 
 
 Common Questions and Troubleshooting
@@ -851,10 +720,9 @@ Copyright &copy; 2013–2017, Team Pa11y
 [migration-5]: https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
-[phantom]: http://phantomjs.org/
-[phantom-cli]: http://phantomjs.org/api/command-line.html
-[phantom-node-options]: https://github.com/baudehlo/node-phantom-simple#node-phantom-simple
-[phantom-page-settings]: http://phantomjs.org/api/webpage/property/settings.html
+[promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
+[puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
