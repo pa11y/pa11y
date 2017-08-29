@@ -8,9 +8,58 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 Table Of Contents
 -----------------
 
+- [Migrating from 4.0 to 5.0](#migrating-from-40-to-50)
 - [Migrating from 3.0 to 4.0](#migrating-from-30-to-40)
 - [Migrating from 2.0 to 3.0](#migrating-from-20-to-30)
 - [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
+
+
+Migrating from 4.0 to 5.0
+-------------------------
+
+**TODO this migration guide is a work in progress. Please update as you work on Pa11y 5.x**
+
+### PhantomJS to Headless Chrome
+
+Pa11y 5.0 switches from PhantomJS to [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome). This allows us to use more modern JavaScript APIs and make Pa11y testing more stable.
+
+### Node.js Support
+
+Pa11y 5.0 only supports Node.js v8.0.0 and higher, you'll need to upgrade to be able to use the latest versions of Pa11y.
+
+### Command-Line Interface
+
+The command-line interface in 5.0 is similar to 4.0, but there are a few key changes.
+
+  - The `--verify-page` flag has been removed, as page verification can be achieved with screen-shots or observing the debug output
+  - The `--htmlcs` flag has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
+  - The `--port` flag has been removed, as this is not required to run multiple Headless Chrome instances
+
+### JavaScript Interface
+
+Pa11y is now completely [`Promise`-based](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise), and uses [`async`/`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function) internally. This means the API has changed significantly.
+
+You no longer need to create a separate test function, now Pa11y is just one function: `pa11y(url, options)`. See the [README](README.md) for more information.
+
+### Configuration
+
+Configuration options have had an update between 4.0 and 5.0:
+
+  - The `allowedStandards` option has been removed. This can still be set by manually adding entries to `pa11y.allowedStandards`
+  - The `beforeScript` option has been removed in favour of using actions (if the existing actions don't meet your needs, [please let us know](https://github.com/pa11y/pa11y/issues/228))
+  - The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
+  - The `page` option has been removed, as this was specific to PhantomJS. You can set the following options to achieve the same results:
+    - `page.headers` can now be set with a new `headers` option
+    - `page.settings.userAgent` can now be set with a new `userAgent` option
+    - `page.viewport` can now be set with a new `viewport` option
+  - The `phantom` option has been removed, as this was specific to PhantomJS
+  - The `verifyPage` option has been removed, as page verification can be achieved with screen-shots or by inspecting the `documentTitle` property of the results
+
+### Miscellaneous Changes
+
+  - The default viewport dimensions for Pa11y have been changed from `1024x768` to `1280x1024`
+  - The `wait-for-element-state` action no longer has a maximum number of retries – it will retry until Pa11y times out
+  - The "multiple-concurrent" example has been removed in favour of a single "multiple" example
 
 
 Migrating from 3.0 to 4.0
@@ -18,7 +67,7 @@ Migrating from 3.0 to 4.0
 
 ### Node.js Support
 
-The only breaking change in Pa11y Dashboard 4.0 is that Node.js 0.12 is no longer supported. We'll be using newer ES6 features in upcoming releases which will not work in this older Node.js version.
+The only breaking change in Pa11y 4.0 is that Node.js 0.12 is no longer supported. We'll be using newer ES6 features in upcoming releases which will not work in this older Node.js version.
 
 
 Migrating from 2.0 to 3.0

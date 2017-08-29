@@ -1,9 +1,9 @@
 'use strict';
 
-var chalk = require('chalk');
+const chalk = require('chalk');
 
-var start = chalk.cyan(' > ');
-var typeStarts = {
+const start = chalk.cyan(' > ');
+const typeStarts = {
 	error: chalk.red(' • Error: '),
 	notice: chalk.cyan(' • Notice: '),
 	unknown: chalk.grey(' • '),
@@ -19,6 +19,8 @@ module.exports = {
 	process: emptyFunction
 };
 
+/* eslint-disable prefer-template */
+
 function emptyFunction() {}
 
 function reportBegin() {
@@ -30,12 +32,12 @@ function reportError(message) {
 	if (/^error:/i.test(message)) {
 		console.error(message);
 	} else {
-		console.error(start + chalk.red('Error: ' + message));
+		console.error(start + chalk.red(`Error: ${message}`));
 	}
 }
 
 function reportDebug(message) {
-	console.log(start + chalk.gray('Debug: ' + message));
+	console.log(start + chalk.gray(`Debug: ${message}`));
 }
 
 function reportInfo(message) {
@@ -43,7 +45,7 @@ function reportInfo(message) {
 }
 
 function reportResults(results, url) {
-	console.log('\n' + chalk.underline('Results for ' + url + ':'));
+	console.log('\n' + chalk.underline(`Results for ${url}:`));
 	if (results.length === 0) {
 		return console.log('\n' + chalk.green('No errors found!') + '\n');
 	}
@@ -54,9 +56,7 @@ function reportResults(results, url) {
 
 function reportResult(result) {
 	console.log(
-		'\n' +
-		(typeStarts[result.type]) + result.message +
-		'\n' +
+		`\n${typeStarts[result.type]}${result.message}\n` +
 		chalk.grey('   ├── ' + result.code) +
 		'\n' +
 		chalk.grey('   ├── ' + result.selector.replace(/\s+/g, ' ')) +
@@ -66,15 +66,15 @@ function reportResult(result) {
 }
 
 function reportTotals(results) {
-	var totalErrors = results.filter(isError).length;
-	var totalNotices = results.filter(isNotice).length;
-	var totalWarnings = results.filter(isWarning).length;
+	const totalErrors = results.filter(isError).length;
+	const totalNotices = results.filter(isNotice).length;
+	const totalWarnings = results.filter(isWarning).length;
 	console.log(
-		chalk.red(totalErrors + ' Errors') +
+		chalk.red(`${totalErrors} Errors`) +
 		'\n' +
-		chalk.yellow(totalWarnings + ' Warnings') +
+		chalk.yellow(`${totalWarnings} Warnings`) +
 		'\n' +
-		chalk.cyan(totalNotices + ' Notices') +
+		chalk.cyan(`${totalNotices} Notices`) +
 		'\n'
 	);
 }
@@ -90,3 +90,5 @@ function isNotice(result) {
 function isWarning(result) {
 	return (result.type === 'warning');
 }
+
+/* eslint-enable prefer-template */
