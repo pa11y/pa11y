@@ -32,7 +32,7 @@ Pa11y 5.0 only supports Node.js v8.0.0 and higher, you'll need to upgrade to be 
 The command-line interface in 5.0 is similar to 4.0, but there are a few key changes.
 
   - The `--verify-page` flag has been removed, as page verification can be achieved with screen-shots or observing the debug output
-  - The `--htmlcs` flag has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses (TODO reconsider this)
+  - The `--htmlcs` flag has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
   - The `--port` flag has been removed, as this is not required to run multiple Headless Chrome instances
 
 ### JavaScript Interface
@@ -47,7 +47,7 @@ Configuration options have had an update between 4.0 and 5.0:
 
   - The `allowedStandards` option has been removed. This can still be set by manually adding entries to `pa11y.allowedStandards`
   - The `beforeScript` option has been removed in favour of using actions (if the existing actions don't meet your needs, [please let us know](https://github.com/pa11y/pa11y/issues/228))
-  - The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses (TODO reconsider this)
+  - The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
   - The `page` option has been removed, as this was specific to PhantomJS. You can set the following options to achieve the same results:
     - `page.headers` can now be set with a new `headers` option
     - `page.settings.userAgent` can now be set with a new `userAgent` option
