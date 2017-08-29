@@ -1,3 +1,4 @@
+'use strict';
 
 const assert = require('proclaim');
 const describeCliCall = require('./helper/describe-cli-call');

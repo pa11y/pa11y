@@ -1,3 +1,4 @@
+'use strict';
 
 const assert = require('proclaim');
 const createMockElement = require('../mock/element');

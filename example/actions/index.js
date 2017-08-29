@@ -1,6 +1,7 @@
 // An example of executing some actions before Pa11y runs.
 // This example logs in to a fictional site then waits
 // until the account page has loaded before running Pa11y.
+'use strict';
 
 const pa11y = require('../..');
 

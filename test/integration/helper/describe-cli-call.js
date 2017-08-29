@@ -1,3 +1,4 @@
+'use strict';
 
 const extend = require('node.extend');
 const path = require('path');

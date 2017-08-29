@@ -1,3 +1,4 @@
+'use strict';
 
 const startWebsite = require('./mock/website');
 

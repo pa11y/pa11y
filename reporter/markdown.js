@@ -1,3 +1,4 @@
+'use strict';
 
 const typeStarts = {
 	error: '__Error:__ ',

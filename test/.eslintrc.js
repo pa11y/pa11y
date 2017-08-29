@@ -1,3 +1,4 @@
+'use strict';
 
 // Clone the main config
 const config = module.exports = JSON.parse(JSON.stringify(require('../.eslintrc')));
