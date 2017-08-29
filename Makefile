@@ -1,5 +1,8 @@
 include Makefile.node
 
+export INTEGRATION_TIMEOUT := 10000
+export INTEGRATION_SLOW := 5000
+
 
 # Verify tasks
 # ------------

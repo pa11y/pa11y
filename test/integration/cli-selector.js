@@ -1,7 +1,7 @@
 'use strict';
 
-var assert = require('proclaim');
-var describeCliCall = require('./helper/describe-cli-call');
+const assert = require('proclaim');
+const describeCliCall = require('./helper/describe-cli-call');
 
 describe('Pa11y CLI Selectors', function() {
 
