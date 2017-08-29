@@ -61,7 +61,18 @@ pa11y('http://example.com', {
 
 ### How can Pa11y log in if my site's behind basic auth?
 
-TODO work out how you do this with Headless Chrome
+You can authenticate using basic auth by sending additional headers to Pa11y. This works with the JavaScript API, or on the command line by using a config file:
+
+```js
+const credentials = 'exampleuser:supersecretpassword';
+const encodedCredentials = new Buffer(credentials).toString('base64');
+
+pa11y('http://example.com', {
+    headers: {
+        Authorization: `Basic ${encodedCredentials}`
+    }
+});
+```
 
 ### How can Pa11y log in if my site has a log in form?
 
