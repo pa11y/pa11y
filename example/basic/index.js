@@ -1,24 +1,22 @@
 // An example of running Pa11y programmatically
 'use strict';
 
-var pa11y = require('../..');
+const pa11y = require('../..');
 
-// Create a test instance with some default options
-var test = pa11y({
+// Test http://example.com/
+pa11y('http://example.com/', {
 
 	// Log what's happening to the console
 	log: {
-		debug: console.log.bind(console),
-		error: console.error.bind(console),
-		info: console.log.bind(console)
+		debug: console.log,
+		error: console.error,
+		info: console.log
 	}
 
-});
-
-// Test http://example.com/
-test.run('example.com', function(error, result) {
-	if (error) {
-		return console.error(error.message);
-	}
+})
+.then(result => {
 	console.log(result);
+})
+.catch(error => {
+	console.error(error.message);
 });
