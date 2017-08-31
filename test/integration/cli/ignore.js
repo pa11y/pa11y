@@ -20,7 +20,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores warnings in the output', () => {
+		it('ignores warnings', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 2);
 			pa11yResponse.json.forEach(issue => {
@@ -41,7 +41,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores warnings and notices in the output', () => {
+		it('ignores warnings and notices', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 1);
 			pa11yResponse.json.forEach(issue => {
@@ -64,7 +64,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores all of the flagged items in the output', () => {
+		it('ignores all of the flagged items', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 1);
 			pa11yResponse.json.forEach(issue => {
@@ -86,7 +86,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores issues with the given code in the output', () => {
+		it('ignores issues with the given code', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 2);
 			pa11yResponse.json.forEach(issue => {
