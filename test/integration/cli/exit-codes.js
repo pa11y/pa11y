@@ -9,7 +9,7 @@ describe('CLI exit codes', () => {
 	describe('when Pa11y is run on a page with no errors', () => {
 
 		before(async () => {
-			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/no-errors`);
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`);
 		});
 
 		it('exits with a code of `0`', () => {
@@ -47,7 +47,7 @@ describe('CLI exit codes', () => {
 		describe('and Pa11y is run on a page with no warnings or errors', () => {
 
 			before(async () => {
-				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/no-errors`, {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--level', 'warning'
 					]
@@ -83,7 +83,7 @@ describe('CLI exit codes', () => {
 		describe('and Pa11y is run on a page with no notices, warnings, or errors', () => {
 
 			before(async () => {
-				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/no-errors`, {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--level', 'notice',
 						// We can't build a page that doesn't include notices, so we have
