@@ -6,7 +6,7 @@ const runPa11yCli = require('../helper/pa11y-cli');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe.only('CLI root-element', () => {
+describe('CLI root-element', () => {
 	let pa11yResponse;
 
 	describe('when the `--root-element` flag is set to an existing element selector', () => {
