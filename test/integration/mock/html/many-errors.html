@@ -11,11 +11,21 @@
 </head>
 <body>
 
+	<!-- Contrast generates an error -->
 	<p style="color: #eee;">
+
+		<!-- Using <b> over <strong> generates a warning -->
 		Hello <b>World</b>!
-		<img src="image.jpg"/>
+
+		<!-- Missing alt attribute generates an error -->
+		<img src="/path/to/image.jpg"/>
+
+		<!-- Empty anchor generates an error -->
 		<a href="http://localhost/image.jpg"></a>
+
 	</p>
+
+	<!-- Missing title attribute generates an error -->
 	<iframe src="http://localhost"></iframe>
 
 </body>

@@ -10,9 +10,6 @@ const rmdir = promisify(fs.rmdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-// Note: we use the JSON reporter in here to make it easier
-// to inspect the output issues. The regular CLI output is
-// tested in the reporter tests
 describe('CLI screen-capture', () => {
 	let pa11yResponse;
 	let screenCaptureDirectory;
