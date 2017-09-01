@@ -406,7 +406,7 @@ describe('lib/action', function() {
 				};
 				matches = 'set field foo to bar'.match(action.match);
 				returnedValue = action.build({}, page, {}, matches);
-			});
+			});	
 
 			it('returns a function', function() {
 				assert.isFunction(returnedValue);
@@ -434,9 +434,11 @@ describe('lib/action', function() {
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
 						element = {};
+						element.dispatchEvent = sinon.stub().returns({});
 						global.document = {
 							querySelector: sinon.stub().returns(element)
 						};
+						global.Event = sinon.stub().returns({});
 						returnedValue = evaluateFunction({
 							selector: 'mock-selector',
 							value: 'mock-value'
@@ -445,6 +447,7 @@ describe('lib/action', function() {
 
 					afterEach(function() {
 						delete global.document;
+						delete global.Event;
 					});
 
 					it('selects an element with the given selector', function() {
