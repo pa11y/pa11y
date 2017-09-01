@@ -433,8 +433,9 @@ describe('lib/action', function() {
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
-						element = {};
-						element.dispatchEvent = sinon.stub().returns({});
+						element = {
+							dispatchEvent: sinon.spy()
+						};
 						global.document = {
 							querySelector: sinon.stub().returns(element)
 						};
@@ -457,6 +458,10 @@ describe('lib/action', function() {
 
 					it('sets the element value', function() {
 						assert.strictEqual(element.value, 'mock-value');
+					});
+
+					it('dispatches an input event', function() {
+						assert.calledOnce(element.dispatchEvent);
 					});
 
 					it('returns `true`', function() {
