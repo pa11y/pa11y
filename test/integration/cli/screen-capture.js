@@ -11,7 +11,6 @@ const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
 describe('CLI screen-capture', () => {
-	let pa11yResponse;
 	let screenCaptureDirectory;
 	let screenCapturePath;
 
@@ -23,7 +22,7 @@ describe('CLI screen-capture', () => {
 			try {
 				await mkdir(screenCaptureDirectory);
 			} catch (error) {}
-			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
+			await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--screen-capture', screenCapturePath
 				]

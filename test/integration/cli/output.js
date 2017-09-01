@@ -25,7 +25,7 @@ describe('CLI output', () => {
 		});
 
 		it('outputs notices', () => {
-			const issue = pa11yResponse.json.find(issue => issue.type === 'notice');
+			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'notice');
 			assert.isObject(issue);
 
 			// Issue code
@@ -43,7 +43,7 @@ describe('CLI output', () => {
 		});
 
 		it('outputs warnings', () => {
-			const issue = pa11yResponse.json.find(issue => issue.type === 'warning');
+			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'warning');
 			assert.isObject(issue);
 
 			// Issue code
@@ -61,7 +61,7 @@ describe('CLI output', () => {
 		});
 
 		it('outputs errors', () => {
-			const issue = pa11yResponse.json.find(issue => issue.type === 'error');
+			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'error');
 			assert.isObject(issue);
 
 			// Issue code
@@ -86,7 +86,7 @@ describe('CLI output', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/selectors`, {
 				arguments: [
 					'--reporter', 'json',
-					'--ignore', 'warning;notice' // this is so we only deal with errors
+					'--ignore', 'warning;notice' // This is so we only deal with errors
 				]
 			});
 		});

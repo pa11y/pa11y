@@ -4,7 +4,7 @@ const startMockWebsite = require('./mock/website');
 
 before(async () => {
 	global.mockWebsite = await startMockWebsite();
-	global.mockWebsiteAddress = `http://localhost:${mockWebsite.address().port}`;
+	global.mockWebsiteAddress = `http://localhost:${global.mockWebsite.address().port}`;
 });
 
 after(() => {

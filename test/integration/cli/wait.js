@@ -16,7 +16,7 @@ describe('CLI wait', () => {
 				arguments: [
 					'--wait', '2100',
 					'--reporter', 'json',
-					'--ignore', 'warning;notice' // this is so we only deal with errors
+					'--ignore', 'warning;notice' // This is so we only deal with errors
 				]
 			});
 		});

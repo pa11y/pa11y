@@ -16,7 +16,7 @@ describe('CLI add-rule', () => {
 				arguments: [
 					'--add-rule', 'Principle1.Guideline1_4.1_4_6',
 					'--reporter', 'json',
-					'--ignore', 'warning;notice' // this is so we only deal with errors
+					'--ignore', 'warning;notice' // This is so we only deal with errors
 				]
 			});
 		});
