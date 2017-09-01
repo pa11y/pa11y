@@ -80,4 +80,33 @@ describe('CLI output', () => {
 
 	});
 
+	describe('when the issues on the page have varying selectors', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/selectors`, {
+				arguments: [
+					'--reporter', 'json',
+					'--ignore', 'warning;notice' // this is so we only deal with errors
+				]
+			});
+		});
+
+		it('outputs issues with the expected selectors', () => {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 8);
+			const selectors = pa11yResponse.json.map(issue => issue.selector);
+			assert.deepEqual(selectors, [
+				'html > body > img:nth-child(1)',
+				'#image2',
+				'#image3',
+				'#div1 > div > img',
+				'html > body > div:nth-child(4) > div:nth-child(3) > img',
+				'#div2 > img:nth-child(1)',
+				'#div2 > img:nth-child(2)',
+				'#div2 > img:nth-child(3)'
+			]);
+		});
+
+	});
+
 });
