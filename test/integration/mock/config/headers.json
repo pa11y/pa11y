@@ -1,0 +1,6 @@
+{
+	"headers": {
+		"foo": "bar",
+		"bar": "baz"
+	}
+}
