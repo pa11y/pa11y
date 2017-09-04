@@ -4,14 +4,27 @@ const fs = require('fs');
 const http = require('http');
 const parseUrl = require('url').parse;
 
-module.exports = startWebsite;
+module.exports = startMockWebsite;
 
-function startWebsite(port, done) {
-	const website = http.createServer((request, response) => {
+function startMockWebsite(port) {
+	return new Promise((resolve, reject) => {
+		const website = createMockWebsite();
+		website.listen(port, error => {
+			if (error) {
+				return reject(error);
+			}
+			resolve(website);
+		});
+	});
+}
+
+function createMockWebsite() {
+	return http.createServer((request, response) => {
 		const url = parseUrl(request.url).pathname;
 		try {
 			let html = fs.readFileSync(`${__dirname}/html/${url}.html`, 'utf-8');
 			html = html.replace('{foo-header}', request.headers.foo);
+			html = html.replace('{bar-header}', request.headers.bar);
 			response.writeHead(200, {
 				'Content-Type': 'text/html'
 			});
@@ -20,8 +33,5 @@ function startWebsite(port, done) {
 			response.writeHead(404);
 			response.end('Not found');
 		}
-	});
-	website.listen(port, error => {
-		done(error, website);
 	});
 }
