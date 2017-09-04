@@ -1,0 +1,32 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+after 2000ms, and then hides an element
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<div id="element-to-hide">
+		test
+	</div>
+
+	<script>
+		setTimeout(() => {
+			document.querySelector('img').remove();
+			document.querySelector('#element-to-hide').style.display = 'none';
+		}, 2000);
+	</script>
+
+</body>
+</html>
