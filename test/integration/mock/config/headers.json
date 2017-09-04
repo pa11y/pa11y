@@ -1,5 +1,6 @@
 {
 	"headers": {
-		"foo": "bar"
+		"foo": "bar",
+		"bar": "baz"
 	}
 }

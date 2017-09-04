@@ -1,0 +1,32 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+after 2000ms, and then makes an element visible
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<div id="element-to-show" style="display: none;">
+		test
+	</div>
+
+	<script>
+		setTimeout(() => {
+			document.querySelector('img').remove();
+			document.querySelector('#element-to-show').style.display = 'block';
+		}, 2000);
+	</script>
+
+</body>
+</html>

@@ -114,7 +114,7 @@ test-unit-coverage:
 	fi
 
 test-integration:
-	@if [ -d test/integration ]; then mocha test/integration --timeout $(INTEGRATION_TIMEOUT) --slow $(INTEGRATION_SLOW) && $(TASK_DONE); fi
+	@if [ -d test/integration ]; then mocha test/integration --timeout $(INTEGRATION_TIMEOUT) --slow $(INTEGRATION_SLOW) $(INTEGRATION_FLAGS) && $(TASK_DONE); fi
 
 
 # Tooling tasks
