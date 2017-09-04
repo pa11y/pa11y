@@ -1,0 +1,28 @@
+<!--
+This HTML file has an error in it that removed via JavaScript
+after 2000ms. This allows us to test the `wait` functionality
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<!-- Remove the image after 2000ms -->
+	<script>
+		setTimeout(() => {
+			document.querySelector('img').remove();
+		}, 2000);
+	</script>
+
+</body>
+</html>

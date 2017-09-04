@@ -1,0 +1,7 @@
+{
+	"ignore": [
+		"error",
+		"warning",
+		"notice"
+	]
+}
