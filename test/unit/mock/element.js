@@ -8,6 +8,7 @@ function createMockElement(data = {}) {
 	const element = Object.assign({
 		childNodes: [],
 		contains: sinon.stub().returns(false),
+		dispatchEvent: sinon.stub(),
 		getClientRects: sinon.stub().returns([]),
 		id: null,
 		innerHTML: 'mock-html',

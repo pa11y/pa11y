@@ -20,7 +20,7 @@ function reportResults(results) {
 }
 
 function buildTsv(results) {
-	return [['type', 'code', 'message', 'context', 'selector'].join('\t')]
+	return [['"type"', '"code"', '"message"', '"context"', '"selector"'].join('\t')]
 		.concat(results.map(buildTsvRow))
 		.join('\n');
 }

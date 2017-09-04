@@ -1,0 +1,42 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+when a field value is checked or unchecked
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<label for="checked-field">
+		<input type="checkbox" name="checked" id="checked-field" checked/>
+	</label>
+
+	<label for="unchecked-field">
+		<input type="checkbox" name="unchecked" id="unchecked-field"/>
+	</label>
+
+	<script>
+	document.querySelector('#checked-field').addEventListener('change', event => {
+		if (event.target.checked === false) {
+			document.querySelector('img').remove();
+		}
+	});
+	document.querySelector('#unchecked-field').addEventListener('change', event => {
+		if (event.target.checked === true) {
+			document.querySelector('img').remove();
+		}
+	});
+	</script>
+
+</body>
+</html>
