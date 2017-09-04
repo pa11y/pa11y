@@ -1,0 +1,30 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+after 2000ms, and then removes a div element
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<div id="element-to-remove">test</div>
+
+	<script>
+		setTimeout(() => {
+			document.querySelector('img').remove();
+			document.querySelector('#element-to-remove').remove();
+		}, 2000);
+	</script>
+
+</body>
+</html>

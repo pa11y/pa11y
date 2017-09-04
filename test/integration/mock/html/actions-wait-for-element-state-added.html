@@ -1,0 +1,31 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+after 2000ms, and then adds an element
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<script>
+		setTimeout(() => {
+			const addedElement = document.createElement('div');
+			addedElement.id = 'added-element';
+			addedElement.innerHTML = 'test';
+			document.querySelector('img').remove();
+			document.body.appendChild(addedElement);
+		}, 2000);
+	</script>
+
+</body>
+</html>

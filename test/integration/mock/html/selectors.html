@@ -1,18 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
 	<title>Page Title</title>
 
 </head>
 <body>
 
-	<p><b>Hello World!</b></p>
+	<!--
+	Missing alt attribute generates an error in all images below.
+	They demonstrate a full range of possible output selectors
+ 	-->
 
-	<p id="foo">paragraph <img alt=""/></p>
+	<img src="/path/to/image1.jpg"/>
 
-	<p>paragraph <b id="bar">bar</b></p>
+	<img src="/path/to/image2.jpg" id="image2"/>
+
+	<div id="div1">
+		<img src="/path/to/image3.jpg" id="image3"/>
+		<div>
+			<img src="/path/to/image4.jpg"/>
+		</div>
+	</div>
+
+	<div>
+		<div></div>
+		<div></div>
+		<div>
+			<img src="/path/to/image5.jpg"/>
+		</div>
+	</div>
+
+	<div id="div2">
+		<img src="/path/to/image6.jpg"/>
+		<img src="/path/to/image7.jpg"/>
+		<img src="/path/to/image8.jpg"/>
+	</div>
 
 </body>
 </html>
