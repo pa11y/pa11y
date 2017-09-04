@@ -21,6 +21,8 @@ describe('CLI config', () => {
 			});
 		});
 
+		// The test file ../mock/html/headers.html which we test here has request headers output in
+		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('sets headers on the tested page', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 1);

@@ -21,6 +21,9 @@ describe('CLI action "set-field-value"', () => {
 			});
 		});
 
+		// The test file ../mock/html/actions-set-field-value.html which we test here has an a11y
+		// error in the markup. When this action is performed the DOM is manupulated by JavaScript
+		// to remove the offending element, hence no a11y errors is proof of this successful action
 		it('sets the field value before running tests', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);

@@ -21,6 +21,10 @@ describe('CLI action "wait-for-element-state"', () => {
 			});
 		});
 
+		// The test file ../mock/html/actions-wait-for-element-state-added.html which we test here
+		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
+		// JavaScript to remove the offending element and add the expected element, hence no a11y
+		// errors is proof of this successful action
 		it('waits for the element to be added before running tests', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
@@ -40,6 +44,10 @@ describe('CLI action "wait-for-element-state"', () => {
 			});
 		});
 
+		// The test file ../mock/html/actions-wait-for-element-state-removed.html which we test here
+		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
+		// JavaScript to remove the offending element and remove the expected element, hence no a11y
+		// errors is proof of this successful action
 		it('waits for the element to be removed before running tests', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
@@ -59,6 +67,10 @@ describe('CLI action "wait-for-element-state"', () => {
 			});
 		});
 
+		// The test file ../mock/html/actions-wait-for-element-state-visible.html which we test here
+		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
+		// JavaScript to remove the offending element and make the expected element visible, hence
+		// no a11y errors is proof of this successful action
 		it('waits for the element to be visible before running tests', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
@@ -78,6 +90,10 @@ describe('CLI action "wait-for-element-state"', () => {
 			});
 		});
 
+		// The test file ../mock/html/actions-wait-for-element-state-hidden.html which we test here
+		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
+		// JavaScript to remove the offending element and hide the expected element, hence no a11y
+		// errors is proof of this successful action
 		it('waits for the element to be hidden before running tests', () => {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
