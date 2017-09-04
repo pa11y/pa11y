@@ -101,9 +101,9 @@ Usage: pa11y [options] <url>
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
     -r, --reporter <reporter>      the reporter to use: cli (default), csv, tsv, html, json
-    -l, --level <level>            the level of message to fail on (exit with code 2): error, warning, notice
+    -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
-    -i, --ignore <ignore>          types and codes of messages to ignore, a repeatable value or separated by semi-colons
+    -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
@@ -268,7 +268,7 @@ Pa11y resolves with a `results` object, containing details about the page and ac
 ```js
 {
     documentTitle: 'The title of the page that was tested',
-    messages: [
+    issues: [
         {
             code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
             context: '<a href="http://example.com/"><img src="example.jpg" alt=""/></a>',
