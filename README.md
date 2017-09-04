@@ -264,7 +264,9 @@ Pa11y can also be run with [some options](#configuration):
 ```js
 pa11y('http://example.com/', {
     // Options go here
-})
+}).then((results) => {
+    // Do something with the results
+});
 ```
 
 Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML CodeSniffer. It looks like this:
@@ -301,6 +303,8 @@ Pa11y resolves with a `results` object, containing details about the page and ac
 }
 ```
 
+### Transforming the Results
+
 If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
 
 ```js
@@ -308,6 +312,33 @@ If you wish to transform these results with the command-line reporters, then you
 // are available in a `results` variable:
 const htmlReporter = require('pa11y/reporter/html');
 const html = htmlReporter.process(results, url);
+```
+
+### Async/Await
+
+Because Pa11y is promise based, you can use `async` functions and the `await` keyword:
+
+```js
+async function runPa11y() {
+    try {
+        const results = await pa11y('http://example.com/');
+        // Do something with the results
+    } catch (error) {
+        // Handle the error
+    }
+}
+
+runPa11y();
+```
+
+### Callback Interface
+
+If you would rather use callbacks than promises or `async`/`await`, then Pa11y supports this. This interface should be considered legacy, however, and may not appear in the next major version of Pa11y:
+
+```js
+pa11y('http://example.com/', (error, results) => {
+    // Do something with the results or handle the error
+});
 ```
 
 ### Validating Actions
