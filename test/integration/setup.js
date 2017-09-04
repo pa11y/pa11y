@@ -1,8 +1,14 @@
 'use strict';
 
-const startWebsite = require('./mock/website');
+const startMockWebsite = require('./mock/website');
 
-before(function(done) {
-	this.port = process.env.PORT || 3131;
-	startWebsite(this.port, done);
+before(async () => {
+	global.mockWebsite = await startMockWebsite();
+	global.mockWebsiteAddress = `http://localhost:${global.mockWebsite.address().port}`;
+});
+
+after(() => {
+	global.mockWebsite.close();
+	delete global.mockWebsite;
+	delete global.mockWebsiteAddress;
 });
