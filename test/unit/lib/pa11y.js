@@ -419,6 +419,49 @@ describe('lib/pa11y', () => {
 
 	});
 
+	describe('pa11y(url, callback)', () => {
+		let callbackError;
+		let callbackResults;
+
+		beforeEach(done => {
+			pa11y('https://mock-url/', (error, results) => {
+				callbackError = error;
+				callbackResults = results;
+				done();
+			});
+		});
+
+		it('calls back with the Pa11y results', () => {
+			assert.strictEqual(callbackResults, pa11yResults);
+		});
+
+		describe('when something errors', () => {
+			let headlessChromeError;
+
+			beforeEach(done => {
+				headlessChromeError = new Error('headless chrome error');
+				puppeteer.mockBrowser.close.reset();
+				puppeteer.mockPage.goto.rejects(headlessChromeError);
+				pa11y('https://mock-url/', (error, results) => {
+					callbackError = error;
+					callbackResults = results;
+					done();
+				});
+			});
+
+			it('closes the browser', () => {
+				assert.calledOnce(puppeteer.mockBrowser.close);
+				assert.calledWithExactly(puppeteer.mockBrowser.close);
+			});
+
+			it('calls back with the error', () => {
+				assert.strictEqual(callbackError, headlessChromeError);
+			});
+
+		});
+
+	});
+
 	it('has an `isValidAction` method which aliases `action.isValidAction`', () => {
 		assert.isFunction(pa11y.isValidAction);
 		assert.strictEqual(pa11y.isValidAction, runAction.isValidAction);
