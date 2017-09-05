@@ -41,6 +41,18 @@ Pa11y is now completely [`Promise`-based](https://developer.mozilla.org/en/docs/
 
 You no longer need to create a separate test function, now Pa11y is just one function: `pa11y(url, options)`. See the [README](README.md) for more information.
 
+### Reporters
+
+The following reporters have been removed from Pa11y:
+
+  - `html`: The HTML reporter has moved outside of Pa11y, please install using `npm install pa11y-reporter-html`
+  - `markdown`: The HTML reporter has been removed. We may introduce as a separate module at a later date
+  - `tsv`: The TSV reporter has moved outside of Pa11y, please install using `npm install pa11y-reporter-tsv`
+
+(TODO actually publish the `html` and `tsv` reporters, so that the above isn't lying :grin:)
+
+Additionally the reporter interface has had an overhaul, and reporters that work for Pa11y 4.0 won't work for 5.0. See the [README](README.md) for more information on the API changes.
+
 ### Configuration
 
 Configuration options have had an update between 4.0 and 5.0:

@@ -100,7 +100,7 @@ Usage: pa11y [options] <url>
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
     -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
-    -r, --reporter <reporter>      the reporter to use: cli (default), csv, tsv, html, json
+    -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
@@ -192,10 +192,14 @@ The command-line tool can report test results in a few different ways using the 
 
   - `cli`: output test results in a human-readable format
   - `csv`: output test results as comma-separated values
-  - `tsv`: output test results as tab-separated values
-  - `html`: output test results as an HTML document
   - `json`: output test results as a JSON array
-  - `markdown`: output test results as a Markdown document
+
+The Pa11y team maintain some additional reporters which can be installed separately via `npm`:
+
+  - `html`: output test results in a self-contained HTML format (`npm install pa11y-reporter-html`)
+  - `tsv`: output test results as tab-separated values (`npm install pa11y-reporter-tsv`)
+
+(TODO actually publish the `html` and `tsv` reporters, so that the above isn't lying :grin:)
 
 You can also write and publish your own reporters. Pa11y looks for reporters in the core library, your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
@@ -206,30 +210,26 @@ pa11y --reporter rainbows http://example.com
 The following locations will be checked:
 
 ```
-<pa11y-core>/reporter/rainbows
+<pa11y-core>/lib/reporter/rainbows
 <cwd>/node_modules/pa11y-reporter-rainbows
 <cwd>/rainbows
 ```
 
-A Pa11y reporter should export the following methods, and these should make use of `console` to send output:
+A Pa11y reporter _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the reporter supports:
 
 ```js
-begin(url); // Called when pa11y starts
+exports.supports = '^5.0.0';
+```
+
+A reporter should export the following methods, which should all return strings. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
+
+```js
+begin(); // Called when pa11y starts
 error(message); // Called when a technical error is reported
 debug(message); // Called when a debug message is reported
 info(message); // Called when an information message is reported
-results(resultsArray, url); // Called with the results of a test run
+results(results); // Called with the results of a test run
 ```
-
-Reporters may also optionally export a `process` method. This should accept the same arguments as the `results` method but return the processed results rather than outputting them:
-
-```js
-process(resultsArray, url); // Called with results by a user
-```
-
-You may find the following reporters useful:
-
-  - [`1.0-json`][1.0-json-reporter]: output test results in the Pa11y 1.0 JSON format
 
 
 JavaScript Interface
@@ -754,6 +754,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
+[semver range]: https://github.com/npm/node-semver#ranges
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
