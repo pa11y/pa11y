@@ -36,7 +36,7 @@ describe('lib/runner', () => {
 					element: createMockElement({
 						id: 'mock-element'
 					}),
-					msg: 'mock message',
+					msg: 'mock issue',
 					type: 1
 				}
 			]);
@@ -60,20 +60,20 @@ describe('lib/runner', () => {
 			assert.isFunction(global.window.HTMLCS.process.firstCall.args[2]);
 		});
 
-		it('gets HTML CodeSniffer messages', () => {
+		it('gets HTML CodeSniffer issues', () => {
 			assert.calledOnce(global.window.HTMLCS.getMessages);
 			assert.calledWithExactly(global.window.HTMLCS.getMessages);
 		});
 
-		it('resolves with page details and an array of processed HTML CodeSniffer messages', () => {
+		it('resolves with page details and an array of processed HTML CodeSniffer issues', () => {
 			assert.isObject(resolvedValue);
 			assert.strictEqual(resolvedValue.documentTitle, window.document.title);
-			assert.isArray(resolvedValue.messages);
-			assert.deepEqual(resolvedValue.messages, [
+			assert.isArray(resolvedValue.issues);
+			assert.deepEqual(resolvedValue.issues, [
 				{
 					code: 'mock-code',
 					context: '<element>mock-html</element>',
-					message: 'mock message',
+					message: 'mock issue',
 					selector: '#mock-element',
 					type: 'error',
 					typeCode: 1
@@ -95,7 +95,7 @@ describe('lib/runner', () => {
 
 		});
 
-		describe('when a message type code is not found', () => {
+		describe('when an issue type code is not found', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -104,7 +104,7 @@ describe('lib/runner', () => {
 						element: createMockElement({
 							id: 'mock-element'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 7
 					}
 				]);
@@ -112,12 +112,12 @@ describe('lib/runner', () => {
 			});
 
 			it('resolves with a `type` of "unknown"', () => {
-				assert.strictEqual(resolvedValue.messages[0].type, 'unknown');
+				assert.strictEqual(resolvedValue.issues[0].type, 'unknown');
 			});
 
 		});
 
-		describe('when a message element has no `outerHTML`', () => {
+		describe('when an issue element has no `outerHTML`', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -127,7 +127,7 @@ describe('lib/runner', () => {
 							id: 'mock-element',
 							outerHTML: ''
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -135,12 +135,12 @@ describe('lib/runner', () => {
 			});
 
 			it('resolves with a `context` of `null`', () => {
-				assert.isNull(resolvedValue.messages[0].context);
+				assert.isNull(resolvedValue.issues[0].context);
 			});
 
 		});
 
-		describe('when a message element has a long `innerHTML`', () => {
+		describe('when an issue element has a long `innerHTML`', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -151,7 +151,7 @@ describe('lib/runner', () => {
 							innerHTML: 'mock-html-that-is-longer-than-31-characters',
 							outerHTML: '<element>mock-html-that-is-longer-than-31-characters</element>'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -159,12 +159,12 @@ describe('lib/runner', () => {
 			});
 
 			it('resolves with a `context` that has truncated `innerHTML`', () => {
-				assert.strictEqual(resolvedValue.messages[0].context, '<element>mock-html-that-is-longer-than-3...</element>');
+				assert.strictEqual(resolvedValue.issues[0].context, '<element>mock-html-that-is-longer-than-3...</element>');
 			});
 
 		});
 
-		describe('when a message element has a long `outerHTML`', () => {
+		describe('when an issue element has a long `outerHTML`', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -174,7 +174,7 @@ describe('lib/runner', () => {
 							id: 'mock-element',
 							outerHTML: '<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz">mock-html</element>'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -182,12 +182,12 @@ describe('lib/runner', () => {
 			});
 
 			it('resolves with a `context` that has truncated `innerHTML`', () => {
-				assert.strictEqual(resolvedValue.messages[0].context, '<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst...');
+				assert.strictEqual(resolvedValue.issues[0].context, '<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst...');
 			});
 
 		});
 
-		describe('when a message element does not have an ID', () => {
+		describe('when an issue element does not have an ID', () => {
 
 			describe('but it\'s parent node does have an ID', () => {
 
@@ -204,7 +204,7 @@ describe('lib/runner', () => {
 						{
 							code: 'mock-code',
 							element: child,
-							msg: 'mock message',
+							msg: 'mock issue',
 							type: 1
 						}
 					]);
@@ -212,7 +212,7 @@ describe('lib/runner', () => {
 				});
 
 				it('resolves with a `selector` that includes the parent ID and child tagname', () => {
-					assert.strictEqual(resolvedValue.messages[0].selector, '#mock-parent > child');
+					assert.strictEqual(resolvedValue.issues[0].selector, '#mock-parent > child');
 				});
 
 			});
@@ -231,7 +231,7 @@ describe('lib/runner', () => {
 						{
 							code: 'mock-code',
 							element: child,
-							msg: 'mock message',
+							msg: 'mock issue',
 							type: 1
 						}
 					]);
@@ -239,7 +239,7 @@ describe('lib/runner', () => {
 				});
 
 				it('resolves with a `selector` that includes the parent and child tagnames', () => {
-					assert.strictEqual(resolvedValue.messages[0].selector, 'parent > child');
+					assert.strictEqual(resolvedValue.issues[0].selector, 'parent > child');
 				});
 
 			});
@@ -268,7 +268,7 @@ describe('lib/runner', () => {
 						{
 							code: 'mock-code',
 							element: child,
-							msg: 'mock message',
+							msg: 'mock issue',
 							type: 1
 						}
 					]);
@@ -276,7 +276,7 @@ describe('lib/runner', () => {
 				});
 
 				it('resolves with a `selector` that includes an `nth-child` pseudo-class', () => {
-					assert.strictEqual(resolvedValue.messages[0].selector, 'parent > child:nth-child(2)');
+					assert.strictEqual(resolvedValue.issues[0].selector, 'parent > child:nth-child(2)');
 				});
 
 			});
@@ -292,7 +292,7 @@ describe('lib/runner', () => {
 						{
 							code: 'mock-code',
 							element: child,
-							msg: 'mock message',
+							msg: 'mock issue',
 							type: 1
 						}
 					]);
@@ -300,7 +300,7 @@ describe('lib/runner', () => {
 				});
 
 				it('resolves with an empty `selector`', () => {
-					assert.strictEqual(resolvedValue.messages[0].selector, '');
+					assert.strictEqual(resolvedValue.issues[0].selector, '');
 				});
 
 			});
@@ -327,7 +327,7 @@ describe('lib/runner', () => {
 
 		});
 
-		describe('when `options.ignore` includes a message type', () => {
+		describe('when `options.ignore` includes an issue type', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -336,7 +336,7 @@ describe('lib/runner', () => {
 						element: createMockElement({
 							id: 'mock-element'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					},
 					{
@@ -344,7 +344,7 @@ describe('lib/runner', () => {
 						element: createMockElement({
 							id: 'mock-element'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 2
 					}
 				]);
@@ -354,12 +354,12 @@ describe('lib/runner', () => {
 				resolvedValue = await runPa11y(options);
 			});
 
-			it('does not resolve with messages of that type', () => {
-				assert.deepEqual(resolvedValue.messages, [
+			it('does not resolve with issues of that type', () => {
+				assert.deepEqual(resolvedValue.issues, [
 					{
 						code: 'mock-warning',
 						context: '<element>mock-html</element>',
-						message: 'mock message',
+						message: 'mock issue',
 						selector: '#mock-element',
 						type: 'warning',
 						typeCode: 2
@@ -369,7 +369,7 @@ describe('lib/runner', () => {
 
 		});
 
-		describe('when `options.ignore` includes a message code', () => {
+		describe('when `options.ignore` includes an issue code', () => {
 
 			beforeEach(async () => {
 				global.window.HTMLCS.getMessages.returns([
@@ -378,7 +378,7 @@ describe('lib/runner', () => {
 						element: createMockElement({
 							id: 'mock-element'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					},
 					{
@@ -386,7 +386,7 @@ describe('lib/runner', () => {
 						element: createMockElement({
 							id: 'mock-element'
 						}),
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -396,12 +396,12 @@ describe('lib/runner', () => {
 				resolvedValue = await runPa11y(options);
 			});
 
-			it('does not resolve with messages with that code', () => {
-				assert.deepEqual(resolvedValue.messages, [
+			it('does not resolve with issues with that code', () => {
+				assert.deepEqual(resolvedValue.issues, [
 					{
 						code: 'mock-code-2',
 						context: '<element>mock-html</element>',
-						message: 'mock message',
+						message: 'mock issue',
 						selector: '#mock-element',
 						type: 'error',
 						typeCode: 1
@@ -409,7 +409,7 @@ describe('lib/runner', () => {
 				]);
 			});
 
-			describe('when the message code case does not match', () => {
+			describe('when the issue code case does not match', () => {
 
 				beforeEach(async () => {
 					global.window.HTMLCS.getMessages.returns([
@@ -418,7 +418,7 @@ describe('lib/runner', () => {
 							element: createMockElement({
 								id: 'mock-element'
 							}),
-							msg: 'mock message',
+							msg: 'mock issue',
 							type: 1
 						}
 					]);
@@ -428,8 +428,8 @@ describe('lib/runner', () => {
 					resolvedValue = await runPa11y(options);
 				});
 
-				it('still does not resolve with messages with that code', () => {
-					assert.deepEqual(resolvedValue.messages, []);
+				it('still does not resolve with issues with that code', () => {
+					assert.deepEqual(resolvedValue.issues, []);
 				});
 
 			});
@@ -461,13 +461,13 @@ describe('lib/runner', () => {
 					{
 						code: 'mock-code-1',
 						element: insideElement,
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					},
 					{
 						code: 'mock-code-2',
 						element: outsideElement,
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -479,12 +479,12 @@ describe('lib/runner', () => {
 				assert.calledWithExactly(window.document.querySelector, '#root-element');
 			});
 
-			it('does not resolve with messages outside of the root element', () => {
-				assert.deepEqual(resolvedValue.messages, [
+			it('does not resolve with issues outside of the root element', () => {
+				assert.deepEqual(resolvedValue.issues, [
 					{
 						code: 'mock-code-1',
 						context: '<element>mock-html</element>',
-						message: 'mock message',
+						message: 'mock issue',
 						selector: '#mock-inside-element',
 						type: 'error',
 						typeCode: 1
@@ -499,12 +499,12 @@ describe('lib/runner', () => {
 					resolvedValue = await runPa11y(options);
 				});
 
-				it('resolves with all messages', () => {
-					assert.deepEqual(resolvedValue.messages, [
+				it('resolves with all issues', () => {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-code-1',
 							context: '<element>mock-html</element>',
-							message: 'mock message',
+							message: 'mock issue',
 							selector: '#mock-inside-element',
 							type: 'error',
 							typeCode: 1
@@ -512,7 +512,7 @@ describe('lib/runner', () => {
 						{
 							code: 'mock-code-2',
 							context: '<element>mock-html</element>',
-							message: 'mock message',
+							message: 'mock issue',
 							selector: '#mock-outside-element',
 							type: 'error',
 							typeCode: 1
@@ -551,19 +551,19 @@ describe('lib/runner', () => {
 					{
 						code: 'mock-code-1',
 						element: unhiddenElement,
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					},
 					{
 						code: 'mock-code-2',
 						element: hiddenElement,
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					},
 					{
 						code: 'mock-code-3',
 						element: childOfHiddenElement,
-						msg: 'mock message',
+						msg: 'mock issue',
 						type: 1
 					}
 				]);
@@ -575,12 +575,12 @@ describe('lib/runner', () => {
 				assert.calledWithExactly(window.document.querySelectorAll, options.hideElements);
 			});
 
-			it('does not resolve with messages inside hidden elements, or that are hidden themselves', () => {
-				assert.deepEqual(resolvedValue.messages, [
+			it('does not resolve with issues inside hidden elements, or that are hidden themselves', () => {
+				assert.deepEqual(resolvedValue.issues, [
 					{
 						code: 'mock-code-1',
 						context: '<element>mock-html</element>',
-						message: 'mock message',
+						message: 'mock issue',
 						selector: '#mock-unhidden-element',
 						type: 'error',
 						typeCode: 1
