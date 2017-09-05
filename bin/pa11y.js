@@ -28,7 +28,7 @@ function configureProgram() {
 		)
 		.option(
 			'-l, --level <level>',
-			'the level of message to fail on (exit with code 2): error, warning, notice',
+			'the level of issue to fail on (exit with code 2): error, warning, notice',
 			'error'
 		)
 		.option(
@@ -38,7 +38,7 @@ function configureProgram() {
 		)
 		.option(
 			'-i, --ignore <ignore>',
-			'types and codes of messages to ignore, a repeatable value or separated by semi-colons',
+			'types and codes of issues to ignore, a repeatable value or separated by semi-colons',
 			collectOptions,
 			[]
 		)
@@ -94,12 +94,12 @@ async function runProgram() {
 	options.log.begin(program.url);
 	try {
 		const pa11yReport = await pa11y(program.url, options);
-		if (reportShouldFail(program.level, pa11yReport.messages, program.threshold)) {
+		if (reportShouldFail(program.level, pa11yReport.issues, program.threshold)) {
 			process.once('exit', () => {
 				process.exit(2);
 			});
 		}
-		options.log.results(pa11yReport.messages, program.url);
+		options.log.results(pa11yReport.issues, program.url);
 	} catch (error) {
 		options.log.error(error.stack);
 		process.exit(1);
