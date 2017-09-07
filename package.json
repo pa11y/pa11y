@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "4.12.2",
+  "version": "5.0.0-alpha",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -36,7 +36,8 @@
     "commander": "^2.9.0",
     "node.extend": "^2.0.0",
     "p-timeout": "^1.2.0",
-    "puppeteer": "^0.9.0"
+    "puppeteer": "^0.9.0",
+    "semver": "^5.4.1"
   },
   "devDependencies": {
     "eslint": "^3.18.0",
