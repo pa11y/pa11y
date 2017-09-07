@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 'use strict';
 
+const buildReporter = require('../lib/reporter');
 const extend = require('node.extend');
 const path = require('path');
 const pkg = require('../package.json');
 const program = require('commander');
 const pa11y = require('../lib/pa11y');
+const semver = require('semver');
 
 configureProgram();
 runProgram();
@@ -23,7 +25,7 @@ function configureProgram() {
 		)
 		.option(
 			'-r, --reporter <reporter>',
-			'the reporter to use: cli (default), csv, tsv, html, json',
+			'the reporter to use: cli (default), csv, json',
 			'cli'
 		)
 		.option(
@@ -90,33 +92,34 @@ async function runProgram() {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	const options = processOptions();
-	options.log.begin(program.url);
+	const report = loadReporter(program.reporter);
+	const options = processOptions(report.log);
+	await report.begin(program.url);
 	try {
-		const pa11yReport = await pa11y(program.url, options);
-		if (reportShouldFail(program.level, pa11yReport.issues, program.threshold)) {
+		const results = await pa11y(program.url, options);
+		if (reportShouldFail(program.level, results.issues, program.threshold)) {
 			process.once('exit', () => {
 				process.exit(2);
 			});
 		}
-		options.log.results(pa11yReport.issues, program.url);
+		await report.results(results);
 	} catch (error) {
-		options.log.error(error.stack);
+		await options.log.error(error.stack);
 		process.exit(1);
 	}
 }
 
-function processOptions() {
+function processOptions(log) {
 	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
-		log: loadReporter(program.reporter),
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
 		timeout: program.timeout,
-		wait: program.wait
+		wait: program.wait,
+		log
 	});
 
 	if (!program.debug) {
@@ -134,16 +137,35 @@ function loadConfig(filePath) {
 }
 
 function loadReporter(name) {
-	const reporter = requireFirst([
-		`../reporter/${name}`,
-		`pa11y-reporter-${name}`,
-		path.join(process.cwd(), name)
-	], null);
-	if (!reporter) {
+	let reporterMethods;
+	try {
+		reporterMethods = requireFirst([
+			`../lib/reporter/${name}`,
+			`pa11y-reporter-${name}`,
+			path.join(process.cwd(), name)
+		], null);
+	} catch (error) {
+		console.error(`An error occurred when loading the "${name}" reporter. This is not an error`);
+		console.error('with Pa11y itself, please contact the creator of this reporter\n');
+		console.error(error.stack);
+		process.exit(1);
+	}
+	if (!reporterMethods) {
 		console.error(`Reporter "${name}" could not be found`);
 		process.exit(1);
 	}
-	return reporter;
+	checkReporterCompatibility(name, reporterMethods.supports, pkg.version);
+	return buildReporter(reporterMethods);
+}
+
+function checkReporterCompatibility(reporterName, reporterSupportString, pa11yVersion) {
+	if (!reporterSupportString || !semver.satisfies(pa11yVersion, reporterSupportString)) {
+		console.error(`Error: The installed "${reporterName}" reporter does not support Pa11y ${pa11yVersion}`);
+		console.error('Please update your version of Pa11y or the reporter');
+		console.error(`Reporter Support: ${reporterSupportString}`);
+		console.error(`Pa11y Version:    ${pa11yVersion}`);
+		process.exit(1);
+	}
 }
 
 function requireFirst(stack, defaultReturn) {
@@ -153,7 +175,10 @@ function requireFirst(stack, defaultReturn) {
 	try {
 		return require(stack.shift());
 	} catch (error) {
-		return requireFirst(stack, defaultReturn);
+		if (error.code === 'MODULE_NOT_FOUND') {
+			return requireFirst(stack, defaultReturn);
+		}
+		throw error;
 	}
 }
 
