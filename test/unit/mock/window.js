@@ -11,6 +11,9 @@ module.exports = {
 		querySelectorAll: sinon.stub().returns([]),
 		title: 'mock-title'
 	},
+	location: {
+		href: 'mock-location-href'
+	},
 	/* eslint-disable camelcase */
 	HTMLCS: {
 		getMessages: sinon.stub().returns([]),
