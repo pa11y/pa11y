@@ -27,6 +27,10 @@ Pa11y 5.0 switches from PhantomJS to [Headless Chrome](https://developers.google
 
 Pa11y 5.0 only supports Node.js v8.0.0 and higher, you'll need to upgrade to be able to use the latest versions of Pa11y.
 
+### Warnings and Notices
+
+Pa11y 5.0 ignores warnings and notices by default, as these are not usually actionable or useful in automated testing. You can force Pa11y to include warnings and notices again by using the `--include-non-errors` command-line flag or the `includeNonErrors` option.
+
 ### Command-Line Interface
 
 The command-line interface in 5.0 is similar to 4.0, but there are a few key changes.

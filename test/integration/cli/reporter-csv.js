@@ -11,6 +11,7 @@ describe('CLI reporter CSV', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-non-errors',
 					'--reporter', 'csv'
 				]
 			});

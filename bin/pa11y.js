@@ -45,6 +45,10 @@ function configureProgram() {
 			[]
 		)
 		.option(
+			'--include-non-errors',
+			'Include warnings and notices in the report'
+		)
+		.option(
 			'-R, --root-element <selector>',
 			'a CSS selector used to limit which part of a page is tested'
 		)
@@ -113,6 +117,7 @@ function processOptions(log) {
 	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
+		includeNonErrors: program.includeNonErrors,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,

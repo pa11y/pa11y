@@ -32,6 +32,7 @@ describe('CLI root-element', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/root-element`, {
 				arguments: [
+					'--include-non-errors',
 					'--root-element', '#not-a-real-thing',
 					'--reporter', 'json'
 				]

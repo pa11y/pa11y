@@ -14,6 +14,7 @@ describe('CLI ignore', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-non-errors',
 					'--ignore', 'warning',
 					'--reporter', 'json'
 				]
@@ -35,6 +36,7 @@ describe('CLI ignore', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-non-errors',
 					'--ignore', 'warning;notice',
 					'--reporter', 'json'
 				]
@@ -57,6 +59,7 @@ describe('CLI ignore', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-non-errors',
 					'--ignore', 'warning',
 					'--ignore', 'notice',
 					'--reporter', 'json'
@@ -80,6 +83,7 @@ describe('CLI ignore', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-non-errors',
 					'--ignore', 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2',
 					'--reporter', 'json'
 				]
