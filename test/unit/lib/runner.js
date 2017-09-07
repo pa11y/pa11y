@@ -68,6 +68,7 @@ describe('lib/runner', () => {
 		it('resolves with page details and an array of processed HTML CodeSniffer issues', () => {
 			assert.isObject(resolvedValue);
 			assert.strictEqual(resolvedValue.documentTitle, window.document.title);
+			assert.strictEqual(resolvedValue.pageUrl, window.location.href);
 			assert.isArray(resolvedValue.issues);
 			assert.deepEqual(resolvedValue.issues, [
 				{
@@ -91,6 +92,20 @@ describe('lib/runner', () => {
 
 			it('resolves with an empty `documentTitle` property', () => {
 				assert.strictEqual(resolvedValue.documentTitle, '');
+			});
+
+		});
+
+		describe('when the location href is not set', () => {
+
+			beforeEach(async () => {
+				delete window.location.href;
+				global.window.HTMLCS.getMessages.returns([]);
+				resolvedValue = await runPa11y(options);
+			});
+
+			it('resolves with an empty `pageUrl` property', () => {
+				assert.strictEqual(resolvedValue.pageUrl, '');
 			});
 
 		});
