@@ -29,7 +29,7 @@ Pa11y CSV Reporter is compatible with Pa11y 5.0. It will not work with older ver
 
 ### Command-Line
 
-Install Pa11y and Pa11y CSV Reporter with [npm][npm] (locally or globally is fine):
+Install Pa11y and Pa11y CSV Reporter with [npm](https://www.npmjs.com/) (locally or globally is fine):
 
 ```sh
 npm install -g pa11y pa11y-reporter-csv
