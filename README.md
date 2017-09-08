@@ -1,7 +1,7 @@
 
 # Pa11y CSV Reporter
 
-A CSV reporter for [Pa11y 5.0](https://github.com/pa11y).
+A CSV reporter for [Pa11y 5.0](https://github.com/pa11y/pa11y).
 
 **:warning: this reporter is built into Pa11y, there's no need to install separately :warning:**
 
