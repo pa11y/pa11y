@@ -15,8 +15,7 @@ describe('CLI wait', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/wait`, {
 				arguments: [
 					'--wait', '2100',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});

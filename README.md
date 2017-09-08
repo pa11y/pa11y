@@ -104,6 +104,8 @@ Usage: pa11y [options] <url>
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
+    --include-notices              Include notices in the report
+    --include-warnings             Include warnings in the report
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
@@ -171,13 +173,13 @@ For more information on configuring Pa11y, see the [configuration documentation]
 The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```
-pa11y --ignore "warning;notice" http://example.com
+pa11y --ignore "issue-code-1;issue-code-2" http://example.com
 ```
 
 or by using the flag multiple times:
 
 ```
-pa11y --ignore warning --ignore notice http://example.com
+pa11y --ignore issue-code-1 --ignore issue-code-2 http://example.com
 ```
 
 Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
@@ -279,23 +281,8 @@ Pa11y resolves with a `results` object, containing details about the page and ac
             selector: 'html > body > p:nth-child(1) > a',
             type: 'error',
             typeCode: 1
-        },
-        {
-            code: 'WCAG2AA.Principle1.Guideline1_3.1_3_1.H49.B',
-            context: '<b>Hello World!</b>',
-            message: 'Semantic markup should be used to mark emphasised or special text so that it can be programmatically determined.',
-            selector: '#content > b:nth-child(4)',
-            type: 'warning',
-            typeCode: 2
-        },
-        {
-            code: 'WCAG2AA.Principle2.Guideline2_4.2_4_4.H77,H78,H79,H80,H81',
-            context: '<a href="http://example.com/">Hello World!</a>',
-            message: 'Check that the link text combined with programmatically determined link context identifies the purpose of the link.',
-            selector: 'html > body > ul > li:nth-child(2) > a',
-            type: 'notice',
-            typeCode: 3
         }
+        // more issues appear here
     ]
 }
 ```
@@ -423,18 +410,41 @@ pa11y('http://example.com/', {
 
 ### `ignore` (array)
 
-An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`.
+An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`. Note: `warning` and `notice` messages are ignored by default.
 
 ```js
 pa11y('http://example.com/', {
     ignore: [
-        'notice',
         'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'
     ]
 });
 ```
 
 Defaults to an empty array.
+
+### `includeNotices` (boolean)
+
+Whether to include results with a type of `notice` in the Pa11y report. Issues with a type of `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
+
+```js
+pa11y('http://example.com/', {
+    includeNotices: true
+});
+```
+
+Defaults to `false`.
+
+### `includeWarnings` (boolean)
+
+Whether to include results with a type of `warning` in the Pa11y report. Issues with a type of `warning` are not directly actionable and so they are excluded by default. You can include them by using this option:
+
+```js
+pa11y('http://example.com/', {
+    includeWarnings: true
+});
+```
+
+Defaults to `false`.
 
 ### `log` (object)
 
