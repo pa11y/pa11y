@@ -68,6 +68,7 @@ Configuration options have had an update between 4.0 and 5.0:
   - The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
   - The `page` option has been removed, as this was specific to PhantomJS. You can set the following options to achieve the same results:
     - `page.headers` can now be set with a new `headers` option
+    - `page.settings.operation` can now be set with a new `method` option
     - `page.settings.userAgent` can now be set with a new `userAgent` option
     - `page.viewport` can now be set with a new `viewport` option
   - The `phantom` option has been removed, as this was specific to PhantomJS

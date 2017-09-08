@@ -462,6 +462,18 @@ pa11y('http://example.com/', {
 
 Each of these defaults to an empty function.
 
+### `method` (string)
+
+The HTTP method to use when running Pa11y.
+
+```js
+pa11y('http://example.com/', {
+    method: 'POST'
+});
+```
+
+Defaults to `GET`.
+
 ### `rootElement` (element)
 
 The root element for testing a subset of the page opposed to the full document.

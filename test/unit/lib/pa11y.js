@@ -84,14 +84,52 @@ describe('lib/pa11y', () => {
 			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
 		});
 
-		it('creates a new page', () => {
-			assert.calledOnce(puppeteer.mockBrowser.newPage);
-			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
+		it('enables request interception', () => {
+			assert.calledOnce(puppeteer.mockPage.setRequestInterceptionEnabled);
+			assert.calledWithExactly(puppeteer.mockPage.setRequestInterceptionEnabled, true);
 		});
 
 		it('sets the user-agent', () => {
 			assert.calledOnce(puppeteer.mockPage.setUserAgent);
 			assert.calledWith(puppeteer.mockPage.setUserAgent, pa11y.defaults.userAgent);
+		});
+
+		it('adds a request handler to the page', () => {
+			assert.calledOnce(puppeteer.mockPage.on);
+			assert.calledWith(puppeteer.mockPage.on, 'request');
+			assert.isFunction(puppeteer.mockPage.on.firstCall.args[1]);
+		});
+
+		describe('request handler', () => {
+			let mockInterceptedRequest;
+
+			beforeEach(() => {
+				mockInterceptedRequest = {
+					continue: sinon.stub()
+				};
+				puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+			});
+
+			it('calls `interceptedRequest.continue` with the method option', () => {
+				assert.calledOnce(mockInterceptedRequest.continue);
+				assert.calledWith(mockInterceptedRequest.continue, {
+					method: pa11y.defaults.method
+				});
+			});
+
+			describe('when called a second time', () => {
+
+				beforeEach(() => {
+					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+				});
+
+				it('calls `interceptedRequest.continue` with an empty object', () => {
+					assert.calledTwice(mockInterceptedRequest.continue);
+					assert.deepEqual(mockInterceptedRequest.continue.secondCall.args[0], {});
+				});
+
+			});
+
 		});
 
 		it('navigates to `url`', () => {
@@ -588,6 +626,10 @@ describe('lib/pa11y', () => {
 
 		it('has a `log.info` method', () => {
 			assert.isFunction(pa11y.defaults.log.info);
+		});
+
+		it('has a `method` property', () => {
+			assert.deepEqual(pa11y.defaults.method, 'GET');
 		});
 
 		it('has a `rootElement` property', () => {

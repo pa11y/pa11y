@@ -25,6 +25,7 @@ function createMockWebsite() {
 			let html = fs.readFileSync(`${__dirname}/html/${url}.html`, 'utf-8');
 			html = html.replace('{foo-header}', request.headers.foo);
 			html = html.replace('{bar-header}', request.headers.bar);
+			html = html.replace('{method}', request.method);
 			response.writeHead(200, {
 				'Content-Type': 'text/html'
 			});
