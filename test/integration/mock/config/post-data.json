@@ -1,0 +1,4 @@
+{
+	"method": "POST",
+	"postData": "foo=bar&bar=baz"
+}
