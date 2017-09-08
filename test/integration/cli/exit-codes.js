@@ -49,7 +49,8 @@ describe('CLI exit codes', () => {
 			before(async () => {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
-						'--include-non-errors',
+						'--include-notices',
+						'--include-warnings',
 						'--level', 'warning'
 					]
 				});
@@ -66,7 +67,8 @@ describe('CLI exit codes', () => {
 			before(async () => {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 					arguments: [
-						'--include-non-errors',
+						'--include-notices',
+						'--include-warnings',
 						'--level', 'warning'
 					]
 				});
@@ -87,7 +89,8 @@ describe('CLI exit codes', () => {
 			before(async () => {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
-						'--include-non-errors',
+						'--include-notices',
+						'--include-warnings',
 						'--level', 'notice',
 						// We can't build a page that doesn't include notices, so we have
 						// to fake it by ignoring the only one there is
@@ -107,7 +110,8 @@ describe('CLI exit codes', () => {
 			before(async () => {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
-						'--include-non-errors',
+						'--include-notices',
+						'--include-warnings',
 						'--level', 'notice'
 					]
 				});
@@ -126,7 +130,8 @@ describe('CLI exit codes', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--threshold', '5'
 				]
 			});
@@ -143,7 +148,8 @@ describe('CLI exit codes', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--threshold', '4'
 				]
 			});

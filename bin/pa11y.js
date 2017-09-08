@@ -45,8 +45,12 @@ function configureProgram() {
 			[]
 		)
 		.option(
-			'--include-non-errors',
-			'Include warnings and notices in the report'
+			'--include-notices',
+			'Include notices in the report'
+		)
+		.option(
+			'--include-warnings',
+			'Include warnings in the report'
 		)
 		.option(
 			'-R, --root-element <selector>',
@@ -117,7 +121,8 @@ function processOptions(log) {
 	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
-		includeNonErrors: program.includeNonErrors,
+		includeNotices: program.includeNotices,
+		includeWarnings: program.includeWarnings,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,

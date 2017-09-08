@@ -29,7 +29,9 @@ Pa11y 5.0 only supports Node.js v8.0.0 and higher, you'll need to upgrade to be 
 
 ### Warnings and Notices
 
-Pa11y 5.0 ignores warnings and notices by default, as these are not usually actionable or useful in automated testing. You can force Pa11y to include warnings and notices again by using the `--include-non-errors` command-line flag or the `includeNonErrors` option.
+Pa11y 5.0 ignores warnings and notices by default, as these are not usually actionable or useful in automated testing.
+
+You can force Pa11y to include warnings and notices again by using the `--include-notices` and `--include-warnings` command-line flags, or the `includeNotices` and `includeWarnings` options.
 
 ### Command-Line Interface
 

@@ -104,7 +104,8 @@ Usage: pa11y [options] <url>
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
-    --include-non-errors           Include warnings and notices in the report
+    --include-notices              Include notices in the report
+    --include-warnings             Include warnings in the report
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
@@ -421,24 +422,25 @@ pa11y('http://example.com/', {
 
 Defaults to an empty array.
 
-### `includeNonErrors` (boolean)
+### `includeNotices` (boolean)
 
-Whether to include non-error results in the Pa11y report. Issues with a type of `warning` or `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
+Whether to include results with a type of `notice` in the Pa11y report. Issues with a type of `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
 pa11y('http://example.com/', {
-    includeNonErrors: true
+    includeNotices: true
 });
 ```
 
-You can use this in combination with the `ignore` flag if you want to, for example, show only errors and warnings but ignore notices:
+Defaults to `false`.
+
+### `includeWarnings` (boolean)
+
+Whether to include results with a type of `warning` in the Pa11y report. Issues with a type of `warning` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
 pa11y('http://example.com/', {
-    includeNonErrors: true,
-    ignore: [
-        'notice'
-    ]
+    includeWarnings: true
 });
 ```
 

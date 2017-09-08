@@ -54,12 +54,13 @@ describe('CLI output', () => {
 
 	});
 
-	describe('when Pa11y is run on a page with errors, warnings, and notices and the `--include-non-errors` flag is set', () => {
+	describe('when Pa11y is run on a page with errors, warnings, and notices and the `--include-notices`/`--include-warnings` flags are set', () => {
 
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--reporter', 'json'
 				]
 			});

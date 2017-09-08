@@ -15,7 +15,8 @@ describe('CLI config', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/headers`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--config', './mock/config/headers.json',
 					'--reporter', 'json'
 				]
@@ -37,7 +38,8 @@ describe('CLI config', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--config', './mock/config/ignore-warnings.json',
 					'--reporter', 'json'
 				]
@@ -56,7 +58,8 @@ describe('CLI config', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
-					'--include-non-errors',
+					'--include-notices',
+					'--include-warnings',
 					'--reporter', 'json'
 				],
 				workingDirectory: path.resolve(`${__dirname}/../mock/config`)
