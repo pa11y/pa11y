@@ -23,7 +23,9 @@ function createMockWebsite() {
 		request.body = '';
 
 		// Grab POST data if there is any
-		request.on('data', data => request.body += data);
+		request.on('data', data => {
+			request.body += data;
+		});
 		request.on('end', () => {
 			const url = parseUrl(request.url).pathname;
 			try {
