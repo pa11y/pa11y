@@ -15,8 +15,7 @@ describe('CLI action "set-field-value"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-set-field-value`, {
 				arguments: [
 					'--config', './mock/config/actions-set-field-value.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
