@@ -35,6 +35,7 @@
     "commander": "^2.9.0",
     "node.extend": "^2.0.0",
     "p-timeout": "^1.2.0",
+    "pa11y-reporter-csv": "^1.0.0",
     "puppeteer": "^0.10.2",
     "semver": "^5.4.1"
   },
