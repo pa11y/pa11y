@@ -15,8 +15,7 @@ describe('CLI action "wait-for-url"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-url-hash`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-url-hash.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
@@ -38,8 +37,7 @@ describe('CLI action "wait-for-url"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-url-path`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-url-path.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
