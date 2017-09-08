@@ -89,10 +89,6 @@ pa11y('http://example.com', {
 });
 ```
 
-### How do I make Pa11y use POST requests?
-
-TODO work out how you can do this with Headless Chrome
-
 ### How can I use Pa11y with a proxy server?
 
 TODO work out how you can do this with Headless Chrome

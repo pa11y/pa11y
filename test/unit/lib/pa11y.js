@@ -84,14 +84,50 @@ describe('lib/pa11y', () => {
 			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
 		});
 
-		it('creates a new page', () => {
-			assert.calledOnce(puppeteer.mockBrowser.newPage);
-			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
+		it('enables request interception', () => {
+			assert.calledOnce(puppeteer.mockPage.setRequestInterceptionEnabled);
+			assert.calledWithExactly(puppeteer.mockPage.setRequestInterceptionEnabled, true);
 		});
 
-		it('sets the user-agent', () => {
-			assert.calledOnce(puppeteer.mockPage.setUserAgent);
-			assert.calledWith(puppeteer.mockPage.setUserAgent, pa11y.defaults.userAgent);
+		it('adds a request handler to the page', () => {
+			assert.calledOnce(puppeteer.mockPage.on);
+			assert.calledWith(puppeteer.mockPage.on, 'request');
+			assert.isFunction(puppeteer.mockPage.on.firstCall.args[1]);
+		});
+
+		describe('request handler', () => {
+			let mockInterceptedRequest;
+
+			beforeEach(() => {
+				mockInterceptedRequest = {
+					continue: sinon.stub()
+				};
+				puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+			});
+
+			it('calls `interceptedRequest.continue` with the method option', () => {
+				assert.calledOnce(mockInterceptedRequest.continue);
+				assert.calledWith(mockInterceptedRequest.continue, {
+					method: pa11y.defaults.method,
+					headers: {
+						'user-agent': pa11y.defaults.userAgent
+					}
+				});
+			});
+
+			describe('when called a second time', () => {
+
+				beforeEach(() => {
+					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+				});
+
+				it('calls `interceptedRequest.continue` with an empty object', () => {
+					assert.calledTwice(mockInterceptedRequest.continue);
+					assert.deepEqual(mockInterceptedRequest.continue.secondCall.args[0], {});
+				});
+
+			});
+
 		});
 
 		it('navigates to `url`', () => {
@@ -366,6 +402,40 @@ describe('lib/pa11y', () => {
 
 		});
 
+		describe('when `options.postData` is set', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.on.resetHistory();
+				options.method = 'POST';
+				options.postData = 'mock-post-data';
+				await pa11y(options);
+			});
+
+			describe('request handler', () => {
+				let mockInterceptedRequest;
+
+				beforeEach(() => {
+					mockInterceptedRequest = {
+						continue: sinon.stub()
+					};
+					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+				});
+
+				it('calls `interceptedRequest.continue` with the postData option', () => {
+					assert.calledOnce(mockInterceptedRequest.continue);
+					assert.calledWith(mockInterceptedRequest.continue, {
+						method: options.method,
+						postData: options.postData,
+						headers: {
+							'user-agent': pa11y.defaults.userAgent
+						}
+					});
+				});
+
+			});
+
+		});
+
 		describe('when `options.screenCapture` is set', () => {
 
 			beforeEach(async () => {
@@ -405,20 +475,38 @@ describe('lib/pa11y', () => {
 		describe('when `options.headers` has properties', () => {
 
 			beforeEach(async () => {
+				puppeteer.mockPage.on.resetHistory();
 				options.headers = {
 					foo: 'bar',
-					bar: 'baz'
+					bar: 'baz',
+					'Foo-Bar-Baz': 'qux'
 				};
 				await pa11y(options);
 			});
 
-			it('sets the headers in the page', () => {
-				assert.calledOnce(puppeteer.mockPage.setExtraHTTPHeaders);
-				assert.instanceOf(puppeteer.mockPage.setExtraHTTPHeaders.firstCall.args[0], Map);
-				assert.deepEqual(Array.from(puppeteer.mockPage.setExtraHTTPHeaders.firstCall.args[0]), [
-					['foo', 'bar'],
-					['bar', 'baz']
-				]);
+			describe('request handler', () => {
+				let mockInterceptedRequest;
+
+				beforeEach(() => {
+					mockInterceptedRequest = {
+						continue: sinon.stub()
+					};
+					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+				});
+
+				it('calls `interceptedRequest.continue` with the headers option all lower-cased', () => {
+					assert.calledOnce(mockInterceptedRequest.continue);
+					assert.calledWith(mockInterceptedRequest.continue, {
+						method: pa11y.defaults.method,
+						headers: {
+							foo: 'bar',
+							bar: 'baz',
+							'foo-bar-baz': 'qux',
+							'user-agent': pa11y.defaults.userAgent
+						}
+					});
+				});
+
 			});
 
 		});
@@ -588,6 +676,14 @@ describe('lib/pa11y', () => {
 
 		it('has a `log.info` method', () => {
 			assert.isFunction(pa11y.defaults.log.info);
+		});
+
+		it('has a `method` property', () => {
+			assert.deepEqual(pa11y.defaults.method, 'GET');
+		});
+
+		it('has a `postData` property', () => {
+			assert.isNull(pa11y.defaults.postData);
 		});
 
 		it('has a `rootElement` property', () => {
