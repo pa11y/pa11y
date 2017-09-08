@@ -45,6 +45,14 @@ function configureProgram() {
 			[]
 		)
 		.option(
+			'--include-notices',
+			'Include notices in the report'
+		)
+		.option(
+			'--include-warnings',
+			'Include warnings in the report'
+		)
+		.option(
 			'-R, --root-element <selector>',
 			'a CSS selector used to limit which part of a page is tested'
 		)
@@ -113,6 +121,8 @@ function processOptions(log) {
 	const options = extend({}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
+		includeNotices: program.includeNotices,
+		includeWarnings: program.includeWarnings,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,

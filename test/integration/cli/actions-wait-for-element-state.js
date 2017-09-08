@@ -15,8 +15,7 @@ describe('CLI action "wait-for-element-state"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-added`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-added.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
@@ -38,8 +37,7 @@ describe('CLI action "wait-for-element-state"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-removed`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-removed.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
@@ -61,8 +59,7 @@ describe('CLI action "wait-for-element-state"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-visible`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-visible.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
@@ -84,8 +81,7 @@ describe('CLI action "wait-for-element-state"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-hidden`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-hidden.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});

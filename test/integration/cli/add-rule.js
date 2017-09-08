@@ -15,8 +15,7 @@ describe('CLI add-rule', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/contrast`, {
 				arguments: [
 					'--add-rule', 'Principle1.Guideline1_4.1_4_6',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});

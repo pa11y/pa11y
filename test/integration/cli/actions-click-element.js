@@ -15,8 +15,7 @@ describe('CLI action "click-element"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-click-element`, {
 				arguments: [
 					'--config', './mock/config/actions-click-element.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
