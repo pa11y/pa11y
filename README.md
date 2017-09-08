@@ -466,6 +466,46 @@ pa11y('http://example.com/', {
 
 Each of these defaults to an empty function.
 
+### `method` (string)
+
+The HTTP method to use when running Pa11y.
+
+```js
+pa11y('http://example.com/', {
+    method: 'POST'
+});
+```
+
+Defaults to `GET`.
+
+### `postData` (string)
+
+The HTTP POST data to send when running Pa11y. This should be combined with a `Content-Type` header. E.g to send form data:
+
+```js
+pa11y('http://example.com/', {
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    method: 'POST',
+    postData: 'foo=bar&bar=baz'
+});
+```
+
+Or to send JSON data:
+
+```js
+pa11y('http://example.com/', {
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    postData: '{"foo": "bar", "bar": "baz"}'
+});
+```
+
+Defaults to `null`.
+
 ### `rootElement` (element)
 
 The root element for testing a subset of the page opposed to the full document.

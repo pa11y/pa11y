@@ -33,6 +33,52 @@ describe('CLI config', () => {
 
 	});
 
+	describe('when the configuration specifies a method', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/method`, {
+				arguments: [
+					'--include-notices',
+					'--include-warnings',
+					'--config', './mock/config/method.json',
+					'--reporter', 'json'
+				]
+			});
+		});
+
+		// The test file ../mock/html/headers.html which we test here has request headers output in
+		// the page title, so reading the title confirms that headers were sent by Pa11y
+		it('tests the page using the specified HTTP method', () => {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.strictEqual(pa11yResponse.json[0].context, '<title>POST</title>');
+		});
+
+	});
+
+	describe('when the configuration specifies POST data', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/post-data`, {
+				arguments: [
+					'--include-notices',
+					'--include-warnings',
+					'--config', './mock/config/post-data.json',
+					'--reporter', 'json'
+				]
+			});
+		});
+
+		// The test file ../mock/html/headers.html which we test here has request headers output in
+		// the page title, so reading the title confirms that headers were sent by Pa11y
+		it('tests the page using the specified HTTP method', () => {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.strictEqual(pa11yResponse.json[0].context, '<title>foo=bar&amp;bar=baz</title>');
+		});
+
+	});
+
 	describe('when the configuration specifies ignore rules', () => {
 
 		before(async () => {
