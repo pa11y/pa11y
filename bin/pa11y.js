@@ -9,6 +9,18 @@ const program = require('commander');
 const pa11y = require('../lib/pa11y');
 const semver = require('semver');
 
+// FIXME This is a temporary hack. Currently Puppeteer rejects when
+// a request that has already been cancelled is intercepted. There's
+// no other way around this for now. Keep an eye on the discussion:
+// https://github.com/GoogleChrome/puppeteer/issues/627
+process.on('unhandledRejection', error => {
+	// If the error is NOT the above Puppeteer issue, then we do stuff
+	if (!/network.continueinterceptedrequest/i.test(error.message)) {
+		console.log(error.stack);
+		process.exit(1);
+	}
+});
+
 configureProgram();
 runProgram();
 
