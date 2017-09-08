@@ -739,12 +739,14 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 5             | N/A                | 8+               | N/A              |
-| :heart:         | 4             | N/A                | 4–8              | N/A              |
+| :heart:         | 4             | N/A                | 4–8              | N/A *            |
 | :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
 
 If you're opening issues related to these, please mention the version that the issue relates to.
+
+\* Pa11y 4's support end date will be reviewed at the end of this period based on community feedback.
 
 
 License
