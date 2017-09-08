@@ -89,5 +89,5 @@ Copyright &copy; 2017, Team Pa11y
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-npm]: https://img.shields.io/npm/v/pa11y.svg
-[shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg
+[shield-npm]: https://img.shields.io/npm/v/pa11y-reporter-csv.svg
+[shield-build]: https://img.shields.io/travis/pa11y/pa11y-reporter-csv/master.svg
