@@ -20,5 +20,5 @@ branches:
 
 # Build script
 script:
-  - 'if [ $LINT ]; then make lint; fi'
+  - 'if [ $LINT ]; then make verify; fi'
   - 'if [ ! $LINT ]; then make test; fi'
