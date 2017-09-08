@@ -14,6 +14,8 @@ describe('CLI standard', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-notices',
+					'--include-warnings',
 					'--standard', 'WCAG2A',
 					'--reporter', 'json'
 				]
@@ -35,6 +37,8 @@ describe('CLI standard', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-notices',
+					'--include-warnings',
 					'--standard', 'WCAG2AAA',
 					'--reporter', 'json'
 				]
@@ -56,6 +60,8 @@ describe('CLI standard', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
+					'--include-notices',
+					'--include-warnings',
 					'--standard', 'Section508',
 					'--reporter', 'json'
 				]
