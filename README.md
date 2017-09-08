@@ -431,6 +431,17 @@ pa11y('http://example.com/', {
 });
 ```
 
+You can use this in combination with the `ignore` flag if you want to, for example, show only errors and warnings but ignore notices:
+
+```js
+pa11y('http://example.com/', {
+    includeNonErrors: true,
+    ignore: [
+        'notice'
+    ]
+});
+```
+
 Defaults to `false`.
 
 ### `log` (object)
