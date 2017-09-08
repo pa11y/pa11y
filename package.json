@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-csv",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A CSV reporter for Pa11y",
   "keywords": [
     "csv",
