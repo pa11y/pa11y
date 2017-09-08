@@ -30,7 +30,6 @@
     "node": ">=8"
   },
   "dependencies": {
-    "async": "^2.2.0",
     "bfj": "^2.1.2",
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
