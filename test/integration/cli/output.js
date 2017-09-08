@@ -21,6 +21,53 @@ describe('CLI output', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 1);
+		});
+
+		it('does not output notices', () => {
+			const notices = pa11yResponse.json.filter(foundIssue => foundIssue.type === 'notice');
+			assert.lengthEquals(notices, 0);
+		});
+
+		it('does not output warnings', () => {
+			const warnings = pa11yResponse.json.filter(foundIssue => foundIssue.type === 'warning');
+			assert.lengthEquals(warnings, 0);
+		});
+
+		it('outputs errors', () => {
+			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'error');
+			assert.isObject(issue);
+
+			// Issue code
+			assert.isString(issue.code);
+			assert.match(issue.code, /^WCAG2AA\./);
+
+			// Issue message, context, and selector
+			assert.isString(issue.message);
+			assert.strictEqual(issue.context, '<html><head>\n\n\t<meta charset="utf-8">...</html>');
+			assert.strictEqual(issue.selector, 'html');
+
+			// Issue type
+			assert.strictEqual(issue.type, 'error');
+			assert.strictEqual(issue.typeCode, 1);
+		});
+
+	});
+
+	describe('when Pa11y is run on a page with errors, warnings, and notices and the `--include-notices`/`--include-warnings` flags are set', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
+				arguments: [
+					'--include-notices',
+					'--include-warnings',
+					'--reporter', 'json'
+				]
+			});
+		});
+
+		it('outputs the expected issues', () => {
+			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 3);
 		});
 
@@ -85,8 +132,7 @@ describe('CLI output', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/selectors`, {
 				arguments: [
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});

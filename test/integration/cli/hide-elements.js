@@ -22,7 +22,7 @@ describe('CLI hide-elements', () => {
 
 		it('ignores issues on and inside the hidden elements', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 2);
+			assert.lengthEquals(pa11yResponse.json, 1);
 		});
 
 	});
@@ -32,6 +32,8 @@ describe('CLI hide-elements', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/hide-elements`, {
 				arguments: [
+					'--include-notices',
+					'--include-warnings',
 					'--hide-elements', 'img, p',
 					'--reporter', 'json'
 				]

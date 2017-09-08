@@ -15,8 +15,7 @@ describe('CLI action "check-field"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-check-field`, {
 				arguments: [
 					'--config', './mock/config/actions-check-field-on.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});
@@ -37,8 +36,7 @@ describe('CLI action "check-field"', () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-check-field`, {
 				arguments: [
 					'--config', './mock/config/actions-check-field-off.json',
-					'--reporter', 'json',
-					'--ignore', 'warning;notice' // This is so we only deal with errors
+					'--reporter', 'json'
 				]
 			});
 		});

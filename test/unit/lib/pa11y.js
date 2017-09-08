@@ -121,7 +121,10 @@ describe('lib/pa11y', () => {
 			assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
 			assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1], {
 				hideElements: pa11y.defaults.hideElements,
-				ignore: pa11y.defaults.ignore,
+				ignore: [
+					'notice',
+					'warning'
+				],
 				rootElement: pa11y.defaults.rootElement,
 				rules: pa11y.defaults.rules,
 				standard: pa11y.defaults.standard,
@@ -282,14 +285,82 @@ describe('lib/pa11y', () => {
 			beforeEach(async () => {
 				extend.reset();
 				options.ignore = [
-					'WARNING'
+					'MOCK-IGNORE'
 				];
 				await pa11y(options);
 			});
 
 			it('lowercases them', () => {
-				assert.deepEqual(extend.firstCall.args[0].ignore, [
+				assert.include(extend.firstCall.args[0].ignore, 'mock-ignore');
+			});
+
+		});
+
+		describe('when `options.includeNotices` is `false`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				options.ignore = [];
+				options.includeNotices = false;
+				await pa11y(options);
+			});
+
+			it('automatically ignores notices', () => {
+				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+					'notice',
 					'warning'
+				]);
+			});
+
+		});
+
+		describe('when `options.includeNotices` is `true`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				options.ignore = [];
+				options.includeNotices = true;
+				await pa11y(options);
+			});
+
+			it('does not automatically ignore notices', () => {
+				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+					'warning'
+				]);
+			});
+
+		});
+
+		describe('when `options.includeWarnings` is `false`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				options.ignore = [];
+				options.includeWarnings = false;
+				await pa11y(options);
+			});
+
+			it('automatically ignores warnings', () => {
+				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+					'notice',
+					'warning'
+				]);
+			});
+
+		});
+
+		describe('when `options.includeWarnings` is `true`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				options.ignore = [];
+				options.includeWarnings = true;
+				await pa11y(options);
+			});
+
+			it('does not automatically ignore warnings', () => {
+				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+					'notice'
 				]);
 			});
 
@@ -493,6 +564,14 @@ describe('lib/pa11y', () => {
 
 		it('has an `ignore` property', () => {
 			assert.deepEqual(pa11y.defaults.ignore, []);
+		});
+
+		it('has an `includeNotices` property', () => {
+			assert.isFalse(pa11y.defaults.includeNotices);
+		});
+
+		it('has an `includeWarnings` property', () => {
+			assert.isFalse(pa11y.defaults.includeWarnings);
 		});
 
 		it('has a `log` property', () => {
