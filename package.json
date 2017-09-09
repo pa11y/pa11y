@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-json",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A JSON reporter for Pa11y",
   "keywords": [
     "json",
