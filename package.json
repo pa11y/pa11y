@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-tsv",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A Tab-Separated-Value reporter for Pa11y",
   "keywords": [
     "tsv",
