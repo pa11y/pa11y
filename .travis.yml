@@ -1,0 +1,24 @@
+
+# Build matrix
+language: node_js
+matrix:
+  include:
+
+    # Run linter once
+    - node_js: '8'
+      env: LINT=true
+
+    # Run tests
+    - node_js: '8'
+
+# Restrict builds on branches
+branches:
+  only:
+    - master
+    - /^\d+\.x$/
+    - /^\d+\.\d+\.\d+$/
+
+# Build script
+script:
+  - 'if [ $LINT ]; then make verify; fi'
+  - 'if [ ! $LINT ]; then make test; fi'

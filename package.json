@@ -1,0 +1,37 @@
+{
+  "name": "pa11y-reporter-html",
+  "version": "0.0.0",
+  "description": "An HTML reporter for Pa11y",
+  "keywords": [
+    "html",
+    "pa11y",
+    "reporter"
+  ],
+  "author": "Team Pa11y",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pa11y-reporter-html/pa11y-reporter-html.git"
+  },
+  "homepage": "https://github.com/pa11y-reporter-html/pa11y-reporter-html",
+  "bugs": "https://github.com/pa11y-reporter-html/pa11y-reporter-html/issues",
+  "license": "LGPL-3.0",
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "hogan.js": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "mocha": "^3.5.0",
+    "mockery": "^2.0.0",
+    "nyc": "^10.1.2",
+    "pa11y-lint-config": "^1.2.0",
+    "proclaim": "^3.4.4",
+    "sinon": "^3.2.0"
+  },
+  "main": "./lib/reporter.js",
+  "scripts": {
+    "test": "make ci"
+  }
+}
