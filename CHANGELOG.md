@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.12.2 (2017-09-11)
+
+  * Exit with an error when using an incompatible command-line reporter
+
 ## 4.12.1 (2017-08-23)
 
   * Roll back dependencies
