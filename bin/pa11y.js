@@ -162,7 +162,6 @@ function loadReporter(name) {
 	let reporterMethods;
 	try {
 		reporterMethods = requireFirst([
-			`../lib/reporter/${name}`,
 			`pa11y-reporter-${name}`,
 			path.join(process.cwd(), name)
 		], null);
