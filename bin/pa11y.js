@@ -6,6 +6,7 @@ var path = require('path');
 var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
+var semver = require('semver');
 
 configureProgram(program);
 runProgram(program);
@@ -175,7 +176,18 @@ function loadReporter(name) {
 		console.error('Reporter "' + name + '" could not be found');
 		process.exit(1);
 	}
+	checkReporterCompatibility(name, reporter.supports, pkg.version);
 	return reporter;
+}
+
+function checkReporterCompatibility(reporterName, reporterSupportString, pa11yVersion) {
+	if (reporterSupportString && !semver.satisfies(pa11yVersion, reporterSupportString)) {
+		console.error('Error: The installed "' + reporterName + '" reporter does not support Pa11y ' + pa11yVersion);
+		console.error('Please update your version of Pa11y to use this reporter');
+		console.error('Reporter Support: ' + reporterSupportString);
+		console.error('Pa11y Version:    ' + pa11yVersion);
+		process.exit(1);
+	}
 }
 
 function requireFirst(stack, defaultReturn) {
