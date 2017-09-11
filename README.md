@@ -203,7 +203,7 @@ The Pa11y team maintain some additional reporters which can be installed separat
 
 (TODO actually publish the `html` and `tsv` reporters, so that the above isn't lying :grin:)
 
-You can also write and publish your own reporters. Pa11y looks for reporters in the core library, your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
+You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```
 pa11y --reporter rainbows http://example.com
@@ -212,7 +212,6 @@ pa11y --reporter rainbows http://example.com
 The following locations will be checked:
 
 ```
-<pa11y-core>/lib/reporter/rainbows
 <cwd>/node_modules/pa11y-reporter-rainbows
 <cwd>/rainbows
 ```
