@@ -198,10 +198,8 @@ The command-line tool can report test results in a few different ways using the 
 
 The Pa11y team maintain some additional reporters which can be installed separately via `npm`:
 
-  - `html`: output test results in a self-contained HTML format (`npm install pa11y-reporter-html`)
-  - `tsv`: output test results as tab-separated values (`npm install pa11y-reporter-tsv`)
-
-(TODO actually publish the `html` and `tsv` reporters, so that the above isn't lying :grin:)
+  - [`html`](https://github.com/pa11y/pa11y-reporter-html): output test results in a self-contained HTML format (`npm install pa11y-reporter-html`)
+  - [`tsv`](https://github.com/pa11y/pa11y-reporter-tsv): output test results as tab-separated values (`npm install pa11y-reporter-tsv`)
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
