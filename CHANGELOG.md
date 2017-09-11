@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.0-beta.1 pre-release (2017-09-11)
+
+  * See the [migration guide](https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50) for details
+
 ## 4.12.1 (2017-08-23)
 
   * Roll back dependencies
