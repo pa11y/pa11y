@@ -38,11 +38,9 @@ We're pleased to announce the Pa11y 5.0 beta is now available! We're switching f
 
 If you'd like to try out the Pa11y 5.0 beta you can do so with
 
-> npm install -g pa11y@beta
+`npm install -g pa11y@beta`
 
 Feedback is greatly appreciated 😊
-
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
 ---
 
