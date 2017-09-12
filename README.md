@@ -15,8 +15,6 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
 
 ## Latest news from Pa11y
 
-💭 We'd like to find out how you use Pa11y and what you think about it. Please [fill in our survey][survey] to let us know your thoughts!
-
 ✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
 
 ---
@@ -189,7 +187,6 @@ Copyright &copy; 2016–2017, Team Pa11y
 [pa11y]: https://github.com/pa11y/pa11y
 [pa11y configurations]: https://github.com/pa11y/pa11y#configuration
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
-[survey]: https://goo.gl/forms/AiMDJR2IuaqX4iD03
 [twitter]: https://twitter.com/pa11yorg
 
 [info-dependencies]: https://gemnasium.com/pa11y/ci
