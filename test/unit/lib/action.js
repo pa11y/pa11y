@@ -534,6 +534,97 @@ describe('lib/action', () => {
 
 	});
 
+	describe('screen-capture action', () => {
+		let action;
+
+		beforeEach(() => {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'screen-capture';
+			});
+		});
+
+		it('has a name property', () => {
+			assert.strictEqual(action.name, 'screen-capture');
+		});
+
+		it('has a match property', () => {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', () => {
+
+			it('matches all of the expected action strings', () => {
+				assert.deepEqual('screen capture foo.png'.match(action.match), [
+					'screen capture foo.png',
+					'screen capture',
+					undefined,
+					'foo.png'
+				]);
+				assert.deepEqual('screen-capture foo.png'.match(action.match), [
+					'screen-capture foo.png',
+					'screen-capture',
+					undefined,
+					'foo.png'
+				]);
+				assert.deepEqual('capture screen to foo.png'.match(action.match), [
+					'capture screen to foo.png',
+					'capture screen',
+					' to',
+					'foo.png'
+				]);
+			});
+
+		});
+
+		it('has a `run` method', () => {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', () => {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async () => {
+				matches = 'screen capture foo.png'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			});
+
+			it('captures the full screen', () => {
+				assert.calledOnce(puppeteer.mockPage.screenshot);
+				assert.calledWith(puppeteer.mockPage.screenshot, {
+					path: matches[3],
+					fullPage: true
+				});
+			});
+
+			it('resolves with `undefined`', () => {
+				assert.isUndefined(resolvedValue);
+			});
+
+			describe('when the screen capture fails', () => {
+				let screenCaptureError;
+				let rejectedError;
+
+				beforeEach(async () => {
+					screenCaptureError = new Error('screen capture error');
+					puppeteer.mockPage.screenshot.rejects(screenCaptureError);
+					try {
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					} catch (error) {
+						rejectedError = error;
+					}
+				});
+
+				it('rejects with the error', () => {
+					assert.strictEqual(rejectedError, screenCaptureError);
+				});
+
+			});
+
+		});
+
+	});
+
 	describe('wait-for-url action', () => {
 		let action;
 

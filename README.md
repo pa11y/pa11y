@@ -624,6 +624,7 @@ pa11y('http://example.com/', {
         'set field #fullname to John Doe',
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing',
+        'screen capture example.png',
         'wait for fragment to be #page-2',
         'wait for path to not be /login',
         'wait for url to be https://example.com/'
@@ -667,6 +668,18 @@ pa11y('http://example.com/', {
     actions: [
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing'
+    ]
+});
+```
+
+### Screen Capture
+
+This allows you to capture the screen between other actions, useful to verify that the page looks as you expect before the Pa11y test runs. This action takes the form `screen capture <file-path>`. E.g.
+
+```js
+pa11y('http://example.com/', {
+    actions: [
+        'screen capture example.png'
     ]
 });
 ```
