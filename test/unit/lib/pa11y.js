@@ -13,6 +13,7 @@ describe('lib/pa11y', () => {
 	let promiseTimeout;
 	let puppeteer;
 	let runAction;
+	let util;
 
 	beforeEach(() => {
 
@@ -38,6 +39,9 @@ describe('lib/pa11y', () => {
 		mockery.registerMock('puppeteer', puppeteer);
 
 		puppeteer.mockPage.evaluate.resolves(pa11yResults);
+
+		util = require('../mock/util');
+		mockery.registerMock('util', util);
 
 		pa11y = require('../../../lib/pa11y');
 
@@ -90,9 +94,9 @@ describe('lib/pa11y', () => {
 		});
 
 		it('adds a request handler to the page', () => {
-			assert.calledOnce(puppeteer.mockPage.on);
+			assert.called(puppeteer.mockPage.on);
 			assert.calledWith(puppeteer.mockPage.on, 'request');
-			assert.isFunction(puppeteer.mockPage.on.firstCall.args[1]);
+			assert.isFunction(puppeteer.mockPage.on.withArgs('request').firstCall.args[1]);
 		});
 
 		describe('request handler', () => {
@@ -102,7 +106,7 @@ describe('lib/pa11y', () => {
 				mockInterceptedRequest = {
 					continue: sinon.stub()
 				};
-				puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+				puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 			});
 
 			it('calls `interceptedRequest.continue` with the method option', () => {
@@ -118,7 +122,7 @@ describe('lib/pa11y', () => {
 			describe('when called a second time', () => {
 
 				beforeEach(() => {
-					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
 				it('calls `interceptedRequest.continue` with an empty object', () => {
@@ -126,6 +130,30 @@ describe('lib/pa11y', () => {
 					assert.deepEqual(mockInterceptedRequest.continue.secondCall.args[0], {});
 				});
 
+			});
+
+		});
+
+		it('adds a console handler to the page', () => {
+			assert.called(puppeteer.mockPage.on);
+			assert.calledWith(puppeteer.mockPage.on, 'console');
+			assert.isFunction(puppeteer.mockPage.on.withArgs('console').firstCall.args[1]);
+		});
+
+		describe('console handler', () => {
+
+			beforeEach(() => {
+				util.inspect.withArgs('mock-arg-1').returns('\'mock-arg-1\'');
+				util.inspect.withArgs(true).returns('true');
+				util.inspect.withArgs(['mock-arg-2']).returns('[ \'mock-arg-2\' ]');
+				puppeteer.mockPage.on.withArgs('console').firstCall.args[1]('mock-arg-1', true, ['mock-arg-2']);
+			});
+
+			it('calls `util.inspect` with each console argument', () => {
+				assert.calledThrice(util.inspect);
+				assert.calledWith(util.inspect, 'mock-arg-1');
+				assert.calledWith(util.inspect, true);
+				assert.calledWith(util.inspect, ['mock-arg-2']);
 			});
 
 		});
@@ -277,8 +305,13 @@ describe('lib/pa11y', () => {
 
 		beforeEach(async () => {
 			options = {
+				mockOptions: true,
 				url: 'https://mock-url/',
-				mockOptions: true
+				log: {
+					debug: sinon.stub(),
+					error: sinon.stub(),
+					info: sinon.stub()
+				}
 			};
 			await pa11y(options);
 		});
@@ -295,6 +328,28 @@ describe('lib/pa11y', () => {
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle'
 			});
+		});
+
+		describe('console handler', () => {
+
+			beforeEach(() => {
+				util.inspect.withArgs('mock-arg-1').returns('\'mock-arg-1\'');
+				util.inspect.withArgs(true).returns('true');
+				util.inspect.withArgs(['mock-arg-2']).returns('[ \'mock-arg-2\' ]');
+				puppeteer.mockPage.on.withArgs('console').firstCall.args[1]('mock-arg-1', true, ['mock-arg-2']);
+			});
+
+			it('calls `util.inspect` with each console argument', () => {
+				assert.calledThrice(util.inspect);
+				assert.calledWith(util.inspect, 'mock-arg-1');
+				assert.calledWith(util.inspect, true);
+				assert.calledWith(util.inspect, ['mock-arg-2']);
+			});
+
+			it('logs the console arguments with `options.log.debug`', () => {
+				assert.calledWithExactly(options.log.debug, 'Browser Console: \'mock-arg-1\' true [ \'mock-arg-2\' ]');
+			});
+
 		});
 
 		describe('when `options.standard` is invalid', () => {
@@ -418,7 +473,7 @@ describe('lib/pa11y', () => {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
-					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
 				it('calls `interceptedRequest.continue` with the postData option', () => {
@@ -491,7 +546,7 @@ describe('lib/pa11y', () => {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
-					puppeteer.mockPage.on.firstCall.args[1](mockInterceptedRequest);
+					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
 				it('calls `interceptedRequest.continue` with the headers option all lower-cased', () => {
