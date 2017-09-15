@@ -24,7 +24,7 @@ describe('CLI ignore', () => {
 
 		it('ignores warnings', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 2);
+			assert.lengthEquals(pa11yResponse.json, 3);
 			pa11yResponse.json.forEach(issue => {
 				assert.notStrictEqual(issue.type, 'warning');
 			});
@@ -96,7 +96,7 @@ describe('CLI ignore', () => {
 
 		it('ignores issues with the given code', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 2);
+			assert.lengthEquals(pa11yResponse.json, 3);
 			pa11yResponse.json.forEach(issue => {
 				assert.notStrictEqual(issue.code, 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2');
 			});
