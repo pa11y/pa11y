@@ -68,7 +68,7 @@ describe('CLI output', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 3);
+			assert.lengthEquals(pa11yResponse.json, 4);
 		});
 
 		it('outputs notices', () => {
@@ -99,8 +99,8 @@ describe('CLI output', () => {
 
 			// Issue message, context, and selector
 			assert.isString(issue.message);
-			assert.strictEqual(issue.context, '<b>World</b>');
-			assert.strictEqual(issue.selector, 'html > body > p > b');
+			assert.strictEqual(issue.context, '<img src="/path/to/image.jpg" alt="">');
+			assert.strictEqual(issue.selector, 'html > body > img');
 
 			// Issue type
 			assert.strictEqual(issue.type, 'warning');
