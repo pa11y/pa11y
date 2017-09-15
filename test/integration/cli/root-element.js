@@ -42,7 +42,7 @@ describe('CLI root-element', () => {
 
 		it('defaults back to outputting all issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 3);
+			assert.lengthEquals(pa11yResponse.json, 4);
 		});
 
 	});
