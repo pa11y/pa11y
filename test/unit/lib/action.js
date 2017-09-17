@@ -1200,4 +1200,221 @@ describe('lib/action', () => {
 
 	});
 
+	describe('wait-for-element-event action', () => {
+		let action;
+
+		beforeEach(() => {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'wait-for-element-event';
+			});
+		});
+
+		it('has a name property', () => {
+			assert.strictEqual(action.name, 'wait-for-element-event');
+		});
+
+		it('has a match property', () => {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', () => {
+
+			it('matches all of the expected action strings', () => {
+				assert.deepEqual('wait for element .foo to emit bar'.match(action.match), [
+					'wait for element .foo to emit bar',
+					' element',
+					'.foo',
+					'bar'
+				]);
+				assert.deepEqual('wait for element .foo .bar to emit baz-qux'.match(action.match), [
+					'wait for element .foo .bar to emit baz-qux',
+					' element',
+					'.foo .bar',
+					'baz-qux'
+				]);
+				assert.deepEqual('wait for .foo to emit bar'.match(action.match), [
+					'wait for .foo to emit bar',
+					undefined,
+					'.foo',
+					'bar'
+				]);
+			});
+
+		});
+
+		it('has a `run` method', () => {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', () => {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async () => {
+				matches = 'wait for element foo to emit bar'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			});
+
+			it('evaluates some JavaScript in the context of the page', () => {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[3]);
+			});
+
+			describe('evaluated JavaScript (evaluate)', () => {
+				let mockElement;
+				let originalDocument;
+
+				beforeEach(async () => {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
+				});
+
+				afterEach(() => {
+					global.document = originalDocument;
+				});
+
+				it('calls `document.querySelector` with the passed in selector', () => {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+				});
+
+				it('adds a one-time event handler to the element for the passed in event type', () => {
+					assert.calledOnce(mockElement.addEventListener);
+					assert.strictEqual(mockElement.addEventListener.firstCall.args[0], 'mock-event-type');
+					assert.isFunction(mockElement.addEventListener.firstCall.args[1]);
+					assert.deepEqual(mockElement.addEventListener.firstCall.args[2], {
+						once: true
+					});
+				});
+
+				describe('event handler', () => {
+					let originalWindow;
+
+					beforeEach(() => {
+						originalWindow = global.window;
+						global.window = {};
+						mockElement.addEventListener.firstCall.args[1]();
+					});
+
+					afterEach(() => {
+						global.window = originalWindow;
+					});
+
+					it('sets `window._pa11yWaitForElementEventFired` to `true`', () => {
+						/* eslint-disable no-underscore-dangle */
+						assert.isTrue(window._pa11yWaitForElementEventFired);
+						/* eslint-enable no-underscore-dangle */
+					});
+
+				});
+
+				it('resolves with `undefined`', () => {
+					assert.isUndefined(resolvedValue);
+				});
+
+				describe('when an element with the given selector cannot be found', () => {
+					let rejectedError;
+
+					beforeEach(async () => {
+						global.document.querySelector.returns(null);
+						try {
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
+						} catch (error) {
+							rejectedError = error;
+						}
+					});
+
+					it('rejects with an error', () => {
+						assert.instanceOf(rejectedError, Error);
+					});
+
+				});
+
+			});
+
+			it('waits for a function to evaluate to `true`', () => {
+				assert.calledOnce(puppeteer.mockPage.waitForFunction);
+				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {
+					polling: 200
+				});
+			});
+
+			describe('evaluated JavaScript (wait for function)', () => {
+				let originalWindow;
+				let returnValue;
+
+				beforeEach(() => {
+					originalWindow = global.window;
+					global.window = {};
+					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
+				});
+
+				afterEach(() => {
+					global.window = originalWindow;
+				});
+
+				it('returns `false`', () => {
+					assert.isFalse(returnValue);
+				});
+
+				describe('when `window._pa11yWaitForElementEventFired` is `true`', () => {
+
+					beforeEach(() => {
+						/* eslint-disable no-underscore-dangle */
+						global.window._pa11yWaitForElementEventFired = true;
+						/* eslint-enable no-underscore-dangle */
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
+					});
+
+					it('returns `true`', () => {
+						assert.isTrue(returnValue);
+					});
+
+					it('deletes the `window._pa11yWaitForElementEventFired` variable', () => {
+						/* eslint-disable no-underscore-dangle */
+						assert.isUndefined(global.window._pa11yWaitForElementEventFired);
+						/* eslint-enable no-underscore-dangle */
+					});
+
+				});
+
+			});
+
+			it('resolves with `undefined`', () => {
+				assert.isUndefined(resolvedValue);
+			});
+
+			describe('when the evaluate fails', () => {
+				let evaluateError;
+				let rejectedError;
+
+				beforeEach(async () => {
+					evaluateError = new Error('evaluate error');
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
+					try {
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					} catch (error) {
+						rejectedError = error;
+					}
+				});
+
+				it('rejects with a new error', () => {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+				});
+
+			});
+
+		});
+
+	});
+
 });
