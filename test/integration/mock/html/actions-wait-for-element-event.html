@@ -1,0 +1,33 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+after an event has been emitted.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<div id="event-target">will emit an event</div>
+
+	<script>
+		const eventTarget = document.querySelector('#event-target');
+		eventTarget.addEventListener('example-event', () => {
+			document.querySelector('img').remove();
+		});
+		setTimeout(() => {
+			eventTarget.dispatchEvent(new Event('example-event'));
+		}, 2000);
+	</script>
+
+</body>
+</html>
