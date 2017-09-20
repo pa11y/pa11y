@@ -627,7 +627,8 @@ pa11y('http://example.com/', {
         'screen capture example.png',
         'wait for fragment to be #page-2',
         'wait for path to not be /login',
-        'wait for url to be https://example.com/'
+        'wait for url to be https://example.com/',
+        'wait for #my-image to emit load'
     ]
 });
 ```
@@ -722,6 +723,19 @@ pa11y('http://example.com/', {
     actions: [
         'click element #tab-2',
         'wait for element #tab-1 to be hidden'
+    ]
+});
+```
+
+### Wait For Element Event
+
+This allows you to pause the test until an element on the page (matching a CSS selector) emits an event. This will wait until Pa11y times out so it should be used after another action that would trigger the event. This action takes the form `wait for element <selector> to emit <event-type>`. E.g.
+
+```js
+pa11y('http://example.com/', {
+    actions: [
+        'click element #tab-2',
+        'wait for element #tab-panel-to to emit content-loaded'
     ]
 });
 ```
