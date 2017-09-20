@@ -30,7 +30,10 @@ describe('CLI exit codes', () => {
 
 	});
 
-	describe('when Pa11y is run on a page that can\'t be loaded', () => {
+	// This has to be skipped for now, some ISPs hijack hostnames that can't
+	// be resolved (looking at you TalkTalk). We could do with finding a better
+	// way to test this later
+	describe.skip('when Pa11y is run on a page that can\'t be loaded', () => {
 
 		before(async () => {
 			pa11yResponse = await runPa11yCli('notahost');
