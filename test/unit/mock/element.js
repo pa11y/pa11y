@@ -6,6 +6,7 @@ module.exports = createMockElement;
 
 function createMockElement(data = {}) {
 	const element = Object.assign({
+		addEventListener: sinon.stub(),
 		childNodes: [],
 		contains: sinon.stub().returns(false),
 		dispatchEvent: sinon.stub(),
