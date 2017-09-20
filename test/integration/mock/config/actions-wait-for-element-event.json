@@ -1,0 +1,5 @@
+{
+	"actions": [
+		"wait for element #event-target to emit example-event"
+	]
+}
