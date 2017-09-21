@@ -84,24 +84,20 @@ describe('lib/pa11y-ci', () => {
 			};
 
 			pa11yError = new Error('Pa11y Error');
-			pa11yResults = [
-				{
-					type: 'error',
-					message: 'Pa11y Result Error',
-					selector: '',
-					context: ''
-				},
-				{
-					type: 'warning',
-					message: 'Pa11y Result Warning',
-					selector: '',
-					context: ''
-				}
-			];
+			pa11yResults = {
+				issues: [
+					{
+						type: 'error',
+						message: 'Pa11y Result Error',
+						selector: '',
+						context: ''
+					}
+				]
+			};
 
-			pa11y.mockTestRunner.run.withArgs('foo-url').yieldsAsync(null, []);
-			pa11y.mockTestRunner.run.withArgs('bar-url').yieldsAsync(null, pa11yResults);
-			pa11y.mockTestRunner.run.withArgs('baz-url').yieldsAsync(pa11yError);
+			pa11y.withArgs('foo-url').resolves({issues: []});
+			pa11y.withArgs('bar-url').resolves(pa11yResults);
+			pa11y.withArgs('baz-url').rejects(pa11yError);
 
 			returnedPromise = pa11yCi(userUrls, userOptions);
 		});
@@ -130,11 +126,6 @@ describe('lib/pa11y-ci', () => {
 				assert.isUndefined(defaults.firstCall.returnValue.log);
 			});
 
-			it('creates a Pa11y test runner with the expected options', () => {
-				assert.calledOnce(pa11y);
-				assert.calledWithExactly(pa11y, defaults.firstCall.returnValue);
-			});
-
 			it('creates an Async.js queue with the expected concurrency', () => {
 				assert.calledOnce(queue);
 				assert.isFunction(queue.firstCall.args[0]);
@@ -146,10 +137,10 @@ describe('lib/pa11y-ci', () => {
 			});
 
 			it('Runs the Pa11y test runner on each of the URLs', () => {
-				assert.callCount(pa11y.mockTestRunner.run, 3);
-				assert.calledWith(pa11y.mockTestRunner.run, 'foo-url');
-				assert.calledWith(pa11y.mockTestRunner.run, 'bar-url');
-				assert.calledWith(pa11y.mockTestRunner.run, 'baz-url');
+				assert.callCount(pa11y, 3);
+				assert.calledWith(pa11y, 'foo-url');
+				assert.calledWith(pa11y, 'bar-url');
+				assert.calledWith(pa11y, 'baz-url');
 			});
 
 			it('logs that the tests have started running', () => {
@@ -196,7 +187,7 @@ describe('lib/pa11y-ci', () => {
 
 					assert.isArray(report.results['bar-url']);
 					assert.lengthEquals(report.results['bar-url'], 1);
-					assert.strictEqual(report.results['bar-url'][0], pa11yResults[0]);
+					assert.strictEqual(report.results['bar-url'][0], pa11yResults.issues[0]);
 
 					assert.isArray(report.results['baz-url']);
 					assert.lengthEquals(report.results['baz-url'], 1);
@@ -214,10 +205,10 @@ describe('lib/pa11y-ci', () => {
 				log.error = sinon.spy();
 				log.info = sinon.spy();
 
-				pa11y.mockTestRunner.run.reset();
-				pa11y.mockTestRunner.run.withArgs('foo-url').yieldsAsync(null, []);
-				pa11y.mockTestRunner.run.withArgs('bar-url').yieldsAsync(null, []);
-				pa11y.mockTestRunner.run.withArgs('baz-url').yieldsAsync(null, []);
+				pa11y.reset();
+				pa11y.withArgs('foo-url').resolves({issues: []});
+				pa11y.withArgs('bar-url').resolves({issues: []});
+				pa11y.withArgs('baz-url').resolves({issues: []});
 
 				returnedPromise = pa11yCi(userUrls, userOptions);
 			});
@@ -258,12 +249,14 @@ describe('lib/pa11y-ci', () => {
 				userUrls = [
 					{
 						url: 'qux-url',
-						bar: 'baz'
+						bar: 'baz',
+						concurrency: 4,
+						wrapWidth: 80
 					}
 				];
 
-				pa11y.mockTestRunner.run.reset();
-				pa11y.mockTestRunner.run.withArgs(userUrls[0]).yieldsAsync(null, []);
+				pa11y.reset();
+				pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: []});
 
 				returnedPromise = pa11yCi(userUrls, userOptions);
 			});
@@ -279,8 +272,8 @@ describe('lib/pa11y-ci', () => {
 				});
 
 				it('Runs the Pa11y test runner on each of the URLs with configurations', () => {
-					assert.callCount(pa11y.mockTestRunner.run, 1);
-					assert.calledWith(pa11y.mockTestRunner.run, userUrls[0]);
+					assert.callCount(pa11y, 1);
+					assert.calledWith(pa11y, 'qux-url', userUrls[0]);
 				});
 
 				it('correctly logs the number of errors for the URL', () => {

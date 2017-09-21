@@ -22,7 +22,7 @@ describe('pa11y-ci (with a single erroring URL)', () => {
 
 	it('outputs error information', () => {
 		assert.include(global.lastResult.output, 'Errors in http://notahost:8090/erroring-1');
-		assert.include(global.lastResult.output, 'Error opening url "http://notahost:8090/erroring-1" : Host notahost not found');
+		assert.include(global.lastResult.output, 'Failed to navigate: http://notahost:8090/erroring-1');
 	});
 
 	it('outputs a total erroring notice', () => {
@@ -51,7 +51,7 @@ describe('pa11y-ci (with multiple erroring URLs)', () => {
 
 	it('outputs error information', () => {
 		assert.include(global.lastResult.output, 'Errors in http://notahost:8090/erroring-1');
-		assert.include(global.lastResult.output, 'Error opening url "http://notahost:8090/erroring-1" : Host notahost not found');
+		assert.include(global.lastResult.output, 'Failed to navigate: http://notahost:8090/erroring-1');
 		assert.include(global.lastResult.output, 'Errors in http://localhost:8090/timeout');
 		assert.include(global.lastResult.output, 'timed out');
 	});
