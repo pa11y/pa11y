@@ -244,10 +244,6 @@ Reporters may also optionally export a `process` method. This should accept the 
 process(resultsArray, url); // Called with results by a user
 ```
 
-You may find the following reporters useful:
-
-  - [`1.0-json`][1.0-json-reporter]: output test results in the Pa11y 1.0 JSON format
-
 
 JavaScript Interface
 --------------------
