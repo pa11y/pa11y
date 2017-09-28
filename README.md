@@ -182,20 +182,20 @@ Copyright &copy; 2016–2017, Team Pa11y
 
 
 
-[issues]: https://github.com/pa11y/ci/issues
+[issues]: https://github.com/pa11y/pa11y-ci/issues
 [node.js]: https://nodejs.org/
 [pa11y]: https://github.com/pa11y/pa11y
 [pa11y configurations]: https://github.com/pa11y/pa11y#configuration
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [twitter]: https://twitter.com/pa11yorg
 
-[info-dependencies]: https://gemnasium.com/pa11y/ci
+[info-dependencies]: https://gemnasium.com/pa11y/pa11y-ci
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y-ci
-[info-build]: https://travis-ci.org/pa11y/ci
-[shield-dependencies]: https://img.shields.io/gemnasium/pa11y/ci.svg
+[info-build]: https://travis-ci.org/pa11y/pa11y-ci
+[shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y-ci.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y-ci.svg
-[shield-build]: https://img.shields.io/travis/pa11y/ci/master.svg
+[shield-build]: https://img.shields.io/travis/pa11y/pa11y-ci/master.svg
