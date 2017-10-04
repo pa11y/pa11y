@@ -1,6 +1,15 @@
 
 # Changelog
 
+## 5.0.0-beta.2 pre-release (2017-10-04)
+
+  * Output browser console messages to the debug log
+  * Add the `screen-capture` action
+  * Add the `wait-for-element-event` action
+  * Update dependencies
+    * puppeteer: ^0.10.2 to ^0.11.0
+    * pa11y-lint-config: ^1.2.0 to ^1.2.1
+
 ## 5.0.0-beta.1 pre-release (2017-09-11)
 
   * See the [migration guide](https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50) for details
