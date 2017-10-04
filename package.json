@@ -36,7 +36,7 @@
     "pa11y-reporter-cli": "^1.0.0",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
-    "puppeteer": "^0.10.2",
+    "puppeteer": "^0.11.0",
     "semver": "^5.4.1"
   },
   "devDependencies": {
@@ -44,7 +44,7 @@
     "mocha": "^3.2.0",
     "mockery": "^2.0.0",
     "nyc": "^10.1.2",
-    "pa11y-lint-config": "^1.2.0",
+    "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.4.4",
     "sinon": "^3.2.0"
   },
