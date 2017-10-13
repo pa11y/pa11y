@@ -406,7 +406,7 @@ describe('lib/action', function() {
 				};
 				matches = 'set field foo to bar'.match(action.match);
 				returnedValue = action.build({}, page, {}, matches);
-			});	
+			});
 
 			it('returns a function', function() {
 				assert.isFunction(returnedValue);
@@ -600,10 +600,13 @@ describe('lib/action', function() {
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
-						element = {};
+						element = {
+							dispatchEvent: sinon.spy()
+						};
 						global.document = {
 							querySelector: sinon.stub().returns(element)
 						};
+						global.Event = sinon.stub().returns({});
 						returnedValue = evaluateFunction({
 							selector: 'mock-selector',
 							checked: true
@@ -612,6 +615,7 @@ describe('lib/action', function() {
 
 					afterEach(function() {
 						delete global.document;
+						delete global.Event;
 					});
 
 					it('selects an element with the given selector', function() {
@@ -621,6 +625,10 @@ describe('lib/action', function() {
 
 					it('checks the selected element', function() {
 						assert.isTrue(element.checked);
+					});
+
+					it('dispatches an input event', function() {
+						assert.calledOnce(element.dispatchEvent);
 					});
 
 					it('returns `true`', function() {
