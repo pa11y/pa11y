@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.13.1 (2017-10-16)
+
+  * Trigger correct change/input events for check-field and set-field-value actions
+
 ## 4.13.0 (2017-09-15)
 
   * Update dependencies
