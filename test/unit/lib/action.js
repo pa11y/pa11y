@@ -433,10 +433,13 @@ describe('lib/action', function() {
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
-						element = {};
+						element = {
+							dispatchEvent: sinon.spy()
+						};
 						global.document = {
 							querySelector: sinon.stub().returns(element)
 						};
+						global.Event = sinon.stub().returns({});
 						returnedValue = evaluateFunction({
 							selector: 'mock-selector',
 							value: 'mock-value'
@@ -445,6 +448,7 @@ describe('lib/action', function() {
 
 					afterEach(function() {
 						delete global.document;
+						delete global.Event;
 					});
 
 					it('selects an element with the given selector', function() {
@@ -454,6 +458,10 @@ describe('lib/action', function() {
 
 					it('sets the element value', function() {
 						assert.strictEqual(element.value, 'mock-value');
+					});
+
+					it('dispatches an input event', function() {
+						assert.calledOnce(element.dispatchEvent);
 					});
 
 					it('returns `true`', function() {
@@ -592,10 +600,13 @@ describe('lib/action', function() {
 
 					beforeEach(function() {
 						evaluateFunction = page.evaluate.firstCall.args[0];
-						element = {};
+						element = {
+							dispatchEvent: sinon.spy()
+						};
 						global.document = {
 							querySelector: sinon.stub().returns(element)
 						};
+						global.Event = sinon.stub().returns({});
 						returnedValue = evaluateFunction({
 							selector: 'mock-selector',
 							checked: true
@@ -604,6 +615,7 @@ describe('lib/action', function() {
 
 					afterEach(function() {
 						delete global.document;
+						delete global.Event;
 					});
 
 					it('selects an element with the given selector', function() {
@@ -613,6 +625,10 @@ describe('lib/action', function() {
 
 					it('checks the selected element', function() {
 						assert.isTrue(element.checked);
+					});
+
+					it('dispatches an input event', function() {
+						assert.calledOnce(element.dispatchEvent);
 					});
 
 					it('returns `true`', function() {
