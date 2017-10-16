@@ -34,9 +34,13 @@ Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
 
 ## Latest news from Pa11y
 
-💭 We'd like to find out how you use Pa11y and what you think about it. Please [fill in our survey][survey] to let us know your thoughts!
+We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details. 
 
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
+If you'd like to try out the Pa11y 5.0 beta you can do so with
+
+`npm install -g pa11y@beta`
+
+Feedback is greatly appreciated 😊
 
 ---
 
@@ -239,10 +243,6 @@ Reporters may also optionally export a `process` method. This should accept the 
 ```js
 process(resultsArray, url); // Called with results by a user
 ```
-
-You may find the following reporters useful:
-
-  - [`1.0-json`][1.0-json-reporter]: output test results in the Pa11y 1.0 JSON format
 
 
 JavaScript Interface
@@ -848,6 +848,7 @@ Copyright &copy; 2013–2017, Team Pa11y
 [1.x]: https://github.com/pa11y/pa11y/tree/1.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
+[migration-5]: https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [phantom]: http://phantomjs.org/
@@ -857,7 +858,6 @@ Copyright &copy; 2013–2017, Team Pa11y
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
-[survey]: https://goo.gl/forms/AiMDJR2IuaqX4iD03
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-dependencies]: https://gemnasium.com/pa11y/pa11y

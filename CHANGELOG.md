@@ -1,6 +1,15 @@
 
 # Changelog
 
+## 4.13.0 (2017-09-15)
+
+  * Update dependencies
+    * HTML CodeSniffer: 2.0.7 to 2.1.1
+
+## 4.12.2 (2017-09-11)
+
+  * Exit with an error when using an incompatible command-line reporter
+
 ## 4.12.1 (2017-08-23)
 
   * Roll back dependencies
