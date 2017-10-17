@@ -16,7 +16,7 @@ const mockPage = puppeteer.mockPage = {
 	evaluate: sinon.stub().resolves(),
 	focus: sinon.stub().resolves(),
 	goto: sinon.stub().resolves(),
-	injectFile: sinon.stub().resolves(),
+	addScriptTag: sinon.stub().resolves(),
 	on: sinon.stub(),
 	screenshot: sinon.stub().resolves(),
 	setExtraHTTPHeaders: sinon.stub().resolves(),
@@ -24,7 +24,8 @@ const mockPage = puppeteer.mockPage = {
 	setUserAgent: sinon.stub().resolves(),
 	setViewport: sinon.stub().resolves(),
 	type: sinon.stub().resolves(),
-	waitForFunction: sinon.stub().resolves()
+	waitForFunction: sinon.stub().resolves(),
+	waitForNavigation: sinon.stub().resolves()
 };
 
 puppeteer.launch.resolves(mockBrowser);

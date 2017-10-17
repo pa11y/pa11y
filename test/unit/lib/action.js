@@ -740,68 +740,84 @@ describe('lib/action', () => {
 			});
 
 			it('waits for a function to evaluate to `true`', () => {
-				assert.calledOnce(puppeteer.mockPage.waitForFunction);
-				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
-				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {});
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'pathname');
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], matches[4]);
-				assert.isFalse(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
+				assert.calledOnce(puppeteer.mockPage.waitForNavigation);
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], 'pathname');
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[4]);
+				assert.isFalse(puppeteer.mockPage.evaluate.firstCall.args[3]);
 			});
 
 			describe('evaluated JavaScript', () => {
 				let originalWindow;
 				let returnValue;
 
-				beforeEach(() => {
+				beforeEach(async () => {
 					originalWindow = global.window;
 					global.window = {
 						location: {
 							'mock-property': 'value'
 						}
 					};
-					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', false);
+					try {
+						returnValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-property', 'value', false);
+					} catch (error) {
+						returnValue = error;
+					}
 				});
 
 				afterEach(() => {
 					global.window = originalWindow;
 				});
 
-				it('returns `true`', () => {
-					assert.isTrue(returnValue);
+				it('resolves with `undefined`', () => {
+					assert.isUndefined(returnValue);
 				});
 
 				describe('when the location property does not match the expected value', () => {
 
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', false);
+					beforeEach(async () => {
+						try {
+							returnValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-property', 'incorrect-value', false);
+						} catch (error) {
+							returnValue = error;
+						}
 					});
 
-					it('returns `false`', () => {
-						assert.isFalse(returnValue);
+					it('rejects with an error', () => {
+						assert.instanceOf(returnValue, Error);
 					});
 
 				});
 
 				describe('when the negated property is `true`', () => {
 
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', true);
+					beforeEach(async () => {
+						try {
+							returnValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-property', 'value', true);
+						} catch (error) {
+							returnValue = error;
+						}
 					});
 
-					it('returns `false`', () => {
-						assert.isFalse(returnValue);
+					it('rejects with an error', () => {
+						assert.instanceOf(returnValue, Error);
 					});
 
 				});
 
 				describe('when the negated property is `true` and the location property does not match the expected value', () => {
 
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', true);
+					beforeEach(async () => {
+						try {
+							returnValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-property', 'incorrect-value', true);
+						} catch (error) {
+							returnValue = error;
+						}
 					});
 
-					it('returns `true`', () => {
-						assert.isTrue(returnValue);
+					it('resolves with `undefined`', () => {
+						assert.isUndefined(returnValue);
 					});
 
 				});
@@ -820,8 +836,8 @@ describe('lib/action', () => {
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
+				it('passes the expected property name into the evaluate function', () => {
+					assert.strictEqual(puppeteer.mockPage.evaluate.lastCall.args[1], 'hash');
 				});
 
 			});
@@ -834,8 +850,8 @@ describe('lib/action', () => {
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
+				it('passes the expected property name into the evaluate function', () => {
+					assert.strictEqual(puppeteer.mockPage.evaluate.lastCall.args[1], 'hash');
 				});
 
 			});
@@ -848,8 +864,8 @@ describe('lib/action', () => {
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'host');
+				it('passes the expected property name into the evaluate function', () => {
+					assert.strictEqual(puppeteer.mockPage.evaluate.lastCall.args[1], 'host');
 				});
 
 			});
@@ -862,8 +878,8 @@ describe('lib/action', () => {
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'href');
+				it('passes the expected property name into the evaluate function', () => {
+					assert.strictEqual(puppeteer.mockPage.evaluate.lastCall.args[1], 'href');
 				});
 
 			});
@@ -876,8 +892,8 @@ describe('lib/action', () => {
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes a `true` negation parameter into the wait function', () => {
-					assert.isTrue(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
+				it('passes a `true` negation parameter into the evaluate function', () => {
+					assert.isTrue(puppeteer.mockPage.evaluate.lastCall.args[3]);
 				});
 
 			});
