@@ -15,7 +15,7 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
 
 ## Latest news from Pa11y
 
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨  
+✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
 
 ---
 
@@ -27,7 +27,7 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
   - [Default configuration](#default-configuration)
   - [URL configuration](#url-configuration)
   - [Sitemaps](#sitemaps)
-- [Tutorials and articles](#tutorials-and-articles)  
+- [Tutorials and articles](#tutorials-and-articles)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -46,7 +46,7 @@ npm install -g pa11y-ci
 Pa11y CI can be used by running it as a command line tool, `pa11y-ci`:
 
 ```
-Usage: pa11y-ci [options]
+Usage: pa11y-ci [options] [<paths>]
 
 Options:
 
@@ -76,7 +76,7 @@ You can use the `--config` command line argument to specify a different file, wh
 }
 ```
 
-Pa11y will be run against each of the URLs in the `urls` array.
+Pa11y will be run against each of the URLs in the `urls` array and the paths specified as CLI arguments. Paths can be specified as relative, absolute and as [glob](https://github.com/isaacs/node-glob#glob) patterns.
 
 ### Default configuration
 

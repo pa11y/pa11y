@@ -13,13 +13,16 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const pa11yCi = require('..');
 const path = require('path');
+const globby = require('globby');
+const protocolify = require('protocolify');
 const pkg = require('../package.json');
 const program = require('commander');
+
 
 // Here we're using Commander to specify the CLI options
 program
 	.version(pkg.version)
-	.usage('[options]')
+	.usage('[options] <paths>')
 	.option(
 		'-c, --config <path>',
 		'the path to a JSON or JavaScript config file'
@@ -51,6 +54,12 @@ program
 	)
 	.parse(process.argv);
 
+// Parse the args into valid paths using glob and protocolify
+const urls = globby.sync(program.args, {
+	// Ensure not-found paths (like "google.com"), are returned
+	nonull: true
+}).map(protocolify);
+
 // Start the promise chain to actually run everything
 Promise.resolve()
 	.then(() => {
@@ -66,7 +75,7 @@ Promise.resolve()
 	})
 	.then(config => {
 		// Actually run Pa11y CI
-		return pa11yCi(config.urls, config.defaults);
+		return pa11yCi(urls.concat(config.urls || []), config.defaults);
 	})
 	.then(report => {
 		// Output JSON if asked for it
