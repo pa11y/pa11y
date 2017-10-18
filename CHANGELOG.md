@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.3.0 (2017-10-18)
+
+  * Add the ability to specify paths and URLs as command-line arguments
+  * Documentation updates
+
 ## 1.2.0 (2017-06-02)
 
   * Add the ability to make Pa11y CI perform POST requests
