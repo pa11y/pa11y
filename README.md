@@ -34,7 +34,7 @@ Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
 
 ## Latest news from Pa11y
 
-We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details. 
+We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details.
 
 If you'd like to try out the Pa11y 5.0 beta you can do so with
 
@@ -123,6 +123,7 @@ Usage: pa11y [options] <url>
     -e, --phantomjs <path>         the path to the phantomjs executable
     -S, --screen-capture <path>    a path to save a screen capture of the page to
     -A, --add-rule <rule>          WCAG 2.0 rules from a different standard to include, a repeatable value or separated by semi-colons
+    -P, --no-package-version-check prevent check on whether the latest version of pa11y is installed
 ```
 
 ### Running Tests
@@ -672,7 +673,7 @@ pa11y({
     ]
 });
 ```
-You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types. 
+You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types.
 
 ### Set Field Value
 

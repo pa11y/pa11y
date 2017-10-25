@@ -96,8 +96,8 @@ function configureProgram(program) {
 			[]
 		)
 		.option(
-			'-P, --do-not-check-package-version',
-			'prevent check against latest released version'
+			'-P, --no-package-version-check',
+			'prevent check on whether the latest version of pa11y is installed'
 		)
 		.parse(process.argv);
 	program.url = program.args[0];

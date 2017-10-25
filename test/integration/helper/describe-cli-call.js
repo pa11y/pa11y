@@ -20,7 +20,7 @@ function describeCliCall(urlPath, cliArguments, environment, testFunction) {
 			if (cliArguments.indexOf('--reporter') === -1 && cliArguments.indexOf('-r') === -1) {
 				cliArguments.push('--reporter', 'json');
 			}
-			cliArguments.push('--do-not-check-package-version');
+			cliArguments.push('--no-package-version-check');
 			var child = spawn('../../bin/pa11y', cliArguments, {
 				cwd: path.resolve(__dirname, '../'),
 				env: environment
