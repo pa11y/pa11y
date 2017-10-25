@@ -7,7 +7,9 @@ var pkg = require('../package.json');
 var program = require('commander');
 var pa11y = require('../lib/pa11y');
 var semver = require('semver');
+var updateNotifier = require('update-notifier');
 
+checkPackageVersion();
 configureProgram(program);
 runProgram(program);
 
@@ -243,4 +245,13 @@ function outputEnvironmentInfo() {
 	console.log('npm:        ' + versions.npm);
 	console.log('PhantomJS:  ' + versions.phantom);
 	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
+}
+
+function checkPackageVersion() {
+	updateNotifier({
+		pkg: {
+			name: 'pa11y',
+			version: pkg.version
+		}
+	}).notify();
 }
