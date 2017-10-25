@@ -83,10 +83,6 @@ describe('lib/pa11y', () => {
 			assert.calledWithExactly(puppeteer.launch, pa11y.defaults.chromeLaunchConfig);
 		});
 
-		it('puppeteer receives the same timeout value of `pa11y.defaults.timeout`', () => {
-			assert.deepEqual(pa11y.defaults.chromeLaunchConfig.timeout, pa11y.defaults.timeout);
-		});
-
 		it('creates a new page', () => {
 			assert.calledOnce(puppeteer.mockBrowser.newPage);
 			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
