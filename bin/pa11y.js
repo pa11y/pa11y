@@ -253,6 +253,8 @@ function outputEnvironmentInfo() {
 
 function checkPackageVersion(program) {
 	if (!program.doNotCheckPackageVersion) {
-		updateNotifier({pkg}).notify();
+		updateNotifier({
+			pkg: pkg
+		}).notify();
 	}
 }
