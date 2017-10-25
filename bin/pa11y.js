@@ -9,7 +9,6 @@ var pa11y = require('../lib/pa11y');
 var semver = require('semver');
 var updateNotifier = require('update-notifier');
 
-checkPackageVersion();
 configureProgram(program);
 runProgram(program);
 
@@ -96,6 +95,10 @@ function configureProgram(program) {
 			collectOptions,
 			[]
 		)
+		.option(
+			'-P, --do-not-check-package-version',
+			'prevent check against latest released version'
+		)
 		.parse(process.argv);
 	program.url = program.args[0];
 }
@@ -108,6 +111,7 @@ function runProgram(program) {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
+	checkPackageVersion(program);
 	var options = processOptions(program);
 	options.log.begin(program.url);
 	try {
@@ -247,11 +251,8 @@ function outputEnvironmentInfo() {
 	console.log('OS:         ' + versions.os + ' (' + process.platform + ')');
 }
 
-function checkPackageVersion() {
-	updateNotifier({
-		pkg: {
-			name: 'pa11y',
-			version: pkg.version
-		}
-	}).notify();
+function checkPackageVersion(program) {
+	if (!program.doNotCheckPackageVersion) {
+		updateNotifier({pkg}).notify();
+	}
 }
