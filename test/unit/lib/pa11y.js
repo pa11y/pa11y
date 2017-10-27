@@ -161,7 +161,8 @@ describe('lib/pa11y', () => {
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle'
+				waitUntil: 'networkidle',
+				timeout: pa11y.defaults.timeout
 			});
 		});
 
@@ -306,6 +307,7 @@ describe('lib/pa11y', () => {
 		beforeEach(async () => {
 			options = {
 				mockOptions: true,
+				timeout: 40000,
 				url: 'https://mock-url/',
 				log: {
 					debug: sinon.stub(),
@@ -326,7 +328,8 @@ describe('lib/pa11y', () => {
 		it('navigates to `options.url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle'
+				waitUntil: 'networkidle',
+				timeout: options.timeout
 			});
 		});
 
@@ -627,7 +630,8 @@ describe('lib/pa11y', () => {
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle'
+				waitUntil: 'networkidle',
+				timeout: pa11y.defaults.timeout
 			});
 		});
 
