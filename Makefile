@@ -1,15 +1,13 @@
-include Makefile.node
+# Reusable Makefile
+# ------------------------------------------------------------------------
+# This section of the Makefile should not be modified, it includes
+# commands from my reusable Makefile: https://github.com/rowanmanning/make
+include node_modules/@rowanmanning/make/javascript/index.mk
+# [edit below this line]
+# ------------------------------------------------------------------------
 
-export INTEGRATION_TIMEOUT := 10000
-export INTEGRATION_SLOW := 5000
-export INTEGRATION_FLAGS := --recursive
-
-
-# Verify tasks
-# ------------
-
-# Lint alias for backwards compatibility
-lint: verify
+INTEGRATION_TIMEOUT = 10000
+INTEGRATION_SLOW = 5000
 
 
 # Build tasks
