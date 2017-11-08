@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const createMockElement = require('../mock/element');
+const createMockElement = require('../mock/element.mock');
 
 describe('lib/runner', () => {
 	let runner;
@@ -29,7 +29,7 @@ describe('lib/runner', () => {
 
 		beforeEach(async () => {
 			originalWindow = global.window;
-			global.window = require('../mock/window');
+			global.window = require('../mock/window.mock');
 			global.window.HTMLCS.getMessages.returns([
 				{
 					code: 'mock-code',
