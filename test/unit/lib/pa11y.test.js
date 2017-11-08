@@ -24,7 +24,7 @@ describe('lib/pa11y', () => {
 		global._runPa11y = sinon.stub().returns(pa11yResults);
 		/* eslint-enable no-underscore-dangle */
 
-		runAction = require('../mock/action');
+		runAction = require('../mock/action.mock');
 		mockery.registerMock('./action', runAction);
 
 		extend = sinon.spy(require('node.extend'));
@@ -35,12 +35,12 @@ describe('lib/pa11y', () => {
 		promiseTimeout = sinon.spy(require('p-timeout'));
 		mockery.registerMock('p-timeout', promiseTimeout);
 
-		puppeteer = require('../mock/puppeteer');
+		puppeteer = require('../mock/puppeteer.mock');
 		mockery.registerMock('puppeteer', puppeteer);
 
 		puppeteer.mockPage.evaluate.resolves(pa11yResults);
 
-		util = require('../mock/util');
+		util = require('../mock/util.mock');
 		mockery.registerMock('util', util);
 
 		pa11y = require('../../../lib/pa11y');
