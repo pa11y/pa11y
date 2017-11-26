@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0-beta.3 pre-release (2017-11-26)
+
+  * Fix a timeout issue
+  * Fix an issue with the built in copy of HTML CodeSniffer
+
 ## 5.0.0-beta.2 pre-release (2017-10-04)
 
   * Output browser console messages to the debug log
