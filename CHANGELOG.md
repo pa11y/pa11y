@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 4.13.2 (2017-11-26)
+
+  * Fix an issue with the built in copy of HTML CodeSniffer
+
 ## 4.13.1 (2017-10-16)
 
   * Trigger correct change/input events for check-field and set-field-value actions
