@@ -193,6 +193,7 @@ describe('lib/pa11y', () => {
 				rootElement: pa11y.defaults.rootElement,
 				rules: pa11y.defaults.rules,
 				standard: pa11y.defaults.standard,
+				threshold: pa11y.defaults.threshold,
 				wait: pa11y.defaults.wait
 			});
 		});
@@ -759,6 +760,10 @@ describe('lib/pa11y', () => {
 
 		it('has a `standard` property', () => {
 			assert.strictEqual(pa11y.defaults.standard, 'WCAG2AA');
+		});
+
+		it('has a `threshold` property', () => {
+			assert.strictEqual(pa11y.defaults.threshold, 0);
 		});
 
 		it('has a `timeout` property', () => {

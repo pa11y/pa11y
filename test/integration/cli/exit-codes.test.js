@@ -128,6 +128,43 @@ describe('CLI exit codes', () => {
 
 	});
 
+	describe('when the `threshold` config is set to more than the number of errors present', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
+				arguments: [
+					'--config', './mock/config/threshold-large.json',
+					'--include-notices',
+					'--include-warnings'
+				]
+			});
+		});
+
+		it('exits with a code of `0`', () => {
+			assert.strictEqual(pa11yResponse.exitCode, 0);
+		});
+
+	});
+
+	describe('when the `threshold` config is set to less than the number of errors present but the `--threshold` flag is set to more', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
+				arguments: [
+					'--config', './mock/config/threshold-small.json',
+					'--include-notices',
+					'--include-warnings',
+					'--threshold', '5'
+				]
+			});
+		});
+
+		it('exits with a code of `0`', () => {
+			assert.strictEqual(pa11yResponse.exitCode, 0);
+		});
+
+	});
+
 	describe('when the `--threshold` flag is set to more than the number of errors present', () => {
 
 		before(async () => {
