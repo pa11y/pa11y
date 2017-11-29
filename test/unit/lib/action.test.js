@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const createMockElement = require('../mock/element');
+const createMockElement = require('../mock/element.mock');
 const sinon = require('sinon');
 
 describe('lib/action', () => {
@@ -14,7 +14,7 @@ describe('lib/action', () => {
 		mockEvent = {event: true};
 		originalEvent = global.Event;
 		global.Event = sinon.stub().returns(mockEvent);
-		puppeteer = require('../mock/puppeteer');
+		puppeteer = require('../mock/puppeteer.mock');
 		runAction = require('../../../lib/action');
 	});
 

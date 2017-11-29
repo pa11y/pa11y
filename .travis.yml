@@ -10,15 +10,9 @@ matrix:
 
     # Run tests
     - node_js: '8'
-
-# Restrict builds on branches
-branches:
-  only:
-    - master
-    - /^\d+\.x$/
-    - /^\d+\.\d+\.\d+$/
+      env: NODE=8
 
 # Build script
 script:
-  - 'if [ $LINT ]; then make lint; fi'
-  - 'if [ ! $LINT ]; then make test; fi'
+  - 'if [ $LINT ]; then make verify; fi'
+  - 'if [ $NODE ]; then make test; fi'

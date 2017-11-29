@@ -1,15 +1,13 @@
-include Makefile.node
+# Reusable Makefile
+# ------------------------------------------------------------------------
+# This section of the Makefile should not be modified, it includes
+# commands from my reusable Makefile: https://github.com/rowanmanning/make
+include node_modules/@rowanmanning/make/javascript/index.mk
+# [edit below this line]
+# ------------------------------------------------------------------------
 
-export INTEGRATION_TIMEOUT := 10000
-export INTEGRATION_SLOW := 5000
-export INTEGRATION_FLAGS := --recursive
-
-
-# Verify tasks
-# ------------
-
-# Lint alias for backwards compatibility
-lint: verify
+INTEGRATION_TIMEOUT = 10000
+INTEGRATION_SLOW = 5000
 
 
 # Build tasks
@@ -21,7 +19,7 @@ build-htmlcs:
 	@npm install git+ssh://git@github.com:squizlabs/HTML_CodeSniffer.git
 	@npm install -g grunt-cli
 	@cd ./node_modules/HTML_CodeSniffer && npm install --development
-	@cd ./node_modules/HTML_CodeSniffer && grunt build
+	@cd ./node_modules/HTML_CodeSniffer && grunt build-bookmarklet
 	@cat ./lib/vendor/HTMLCS-LICENSE > lib/vendor/HTMLCS.js
 	@cat ./node_modules/HTML_CodeSniffer/build/HTMLCS.js >> lib/vendor/HTMLCS.js
 	@$(TASK_DONE)
