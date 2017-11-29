@@ -722,6 +722,10 @@ describe('lib/pa11y', () => {
 			assert.isFalse(pa11y.defaults.includeWarnings);
 		});
 
+		it('has a `level` property', () => {
+			assert.strictEqual(pa11y.defaults.level, 'error');
+		});
+
 		it('has a `log` property', () => {
 			assert.isObject(pa11y.defaults.log);
 		});
