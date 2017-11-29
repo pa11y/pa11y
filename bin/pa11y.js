@@ -35,8 +35,7 @@ function configureProgram() {
 		)
 		.option(
 			'-T, --threshold <number>',
-			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
-			'0'
+			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2'
 		)
 		.option(
 			'-i, --ignore <ignore>',
@@ -105,7 +104,7 @@ async function runProgram() {
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
-		if (reportShouldFail(program.level, results.issues, program.threshold)) {
+		if (reportShouldFail(program.level, results.issues, options.threshold)) {
 			process.once('exit', () => {
 				process.exit(2);
 			});
@@ -118,7 +117,10 @@ async function runProgram() {
 }
 
 function processOptions(log) {
-	const options = extend({}, loadConfig(program.config), {
+	const configOptions = loadConfig(program.config);
+	const options = extend({
+		threshold: (configOptions.threshold ? configOptions.threshold : pa11y.defaults.threshold)
+	}, configOptions, {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
 		includeNotices: program.includeNotices,
@@ -127,6 +129,7 @@ function processOptions(log) {
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
+		threshold: program.threshold,
 		timeout: program.timeout,
 		wait: program.wait,
 		log
