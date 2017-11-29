@@ -449,6 +449,18 @@ pa11y('http://example.com/', {
 
 Defaults to `false`.
 
+### `level` (string)
+
+The level of issue which can fail the test (and cause it to exit with code 2). This should be one of `error` (the default), `warning`, or `notice`.
+
+```js
+pa11y('http://example.com/', {
+    level: 'warning'
+});
+```
+
+Defaults to `error`.
+
 ### `log` (object)
 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
