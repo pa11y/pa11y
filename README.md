@@ -343,7 +343,7 @@ Configuration
 
 Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a config file used by the command-line interface.
 
-When options can be set both in the configuration and using the command-line interface, it is the value set in the latter which will take priority.
+When options can be set both in the configuration and using the command-line interface, the value set in the latter will take priority.
 
 Below is a reference of all the options that are available:
 
