@@ -25,8 +25,7 @@ function configureProgram() {
 		)
 		.option(
 			'-r, --reporter <reporter>',
-			'the reporter to use: cli (default), csv, json',
-			'cli'
+			'the reporter to use: cli (default), csv, json'
 		)
 		.option(
 			'-l, --level <level>',
@@ -98,8 +97,9 @@ async function runProgram() {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	const report = loadReporter(program.reporter);
-	const options = processOptions(report.log);
+	const options = processOptions();
+	const report = loadReporter(options.reporter);
+	options.log = report.log;
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
@@ -115,7 +115,7 @@ async function runProgram() {
 	}
 }
 
-function processOptions(log) {
+function processOptions() {
 	// CLI options take precedence over config options (which take precedence over defaults)
 	const options = extend(pa11y.defaults, loadConfig(program.config), {
 		hideElements: program.hideElements,
@@ -123,14 +123,14 @@ function processOptions(log) {
 		includeNotices: program.includeNotices,
 		includeWarnings: program.includeWarnings,
 		level: program.level,
+		reporter: program.reporter,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
 		threshold: program.threshold,
 		timeout: program.timeout,
-		wait: program.wait,
-		log
+		wait: program.wait
 	});
 
 	if (!program.debug) {

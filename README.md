@@ -517,6 +517,18 @@ pa11y('http://example.com/', {
 
 Defaults to `null`.
 
+### `reporter` (string)
+
+The reporter to use while running the test. [More about reporters](#reporters).
+
+```js
+pa11y('http://example.com/', {
+    reporter: 'json'
+});
+```
+
+Defaults to `cli`.
+
 ### `rootElement` (element)
 
 The root element for testing a subset of the page opposed to the full document.
