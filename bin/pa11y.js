@@ -30,8 +30,7 @@ function configureProgram() {
 		)
 		.option(
 			'-l, --level <level>',
-			'the level of issue to fail on (exit with code 2): error, warning, notice',
-			'error'
+			'the level of issue to fail on (exit with code 2): error, warning, notice'
 		)
 		.option(
 			'-T, --threshold <number>',
@@ -104,7 +103,7 @@ async function runProgram() {
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
-		if (reportShouldFail(program.level, results.issues, options.threshold)) {
+		if (reportShouldFail(options.level, results.issues, options.threshold)) {
 			process.once('exit', () => {
 				process.exit(2);
 			});
@@ -117,14 +116,13 @@ async function runProgram() {
 }
 
 function processOptions(log) {
-	const configOptions = loadConfig(program.config);
-	const options = extend({
-		threshold: (configOptions.threshold ? configOptions.threshold : pa11y.defaults.threshold)
-	}, configOptions, {
+	// CLI options take precedence over config options (which take precedence over defaults)
+	const options = extend(pa11y.defaults, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
 		includeNotices: program.includeNotices,
 		includeWarnings: program.includeWarnings,
+		level: program.level,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
