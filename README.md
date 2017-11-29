@@ -554,6 +554,8 @@ Defaults to `WCAG2AA`.
 
 The time in milliseconds that a test should be allowed to run before calling back with a timeout error.
 
+Please note that this is the timeout for the _entire_ test run (including time to initialise Chrome, load the page, and run the tests).
+
 ```js
 pa11y('http://example.com/', {
     timeout: 500
