@@ -750,6 +750,10 @@ describe('lib/pa11y', () => {
 			assert.isNull(pa11y.defaults.postData);
 		});
 
+		it('has a `reporter` property', () => {
+			assert.deepEqual(pa11y.defaults.reporter, 'cli');
+		});
+
 		it('has a `rootElement` property', () => {
 			assert.isNull(pa11y.defaults.rootElement);
 		});
