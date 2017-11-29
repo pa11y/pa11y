@@ -343,6 +343,8 @@ Configuration
 
 Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a config file used by the command-line interface.
 
+When options can be set both in the configuration and using the command-line interface, it is the value set in the latter which will take priority.
+
 Below is a reference of all the options that are available:
 
 ### `actions` (array) **BETA**
@@ -549,6 +551,18 @@ pa11y('http://example.com/', {
 ```
 
 Defaults to `WCAG2AA`.
+
+### `threshold` (number)
+
+The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2).
+
+```js
+pa11y('http://example.com/', {
+    threshold: 9
+});
+```
+
+Defaults to `0`.
 
 ### `timeout` (number)
 
