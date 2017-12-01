@@ -193,7 +193,6 @@ describe('lib/pa11y', () => {
 				rootElement: pa11y.defaults.rootElement,
 				rules: pa11y.defaults.rules,
 				standard: pa11y.defaults.standard,
-				threshold: pa11y.defaults.threshold,
 				wait: pa11y.defaults.wait
 			});
 		});
@@ -722,10 +721,6 @@ describe('lib/pa11y', () => {
 			assert.isFalse(pa11y.defaults.includeWarnings);
 		});
 
-		it('has a `level` property', () => {
-			assert.strictEqual(pa11y.defaults.level, 'error');
-		});
-
 		it('has a `log` property', () => {
 			assert.isObject(pa11y.defaults.log);
 		});
@@ -750,10 +745,6 @@ describe('lib/pa11y', () => {
 			assert.isNull(pa11y.defaults.postData);
 		});
 
-		it('has a `reporter` property', () => {
-			assert.deepEqual(pa11y.defaults.reporter, 'cli');
-		});
-
 		it('has a `rootElement` property', () => {
 			assert.isNull(pa11y.defaults.rootElement);
 		});
@@ -768,10 +759,6 @@ describe('lib/pa11y', () => {
 
 		it('has a `standard` property', () => {
 			assert.strictEqual(pa11y.defaults.standard, 'WCAG2AA');
-		});
-
-		it('has a `threshold` property', () => {
-			assert.strictEqual(pa11y.defaults.threshold, 0);
 		});
 
 		it('has a `timeout` property', () => {

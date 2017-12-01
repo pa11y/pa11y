@@ -100,6 +100,7 @@ async function runProgram() {
 	const options = processOptions();
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
+	console.log(options);
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
@@ -117,7 +118,12 @@ async function runProgram() {
 
 function processOptions() {
 	// CLI options take precedence over config options (which take precedence over defaults)
-	const options = extend(pa11y.defaults, loadConfig(program.config), {
+	// 'level', 'reporter', and 'threshold' defaults are given here as they are not relevant when using lib/pa11y via JavaScript
+	const options = extend({
+		level: 'error',
+		reporter: 'cli',
+		threshold: 0
+	}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
 		includeNotices: program.includeNotices,
