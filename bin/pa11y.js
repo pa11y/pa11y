@@ -100,7 +100,9 @@ async function runProgram() {
 	const options = processOptions();
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
-	console.log(options);
+	if (!program.debug) {
+		options.log.debug = () => {};
+	}
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
@@ -138,10 +140,6 @@ function processOptions() {
 		timeout: program.timeout,
 		wait: program.wait
 	});
-
-	if (!program.debug) {
-		options.log.debug = () => {};
-	}
 	return options;
 }
 
