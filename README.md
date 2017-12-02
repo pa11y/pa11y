@@ -343,7 +343,7 @@ pa11y.validateAction('open the pod bay doors'); // false
 Configuration
 -------------
 
-Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function, in a [config JSON file](#command-line-configuration), or directly as a [command-line option](command-line-interface).
+Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a [JSON configuration file](#command-line-configuration). Some are also available directly as [command-line options](#command-line-interface).
 
 Below is a reference of all the options that are available:
 
@@ -459,7 +459,7 @@ The level of issue which can fail the test (and cause it to exit with code 2) wh
 }
 ```
 
-Defaults to `error`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
+Defaults to `error`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `log` (object)
 
@@ -527,7 +527,7 @@ The reporter to use while running the test via the CLI. [More about reporters](#
 }
 ```
 
-Defaults to `cli`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
+Defaults to `cli`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `rootElement` (element)
 
@@ -586,7 +586,7 @@ The number of errors, warnings, or notices to permit before the test is consider
 }
 ```
 
-Defaults to `0`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
+Defaults to `0`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `timeout` (number)
 
