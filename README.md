@@ -170,6 +170,8 @@ The command-line tool can be configured with a JSON file as well as arguments. B
 pa11y --config ./path/to/config.json http://example.com
 ```
 
+If any configuration is set both in a configuration file and also as a command-line option, the value set in the latter will take priority.
+
 For more information on configuring Pa11y, see the [configuration documentation](#configuration).
 
 ### Ignoring
@@ -341,9 +343,7 @@ pa11y.validateAction('open the pod bay doors'); // false
 Configuration
 -------------
 
-Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a config file used by the command-line interface.
-
-When options can be set both in the configuration and using the command-line interface, the value set in the latter will take priority.
+Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function, in a [config JSON file](#command-line-configuration), or directly as a [command-line option](command-line-interface).
 
 Below is a reference of all the options that are available:
 
@@ -453,13 +453,13 @@ Defaults to `false`.
 
 The level of issue which can fail the test (and cause it to exit with code 2) when running via the CLI. This should be one of `error` (the default), `warning`, or `notice`.
 
-```js
+```json
 {
-    level: 'warning'
+    "level": "warning"
 }
 ```
 
-Defaults to `error`.
+Defaults to `error`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `log` (object)
 
@@ -521,13 +521,13 @@ Defaults to `null`.
 
 The reporter to use while running the test via the CLI. [More about reporters](#reporters).
 
-```js
+```json
 {
-    reporter: 'json'
+    "reporter": "json"
 }
 ```
 
-Defaults to `cli`.
+Defaults to `cli`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `rootElement` (element)
 
@@ -580,13 +580,13 @@ Defaults to `WCAG2AA`.
 
 The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2) when running via the CLI.
 
-```js
+```json
 {
-    threshold: 9
+    "threshold": 9
 }
 ```
 
-Defaults to `0`.
+Defaults to `0`. Note this configuration is only relevant or available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `timeout` (number)
 
