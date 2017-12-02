@@ -451,12 +451,12 @@ Defaults to `false`.
 
 ### `level` (string)
 
-The level of issue which can fail the test (and cause it to exit with code 2). This should be one of `error` (the default), `warning`, or `notice`.
+The level of issue which can fail the test (and cause it to exit with code 2) when running via the CLI. This should be one of `error` (the default), `warning`, or `notice`.
 
 ```js
-pa11y('http://example.com/', {
+{
     level: 'warning'
-});
+}
 ```
 
 Defaults to `error`.
@@ -519,12 +519,12 @@ Defaults to `null`.
 
 ### `reporter` (string)
 
-The reporter to use while running the test. [More about reporters](#reporters).
+The reporter to use while running the test via the CLI. [More about reporters](#reporters).
 
 ```js
-pa11y('http://example.com/', {
+{
     reporter: 'json'
-});
+}
 ```
 
 Defaults to `cli`.
@@ -578,12 +578,12 @@ Defaults to `WCAG2AA`.
 
 ### `threshold` (number)
 
-The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2).
+The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2) when running via the CLI.
 
 ```js
-pa11y('http://example.com/', {
+{
     threshold: 9
-});
+}
 ```
 
 Defaults to `0`.
