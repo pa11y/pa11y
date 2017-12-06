@@ -78,4 +78,28 @@ describe('CLI standard', () => {
 
 	});
 
+	describe('when the `standard` config is set to "WCAG2AAA" but the `--standard` flag is set to "Section508"', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
+				arguments: [
+					'--config', './mock/config/standard.json',
+					'--include-notices',
+					'--include-warnings',
+					'--standard', 'Section508',
+					'--reporter', 'json'
+				]
+			});
+		});
+
+		it('outputs the expected issues', () => {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 1);
+			pa11yResponse.json.forEach(issue => {
+				assert.match(issue.code, /^Section508\./);
+			});
+		});
+
+	});
+
 });
