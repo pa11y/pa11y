@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.3.1 (2017-12-06)
+
+  * Fix the way configurations are loaded
+
 ## 1.3.0 (2017-10-18)
 
   * Add the ability to specify paths and URLs as command-line arguments
