@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0-beta.4 pre-release (2017-12-06)
+
+  * Add reporter, threshold and level as configuration options
+  * Clarify some documentation
+
 ## 5.0.0-beta.3 pre-release (2017-11-26)
 
   * Fix a timeout issue
