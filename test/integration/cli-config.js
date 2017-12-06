@@ -60,7 +60,7 @@ describe('pa11y-ci (with a config file that has a "js" extension)', () => {
 
 });
 
-describe('pa11y-ci (with a config file that has a specified extension)', () => {
+describe('pa11y-ci (with a config file that has a specified JSON extension)', () => {
 
 	before(() => {
 		return global.cliCall([
@@ -71,6 +71,21 @@ describe('pa11y-ci (with a config file that has a specified extension)', () => {
 
 	it('loads the expected config', () => {
 		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-json');
+	});
+
+});
+
+describe('pa11y-ci (with a config file that has a specified JS extension)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'extension-js.js'
+		]);
+	});
+
+	it('loads the expected config', () => {
+		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-js');
 	});
 
 });

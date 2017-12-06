@@ -141,6 +141,9 @@ function resolveConfigPath(configPath) {
 	if (configPath[0] !== '/') {
 		configPath = path.join(process.cwd(), configPath);
 	}
+	if (/\.js(on)?$/.test(configPath)) {
+		configPath = configPath.replace(/\.js(on)?$/, '');
+	}
 	return configPath;
 }
 
