@@ -170,6 +170,8 @@ The command-line tool can be configured with a JSON file as well as arguments. B
 pa11y --config ./path/to/config.json http://example.com
 ```
 
+If any configuration is set both in a configuration file and also as a command-line option, the value set in the latter will take priority.
+
 For more information on configuring Pa11y, see the [configuration documentation](#configuration).
 
 ### Ignoring
@@ -341,7 +343,7 @@ pa11y.validateAction('open the pod bay doors'); // false
 Configuration
 -------------
 
-Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a config file used by the command-line interface.
+Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a [JSON configuration file](#command-line-configuration). Some are also available directly as [command-line options](#command-line-interface).
 
 Below is a reference of all the options that are available:
 
@@ -447,6 +449,18 @@ pa11y('http://example.com/', {
 
 Defaults to `false`.
 
+### `level` (string)
+
+The level of issue which can fail the test (and cause it to exit with code 2) when running via the CLI. This should be one of `error` (the default), `warning`, or `notice`.
+
+```json
+{
+    "level": "warning"
+}
+```
+
+Defaults to `error`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
+
 ### `log` (object)
 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
@@ -503,6 +517,18 @@ pa11y('http://example.com/', {
 
 Defaults to `null`.
 
+### `reporter` (string)
+
+The reporter to use while running the test via the CLI. [More about reporters](#reporters).
+
+```json
+{
+    "reporter": "json"
+}
+```
+
+Defaults to `cli`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
+
 ### `rootElement` (element)
 
 The root element for testing a subset of the page opposed to the full document.
@@ -549,6 +575,18 @@ pa11y('http://example.com/', {
 ```
 
 Defaults to `WCAG2AA`.
+
+### `threshold` (number)
+
+The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2) when running via the CLI.
+
+```json
+{
+    "threshold": 9
+}
+```
+
+Defaults to `0`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
 ### `timeout` (number)
 

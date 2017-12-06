@@ -85,6 +85,91 @@ describe('CLI exit codes', () => {
 
 	});
 
+	describe('when the `level` config is set to "warning"', () => {
+
+		describe('and Pa11y is run on a page with no warnings or errors', () => {
+
+			before(async () => {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
+					arguments: [
+						'--config', './mock/config/level-warning.json',
+						'--include-notices',
+						'--include-warnings'
+					]
+				});
+			});
+
+			it('exits with a code of `0`', () => {
+				assert.strictEqual(pa11yResponse.exitCode, 0);
+			});
+
+		});
+
+		describe('and Pa11y is run on a page with warnings', () => {
+
+			before(async () => {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
+					arguments: [
+						'--config', './mock/config/level-warning.json',
+						'--include-notices',
+						'--include-warnings'
+					]
+				});
+			});
+
+			it('exits with a code of `2`', () => {
+				assert.strictEqual(pa11yResponse.exitCode, 2);
+			});
+
+		});
+
+	});
+
+	describe('when the `level` config is set to "warning" but the `--level` flag is set to "notice"', () => {
+
+		describe('and Pa11y is run on a page with no notices, warnings, or errors', () => {
+
+			before(async () => {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
+					arguments: [
+						'--config', './mock/config/level-warning.json',
+						'--include-notices',
+						'--include-warnings',
+						'--level', 'notice',
+						// We can't build a page that doesn't include notices, so we have
+						// to fake it by ignoring the only one there is
+						'--ignore', 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2'
+					]
+				});
+			});
+
+			it('exits with a code of `0`', () => {
+				assert.strictEqual(pa11yResponse.exitCode, 0);
+			});
+
+		});
+
+		describe('and Pa11y is run on a page with notices', () => {
+
+			before(async () => {
+				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
+					arguments: [
+						'--config', './mock/config/level-warning.json',
+						'--include-notices',
+						'--include-warnings',
+						'--level', 'notice'
+					]
+				});
+			});
+
+			it('exits with a code of `2`', () => {
+				assert.strictEqual(pa11yResponse.exitCode, 2);
+			});
+
+		});
+
+	});
+
 	describe('when the `--level` flag is set to "notice"', () => {
 
 		describe('and Pa11y is run on a page with no notices, warnings, or errors', () => {
@@ -124,6 +209,43 @@ describe('CLI exit codes', () => {
 				assert.strictEqual(pa11yResponse.exitCode, 2);
 			});
 
+		});
+
+	});
+
+	describe('when the `threshold` config is set to more than the number of errors present', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
+				arguments: [
+					'--config', './mock/config/threshold-large.json',
+					'--include-notices',
+					'--include-warnings'
+				]
+			});
+		});
+
+		it('exits with a code of `0`', () => {
+			assert.strictEqual(pa11yResponse.exitCode, 0);
+		});
+
+	});
+
+	describe('when the `threshold` config is set to less than the number of errors present but the `--threshold` flag is set to more', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
+				arguments: [
+					'--config', './mock/config/threshold-small.json',
+					'--include-notices',
+					'--include-warnings',
+					'--threshold', '5'
+				]
+			});
+		});
+
+		it('exits with a code of `0`', () => {
+			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 
 	});

@@ -25,18 +25,15 @@ function configureProgram() {
 		)
 		.option(
 			'-r, --reporter <reporter>',
-			'the reporter to use: cli (default), csv, json',
-			'cli'
+			'the reporter to use: cli (default), csv, json'
 		)
 		.option(
 			'-l, --level <level>',
-			'the level of issue to fail on (exit with code 2): error, warning, notice',
-			'error'
+			'the level of issue to fail on (exit with code 2): error, warning, notice'
 		)
 		.option(
 			'-T, --threshold <number>',
-			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
-			'0'
+			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2'
 		)
 		.option(
 			'-i, --ignore <ignore>',
@@ -100,12 +97,16 @@ async function runProgram() {
 	if (!program.url || program.args[1]) {
 		program.help();
 	}
-	const report = loadReporter(program.reporter);
-	const options = processOptions(report.log);
+	const options = processOptions();
+	const report = loadReporter(options.reporter);
+	options.log = report.log;
+	if (!program.debug) {
+		options.log.debug = () => {};
+	}
 	await report.begin(program.url);
 	try {
 		const results = await pa11y(program.url, options);
-		if (reportShouldFail(program.level, results.issues, program.threshold)) {
+		if (reportShouldFail(options.level, results.issues, options.threshold)) {
 			process.once('exit', () => {
 				process.exit(2);
 			});
@@ -117,24 +118,28 @@ async function runProgram() {
 	}
 }
 
-function processOptions(log) {
-	const options = extend({}, loadConfig(program.config), {
+function processOptions() {
+	// CLI options take precedence over config options (which take precedence over defaults)
+	// 'level', 'reporter', and 'threshold' defaults are given here as they are not relevant when using lib/pa11y via JavaScript
+	const options = extend({
+		level: 'error',
+		reporter: 'cli',
+		threshold: 0
+	}, loadConfig(program.config), {
 		hideElements: program.hideElements,
 		ignore: (program.ignore.length ? program.ignore : undefined),
 		includeNotices: program.includeNotices,
 		includeWarnings: program.includeWarnings,
+		level: program.level,
+		reporter: program.reporter,
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
 		standard: program.standard,
+		threshold: program.threshold,
 		timeout: program.timeout,
-		wait: program.wait,
-		log
+		wait: program.wait
 	});
-
-	if (!program.debug) {
-		options.log.debug = () => {};
-	}
 	return options;
 }
 

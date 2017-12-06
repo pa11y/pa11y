@@ -24,4 +24,22 @@ describe('CLI reporter JSON', () => {
 
 	});
 
+	describe('when the `reporter` config is set to "json"', () => {
+
+		before(async () => {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
+				arguments: [
+					'--config', './mock/config/reporter-json.json'
+				]
+			});
+		});
+
+		it('outputs issues in JSON format', () => {
+			const json = JSON.parse(pa11yResponse.output);
+			assert.isArray(json);
+			assert.lengthEquals(json, 1);
+		});
+
+	});
+
 });
