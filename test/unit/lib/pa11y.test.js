@@ -89,8 +89,8 @@ describe('lib/pa11y', () => {
 		});
 
 		it('enables request interception', () => {
-			assert.calledOnce(puppeteer.mockPage.setRequestInterceptionEnabled);
-			assert.calledWithExactly(puppeteer.mockPage.setRequestInterceptionEnabled, true);
+			assert.calledOnce(puppeteer.mockPage.setRequestInterception);
+			assert.calledWithExactly(puppeteer.mockPage.setRequestInterception, true);
 		});
 
 		it('adds a request handler to the page', () => {
@@ -161,7 +161,7 @@ describe('lib/pa11y', () => {
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle',
+				waitUntil: 'networkidle0',
 				timeout: pa11y.defaults.timeout
 			});
 		});
@@ -172,13 +172,13 @@ describe('lib/pa11y', () => {
 		});
 
 		it('injects HTML CodeSniffer', () => {
-			assert.called(puppeteer.mockPage.injectFile);
-			assert.calledWith(puppeteer.mockPage.injectFile, path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`));
+			assert.called(puppeteer.mockPage.addScriptTag);
+			assert.calledWith(puppeteer.mockPage.addScriptTag, {path: path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`)});
 		});
 
 		it('injects the Pa11y runner', () => {
-			assert.called(puppeteer.mockPage.injectFile);
-			assert.calledWith(puppeteer.mockPage.injectFile, path.resolve(`${__dirname}/../../../lib/runner.js`));
+			assert.called(puppeteer.mockPage.addScriptTag);
+			assert.calledWith(puppeteer.mockPage.addScriptTag, {path: path.resolve(`${__dirname}/../../../lib/runner.js`)});
 		});
 
 		it('evaluates some JavaScript in the context of the page', () => {
@@ -328,7 +328,7 @@ describe('lib/pa11y', () => {
 		it('navigates to `options.url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle',
+				waitUntil: 'networkidle0',
 				timeout: options.timeout
 			});
 		});
@@ -630,7 +630,7 @@ describe('lib/pa11y', () => {
 		it('navigates to `url`', () => {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle',
+				waitUntil: 'networkidle0',
 				timeout: pa11y.defaults.timeout
 			});
 		});
