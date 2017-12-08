@@ -36,7 +36,7 @@
     "pa11y-reporter-cli": "^1.0.0",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
-    "puppeteer": "^0.11.0",
+    "puppeteer": "^0.13.0",
     "semver": "^5.4.1"
   },
   "devDependencies": {
