@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0-beta.5 pre-release (2017-12-11)
+
+  * Update dependencies
+    * puppeteer: ^0.11.0 to ^0.13.0
+
 ## 5.0.0-beta.4 pre-release (2017-12-06)
 
   * Add reporter, threshold and level as configuration options
