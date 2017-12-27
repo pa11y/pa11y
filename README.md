@@ -335,8 +335,8 @@ Pa11y exposes a function which allows you to validate [action](#actions) strings
 This function accepts an action string and returns a boolean indicating whether it matches one of the actions that Pa11y supports:
 
 ```js
-pa11y.validateAction('click element #submit');  // true
-pa11y.validateAction('open the pod bay doors'); // false
+pa11y.isValidAction('click element #submit');  // true
+pa11y.isValidAction('open the pod bay doors'); // false
 ```
 
 
