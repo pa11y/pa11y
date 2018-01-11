@@ -131,6 +131,78 @@ describe('lib/action', () => {
 
 	});
 
+	describe('redirect-url action', () => {
+		let action;
+
+		beforeEach(() => {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'redirect-url';
+			});
+		});
+
+		it('has a name property', () => {
+			assert.strictEqual(action.name, 'redirect-url');
+		});
+
+		it('has a match property', () => {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', () => {
+			it('matches all of the expected action strings', () => {
+				assert.deepEqual('redirect to http://pa11y.org'.match(action.match), [
+					'redirect to http://pa11y.org',
+					undefined,
+					'http://pa11y.org'
+				]);
+			});
+		});
+
+		it('has a `run` method', () => {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', () => {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async () => {
+				matches = 'redirect to http://pa11y.org'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			});
+
+			it('clicks the specified element on the page', () => {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWithExactly(puppeteer.mockPage.goto, matches[2]);
+			});
+
+			it('resolves with `undefined`', () => {
+				assert.isUndefined(resolvedValue);
+			});
+
+			describe('when the click fails', () => {
+				let redirectError;
+				let rejectedError;
+
+				beforeEach(async () => {
+					redirectError = new Error('redirect to error');
+					puppeteer.mockPage.goto.rejects(redirectError);
+					try {
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					} catch (error) {
+						rejectedError = error;
+					}
+				});
+
+				it('rejects with a new error', () => {
+					assert.notStrictEqual(rejectedError, redirectError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: Could not redirect to "http://pa11y.org"');
+				});
+			});
+		});
+	});
+
 	describe('click-element action', () => {
 		let action;
 
