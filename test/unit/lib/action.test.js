@@ -131,17 +131,17 @@ describe('lib/action', () => {
 
 	});
 
-	describe('redirect-url action', () => {
+	describe('navigate-url action', () => {
 		let action;
 
 		beforeEach(() => {
 			action = runAction.actions.find(foundAction => {
-				return foundAction.name === 'redirect-url';
+				return foundAction.name === 'navigate-url';
 			});
 		});
 
 		it('has a name property', () => {
-			assert.strictEqual(action.name, 'redirect-url');
+			assert.strictEqual(action.name, 'navigate-url');
 		});
 
 		it('has a match property', () => {
@@ -150,8 +150,8 @@ describe('lib/action', () => {
 
 		describe('.match', () => {
 			it('matches all of the expected action strings', () => {
-				assert.deepEqual('redirect to http://pa11y.org'.match(action.match), [
-					'redirect to http://pa11y.org',
+				assert.deepEqual('navigate to http://pa11y.org'.match(action.match), [
+					'navigate to http://pa11y.org',
 					undefined,
 					'http://pa11y.org'
 				]);
@@ -167,7 +167,7 @@ describe('lib/action', () => {
 			let resolvedValue;
 
 			beforeEach(async () => {
-				matches = 'redirect to http://pa11y.org'.match(action.match);
+				matches = 'navigate to http://pa11y.org'.match(action.match);
 				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
@@ -181,12 +181,12 @@ describe('lib/action', () => {
 			});
 
 			describe('when the click fails', () => {
-				let redirectError;
+				let navigateError;
 				let rejectedError;
 
 				beforeEach(async () => {
-					redirectError = new Error('redirect to error');
-					puppeteer.mockPage.goto.rejects(redirectError);
+					navigateError = new Error('navigate to error');
+					puppeteer.mockPage.goto.rejects(navigateError);
 					try {
 						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
@@ -195,9 +195,9 @@ describe('lib/action', () => {
 				});
 
 				it('rejects with a new error', () => {
-					assert.notStrictEqual(rejectedError, redirectError);
+					assert.notStrictEqual(rejectedError, navigateError);
 					assert.instanceOf(rejectedError, Error);
-					assert.strictEqual(rejectedError.message, 'Failed action: Could not redirect to "http://pa11y.org"');
+					assert.strictEqual(rejectedError.message, 'Failed action: Could not navigate to "http://pa11y.org"');
 				});
 			});
 		});
