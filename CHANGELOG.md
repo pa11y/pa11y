@@ -1,6 +1,13 @@
 
 # Changelog
 
+## 5.0.0-beta.6 pre-release (2018-01-16)
+
+  * Add the `navigate-url` action
+  * Correct documentation on `isValidAction`
+  * Update dependencies
+    * puppeteer: ^0.13.0 to ^1.0.0
+
 ## 5.0.0-beta.5 pre-release (2017-12-11)
 
   * Update dependencies
