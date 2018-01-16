@@ -668,7 +668,8 @@ pa11y('http://example.com/', {
         'wait for fragment to be #page-2',
         'wait for path to not be /login',
         'wait for url to be https://example.com/',
-        'wait for #my-image to emit load'
+        'wait for #my-image to emit load',
+        'navigate to https://another-example.com/'
     ]
 });
 ```
@@ -776,6 +777,18 @@ pa11y('http://example.com/', {
     actions: [
         'click element #tab-2',
         'wait for element #tab-panel-to to emit content-loaded'
+    ]
+});
+```
+
+### Navigate To URL
+
+This action allows you to navigate to a new URL if, for example, the URL is inaccessible using other methods. This action takes the form `navigate to <url>`. E.g.
+
+```js
+pa11y('http://example.com/', {
+    actions: [
+        'navigate to http://another-example.com'
     ]
 });
 ```
