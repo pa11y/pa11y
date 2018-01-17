@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.0-beta.7 pre-release (2018-01-17)
+
+  * Fix browser logging
+
 ## 5.0.0-beta.6 pre-release (2018-01-16)
 
   * Add the `navigate-url` action
