@@ -13,7 +13,6 @@ describe('lib/pa11y', () => {
 	let promiseTimeout;
 	let puppeteer;
 	let runAction;
-	let util;
 
 	beforeEach(() => {
 
@@ -39,9 +38,6 @@ describe('lib/pa11y', () => {
 		mockery.registerMock('puppeteer', puppeteer);
 
 		puppeteer.mockPage.evaluate.resolves(pa11yResults);
-
-		util = require('../mock/util.mock');
-		mockery.registerMock('util', util);
 
 		pa11y = require('../../../lib/pa11y');
 
@@ -138,24 +134,6 @@ describe('lib/pa11y', () => {
 			assert.called(puppeteer.mockPage.on);
 			assert.calledWith(puppeteer.mockPage.on, 'console');
 			assert.isFunction(puppeteer.mockPage.on.withArgs('console').firstCall.args[1]);
-		});
-
-		describe('console handler', () => {
-
-			beforeEach(() => {
-				util.inspect.withArgs('mock-arg-1').returns('\'mock-arg-1\'');
-				util.inspect.withArgs(true).returns('true');
-				util.inspect.withArgs(['mock-arg-2']).returns('[ \'mock-arg-2\' ]');
-				puppeteer.mockPage.on.withArgs('console').firstCall.args[1]('mock-arg-1', true, ['mock-arg-2']);
-			});
-
-			it('calls `util.inspect` with each console argument', () => {
-				assert.calledThrice(util.inspect);
-				assert.calledWith(util.inspect, 'mock-arg-1');
-				assert.calledWith(util.inspect, true);
-				assert.calledWith(util.inspect, ['mock-arg-2']);
-			});
-
 		});
 
 		it('navigates to `url`', () => {
@@ -334,23 +312,17 @@ describe('lib/pa11y', () => {
 		});
 
 		describe('console handler', () => {
+			let mockMessage;
 
 			beforeEach(() => {
-				util.inspect.withArgs('mock-arg-1').returns('\'mock-arg-1\'');
-				util.inspect.withArgs(true).returns('true');
-				util.inspect.withArgs(['mock-arg-2']).returns('[ \'mock-arg-2\' ]');
-				puppeteer.mockPage.on.withArgs('console').firstCall.args[1]('mock-arg-1', true, ['mock-arg-2']);
+				mockMessage = {
+					text: sinon.stub().returns('mock-message')
+				};
+				puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
 			});
 
-			it('calls `util.inspect` with each console argument', () => {
-				assert.calledThrice(util.inspect);
-				assert.calledWith(util.inspect, 'mock-arg-1');
-				assert.calledWith(util.inspect, true);
-				assert.calledWith(util.inspect, ['mock-arg-2']);
-			});
-
-			it('logs the console arguments with `options.log.debug`', () => {
-				assert.calledWithExactly(options.log.debug, 'Browser Console: \'mock-arg-1\' true [ \'mock-arg-2\' ]');
+			it('logs the console message text with `options.log.debug`', () => {
+				assert.calledWithExactly(options.log.debug, 'Browser Console: mock-message');
 			});
 
 		});
