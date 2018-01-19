@@ -366,6 +366,30 @@ pa11y('http://example.com/', {
 
 Defaults to an empty array.
 
+### `browser` (Browser)
+
+A [Puppeteer Browser instance][puppeteer-browser] which will be used in the test run. If this is provided then there are several things you need to consider:
+
+  1. Pa11y's `chromeLaunchConfig` option will be ignored, you'll need to pass this configuration in when you create your Browser instance
+  2. Pa11y will not automatically close the Browser when the tests have finished running, you will need to do this yourself if you need the Node.js process to exit
+  3. It's important that you use a version of Puppeteer that meets the range specified in Pa11y's `package.json`
+
+**Note:** This is an advanced option. If you're using this, please mention in any issues you open on Pa11y and double-check that the Puppeteer version you're using matches Pa11y's.
+
+```js
+const browser = await puppeteer.launch({
+    ignoreHTTPSErrors: true
+});
+
+pa11y('http://example.com/', {
+    browser: browser
+});
+
+browser.close();
+```
+
+Defaults to `null`.
+
 ### `chromeLaunchConfig` (object)
 
 Launch options for the Headless Chrome instance. [See the Puppeteer documentation for more information][puppeteer-launch].
@@ -886,6 +910,7 @@ Copyright &copy; 2013–2017, Team Pa11y and contributors
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[puppeteer-browser]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser
 [puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [semver range]: https://github.com/npm/node-semver#ranges

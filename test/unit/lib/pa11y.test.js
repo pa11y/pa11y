@@ -580,6 +580,34 @@ describe('lib/pa11y', () => {
 
 		});
 
+		describe('when `options.browser` is set', () => {
+
+			beforeEach(async () => {
+				extend.reset();
+				puppeteer.launch.resetHistory();
+				puppeteer.mockBrowser.newPage.resetHistory();
+				options.browser = {
+					close: sinon.stub(),
+					newPage: sinon.stub().resolves(puppeteer.mockPage)
+				};
+				await pa11y(options);
+			});
+
+			it('does not launch puppeteer', () => {
+				assert.notCalled(puppeteer.launch);
+			});
+
+			it('creates a new page using the passed in browser', () => {
+				assert.calledOnce(options.browser.newPage);
+				assert.calledWithExactly(options.browser.newPage);
+			});
+
+			it('does not close the browser', () => {
+				assert.notCalled(options.browser.close);
+			});
+
+		});
+
 	});
 
 	describe('pa11y(url, options)', () => {
@@ -665,6 +693,10 @@ describe('lib/pa11y', () => {
 
 		it('has an `actions` property', () => {
 			assert.deepEqual(pa11y.defaults.actions, []);
+		});
+
+		it('has a `browser` property', () => {
+			assert.isNull(pa11y.defaults.browser);
 		});
 
 		it('has a `chromeLaunchConfig` property', () => {
