@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0-beta.8 pre-release (2018-01-22)
+
+  * Allow sharing a Chrome browser instance between test runs
+  * Fix Content-Security-Policy issues
+
 ## 5.0.0-beta.7 pre-release (2018-01-17)
 
   * Fix browser logging
