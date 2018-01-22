@@ -7,8 +7,11 @@ const sinon = require('sinon');
 
 describe('lib/pa11y', () => {
 	let extend;
+	let fs;
+	let htmlCodeSnifferPath;
 	let pa11y;
 	let pa11yResults;
+	let pa11yRunnerPath;
 	let pkg;
 	let promiseTimeout;
 	let puppeteer;
@@ -28,6 +31,16 @@ describe('lib/pa11y', () => {
 
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
+
+		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`);
+		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
+
+		fs = require('../mock/fs-extra.mock');
+		mockery.registerMock('fs-extra', fs);
+
+		fs.readFile.withArgs(htmlCodeSnifferPath).resolves('mock-html-codesniffer-js');
+		fs.readFile.withArgs(pa11yRunnerPath).resolves('mock-pa11y-runner-js');
+
 
 		pkg = require('../../../package.json');
 
@@ -149,20 +162,30 @@ describe('lib/pa11y', () => {
 			assert.calledWith(puppeteer.mockPage.setViewport, pa11y.defaults.viewport);
 		});
 
-		it('injects HTML CodeSniffer', () => {
-			assert.called(puppeteer.mockPage.addScriptTag);
-			assert.calledWith(puppeteer.mockPage.addScriptTag, {path: path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`)});
+		it('loads the HTML CodeSniffer JavaScript', () => {
+			assert.called(fs.readFile);
+			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`), 'utf-8');
 		});
 
-		it('injects the Pa11y runner', () => {
-			assert.called(puppeteer.mockPage.addScriptTag);
-			assert.calledWith(puppeteer.mockPage.addScriptTag, {path: path.resolve(`${__dirname}/../../../lib/runner.js`)});
+		it('loads the Pa11y runner JavaScript', () => {
+			assert.called(fs.readFile);
+			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+		});
+
+		it('evaluates the HTML CodeSniffer JavaScript', () => {
+			assert.called(puppeteer.mockPage.evaluate);
+			assert.calledWith(puppeteer.mockPage.evaluate, 'mock-html-codesniffer-js');
+		});
+
+		it('evaluates the the Pa11y runner JavaScript', () => {
+			assert.called(puppeteer.mockPage.evaluate);
+			assert.calledWith(puppeteer.mockPage.evaluate, 'mock-pa11y-runner-js');
 		});
 
 		it('evaluates some JavaScript in the context of the page', () => {
-			assert.calledOnce(puppeteer.mockPage.evaluate);
-			assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
-			assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1], {
+			assert.called(puppeteer.mockPage.evaluate);
+			assert.isFunction(puppeteer.mockPage.evaluate.thirdCall.args[0]);
+			assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1], {
 				hideElements: pa11y.defaults.hideElements,
 				ignore: [
 					'notice',
@@ -183,7 +206,7 @@ describe('lib/pa11y', () => {
 				options = {
 					mockOptions: true
 				};
-				returnValue = puppeteer.mockPage.evaluate.firstCall.args[0](options);
+				returnValue = puppeteer.mockPage.evaluate.thirdCall.args[0](options);
 			});
 
 			it('calls `_runPa11y` with the passed in options', () => {
@@ -372,7 +395,7 @@ describe('lib/pa11y', () => {
 			});
 
 			it('automatically ignores notices', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
 				]);
@@ -390,7 +413,7 @@ describe('lib/pa11y', () => {
 			});
 
 			it('does not automatically ignore notices', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'warning'
 				]);
 			});
@@ -407,7 +430,7 @@ describe('lib/pa11y', () => {
 			});
 
 			it('automatically ignores warnings', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
 				]);
@@ -425,7 +448,7 @@ describe('lib/pa11y', () => {
 			});
 
 			it('does not automatically ignore warnings', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.firstCall.args[1].ignore, [
+				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice'
 				]);
 			});
