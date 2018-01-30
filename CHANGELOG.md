@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 5.0.0-beta.9 pre-release (2018-01-30)
+
+  * Update dependencies
+    * pa11y-reporter-cli: ^1.0.0 to ^1.0.1
+
 ## 5.0.0-beta.8 pre-release (2018-01-22)
 
   * Allow sharing a Chrome browser instance between test runs
