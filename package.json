@@ -34,7 +34,7 @@
     "fs-extra": "^5.0.0",
     "node.extend": "^2.0.0",
     "p-timeout": "^1.2.0",
-    "pa11y-reporter-cli": "^1.0.0",
+    "pa11y-reporter-cli": "^1.0.1",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
     "puppeteer": "^1.0.0",
