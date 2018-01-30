@@ -63,7 +63,7 @@ describe('lib/reporter', () => {
 						type: 'notice',
 						code: 'mock-code-3',
 						message: 'mock-message-3',
-						context: 'mock-context-3',
+						context: null,
 						selector: 'mock-selector-3'
 					}
 				]
@@ -87,7 +87,7 @@ describe('lib/reporter', () => {
 				 • Notice: mock-message-3
 				   ├── mock-code-3
 				   ├── mock-selector-3
-				   └── mock-context-3
+				   └── [no context]
 
 				1 Errors
 				1 Warnings
