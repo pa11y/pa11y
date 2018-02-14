@@ -609,6 +609,8 @@ describe('lib/pa11y', () => {
 				extend.reset();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.close.resetHistory();
 				options.browser = {
 					close: sinon.stub(),
 					newPage: sinon.stub().resolves(puppeteer.mockPage)
@@ -627,6 +629,41 @@ describe('lib/pa11y', () => {
 
 			it('does not close the browser', () => {
 				assert.notCalled(options.browser.close);
+			});
+
+			it('closes the page', () => {
+				assert.calledOnce(puppeteer.mockPage.close);
+			});
+
+		});
+
+		describe('when `options.page` is set', () => {
+
+			beforeEach(async () => {
+				extend.reset();
+				puppeteer.launch.resetHistory();
+				puppeteer.mockBrowser.newPage.resetHistory();
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.close.resetHistory();
+				options.browser = puppeteer.mockBrowser;
+				options.page = puppeteer.mockPage;
+				await pa11y(options);
+			});
+
+			it('does not launch puppeteer', () => {
+				assert.notCalled(puppeteer.launch);
+			});
+
+			it('does not open the page', () => {
+				assert.notCalled(options.browser.newPage);
+			});
+
+			it('does not close the browser', () => {
+				assert.notCalled(options.browser.close);
+			});
+
+			it('does not close the page', () => {
+				assert.notCalled(options.page.close);
 			});
 
 		});
