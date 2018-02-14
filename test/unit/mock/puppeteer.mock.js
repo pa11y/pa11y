@@ -12,6 +12,7 @@ const mockBrowser = puppeteer.mockBrowser = {
 };
 
 const mockPage = puppeteer.mockPage = {
+	close: sinon.stub().resolves(),
 	click: sinon.stub().resolves(),
 	evaluate: sinon.stub().resolves(),
 	focus: sinon.stub().resolves(),
