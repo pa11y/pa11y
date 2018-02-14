@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.0-beta.10 pre-release (2018-02-14)
+
+  * Allow passing in a Chrome page instance to a test
+
 ## 5.0.0-beta.9 pre-release (2018-01-30)
 
   * Update dependencies
