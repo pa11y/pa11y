@@ -391,7 +391,7 @@ pa11y('http://example.com/', {
 browser.close();
 ```
 
-A more full example can be found in [the examples][#puppeteer-example].
+A more full example can be found in [the examples](#puppeteer-example).
 
 Defaults to `null`.
 
