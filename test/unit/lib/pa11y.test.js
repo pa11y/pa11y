@@ -41,7 +41,6 @@ describe('lib/pa11y', () => {
 		fs.readFile.withArgs(htmlCodeSnifferPath).resolves('mock-html-codesniffer-js');
 		fs.readFile.withArgs(pa11yRunnerPath).resolves('mock-pa11y-runner-js');
 
-
 		pkg = require('../../../package.json');
 
 		promiseTimeout = sinon.spy(require('p-timeout'));
@@ -635,9 +634,26 @@ describe('lib/pa11y', () => {
 				assert.calledOnce(puppeteer.mockPage.close);
 			});
 
+			describe('and an error occurs', () => {
+				let headlessChromeError;
+
+				beforeEach(async () => {
+					headlessChromeError = new Error('headless chrome error');
+					puppeteer.mockPage.goto.rejects(headlessChromeError);
+					try {
+						await pa11y(options);
+					} catch (error) {}
+				});
+
+				it('does not close the browser', () => {
+					assert.notCalled(options.browser.close);
+				});
+
+			});
+
 		});
 
-		describe('when `options.page` is set', () => {
+		describe('when `options.browser` and `options.page` is set', () => {
 
 			beforeEach(async () => {
 				extend.reset();
@@ -664,6 +680,46 @@ describe('lib/pa11y', () => {
 
 			it('does not close the page', () => {
 				assert.notCalled(options.page.close);
+			});
+
+			describe('and an error occurs', () => {
+				let headlessChromeError;
+
+				beforeEach(async () => {
+					headlessChromeError = new Error('headless chrome error');
+					puppeteer.mockPage.goto.rejects(headlessChromeError);
+					try {
+						await pa11y(options);
+					} catch (error) {}
+				});
+
+				it('does not close the browser', () => {
+					assert.notCalled(options.browser.close);
+				});
+
+				it('does not close the page', () => {
+					assert.notCalled(options.page.close);
+				});
+
+			});
+
+		});
+
+		describe('when `options.page` is set without `options.browser`', () => {
+			let rejectedError;
+
+			beforeEach(async () => {
+				options.page = puppeteer.mockPage;
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', () => {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'The page option must only be set alongside the browser option');
 			});
 
 		});

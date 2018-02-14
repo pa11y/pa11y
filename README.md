@@ -366,13 +366,16 @@ pa11y('http://example.com/', {
 
 Defaults to an empty array.
 
-### `browser` (Browser)
+### `browser` (Browser) and `page` (Page)
 
-A [Puppeteer Browser instance][puppeteer-browser] which will be used in the test run. If this is provided then there are several things you need to consider:
+A [Puppeteer Browser instance][puppeteer-browser] which will be used in the test run. Optionally you may also supply a [Puppeteer Page instance][puppeteer-page], but this cannot be used between test runs as event listeners would be bound multiple times.
+
+If either of these options are provided then there are several things you need to consider:
 
   1. Pa11y's `chromeLaunchConfig` option will be ignored, you'll need to pass this configuration in when you create your Browser instance
   2. Pa11y will not automatically close the Browser when the tests have finished running, you will need to do this yourself if you need the Node.js process to exit
   3. It's important that you use a version of Puppeteer that meets the range specified in Pa11y's `package.json`
+  4. You _cannot_ reuse page instances between multiple test runs, doing so will result in an error. The page option allows you to do things like take screen-shots on a Pa11y failure or execute your own JavaScript before Pa11y
 
 **Note:** This is an advanced option. If you're using this, please mention in any issues you open on Pa11y and double-check that the Puppeteer version you're using matches Pa11y's.
 
@@ -387,6 +390,8 @@ pa11y('http://example.com/', {
 
 browser.close();
 ```
+
+A more full example can be found in [the examples][#puppeteer-example].
 
 Defaults to `null`.
 
@@ -833,6 +838,10 @@ Run Pa11y on multiple URLs at once and output the results. [See the example](exa
 
 Step through some actions before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/actions/index.js).
 
+### Puppeteer Example
+
+Pass in pre-created Puppeteer browser and page instances so that you can reuse them between tests. [See the example](example/puppeteer/index.js).
+
 
 Common Questions and Troubleshooting
 ------------------------------------
@@ -912,6 +921,7 @@ Copyright &copy; 2013–2017, Team Pa11y and contributors
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [puppeteer-browser]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser
 [puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
+[puppeteer-page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [semver range]: https://github.com/npm/node-semver#ranges
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
