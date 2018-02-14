@@ -3,20 +3,31 @@
 
 const pa11y = require('../..');
 
-// Test http://example.com/
-pa11y('http://example.com/', {
+runExample();
 
-	// Log what's happening to the console
-	log: {
-		debug: console.log,
-		error: console.error,
-		info: console.log
+// Async function required for us to use await
+async function runExample() {
+	try {
+
+		// Test http://example.com/
+		const result = await pa11y('http://example.com/', {
+
+			// Log what's happening to the console
+			log: {
+				debug: console.log,
+				error: console.error,
+				info: console.log
+			}
+
+		});
+
+		// Output the raw result object
+		console.log(result);
+
+	} catch (error) {
+
+		// Output an error if it occurred
+		console.error(error.message);
+
 	}
-
-})
-.then(result => {
-	console.log(result);
-})
-.catch(error => {
-	console.error(error.message);
-});
+}
