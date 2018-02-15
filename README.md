@@ -28,20 +28,6 @@ pa11y('http://example.com/').then((results) => {
 
 Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
 
----
-
-## Latest news from Pa11y
-
-We're pleased to announce the Pa11y 5.0 beta is now available! We're switching from PhantomJS to Headless Chrome, as well as many other changes. See the [migration guide][migration-5] for further details.
-
-If you'd like to try out the Pa11y 5.0 beta you can do so with
-
-`npm install -g pa11y@beta`
-
-Feedback is greatly appreciated 😊
-
----
-
 
 Table Of Contents
 -----------------
@@ -893,14 +879,12 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 5             | N/A                | 8+               | N/A              |
-| :heart:         | 4             | N/A                | 4–8              | N/A *            |
+| :hourglass:     | 4             | 4.9                | 4–8              | 2018-08-15       |
 | :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
 
 If you're opening issues related to these, please mention the version that the issue relates to.
-
-\* Pa11y 4's support end date will be reviewed at the end of this period based on community feedback.
 
 
 License
@@ -915,7 +899,6 @@ Copyright &copy; 2013–2017, Team Pa11y and contributors
 [4.x]: https://github.com/pa11y/pa11y/tree/4.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
-[migration-5]: https://github.com/pa11y/pa11y/blob/5.x/MIGRATION.md#migrating-from-40-to-50
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
