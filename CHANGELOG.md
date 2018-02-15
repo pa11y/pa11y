@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.0 (2018-02-15)
+
+  * See the [migration guide](https://github.com/pa11y/pa11y/blob/master/MIGRATION.md#migrating-from-40-to-50) for details
+
 ## 5.0.0-beta.10 pre-release (2018-02-14)
 
   * Allow passing in a Chrome page instance to a test
