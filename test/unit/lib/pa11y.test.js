@@ -233,7 +233,7 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.reset();
+				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('mock-url');
 			});
 
@@ -247,7 +247,7 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme and starts with a slash', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.reset();
+				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('/mock-path');
 			});
 
@@ -261,7 +261,7 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme and starts with a period', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.reset();
+				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('./mock-path');
 			});
 
@@ -279,7 +279,7 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				headlessChromeError = new Error('headless chrome error');
-				puppeteer.mockBrowser.close.reset();
+				puppeteer.mockBrowser.close.resetHistory();
 				puppeteer.mockPage.goto.rejects(headlessChromeError);
 				try {
 					await pa11y('https://mock-url/');
@@ -371,7 +371,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.ignore` has items with uppercase letters', () => {
 
 			beforeEach(async () => {
-				extend.reset();
+				extend.resetHistory();
 				options.ignore = [
 					'MOCK-IGNORE'
 				];
@@ -491,7 +491,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.screenCapture` is set', () => {
 
 			beforeEach(async () => {
-				extend.reset();
+				extend.resetHistory();
 				options.screenCapture = 'mock.png';
 				await pa11y(options);
 			});
@@ -566,7 +566,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.actions` is set', () => {
 
 			beforeEach(async () => {
-				extend.reset();
+				extend.resetHistory();
 				options.actions = [
 					'mock-action-1',
 					'mock-action-2'
@@ -605,7 +605,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.browser` is set', () => {
 
 			beforeEach(async () => {
-				extend.reset();
+				extend.resetHistory();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
 				puppeteer.mockBrowser.close.resetHistory();
@@ -656,7 +656,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.browser` and `options.page` is set', () => {
 
 			beforeEach(async () => {
-				extend.reset();
+				extend.resetHistory();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
 				puppeteer.mockBrowser.close.resetHistory();
@@ -774,7 +774,7 @@ describe('lib/pa11y', () => {
 
 			beforeEach(done => {
 				headlessChromeError = new Error('headless chrome error');
-				puppeteer.mockBrowser.close.reset();
+				puppeteer.mockBrowser.close.resetHistory();
 				puppeteer.mockPage.goto.rejects(headlessChromeError);
 				pa11y('https://mock-url/', (error, results) => {
 					callbackError = error;
