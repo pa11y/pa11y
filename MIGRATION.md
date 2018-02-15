@@ -17,8 +17,6 @@ Table Of Contents
 Migrating from 4.0 to 5.0
 -------------------------
 
-**TODO this migration guide is a work in progress. Please update as you work on Pa11y 5.x**
-
 ### PhantomJS to Headless Chrome
 
 Pa11y 5.0 switches from PhantomJS to [Headless Chrome](https://developers.google.com/web/updates/2017/04/headless-chrome). This allows us to use more modern JavaScript APIs and make Pa11y testing more stable.
