@@ -91,7 +91,17 @@ pa11y('http://example.com', {
 
 ### How can I use Pa11y with a proxy server?
 
-TODO work out how you can do this with Headless Chrome
+Proxy configuration can be passed through from Pa11y to Headless Chrome using the `args` propery of [`chromeLaunchConfig` option][chromeLaunchConfig];
+
+```js
+pa11y('http://example.com', {
+    chromeLaunchConfig: {
+        args: [
+            '--proxy-server=127.0.0.1:9999',
+        ]
+    }
+});
+```
 
 ### How can I simulate a user interaction before running Pa11y?
 
@@ -115,6 +125,7 @@ Please include your Node.js and Pa11y version numbers, as well as your operating
 
 
 [actions]: https://github.com/pa11y/pa11y#actions
+[chromeLaunchConfig]: https://github.com/pa11y/pa11y#chromelaunchconfig-object
 [issues]: https://github.com/pa11y/pa11y/issues?utf8=%E2%9C%93&q=is%3Aissue
 [new-issue]: https://github.com/pa11y/pa11y/issues/new
 [ngViewLoaded]: https://github.com/angular-ui/ui-router/wiki#view-load-events
