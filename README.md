@@ -13,12 +13,6 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
 
 ---
 
-## Latest news from Pa11y
-
-✨ 🔜 ✨ The Pa11y team is very excited to announce plans for the successor to Pa11y Dashboard and Pa11y Webservice, codename "Sidekick". Help us define the features that you want to see by visiting the [proposal][sidekick-proposal]. ✨
-
----
-
 ## Table Of Contents
 
 - [Requirements](#requirements)
@@ -34,7 +28,7 @@ CI runs accessibility tests against multiple URLs and reports on any issues. Thi
 
 ## Requirements
 
-This command line tool requires [Node.js] 4+. You can install through npm:
+This command line tool requires [Node.js] 8+. You can install through npm:
 
 ```sh
 npm install -g pa11y-ci
@@ -106,7 +100,7 @@ Pa11y CI has a few of its own configurations which you can set as well:
 
 ### URL configuration
 
-Each URL in your config file can be an object and specify [pa11y configurations] which override the defaults too. You do this by using an object instead of a string, and providing the URL as a `url` property on that object. This can be useful if, for example, you know that a certain URL takes a while to load or you want to verify the presence of a specific piece of HTML:
+Each URL in your config file can be an object and specify [pa11y configurations] which override the defaults too. You do this by using an object instead of a string, and providing the URL as a `url` property on that object. This can be useful if, for example, you know that a certain URL takes a while to load or you want to check what the page looked like when the tests were run:
 
 ```json
 {
@@ -118,7 +112,7 @@ Each URL in your config file can be an object and specify [pa11y configurations]
         {
             "url": "http://pa11y.org/contributing",
             "timeout": 50000,
-            "verifyPage": "<title>Contributing to Pa11y</title>"
+            "screenCapture": "myDir/my-screen-capture.png"
         }
     ]
 }
@@ -175,11 +169,24 @@ make test-integration    # Run the integration tests
 ```
 
 
+## Support and Migration
+
+Pa11y CI major versions are normally supported for 6 months after their last minor release. This means that patch-level changes will be added and bugs will be fixed. The table below outlines the end-of-support dates for major versions, and the last minor release for that version.
+
+We also maintain a [migration guide](MIGRATION.md) to help you migrate.
+
+| :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
+| :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
+| :heart:         | 2             | N/A                | 8+               | N/A              |
+| :hourglass:     | 1             | 1.3                | 4+               | 2018-04-18       |
+
+If you're opening issues related to these, please mention the version that the issue relates to.
+
+
 ## Licence
 
 Licensed under the [Lesser General Public License (LGPL-3.0)](LICENSE).<br/>
 Copyright &copy; 2016–2017, Team Pa11y
-
 
 
 [issues]: https://github.com/pa11y/pa11y-ci/issues
@@ -196,6 +203,6 @@ Copyright &copy; 2016–2017, Team Pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y-ci
 [shield-dependencies]: https://img.shields.io/gemnasium/pa11y/pa11y-ci.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-4–6-brightgreen.svg
+[shield-node]: https://img.shields.io/badge/node.js%20support-8-brightgreen.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y-ci.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y-ci/master.svg

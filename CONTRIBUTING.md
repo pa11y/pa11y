@@ -1,6 +1,5 @@
 
-Contributing Guide
-==================
+# Contributing Guide
 
 Thanks for getting involved :tada:
 
