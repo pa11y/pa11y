@@ -1,6 +1,18 @@
 
 # Changelog
 
+## 5.0.1 (2018-02-16)
+
+  * Update dependencies
+    * commander: ^2.9.0 to ^2.14.1
+    * p-timeout: ^1.2.0 to ^2.0.1
+    * semver: ^5.4.1 to ^5.5.0
+    * eslint: ^3.1.8 to ^4.17.0
+    * mocha: ^3.2.0 to ^5.0.1
+    * nyc: ^10.1.2 to ^11.4.1
+    * proclaim: ^3.4.4 to ^3.5.1
+    * sinon: ^3.2.0 to ^4.3.0
+
 ## 5.0.0 (2018-02-15)
 
   * See the [migration guide](https://github.com/pa11y/pa11y/blob/master/MIGRATION.md#migrating-from-40-to-50) for details
