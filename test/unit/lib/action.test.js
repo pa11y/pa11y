@@ -74,7 +74,7 @@ describe('lib/action', () => {
 			let rejectedError;
 
 			beforeEach(async () => {
-				runAction.actions[1].run.reset();
+				runAction.actions[1].run.resetHistory();
 				try {
 					await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'baz 123');
 				} catch (error) {
@@ -569,7 +569,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the field should be unchecked', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.evaluate.reset();
+					puppeteer.mockPage.evaluate.resetHistory();
 					matches = 'uncheck field foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -887,7 +887,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "fragment"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for fragment to be foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -901,7 +901,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "hash"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for hash to be foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -915,7 +915,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "host"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for host to be foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -929,7 +929,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "url"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for url to be foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -943,7 +943,7 @@ describe('lib/action', () => {
 			describe('when `matches` includes a negation like "to not be"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for path to not be foo'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -1229,7 +1229,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "removed"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be removed'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -1243,7 +1243,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "visible"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be visible'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
@@ -1257,7 +1257,7 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "hidden"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.reset();
+					puppeteer.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be hidden'.match(action.match);
 					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
