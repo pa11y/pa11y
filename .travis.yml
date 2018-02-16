@@ -1,6 +1,8 @@
 
 # Build matrix
 language: node_js
+sudo: required
+
 matrix:
   include:
 
@@ -19,12 +21,6 @@ env:
 # Services setup
 services:
   - postgresql
-
-# Restrict builds on branches
-branches:
-  only:
-    - master
-    - /^\d+\.\d+\.\d+$/
 
 # Build script
 before_script:
