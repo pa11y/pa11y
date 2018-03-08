@@ -1,0 +1,13 @@
+{
+    "urls": [
+        "http://pa11y.org/",
+        {
+          "url": "http://pa11y.org/news",
+          "chromeLaunchConfig": {
+            "ignoreHTTPSErrors": true
+          }
+        },
+        "http://pa11y.org/tutorials",
+        "http://pa11y.org/contributing"
+    ]
+}

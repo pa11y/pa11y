@@ -11,9 +11,9 @@ describe('lib/pa11y-ci', () => {
 	let pa11y;
 	let pa11yCi;
 	let queue;
+	let puppeteer;
 
 	beforeEach(() => {
-
 		defaults = sinon.spy(require('lodash/defaultsDeep'));
 		mockery.registerMock('lodash/defaultsDeep', defaults);
 
@@ -24,6 +24,9 @@ describe('lib/pa11y-ci', () => {
 
 		queue = sinon.spy(require('async/queue'));
 		mockery.registerMock('async/queue', queue);
+
+		puppeteer = require('../mock/puppeteer.mock');
+		mockery.registerMock('puppeteer', puppeteer);
 
 		pa11yCi = require('../../..');
 	});
@@ -241,17 +244,20 @@ describe('lib/pa11y-ci', () => {
 
 		describe('when URLs include additional configurations', () => {
 
-			beforeEach(() => {
+			beforeEach(async () => {
 
 				log.error = sinon.spy();
 				log.info = sinon.spy();
+
+				const mockBrowser = await puppeteer.launch();
 
 				userUrls = [
 					{
 						url: 'qux-url',
 						bar: 'baz',
 						concurrency: 4,
-						wrapWidth: 80
+						wrapWidth: 80,
+						browser: mockBrowser
 					}
 				];
 
