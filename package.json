@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",

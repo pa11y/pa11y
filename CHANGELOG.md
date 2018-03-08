@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.2 (2018-03-08)
+
+  * Pin puppeteer at 1.0.0 to fix file URL issues
+
 ## 5.0.1 (2018-02-16)
 
   * Update dependencies
