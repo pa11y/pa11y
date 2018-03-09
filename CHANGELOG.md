@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.0.3 (2018-03-09)
+
+  * Fix an issue caused by a site having a global `module.exports` property
+
 ## 5.0.2 (2018-03-08)
 
   * Pin puppeteer at 1.0.0 to fix file URL issues
