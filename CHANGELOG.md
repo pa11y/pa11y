@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.0.0 (2018-03-12)
+
+  * See the [migration guide](https://github.com/pa11y/pa11y-ci/blob/master/MIGRATION.md#migrating-from-10-to-20) for details
+
 ## 1.3.1 (2017-12-06)
 
   * Fix the way configurations are loaded
