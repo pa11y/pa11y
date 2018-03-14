@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.0.1 (2018-03-14)
+
+  * Fix an issue with reporting null contexts
+
 ## 2.0.0 (2018-03-12)
 
   * See the [migration guide](https://github.com/pa11y/pa11y-ci/blob/master/MIGRATION.md#migrating-from-10-to-20) for details
