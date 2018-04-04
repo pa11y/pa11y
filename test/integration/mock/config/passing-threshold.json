@@ -1,0 +1,8 @@
+{
+	"urls": [
+		{
+      "url": "http://localhost:8090/failing-1",
+      "threshold": 1
+    }
+	]
+}

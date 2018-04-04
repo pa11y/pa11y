@@ -49,3 +49,26 @@ describe('pa11y-ci (with multiple passing URLs)', () => {
 	});
 
 });
+
+describe('pa11y-ci (with URLs passing due to threshold)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'passing-threshold'
+		]);
+	});
+
+	it('exits with 0', () => {
+		assert.strictEqual(global.lastResult.code, 0);
+	});
+
+	it('outputs a result notice for each URL', () => {
+		assert.include(global.lastResult.output, 'http://localhost:8090/failing-1 - 1 errors (within threshold of 1)');
+	});
+
+	it('outputs a total passing notice', () => {
+		assert.include(global.lastResult.output, '1/1 URLs passed');
+	});
+
+});

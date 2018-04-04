@@ -255,6 +255,7 @@ describe('lib/pa11y-ci', () => {
 					{
 						url: 'qux-url',
 						bar: 'baz',
+						threshold: 2,
 						concurrency: 4,
 						wrapWidth: 80,
 						browser: mockBrowser
@@ -262,7 +263,14 @@ describe('lib/pa11y-ci', () => {
 				];
 
 				pa11y.reset();
-				pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: []});
+				pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: [
+					{
+						type: 'error',
+						message: 'Pa11y Result Error',
+						selector: '',
+						context: null
+					}
+				]});
 
 				returnedPromise = pa11yCi(userUrls, userOptions);
 			});
@@ -283,13 +291,14 @@ describe('lib/pa11y-ci', () => {
 				});
 
 				it('correctly logs the number of errors for the URL', () => {
-					assert.calledWithMatch(log.info, /qux-url.*0 errors/i);
+					assert.calledWithMatch(log.info, /qux-url.*1 errors/i);
 				});
 
 				describe('resolved object', () => {
 
 					it('has a `results` property set to an object where keys are URLs and values are their results', () => {
 						assert.isObject(report.results);
+						assert.strictEqual(report.passes, 1);
 						assert.isArray(report.results['qux-url']);
 						assert.lengthEquals(report.results['qux-url'], 0);
 					});
