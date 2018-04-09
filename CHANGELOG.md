@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.1.0 (2018-04-09)
+
+  * Respect the Pa11y `threshold` configuration option for individual urls when determining whether to pass or fail
+
 ## 2.0.1 (2018-03-14)
 
   * Fix an issue with reporting null contexts

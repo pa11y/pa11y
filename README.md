@@ -143,7 +143,7 @@ If there are items in the sitemap that you'd like to exclude from the testing (f
 
 Here are some useful articles written by Pa11y users and contributors:
 
-- [Automated accessibility testing with Travis and Pa11y CI](http://cruft.io/posts/automated-accessibility-testing-node-travis-ci-pa11y/)
+- [Automated accessibility testing with Travis and Pa11y CI](http://andrewmee.com/posts/automated-accessibility-testing-node-travis-ci-pa11y/)
 
 
 ## Contributing
