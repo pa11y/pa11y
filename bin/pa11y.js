@@ -28,6 +28,12 @@ function configureProgram() {
 			'the reporter to use: cli (default), csv, json'
 		)
 		.option(
+			'-e, --runner <runner>',
+			'the test runners to use: htmlcs (default), axe',
+			collectOptions,
+			[]
+		)
+		.option(
 			'-l, --level <level>',
 			'the level of issue to fail on (exit with code 2): error, warning, notice'
 		)
@@ -132,6 +138,7 @@ function processOptions() {
 		includeWarnings: program.includeWarnings,
 		level: program.level,
 		reporter: program.reporter,
+		runners: (program.runner.length ? program.runner : undefined),
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,
