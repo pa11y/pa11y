@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.1.1 (2018-04-24)
+
+  * Pin puppeteer at 1.0.0 to fix file URL issues
+
 ## 2.1.0 (2018-04-09)
 
   * Respect the Pa11y `threshold` configuration option for individual urls when determining whether to pass or fail
