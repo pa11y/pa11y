@@ -546,14 +546,14 @@ Defaults to `cli`. Note this configuration is only available when using Pa11y on
 
 ### `rootElement` (element)
 
-The root element for testing a subset of the page opposed to the full document.
+The root element for testing a subset of the page opposed to the full document. 
 
 ```js
 pa11y('http://example.com/', {
     rootElement: '#main'
 });
 ```
-Defaults to `null`, meaning the full document will be tested.
+Defaults to `null`, meaning the full document will be tested. If the specified root element isn't found, the full document will be tested. 
 
 ### `rules` (array)
 
