@@ -1,0 +1,38 @@
+{
+  "name": "pa11y-runner-axe",
+  "version": "0.0.0",
+  "description": "An aXe runner for Pa11y",
+  "keywords": [
+    "axe",
+    "pa11y",
+    "runner"
+  ],
+  "author": "Team Pa11y",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pa11y/pa11y-runner-axe.git"
+  },
+  "homepage": "https://github.com/pa11y/pa11y-runner-axe",
+  "bugs": "https://github.com/pa11y/pa11y-runner-axe/issues",
+  "license": "LGPL-3.0",
+  "engines": {
+    "node": ">=8"
+  },
+  "dependencies": {
+    "axe-core": "^3.0.2"
+  },
+  "devDependencies": {
+    "@rowanmanning/make": "^1.0.1",
+    "eslint": "^4.17.0",
+    "mocha": "^5.0.1",
+    "mockery": "^2.0.0",
+    "nyc": "^11.4.1",
+    "pa11y-lint-config": "^1.2.1",
+    "proclaim": "^3.5.1",
+    "sinon": "^4.3.0"
+  },
+  "main": "./lib/runner.js",
+  "scripts": {
+    "test": "make ci"
+  }
+}
