@@ -899,6 +899,7 @@ Copyright &copy; 2013–2017, Team Pa11y and contributors
 [4.x]: https://github.com/pa11y/pa11y/tree/4.x
 [async]: https://github.com/caolan/async
 [brew]: http://mxcl.github.com/homebrew/
+[htmlcs-wcag2aaa-ruleset]: https://github.com/pa11y/pa11y/wiki/HTML-CodeSniffer-Rules
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
