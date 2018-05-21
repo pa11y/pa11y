@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 5.0.4 (2018-05-21)
+
+  * Update dependencies
+    * puppeteer: 1.0.0 to ^1.4.0
+  * Correct and clarify some of the documentation
+
 ## 5.0.3 (2018-03-09)
 
   * Fix an issue caused by a site having a global `module.exports` property
