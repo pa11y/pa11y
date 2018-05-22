@@ -107,7 +107,7 @@ describe('lib/runner', () => {
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
 		assert.isArray(runner.scripts);
 		assert.deepEqual(runner.scripts, [
-			`${path.resolve(__dirname, '..', '..', '..', 'lib')}/../node_modules/axe-core/axe.min.js`
+			`${path.resolve(__dirname, '..', '..', '..')}/node_modules/axe-core/axe.min.js`
 		]);
 	});
 
