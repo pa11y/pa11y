@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.2.1 (2018-05-22)
+
+  * Attempt to fix an npm publishing issue
+
 ## 0.2.0 (2018-05-22)
 
   * Change the output format
