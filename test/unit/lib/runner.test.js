@@ -83,10 +83,7 @@ describe('lib/runner', () => {
 				rules: [],
 				standard: 'mock-standard'
 			};
-			pa11y = {
-				getElementContext: sinon.stub().returns('mock-element-context'),
-				getElementSelector: sinon.stub().returns('mock-element-selector')
-			};
+			pa11y = {};
 			resolvedValue = await runner.run(options, pa11y);
 		});
 
@@ -100,51 +97,31 @@ describe('lib/runner', () => {
 			assert.calledWithExactly(global.window.HTMLCS.getMessages);
 		});
 
-		it('generates context for each issue element', () => {
-			assert.callCount(pa11y.getElementContext, 4);
-			assert.calledWithExactly(pa11y.getElementContext.getCall(0), 'mock-element-1');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(1), 'mock-element-2');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(2), 'mock-element-3');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(3), 'mock-element-4');
-		});
-
-		it('generates selectors for each issue element', () => {
-			assert.callCount(pa11y.getElementSelector, 4);
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(0), 'mock-element-1');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(1), 'mock-element-2');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(2), 'mock-element-3');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(3), 'mock-element-4');
-		});
-
 		it('resolves with processed and normalised issues', () => {
 			assert.deepEqual(resolvedValue, [
 				{
 					code: 'mock-code-1',
 					message: 'mock message 1',
 					type: 'error',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector'
+					element: 'mock-element-1'
 				},
 				{
 					code: 'mock-code-2',
 					message: 'mock message 2',
 					type: 'warning',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector'
+					element: 'mock-element-2'
 				},
 				{
 					code: 'mock-code-3',
 					message: 'mock message 3',
 					type: 'notice',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector'
+					element: 'mock-element-3'
 				},
 				{
 					code: 'mock-code-4',
 					message: 'mock message 4',
 					type: 'unknown',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector'
+					element: 'mock-element-4'
 				}
 			]);
 		});
