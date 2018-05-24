@@ -122,10 +122,7 @@ describe('lib/runner', () => {
 
 		beforeEach(async () => {
 			options = {};
-			pa11y = {
-				getElementContext: sinon.stub().returns('mock-element-context'),
-				getElementSelector: sinon.stub().returns('mock-element-selector')
-			};
+			pa11y = {};
 			resolvedValue = await runner.run(options, pa11y);
 		});
 
@@ -134,30 +131,13 @@ describe('lib/runner', () => {
 			assert.calledWithExactly(global.window.axe.run);
 		});
 
-		it('generates context for each issue element', () => {
-			assert.callCount(pa11y.getElementContext, 4);
-			assert.calledWithExactly(pa11y.getElementContext.getCall(0), 'mock-element-1');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(1), 'mock-element-2');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(2), 'mock-element-3');
-			assert.calledWithExactly(pa11y.getElementContext.getCall(3), 'mock-element-4');
-		});
-
-		it('generates selectors for each issue element', () => {
-			assert.callCount(pa11y.getElementSelector, 4);
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(0), 'mock-element-1');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(1), 'mock-element-2');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(2), 'mock-element-3');
-			assert.calledWithExactly(pa11y.getElementSelector.getCall(3), 'mock-element-4');
-		});
-
 		it('resolves with processed and normalised issues', () => {
 			assert.deepEqual(resolvedValue, [
 				{
 					code: 'mock-id-1',
 					message: 'mock help 1 (mock-help-url-1)',
 					type: 'error',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector',
+					element: 'mock-element-1',
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'mock impact 1',
@@ -169,8 +149,7 @@ describe('lib/runner', () => {
 					code: 'mock-id-2',
 					message: 'mock help 2 (mock-help-url-2)',
 					type: 'error',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector',
+					element: 'mock-element-2',
 					runnerExtras: {
 						description: 'mock description 2',
 						impact: 'mock impact 2',
@@ -182,8 +161,7 @@ describe('lib/runner', () => {
 					code: 'mock-id-3',
 					message: 'mock help 3 (mock-help-url-3)',
 					type: 'warning',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector',
+					element: 'mock-element-3',
 					runnerExtras: {
 						description: 'mock description 3',
 						impact: 'mock impact 3',
@@ -195,8 +173,7 @@ describe('lib/runner', () => {
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
 					type: 'warning',
-					context: 'mock-element-context',
-					selector: 'mock-element-selector',
+					element: 'mock-element-4',
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'mock impact 4',
