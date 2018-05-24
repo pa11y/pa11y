@@ -867,10 +867,10 @@ Pa11y supports multiple test runners. which return different results. The built-
   - `axe`: run tests using [aXe-core][axe].
   - `htmlcs` (default): run tests using [HTML CodeSniffer][htmlcs]
 
-You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
+You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
 
 ```
-pa11y --reporter my-testing-tool http://example.com
+pa11y --runner my-testing-tool http://example.com
 ```
 
 The following locations will be checked:
