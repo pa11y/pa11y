@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.3.0 (2018-05-24)
+
+  * Updates to match new Pa11y behaviour, returning element rather than selector and context
+
 ## 0.2.1 (2018-05-22)
 
   * Attempt to fix an npm publishing issue
