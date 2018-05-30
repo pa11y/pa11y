@@ -862,7 +862,7 @@ pa11y('http://example.com/', {
 Runners
 -------
 
-Pa11y supports multiple test runners. which return different results. The built-in test runners are:
+Pa11y supports multiple test runners which return different results. The built-in test runners are:
 
   - `axe`: run tests using [aXe-core][axe].
   - `htmlcs` (default): run tests using [HTML CodeSniffer][htmlcs]

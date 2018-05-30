@@ -486,21 +486,6 @@ describe('lib/runner', () => {
 
 			});
 
-			describe('when the element HTML is short enough to not need truncating', () => {
-
-				beforeEach(() => {
-					const element = createMockElement({
-						outerHTML: '<element>mock-html</element>'
-					});
-					returnValue = pa11y.getElementContext(element);
-				});
-
-				it('returns the element HTML unmodified', () => {
-					assert.strictEqual(returnValue, '<element>mock-html</element>');
-				});
-
-			});
-
 			describe('when the element has a long `innerHTML`', () => {
 
 				beforeEach(() => {
@@ -542,7 +527,7 @@ describe('lib/runner', () => {
 					returnValue = pa11y.getElementContext(element);
 				});
 
-				it('returns the element HTML unmodified', () => {
+				it('returns null', () => {
 					assert.isNull(returnValue);
 				});
 
