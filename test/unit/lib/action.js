@@ -1466,5 +1466,57 @@ describe('lib/action', function() {
 
 	});
 
+	describe('screen-capture action', function() {
+		var action;
+
+		beforeEach(function() {
+			action = buildAction.allowedActions.find(function(allowedAction) {
+				return allowedAction.name === 'screen-capture';
+			});
+		});
+
+		it('should have a name property', function() {
+			assert.strictEqual(action.name, 'screen-capture');
+		});
+
+		it('should have a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', () => {
+				assert.deepEqual('screen capture foo.png'.match(action.match), [
+					'screen capture foo.png',
+					'screen capture',
+					undefined,
+					'foo.png'
+				]);
+				assert.deepEqual('screen-capture foo.png'.match(action.match), [
+					'screen-capture foo.png',
+					'screen-capture',
+					undefined,
+					'foo.png'
+				]);
+				assert.deepEqual('capture screen to foo.png'.match(action.match), [
+					'capture screen to foo.png',
+					'capture screen',
+					' to',
+					'foo.png'
+				]);
+			});
+
+		});
+
+		it('should have a build method', function() {
+			assert.isFunction(action.build);
+		});
+
+		describe('.build(browser, page, options, matches)', function() {
+			// TODO 
+		});	
+
+	});
+
 
 });
