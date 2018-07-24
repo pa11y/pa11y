@@ -1,6 +1,6 @@
 {
   "name": "pa11y-runner-axe",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "An aXe runner for Pa11y",
   "keywords": [
     "axe",
