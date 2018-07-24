@@ -21,7 +21,7 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA'
+			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(
 			'-r, --reporter <reporter>',
@@ -87,7 +87,7 @@ function configureProgram() {
 		)
 		.option(
 			'-A, --add-rule <rule>',
-			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons',
+			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner',
 			collectOptions,
 			[]
 		)
