@@ -911,7 +911,7 @@ The `run` method _must_ resolve with an array of Pa11y issues. These follow the 
 ```js
 {
     code: '123', // An ID or code which identifies this error
-    element: {}, // The HTML element this issue relates to
+    element: {}, // The HTML element this issue relates to, or null if no element is found
     message: 'example', // A descriptive message outlining the issue
     type: 'error', // A type of "error", "warning", or "notice"
     runnerExtras: {} // Additional data that your runner can provide, but isn't used by Pa11y
