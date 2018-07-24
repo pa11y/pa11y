@@ -40,6 +40,14 @@ describe('lib/runner', () => {
 							]
 						}
 					]
+				},
+				{
+					id: 'mock-id-no-nodes',
+					description: 'mock description no-nodes',
+					impact: 'mock impact no-nodes',
+					help: 'mock help no-nodes',
+					helpUrl: 'mock-help-url-no-nodes',
+					nodes: []
 				}
 			],
 			incomplete: [
@@ -155,6 +163,18 @@ describe('lib/runner', () => {
 						impact: 'mock impact 2',
 						help: 'mock help 2',
 						helpUrl: 'mock-help-url-2'
+					}
+				},
+				{
+					code: 'mock-id-no-nodes',
+					message: 'mock help no-nodes (mock-help-url-no-nodes)',
+					type: 'error',
+					element: null,
+					runnerExtras: {
+						description: 'mock description no-nodes',
+						impact: 'mock impact no-nodes',
+						help: 'mock help no-nodes',
+						helpUrl: 'mock-help-url-no-nodes'
 					}
 				},
 				{
