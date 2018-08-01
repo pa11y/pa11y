@@ -47,9 +47,9 @@ Assuming you've installed both Pa11y and Pa11y HTML Reporter:
 const html = require('pa11y-reporter-html');
 const pa11y = require('pa11y');
 
-pa11y('http://example.com').then(results => {
+pa11y('http://example.com').then(async results => {
     // Returns a string with the results formatted as HTML
-    const htmlResults = html.results(results);
+    const htmlResults = await html.results(results);
     console.log(htmlResults);
 });
 ```
