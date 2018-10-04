@@ -728,10 +728,7 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				extend.resetHistory();
-				puppeteer.launch.resetHistory();
-				puppeteer.mockBrowser.newPage.resetHistory();
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.close.resetHistory();
+				puppeteer.mockPage.goto.resetHistory();
 				options.browser = puppeteer.mockBrowser;
 				options.page = puppeteer.mockPage;
 				options.ignoreUrl = true;

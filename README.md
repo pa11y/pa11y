@@ -439,6 +439,18 @@ pa11y('http://example.com/', {
 
 Defaults to an empty array.
 
+### `ignoreUrl` (boolean)
+
+Whether to use the provided [Puppeteer Page instance][puppeteer-page] as is or use the provided url.
+
+```js
+pa11y('http://example.com/', {
+    ignoreUrl: true
+});
+```
+
+Defaults to `false`.
+
 ### `includeNotices` (boolean)
 
 Whether to include results with a type of `notice` in the Pa11y report. Issues with a type of `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
