@@ -1513,8 +1513,47 @@ describe('lib/action', function() {
 		});
 
 		describe('.build(browser, page, options, matches)', function() {
-			// TODO 
-		});	
+            var matches;
+            var options;
+            var page;
+            var returnedValue;
+
+            beforeEach(function() {
+                options = {
+                    log: {
+                        debug: sinon.spy()
+                    }
+                };
+                page = {
+                    render: sinon.stub().callsArg(1, 'capture.png')
+                };
+
+                matches = 'screen-capture capture.png'.match(action.match);
+                returnedValue = action.build({}, page, options, matches);
+            });
+
+            it('returns a function', function() {
+                assert.isFunction(returnedValue);
+            });
+
+            describe('returned function', function() {
+
+                beforeEach(function(done) {
+                    returnedValue(done);
+                });
+
+                it('calls `page.render` with a function and some action options', function() {
+                    assert.calledOnce(page.render);
+                    assert.isFunction(page.render.firstCall.args[1]);
+                    assert.strictEqual(page.render.firstCall.args[0], matches[3]);
+                });
+
+                it('logs that the program is capturing the screen', function() {
+                    assert.calledWith(options.log.debug, 'Saving screen capture…');
+                });
+
+            });
+        });
 
 	});
 
