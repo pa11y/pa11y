@@ -1,6 +1,20 @@
 
 # Changelog
 
+## 5.1.0 (2018-10-18)
+
+  * Intercept first page requests only when necessary, to [work around a Puppeteer bug](https://github.com/pa11y/pa11y/issues/421).
+  * Add an .nvmrc file to specify the minimum Node version already [listed in the requirements](https://github.com/pa11y/pa11y#requirements)
+  * Update dependencies
+    * commander: ^2.14.1 to ^2.19.0
+    * eslint: ^4.17.0 to ^4.19.1
+    * mocha: ^5.0.1 to ^5.2.0
+    * nyc: ^11.4.1 to ^11.9.0
+    * puppeteer: ^1.4.0 to ^1.9.0
+    * semver: ^5.5.0 to ^5.6.0
+    * sinon: ^4.3.0 to ^4.5.0
+    * HTML CodeSniffer: 2.1.1 to 2.2.0 
+
 ## 5.0.4 (2018-05-21)
 
   * Update dependencies

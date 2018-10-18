@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "5.0.4",
+  "version": "5.1.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -30,25 +30,25 @@
     "node": ">=8"
   },
   "dependencies": {
-    "commander": "^2.14.1",
+    "commander": "^2.19.0",
     "fs-extra": "^5.0.0",
     "node.extend": "^2.0.0",
     "p-timeout": "^2.0.1",
     "pa11y-reporter-cli": "^1.0.1",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
-    "puppeteer": "^1.4.0",
-    "semver": "^5.5.0"
+    "puppeteer": "^1.9.0",
+    "semver": "^5.6.0"
   },
   "devDependencies": {
     "@rowanmanning/make": "^1.0.1",
-    "eslint": "^4.17.0",
-    "mocha": "^5.0.1",
+    "eslint": "^4.19.1",
+    "mocha": "^5.2.0",
     "mockery": "^2.0.0",
-    "nyc": "^11.4.1",
+    "nyc": "^11.9.0",
     "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.5.1",
-    "sinon": "^4.3.0"
+    "sinon": "^4.5.0"
   },
   "main": "./lib/pa11y.js",
   "bin": {
