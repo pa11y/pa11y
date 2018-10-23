@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.1 (2018-10-23)
+
+  * Remove out-of-date note from README
+
 ## 1.0.0 (2018-10-23)
 
   * Update to HTML CodeSniffer v2.2.0
