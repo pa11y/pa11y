@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.0 (2018-10-23)
+
+  * Update to axe-core v3.1.2
+
 ## 0.3.0 (2018-05-24)
 
   * Updates to match new Pa11y behaviour, returning element rather than selector and context
