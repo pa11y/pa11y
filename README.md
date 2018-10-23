@@ -3,8 +3,6 @@
 
 A HTML CodeSniffer runner for [Pa11y](https://github.com/pa11y/pa11y).
 
-**:warning: This runner is not in use yet, and is here for review purposes. A later version of Pa11y will include this :warning:**
-
 [![NPM version][shield-npm]][info-npm]
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0 licensed][shield-license]][info-license]
