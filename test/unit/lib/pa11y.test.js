@@ -96,50 +96,9 @@ describe('lib/pa11y', () => {
 			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
 		});
 
-		it('enables request interception', () => {
-			assert.calledOnce(puppeteer.mockPage.setRequestInterception);
-			assert.calledWithExactly(puppeteer.mockPage.setRequestInterception, true);
-		});
-
-		it('adds a request handler to the page', () => {
-			assert.called(puppeteer.mockPage.on);
-			assert.calledWith(puppeteer.mockPage.on, 'request');
-			assert.isFunction(puppeteer.mockPage.on.withArgs('request').firstCall.args[1]);
-		});
-
-		describe('request handler', () => {
-			let mockInterceptedRequest;
-
-			beforeEach(() => {
-				mockInterceptedRequest = {
-					continue: sinon.stub()
-				};
-				puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
-			});
-
-			it('calls `interceptedRequest.continue` with the method option', () => {
-				assert.calledOnce(mockInterceptedRequest.continue);
-				assert.calledWith(mockInterceptedRequest.continue, {
-					method: pa11y.defaults.method,
-					headers: {
-						'user-agent': pa11y.defaults.userAgent
-					}
-				});
-			});
-
-			describe('when called a second time', () => {
-
-				beforeEach(() => {
-					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
-				});
-
-				it('calls `interceptedRequest.continue` with an empty object', () => {
-					assert.calledTwice(mockInterceptedRequest.continue);
-					assert.deepEqual(mockInterceptedRequest.continue.secondCall.args[0], {});
-				});
-
-			});
-
+		it('set the user agent', () => {
+			assert.calledOnce(puppeteer.mockPage.setUserAgent);
+			assert.calledWithExactly(puppeteer.mockPage.setUserAgent, pa11y.defaults.userAgent);
 		});
 
 		it('adds a console handler to the page', () => {
@@ -463,6 +422,17 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
+			it('enables request interception', () => {
+				assert.calledOnce(puppeteer.mockPage.setRequestInterception);
+				assert.calledWithExactly(puppeteer.mockPage.setRequestInterception, true);
+			});
+
+			it('adds a request handler to the page', () => {
+				assert.called(puppeteer.mockPage.on);
+				assert.calledWith(puppeteer.mockPage.on, 'request');
+				assert.isFunction(puppeteer.mockPage.on.withArgs('request').firstCall.args[1]);
+			});
+
 			describe('request handler', () => {
 				let mockInterceptedRequest;
 
@@ -478,9 +448,7 @@ describe('lib/pa11y', () => {
 					assert.calledWith(mockInterceptedRequest.continue, {
 						method: options.method,
 						postData: options.postData,
-						headers: {
-							'user-agent': pa11y.defaults.userAgent
-						}
+						headers: {}
 					});
 				});
 
@@ -553,8 +521,7 @@ describe('lib/pa11y', () => {
 						headers: {
 							foo: 'bar',
 							bar: 'baz',
-							'foo-bar-baz': 'qux',
-							'user-agent': pa11y.defaults.userAgent
+							'foo-bar-baz': 'qux'
 						}
 					});
 				});

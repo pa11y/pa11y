@@ -588,7 +588,7 @@ pa11y('http://example.com/', {
 });
 ```
 
-Defaults to `null`, meaning the screen will not be captured.
+Defaults to `null`, meaning the screen will not be captured. Note the directory part of this path must be an existing directory in the file system – Pa11y will not create this for you.
 
 ### `standard` (string)
 
