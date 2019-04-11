@@ -328,6 +328,12 @@ describe('lib/action', () => {
 					'.foo .bar .baz',
 					'hello world'
 				]);
+				assert.deepEqual('set field .foo to hello to the world'.match(action.match), [
+					'set field .foo to hello to the world',
+					' field',
+					'.foo',
+					'hello to the world'
+				]);
 			});
 
 		});
