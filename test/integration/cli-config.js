@@ -60,6 +60,21 @@ describe('pa11y-ci (with a config file that has a "js" extension)', () => {
 
 });
 
+describe('pa11y-ci (with a config file that has a "js" extension that returns a promise)', () => {
+
+	before(() => {
+		return global.cliCall([
+			'--config',
+			'extension-js-promise'
+		]);
+	});
+
+	it('loads the expected config', () => {
+		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-js-promise');
+	});
+
+});
+
 describe('pa11y-ci (with a config file that has a specified JSON extension)', () => {
 
 	before(() => {

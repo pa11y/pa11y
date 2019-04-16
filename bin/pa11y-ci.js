@@ -129,7 +129,11 @@ function loadConfig(configPath) {
 				new Error(`There was a problem loading "${configPath}":\n${error.stack}`)
 			);
 		}
-		resolve(defaultConfig(config || {}));
+
+		// Allow loaded configs to return a promise
+		Promise.resolve(config).then(config => {
+			resolve(defaultConfig(config || {}));
+		});
 	});
 }
 
