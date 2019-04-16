@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.2.0 (2019-04-16)
+
+  * Allow loaded config to return promises
+
 ## 2.1.1 (2018-04-24)
 
   * Pin puppeteer at 1.0.0 to fix file URL issues
