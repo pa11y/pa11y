@@ -499,7 +499,8 @@ describe('lib/pa11y', () => {
 				options.headers = {
 					foo: 'bar',
 					bar: 'baz',
-					'Foo-Bar-Baz': 'qux'
+					'Foo-Bar-Baz': 'qux',
+					Cookie: 'test-cookie;'
 				};
 				await pa11y(options);
 			});
@@ -514,14 +515,15 @@ describe('lib/pa11y', () => {
 					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
-				it('calls `interceptedRequest.continue` with the headers option all lower-cased', () => {
+				it('calls `interceptedRequest.continue` with the headers option all lower-cased except Cookie', () => {
 					assert.calledOnce(mockInterceptedRequest.continue);
 					assert.calledWith(mockInterceptedRequest.continue, {
 						method: pa11y.defaults.method,
 						headers: {
 							foo: 'bar',
 							bar: 'baz',
-							'foo-bar-baz': 'qux'
+							'foo-bar-baz': 'qux',
+							Cookie: 'test-cookie;'
 						}
 					});
 				});
