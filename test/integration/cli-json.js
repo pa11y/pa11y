@@ -22,7 +22,7 @@ describe('pa11y-ci (with the `--json` flag set)', () => {
 			results: {
 				'http://notahost:8090/erroring-1': [
 					{
-						message: 'net::ERR_NAME_NOT_RESOLVED'
+						message: 'net::ERR_NAME_NOT_RESOLVED at http://notahost:8090/erroring-1'
 					}
 				],
 				'http://localhost:8090/failing-1': [

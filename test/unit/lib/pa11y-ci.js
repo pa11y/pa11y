@@ -258,7 +258,8 @@ describe('lib/pa11y-ci', () => {
 						threshold: 2,
 						concurrency: 4,
 						wrapWidth: 80,
-						browser: mockBrowser
+						browser: mockBrowser,
+						useIncognitoBrowserContext: false
 					}
 				];
 

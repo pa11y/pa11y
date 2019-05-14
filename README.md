@@ -97,6 +97,7 @@ You can specify a default set of [pa11y configurations] that should be used for 
 Pa11y CI has a few of its own configurations which you can set as well:
 
   - `concurrency`: The number of tests that should be run in parallel. Defaults to `2`.
+  - `useIncognitoBrowserContext`: Run test with an isolated incognito browser context, stops cookies being shared and modified between tests. Defaults to `false`.
 
 ### URL configuration
 
