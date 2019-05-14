@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.3.0 (2019-05-14)
+
+  * Add useIncognitoBrowserContext option for test runs
+
 ## 2.2.0 (2019-04-16)
 
   * Allow loaded config to return promises
