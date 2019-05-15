@@ -800,6 +800,13 @@ describe('lib/action', () => {
 					'not ',
 					'example.com'
 				]);
+				assert.notDeepEqual('wait for path not to be /account/signin/'.match(action.match), [
+					'wait for path not to be /account/signin/',
+					'path',
+					undefined,
+					undefined,
+					'not to be /account/signin/'
+				]);
 			});
 
 		});
