@@ -68,7 +68,7 @@ describe('CLI output', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 4);
+			assert.lengthEquals(pa11yResponse.json, 17);
 		});
 
 		it('outputs notices', () => {

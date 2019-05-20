@@ -42,7 +42,7 @@ describe('CLI hide-elements', () => {
 
 		it('ignores issues on and inside the hidden elements', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 2);
+			assert.lengthEquals(pa11yResponse.json, 15);
 		});
 
 	});
