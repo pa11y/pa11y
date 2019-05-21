@@ -27,7 +27,7 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('sets headers on the tested page', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.lengthEquals(pa11yResponse.json, 13);
 			assert.strictEqual(pa11yResponse.json[0].context, '<title>bar baz</title>');
 		});
 
@@ -50,7 +50,7 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('tests the page using the specified HTTP method', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.lengthEquals(pa11yResponse.json, 13);
 			assert.strictEqual(pa11yResponse.json[0].context, '<title>POST</title>');
 		});
 
@@ -73,7 +73,7 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('tests the page using the specified HTTP method', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.lengthEquals(pa11yResponse.json, 13);
 			assert.strictEqual(pa11yResponse.json[0].context, '<title>foo=bar&amp;bar=baz</title>');
 		});
 
