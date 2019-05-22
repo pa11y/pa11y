@@ -328,6 +328,12 @@ describe('lib/action', () => {
 					'.foo .bar .baz',
 					'hello world'
 				]);
+				assert.deepEqual('set field .foo to hello to the world'.match(action.match), [
+					'set field .foo to hello to the world',
+					' field',
+					'.foo',
+					'hello to the world'
+				]);
 			});
 
 		});
@@ -793,6 +799,13 @@ describe('lib/action', () => {
 					' to not be',
 					'not ',
 					'example.com'
+				]);
+				assert.notDeepEqual('wait for path not to be /account/signin/'.match(action.match), [
+					'wait for path not to be /account/signin/',
+					'path',
+					undefined,
+					undefined,
+					'not to be /account/signin/'
 				]);
 			});
 

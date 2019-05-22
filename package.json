@@ -37,13 +37,13 @@
     "pa11y-reporter-cli": "^1.0.1",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
-    "puppeteer": "^1.9.0",
+    "puppeteer": "^1.13.0",
     "semver": "^5.6.0"
   },
   "devDependencies": {
     "@rowanmanning/make": "^1.0.1",
     "eslint": "^4.19.1",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "mockery": "^2.0.0",
     "nyc": "^11.9.0",
     "pa11y-lint-config": "^1.2.1",
