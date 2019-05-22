@@ -691,6 +691,46 @@ describe('lib/pa11y', () => {
 
 		});
 
+		describe('when `options.ignoreUrl` and `options.page` is set', () => {
+
+			beforeEach(async () => {
+				extend.resetHistory();
+				puppeteer.mockPage.goto.resetHistory();
+				options.browser = puppeteer.mockBrowser;
+				options.page = puppeteer.mockPage;
+				options.ignoreUrl = true;
+				await pa11y(options);
+			});
+
+			it('does not close the page', () => {
+				assert.notCalled(options.page.close);
+			});
+
+			it('does not call goto on the page', () => {
+				assert.notCalled(options.page.goto);
+			});
+
+		});
+
+		describe('when `options.ignoreUrl` is set without `options.page`', () => {
+			let rejectedError;
+
+			beforeEach(async () => {
+				options.ignoreUrl = true;
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', () => {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
+			});
+
+		});
+
 	});
 
 	describe('pa11y(url, options)', () => {
@@ -798,6 +838,10 @@ describe('lib/pa11y', () => {
 
 		it('has an `ignore` property', () => {
 			assert.deepEqual(pa11y.defaults.ignore, []);
+		});
+
+		it('has an `ignoreUrl` property', () => {
+			assert.isFalse(pa11y.defaults.ignoreUrl);
 		});
 
 		it('has an `includeNotices` property', () => {
