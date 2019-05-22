@@ -2,6 +2,7 @@
 
 const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
+const {groupResponses} = require('../helper/pa11y-responses');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
@@ -68,7 +69,12 @@ describe('CLI output', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 17);
+
+			const responses = groupResponses(pa11yResponse.json);
+
+			assert.lengthEquals(responses.error, 1);
+			assert.lengthEquals(responses.warning, 1);
+			assert.lengthEquals(responses.notice, 15);
 		});
 
 		it('outputs notices', () => {
