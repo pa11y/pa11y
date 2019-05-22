@@ -441,11 +441,16 @@ Defaults to an empty array.
 
 ### `ignoreUrl` (boolean)
 
-Whether to use the provided [Puppeteer Page instance][puppeteer-page] as is or use the provided url.
+Whether to use the provided [Puppeteer Page instance][puppeteer-page] as is or use the provided url. Both the [Puppeteer Page instance][puppeteer-page] and the [Puppeteer Browser instance][puppeteer-browser] are required alongside `ignoreUrl`.
 
 ```js
+const browser = await puppeteer.launch();
+const page = await browser.newPage();
+
 pa11y('http://example.com/', {
-    ignoreUrl: true
+    ignoreUrl: true,
+    page: page,
+    browser: browser
 });
 ```
 
