@@ -16,6 +16,7 @@ function runPa11yCli(url, options = {}) {
 		},
 		workingDirectory: path.resolve(`${__dirname}/..`)
 	}, options);
+
 	options.arguments.push(url);
 
 	return new Promise((resolve, reject) => {
@@ -47,7 +48,7 @@ function runPa11yCli(url, options = {}) {
 		pa11yProcess.on('close', code => {
 			response.exitCode = code;
 			try {
-				response.json = JSON.parse(response.output);
+				response.json = JSON.parse(response.stdout);
 			} catch (error) {}
 			resolve(response);
 		});
