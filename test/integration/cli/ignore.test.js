@@ -2,6 +2,7 @@
 
 const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
+const {groupResponses} = require('../helper/pa11y-responses');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
@@ -24,10 +25,11 @@ describe('CLI ignore', () => {
 
 		it('ignores warnings', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 3);
-			pa11yResponse.json.forEach(issue => {
-				assert.notStrictEqual(issue.type, 'warning');
-			});
+
+			const responses = groupResponses(pa11yResponse.json);
+			assert.lengthEquals(responses.warning, 0);
+			assert.lengthEquals(responses.notice, 15);
+			assert.lengthEquals(responses.error, 1);
 		});
 
 	});
@@ -47,11 +49,11 @@ describe('CLI ignore', () => {
 
 		it('ignores warnings and notices', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
-			pa11yResponse.json.forEach(issue => {
-				assert.notStrictEqual(issue.type, 'warning');
-				assert.notStrictEqual(issue.type, 'notice');
-			});
+
+			const responses = groupResponses(pa11yResponse.json);
+			assert.lengthEquals(responses.warning, 0);
+			assert.lengthEquals(responses.notice, 0);
+			assert.lengthEquals(responses.error, 1);
 		});
 
 	});
@@ -96,8 +98,13 @@ describe('CLI ignore', () => {
 
 		it('ignores issues with the given code', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 3);
-			pa11yResponse.json.forEach(issue => {
+
+			const responses = groupResponses(pa11yResponse.json);
+			assert.lengthEquals(responses.warning, 1);
+			assert.lengthEquals(responses.notice, 15);
+			assert.lengthEquals(responses.error, 0);
+
+			responses.notice.forEach(issue => {
 				assert.notStrictEqual(issue.code, 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2');
 			});
 		});
