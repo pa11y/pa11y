@@ -32,9 +32,8 @@ describe('CLI hide-elements', () => {
 		before(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/hide-elements`, {
 				arguments: [
-					'--include-notices',
 					'--include-warnings',
-					'--hide-elements', 'img, p',
+					'--hide-elements', 'img, a',
 					'--reporter', 'json'
 				]
 			});
