@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const createMockElement = require('../mock/element.mock');
+const {createMockElement, createMockPrototypeElement} = require('../mock/element.mock');
 const sinon = require('sinon');
 
 describe('lib/action', () => {
@@ -395,6 +395,40 @@ describe('lib/action', () => {
 
 				it('resolves with `undefined`', () => {
 					assert.isUndefined(resolvedValue);
+				});
+
+				describe('with an element created from a prototype', () => {
+					beforeEach(async () => {
+						const mockPrototypeElement = createMockPrototypeElement();
+						global.document.querySelector.returns(mockPrototypeElement);
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					});
+
+					afterEach(() => {
+						global.document = originalDocument;
+					});
+
+					it('calls `document.querySelector` with the passed in selector', () => {
+						assert.calledTwice(global.document.querySelector);
+						assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+					});
+
+					it('sets the element `value` property to the passed in value', () => {
+						assert.strictEqual(mockElement.value, 'mock-value');
+					});
+
+					it('triggers an input event on the element', () => {
+						assert.calledTwice(Event);
+						assert.calledWithExactly(Event, 'input', {
+							bubbles: true
+						});
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+					});
+
+					it('resolves with `undefined`', () => {
+						assert.isUndefined(resolvedValue);
+					});
 				});
 
 				describe('when an element with the given selector cannot be found', () => {

@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const createMockElement = require('../mock/element.mock');
+const {createMockElement} = require('../mock/element.mock');
 
 describe('lib/runner', () => {
 	let runner;
