@@ -2,10 +2,14 @@
 
 const sinon = require('sinon');
 
-module.exports = createMockElement;
+module.exports = {
+	createMockElement,
+	createMockPrototypeElement
+};
 
-function createMockElement(data = {}) {
-	const element = Object.assign({
+
+const initMockElementProperties = () => {
+	return {
 		addEventListener: sinon.stub(),
 		childNodes: [],
 		contains: sinon.stub().returns(false),
@@ -20,8 +24,23 @@ function createMockElement(data = {}) {
 		outerHTML: '<element>mock-html</element>',
 		parentNode: null,
 		tagName: 'ELEMENT'
-	}, data);
+	};
+};
 
+function MockElement() {
+	Object.assign(this, initMockElementProperties());
+}
+
+MockElement.prototype = {
+	set value(value) {
+		this.elementValue = value;
+	},
+	get value() {
+		return this.elementValue;
+	}
+};
+
+function connectToDOM(element) {
 	if (element.parentNode) {
 		element.parentNode.childNodes.push(element);
 	}
@@ -30,6 +49,15 @@ function createMockElement(data = {}) {
 			childNode.parentNode = element;
 		});
 	}
-
 	return element;
+}
+
+function createMockPrototypeElement(data = {}) {
+	const element = Object.assign(new MockElement(), data);
+	return connectToDOM(element);
+}
+
+function createMockElement(data = {}) {
+	const element = Object.assign(initMockElementProperties(), data);
+	return connectToDOM(element);
 }
