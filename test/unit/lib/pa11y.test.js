@@ -722,6 +722,26 @@ describe('lib/pa11y', () => {
 
 		});
 
+		describe('when `options.ignoreUrl` is set without `options.page`', () => {
+			let rejectedError;
+
+			beforeEach(async () => {
+				options.page = undefined;
+				options.ignoreUrl = true;
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', () => {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
+			});
+
+		});
+
 		describe('when `options.runners` is set', () => {
 			let mockRunnerNodeModule;
 			let mockRunnerPa11yNodeModule;
