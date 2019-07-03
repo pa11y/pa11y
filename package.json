@@ -33,7 +33,7 @@
     "commander": "^2.19.0",
     "fs-extra": "^5.0.0",
     "html_codesniffer": "^2.3.0",
-    "node.extend": "^2.0.0",
+    "node.extend": "^2.0.2",
     "p-timeout": "^2.0.1",
     "pa11y-reporter-cli": "^1.0.1",
     "pa11y-reporter-csv": "^1.0.0",
@@ -44,9 +44,9 @@
   "devDependencies": {
     "@rowanmanning/make": "^1.0.1",
     "eslint": "^6.0.1",
-    "mocha": "^6.0.2",
+    "mocha": "^6.1.4",
     "mockery": "^2.0.0",
-    "nyc": "^11.9.0",
+    "nyc": "^14.1.1",
     "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.5.1",
     "sinon": "^4.5.0"
