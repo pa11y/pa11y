@@ -25,8 +25,7 @@ pa11y('http://example.com/').then((results) => {
 });
 ```
 
-Need a GUI? Try [Koa11y](https://open-indy.github.io/Koa11y/)!
-
+If you need a GUI you can try [Koa11y](https://open-indy.github.io/Koa11y/), which is a desktop application that uses pa11y to run accessibility tests.
 
 Table Of Contents
 -----------------
@@ -194,7 +193,7 @@ The Pa11y team maintain some additional reporters which can be installed separat
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
-```
+```sh
 pa11y --reporter rainbows http://example.com
 ```
 
@@ -227,7 +226,7 @@ JavaScript Interface
 
 Install Pa11y with [npm][npm] or add to your `package.json`:
 
-```
+```sh
 npm install pa11y
 ```
 
@@ -376,7 +375,7 @@ pa11y('http://example.com/', {
 browser.close();
 ```
 
-A more full example can be found in [the examples](#puppeteer-example).
+A more complete example can be found in the [puppeteer examples](#puppeteer-example).
 
 Defaults to `null`.
 
@@ -895,21 +894,18 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 5             | N/A                | 8+               | N/A              |
-| :hourglass:     | 4             | 4.13               | 4–8              | 2018-08-15       |
+| :skull:         | 4             | 4.13               | 4–8              | 2018-08-15       |
 | :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
 | :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
 
 If you're opening issues related to these, please mention the version that the issue relates to.
 
-
 License
 -------
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].<br/>
-Copyright &copy; 2013–2017, Team Pa11y and contributors
-
-
+Copyright &copy; 2013–2019, Team Pa11y and contributors
 
 [1.0-json-reporter]: https://github.com/pa11y/reporter-1.0-json
 [4.x]: https://github.com/pa11y/pa11y/tree/4.x
