@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -17,7 +17,9 @@
     "Charlie Brown (http://www.carbonatethis.com/)",
     "Hollie Kay (http://www.hollsk.co.uk/)",
     "Adam Tavener (http://www.tavvy.co.uk/)",
-    "Glynn Phillips (http://www.glynnphillips.co.uk/)"
+    "Glynn Phillips (http://www.glynnphillips.co.uk/)",
+    "José Bolos (https://github.com/josebolos)",
+    "Joey Ciechanowicz (https://github.com/joeyciechanowicz)"
   ],
   "repository": {
     "type": "git",
