@@ -49,7 +49,7 @@
     "nyc": "^14.1.1",
     "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.5.1",
-    "sinon": "^4.5.0"
+    "sinon": "^7.0.0"
   },
   "main": "./lib/pa11y.js",
   "bin": {
