@@ -1,6 +1,16 @@
 
 # Changelog
 
+## 5.2.0 (2019-07-04)
+
+  * Allow pa11y to use an existing puppeteer page instance (thanks @kevinatown)
+  * Fixed a bug where `set field` may fail if the text contains the string " to " (thanks @kkoskelin)
+  * Use npm version of HTML_CodeSniffer instead of a static one (thanks @paazmaya) and update to version 2.4.0
+  * Add a `package-lock.json` file to the package
+  * Several dependency and tooling updates (thanks @leeroyrose and others)
+  * Other bugfixes (thanks @joeyciechanowicz)
+  * Minor documentation updates
+
 ## 5.1.0 (2018-10-18)
 
   * Intercept first page requests only when necessary, to [work around a Puppeteer bug](https://github.com/pa11y/pa11y/issues/421).
@@ -13,7 +23,7 @@
     * puppeteer: ^1.4.0 to ^1.9.0
     * semver: ^5.5.0 to ^5.6.0
     * sinon: ^4.3.0 to ^4.5.0
-    * HTML CodeSniffer: 2.1.1 to 2.2.0 
+    * HTML CodeSniffer: 2.1.1 to 2.2.0
 
 ## 5.0.4 (2018-05-21)
 
