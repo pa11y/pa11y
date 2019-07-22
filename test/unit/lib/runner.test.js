@@ -2,7 +2,6 @@
 
 const assert = require('proclaim');
 const sinon = require('sinon');
-const path = require('path');
 
 describe('lib/runner', () => {
 	let issues;
@@ -64,9 +63,8 @@ describe('lib/runner', () => {
 
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
 		assert.isArray(runner.scripts);
-		assert.deepEqual(runner.scripts, [
-			path.join(path.resolve(__dirname, '..', '..', '..', 'lib'), 'vendor', 'HTMLCS.js')
-		]);
+		assert.lengthEquals(runner.scripts, 1);
+		assert.isTrue(runner.scripts[0].endsWith('node_modules/html_codesniffer/build/HTMLCS.js'));
 	});
 
 	it('has a `run` method', () => {
