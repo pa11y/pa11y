@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.1.0 (2019-07-22)
+
+  * Use NPM version of HTML CodeSniffer 2.4
+
 ## 1.0.1 (2018-10-23)
 
   * Remove out-of-date note from README
