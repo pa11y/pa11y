@@ -40,7 +40,7 @@
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
     "pa11y-runner-axe": "^1.0.1",
-    "pa11y-runner-htmlcs": "^1.0.1",
+    "pa11y-runner-htmlcs": "^1.1.0",
     "puppeteer": "^1.13.0",
     "semver": "^5.6.0"
   },
