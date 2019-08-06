@@ -52,11 +52,11 @@ describe('lib/pa11y', () => {
 		htmlCodeSnifferPath = '/mock/HTMLCS.js';
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
-		fs = require('../mock/fs-extra.mock');
-		mockery.registerMock('fs-extra', fs);
+		fs = require('../mock/fs.mock');
+		mockery.registerMock('fs', fs);
 
-		fs.readFile.withArgs(htmlCodeSnifferPath).resolves('mock-html-codesniffer-js');
-		fs.readFile.withArgs(pa11yRunnerPath).resolves('mock-pa11y-runner-js');
+		fs.readFile.withArgs(htmlCodeSnifferPath).yieldsAsync(undefined, 'mock-html-codesniffer-js');
+		fs.readFile.withArgs(pa11yRunnerPath).yieldsAsync(undefined, 'mock-pa11y-runner-js');
 
 		pkg = require('../../../package.json');
 
@@ -143,12 +143,12 @@ describe('lib/pa11y', () => {
 
 		it('loads the HTML CodeSniffer JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
 		});
 
 		it('loads the Pa11y runner JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
 		});
 
 		it('verifies that the runner supports the current version of Pa11y', () => {
@@ -768,8 +768,8 @@ describe('lib/pa11y', () => {
 				};
 				mockery.registerMock('node-module', mockRunnerNodeModule);
 
-				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').resolves('mock-runner-pa11y-node-module-js');
-				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').resolves('mock-runner-node-module-js');
+				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-pa11y-node-module-js');
+				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-node-module-js');
 
 				options.runners = [
 					'pa11y-node-module',
