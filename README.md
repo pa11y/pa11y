@@ -2,12 +2,18 @@
 Pa11y
 =====
 
-Pa11y is your automated accessibility testing pal. It runs [HTML CodeSniffer][sniff] from the command line for programmatic accessibility reporting.
+Pa11y is your automated accessibility testing pal. It runs accessibility tests on your pages via the command line or Node.js, so you can automate your testing process.
 
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0 licensed][shield-license]][info-license]
+
+---
+
+:sparkles: ☑️ 👩‍🎨 **Hi! We’re working on improving the design and usability of the Pa11y website. You can help us enormously by [filling in our survey](https://forms.gle/ZJzFwbC7DCVT2CNh7). Thanks!**
+
+---
 
 On the command line:
 
@@ -35,6 +41,7 @@ Table Of Contents
 - [JavaScript Interface](#javascript-interface)
 - [Configuration](#configuration)
 - [Actions](#actions)
+- [Runners](#runners)
 - [Examples](#examples)
 - [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
 - [Tutorials and articles](#tutorials-and-articles)
@@ -87,8 +94,9 @@ Usage: pa11y [options] <url>
 
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
-    -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA
+    -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner
     -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
+    -e, --runner <runner>          the test runners to use: htmlcs (default), axe
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
@@ -101,7 +109,7 @@ Usage: pa11y [options] <url>
     -w, --wait <ms>                the time to wait before running tests in milliseconds
     -d, --debug                    output debug messages
     -S, --screen-capture <path>    a path to save a screen capture of the page to
-    -A, --add-rule <rule>          WCAG 2.0 rules to include, a repeatable value or separated by semi-colons
+    -A, --add-rule <rule>          WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
     -h, --help                     output usage information
 ```
 
@@ -129,6 +137,18 @@ Run Pa11y with the Section508 ruleset:
 
 ```
 pa11y --standard Section508 http://example.com
+```
+
+Run Pa11y using [aXe] as a [test runner](#runners):
+
+```
+pa11y --runner axe http://example.com
+```
+
+Run Pa11y using [aXe] _and_ [HTML CodeSniffer][htmlcs] as [test runners](#runners):
+
+```
+pa11y --runner axe --runner htmlcs http://example.com
 ```
 
 ### Exit Codes
@@ -282,7 +302,7 @@ If you wish to transform these results with the command-line reporters, then you
 // Assuming you've already run tests, and the results
 // are available in a `results` variable:
 const htmlReporter = require('pa11y/reporter/html');
-const html = htmlReporter.results(results, url);
+const html = await htmlReporter.results(results, url);
 ```
 
 ### Async/Await
@@ -568,11 +588,32 @@ pa11y('http://example.com/', {
     rootElement: '#main'
 });
 ```
-Defaults to `null`, meaning the full document will be tested. If the specified root element isn't found, the full document will be tested. 
+Defaults to `null`, meaning the full document will be tested. If the specified root element isn't found, the full document will be tested.
+
+### `runners` (array)
+
+An array of runner names which correspond to existing and installed [Pa11y runners](#runners). If a runner is not found then Pa11y will error.
+
+```js
+pa11y('http://example.com/', {
+    runners: [
+        'axe',
+        'htmlcs'
+    ]
+});
+```
+
+Defaults to:
+
+```js
+[
+    'htmlcs'
+]
+```
 
 ### `rules` (array)
 
-An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: These won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset].
+An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: These won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
 
 ```js
 pa11y('http://example.com/', {
@@ -596,7 +637,7 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`.
+The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
 
 ```js
 pa11y('http://example.com/', {
@@ -824,6 +865,66 @@ pa11y('http://example.com/', {
 ```
 
 
+Runners
+-------
+
+Pa11y supports multiple test runners which return different results. The built-in test runners are:
+
+  - `axe`: run tests using [aXe-core][axe].
+  - `htmlcs` (default): run tests using [HTML CodeSniffer][htmlcs]
+
+You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
+
+```
+pa11y --runner my-testing-tool http://example.com
+```
+
+The following locations will be checked:
+
+```
+<cwd>/node_modules/pa11y-runner-my-testing-tool
+<cwd>/node_modules/my-testing-tool
+<cwd>/my-testing-tool
+```
+
+A Pa11y runner _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the runner supports:
+
+```js
+exports.supports = '^5.0.0';
+```
+
+A Pa11y runner _must_ export a property named `scripts`. This is an array of strings which are paths to scripts which need to load before the tests can be run. This may be empty:
+
+```js
+exports.scripts = [
+    `${__dirname}/vendor/example.js`
+];
+```
+
+A runner _must_ export a `run` method, which returns a promise that resolves with test results (it's advisable to use an `async` function). The `run` method is evaluated in a browser context and so has access to a global `window` object.
+
+The `run` method _must not_ use anything that's been imported using `require`, as it's run in a browser context. Doing so will error.
+
+The `run` method is called with two arguments:
+
+  - `options`: Options specified in the test runner
+  - `pa11y`: The Pa11y test runner, which includes some helper methods:
+    - `pa11y.getElementContext(element)`: Get a short HTML context snippet for an element
+    - `pa11y.getElementSelector(element)`: Get a unique selector with which you can select this element in a page
+
+The `run` method _must_ resolve with an array of Pa11y issues. These follow the format:
+
+```js
+{
+    code: '123', // An ID or code which identifies this error
+    element: {}, // The HTML element this issue relates to, or null if no element is found
+    message: 'example', // A descriptive message outlining the issue
+    type: 'error', // A type of "error", "warning", or "notice"
+    runnerExtras: {} // Additional data that your runner can provide, but isn't used by Pa11y
+}
+```
+
+
 Examples
 --------
 
@@ -910,6 +1011,7 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [1.0-json-reporter]: https://github.com/pa11y/reporter-1.0-json
 [4.x]: https://github.com/pa11y/pa11y/tree/4.x
 [async]: https://github.com/caolan/async
+[axe]: https://www.axe-core.org/
 [brew]: http://mxcl.github.com/homebrew/
 [htmlcs-wcag2aaa-ruleset]: https://github.com/pa11y/pa11y/wiki/HTML-CodeSniffer-Rules
 [node]: http://nodejs.org/
@@ -921,8 +1023,7 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [semver range]: https://github.com/npm/node-semver#ranges
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
-[sniff]: http://squizlabs.github.com/HTML_CodeSniffer/
-[sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
+[htmlcs]: http://squizlabs.github.com/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-license]: LICENSE
@@ -930,6 +1031,6 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [info-npm]: https://www.npmjs.com/package/pa11y
 [info-build]: https://travis-ci.org/pa11y/pa11y
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
-[shield-node]: https://img.shields.io/badge/node.js%20support-8-brightgreen.svg
+[shield-node]: https://img.shields.io/node/v/pa11y.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
 [shield-build]: https://img.shields.io/travis/pa11y/pa11y/master.svg

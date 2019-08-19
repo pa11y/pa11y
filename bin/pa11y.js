@@ -21,11 +21,17 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA'
+			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(
 			'-r, --reporter <reporter>',
 			'the reporter to use: cli (default), csv, json'
+		)
+		.option(
+			'-e, --runner <runner>',
+			'the test runners to use: htmlcs (default), axe',
+			collectOptions,
+			[]
 		)
 		.option(
 			'-l, --level <level>',
@@ -81,7 +87,7 @@ function configureProgram() {
 		)
 		.option(
 			'-A, --add-rule <rule>',
-			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons',
+			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner',
 			collectOptions,
 			[]
 		)
@@ -132,6 +138,7 @@ function processOptions() {
 		includeWarnings: program.includeWarnings,
 		level: program.level,
 		reporter: program.reporter,
+		runners: (program.runner.length ? program.runner : undefined),
 		rootElement: program.rootElement,
 		rules: (program.addRule.length ? program.addRule : undefined),
 		screenCapture: program.screenCapture,

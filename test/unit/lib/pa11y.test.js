@@ -8,6 +8,7 @@ const sinon = require('sinon');
 describe('lib/pa11y', () => {
 	let extend;
 	let fs;
+	let htmlCodeSnifferRunner;
 	let htmlCodeSnifferPath;
 	let pa11y;
 	let pa11yResults;
@@ -16,6 +17,7 @@ describe('lib/pa11y', () => {
 	let promiseTimeout;
 	let puppeteer;
 	let runAction;
+	let semver;
 
 	beforeEach(() => {
 
@@ -23,7 +25,11 @@ describe('lib/pa11y', () => {
 			mockResults: true
 		};
 		/* eslint-disable no-underscore-dangle */
-		global._runPa11y = sinon.stub().returns(pa11yResults);
+		global.window = {
+			__pa11y: {
+				run: sinon.stub().returns(pa11yResults)
+			}
+		};
 		/* eslint-enable no-underscore-dangle */
 
 		runAction = require('../mock/action.mock');
@@ -32,14 +38,25 @@ describe('lib/pa11y', () => {
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
 
-		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`);
+		pkg = require('../../../package.json');
+
+		htmlCodeSnifferRunner = {
+			supports: 'mock-support-string',
+			scripts: [
+				'/mock/HTMLCS.js'
+			],
+			run: () => 'mock-htmlcs-runner'
+		};
+		mockery.registerMock('pa11y-runner-htmlcs', htmlCodeSnifferRunner);
+
+		htmlCodeSnifferPath = '/mock/HTMLCS.js';
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
-		fs = require('../mock/fs-extra.mock');
-		mockery.registerMock('fs-extra', fs);
+		fs = require('../mock/fs.mock');
+		mockery.registerMock('fs', fs);
 
-		fs.readFile.withArgs(htmlCodeSnifferPath).resolves('mock-html-codesniffer-js');
-		fs.readFile.withArgs(pa11yRunnerPath).resolves('mock-pa11y-runner-js');
+		fs.readFile.withArgs(htmlCodeSnifferPath).yieldsAsync(undefined, 'mock-html-codesniffer-js');
+		fs.readFile.withArgs(pa11yRunnerPath).yieldsAsync(undefined, 'mock-pa11y-runner-js');
 
 		pkg = require('../../../package.json');
 
@@ -51,13 +68,17 @@ describe('lib/pa11y', () => {
 
 		puppeteer.mockPage.evaluate.resolves(pa11yResults);
 
+		semver = require('../mock/semver.mock');
+		mockery.registerMock('semver', semver);
+		semver.satisfies.returns(true);
+
 		pa11y = require('../../../lib/pa11y');
 
 	});
 
 	afterEach(() => {
 		/* eslint-disable no-underscore-dangle */
-		delete global._runPa11y;
+		delete global.window;
 		/* eslint-enable no-underscore-dangle */
 	});
 
@@ -122,17 +143,23 @@ describe('lib/pa11y', () => {
 
 		it('loads the HTML CodeSniffer JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
 		});
 
 		it('loads the Pa11y runner JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
 		});
 
-		it('evaluates the HTML CodeSniffer JavaScript', () => {
+		it('verifies that the runner supports the current version of Pa11y', () => {
+			assert.calledOnce(semver.satisfies);
+			assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+		});
+
+		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', () => {
 			assert.called(puppeteer.mockPage.evaluate);
-			assert.calledWith(puppeteer.mockPage.evaluate, 'mock-html-codesniffer-js');
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = \(\) => 'mock-htmlcs-runner'\s*;\s*$/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', () => {
@@ -149,8 +176,12 @@ describe('lib/pa11y', () => {
 					'notice',
 					'warning'
 				],
+				pa11yVersion: pkg.version,
 				rootElement: pa11y.defaults.rootElement,
 				rules: pa11y.defaults.rules,
+				runners: [
+					'htmlcs'
+				],
 				standard: pa11y.defaults.standard,
 				wait: pa11y.defaults.wait
 			});
@@ -167,14 +198,14 @@ describe('lib/pa11y', () => {
 				returnValue = puppeteer.mockPage.evaluate.thirdCall.args[0](options);
 			});
 
-			it('calls `_runPa11y` with the passed in options', () => {
+			it('calls `__pa11y.run` with the passed in options', () => {
 				/* eslint-disable no-underscore-dangle */
-				assert.calledOnce(global._runPa11y);
-				assert.calledWithExactly(global._runPa11y, options);
+				assert.calledOnce(global.window.__pa11y.run);
+				assert.calledWithExactly(global.window.__pa11y.run, options);
 				/* eslint-enable no-underscore-dangle */
 			});
 
-			it('returns the return value of `_runPa11y`', () => {
+			it('returns the return value of `__pa11y.run`', () => {
 				assert.strictEqual(returnValue, pa11yResults);
 			});
 
@@ -691,31 +722,11 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.ignoreUrl` and `options.page` is set', () => {
-
-			beforeEach(async () => {
-				extend.resetHistory();
-				puppeteer.mockPage.goto.resetHistory();
-				options.browser = puppeteer.mockBrowser;
-				options.page = puppeteer.mockPage;
-				options.ignoreUrl = true;
-				await pa11y(options);
-			});
-
-			it('does not close the page', () => {
-				assert.notCalled(options.page.close);
-			});
-
-			it('does not call goto on the page', () => {
-				assert.notCalled(options.page.goto);
-			});
-
-		});
-
 		describe('when `options.ignoreUrl` is set without `options.page`', () => {
 			let rejectedError;
 
 			beforeEach(async () => {
+				options.page = undefined;
 				options.ignoreUrl = true;
 				try {
 					await pa11y(options);
@@ -727,6 +738,92 @@ describe('lib/pa11y', () => {
 			it('rejects with a descriptive error', () => {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
+			});
+
+		});
+
+		describe('when `options.runners` is set', () => {
+			let mockRunnerNodeModule;
+			let mockRunnerPa11yNodeModule;
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFile.resetHistory();
+
+				mockRunnerPa11yNodeModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-runner-pa11y-node-module/vendor.js'
+					],
+					run: () => 'mock-runner-pa11y-node-module'
+				};
+				mockery.registerMock('pa11y-runner-pa11y-node-module', mockRunnerPa11yNodeModule);
+
+				mockRunnerNodeModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-runner-node-module/vendor.js'
+					],
+					run: () => 'mock-runner-node-module'
+				};
+				mockery.registerMock('node-module', mockRunnerNodeModule);
+
+				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-pa11y-node-module-js');
+				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-node-module-js');
+
+				options.runners = [
+					'pa11y-node-module',
+					'node-module'
+				];
+				await pa11y(options);
+			});
+
+			it('evaluates all vendor script and runner JavaScript', () => {
+				assert.called(puppeteer.mockPage.evaluate);
+				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
+				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
+			});
+
+		});
+
+		describe('when `options.runners` is set and one of the runners does not support the current version of Pa11y', () => {
+			let mockRunnerNodeModule;
+			let rejectedError;
+
+			beforeEach(async () => {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFile.resetHistory();
+
+				mockRunnerNodeModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-runner-node-module/vendor.js'
+					],
+					run: () => 'mock-runner-node-module'
+				};
+				mockery.registerMock('node-module', mockRunnerNodeModule);
+
+				semver.satisfies.returns(false);
+
+				options.runners = [
+					'node-module'
+				];
+
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', () => {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, [
+					`The installed "node-module" runner does not support Pa11y ${pkg.version}`,
+					'Please update your version of Pa11y or the runner',
+					'Reporter Support: mock-support-string',
+					`Pa11y Version:    ${pkg.version}`
+				].join('\n'));
 			});
 
 		});
