@@ -197,9 +197,9 @@
 ## 4.3.0 (2016-12-15)
 
   * Add a `verifyPage` option, and a `--verify-page` flag
-  * Switch from JSHint/JSCS to ESLint
-  * Add a contributing guide
-  * Update dependencies
+  * Switch from JSHint/JSCS to ESLint
+  * Add a contributing guide
+  * Update dependencies
     * istanbul: ~0.3 to ~0.4
 
 ## 4.2.0 (2016-11-25)
