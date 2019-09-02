@@ -691,6 +691,7 @@ describe('lib/pa11y', () => {
 				puppeteer.mockPage.close.resetHistory();
 				options.browser = puppeteer.mockBrowser;
 				options.page = puppeteer.mockPage;
+
 				await pa11y(options);
 			});
 
@@ -732,6 +733,27 @@ describe('lib/pa11y', () => {
 
 			});
 
+		});
+
+		describe('when `options.page` and `options.ignoreUrl` are set', () => {
+
+			beforeEach(async () => {
+				extend.resetHistory();
+				puppeteer.launch.resetHistory();
+				puppeteer.mockBrowser.newPage.resetHistory();
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.close.resetHistory();
+				puppeteer.mockPage.goto.resetHistory();
+				options.browser = puppeteer.mockBrowser;
+				options.page = puppeteer.mockPage;
+				options.ignoreUrl = true;
+
+				await pa11y(options);
+			});
+
+			it('does not call page.goto', () => {
+				assert.notCalled(options.page.goto);
+			});
 		});
 
 		describe('when `options.page` is set without `options.browser`', () => {
