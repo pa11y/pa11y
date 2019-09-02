@@ -561,6 +561,20 @@ describe('lib/pa11y', () => {
 
 		});
 
+		describe('when `options.userAgent` is `false`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.setUserAgent.resetHistory();
+				options.userAgent = false;
+				await pa11y(options);
+			});
+
+			it('automatically ignores warnings', () => {
+				assert.notCalled(puppeteer.mockPage.setUserAgent);
+			});
+
+		});
+
 		describe('when `options.actions` is set', () => {
 
 			beforeEach(async () => {
@@ -783,7 +797,6 @@ describe('lib/pa11y', () => {
 				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
 				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
 			});
-
 		});
 
 		describe('when `options.runners` is set and one of the runners does not support the current version of Pa11y', () => {
