@@ -483,6 +483,21 @@ describe('lib/pa11y', () => {
 					});
 				});
 
+				describe('when triggered again', () => {
+					beforeEach(() => {
+						puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
+					});
+
+					it('calls `interceptedRequest.continue` with an empty object', () => {
+						assert.calledTwice(mockInterceptedRequest.continue);
+						assert.calledWith(mockInterceptedRequest.continue, {
+							method: options.method,
+							postData: options.postData,
+							headers: {}
+						});
+						assert.calledWith(mockInterceptedRequest.continue, {});
+					});
+				});
 			});
 
 		});
@@ -654,7 +669,8 @@ describe('lib/pa11y', () => {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {}
+					} catch (error) {
+					}
 				});
 
 				it('does not close the browser', () => {
@@ -702,7 +718,8 @@ describe('lib/pa11y', () => {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {}
+					} catch (error) {
+					}
 				});
 
 				it('does not close the browser', () => {
