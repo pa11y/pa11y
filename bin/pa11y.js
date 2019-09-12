@@ -12,6 +12,10 @@ const semver = require('semver');
 configureProgram();
 runProgram();
 
+/**
+ * Parse the flags and arguments passed to the CLI
+ * @returns {void}
+ */
 function configureProgram() {
 	program.version(pkg.version)
 		.usage('[options] <url>')
@@ -95,6 +99,10 @@ function configureProgram() {
 	program.url = program.args[0];
 }
 
+/**
+ * Test the page and generate the results
+ * @returns {void}
+ */
 async function runProgram() {
 	if (program.environment) {
 		outputEnvironmentInfo();
@@ -124,9 +132,14 @@ async function runProgram() {
 	}
 }
 
+/**
+ * Process options based on precedence rules.
+ * CLI options take precedence over config options (which take precedence over defaults)
+ * @returns {Object} An object containing all the options that have been specified
+ */
 function processOptions() {
-	// CLI options take precedence over config options (which take precedence over defaults)
-	// 'level', 'reporter', and 'threshold' defaults are given here as they are not relevant when using lib/pa11y via JavaScript
+	// The 'level', 'reporter', and 'threshold' defaults are given here
+	//  as they are not relevant when using lib/pa11y via JavaScript
 	const options = extend({
 		level: 'error',
 		reporter: 'cli',
@@ -150,6 +163,11 @@ function processOptions() {
 	return options;
 }
 
+/**
+ * Tries to loads a JSON config file from disk from a list of potential locations
+ * @param {String} filePath - Path for the config file passed to the CLI
+ * @returns {Object} A config object
+ */
 function loadConfig(filePath) {
 	return requireFirst([
 		filePath,
@@ -158,8 +176,14 @@ function loadConfig(filePath) {
 	], {});
 }
 
+/**
+ * Attempts to load a reporter from disk
+ * @param {String} name - The name of the reporter, e.g. `pa11y-reporter-html`
+ * @returns {void}
+ */
 function loadReporter(name) {
 	let reporterMethods;
+
 	try {
 		reporterMethods = requireFirst([
 			`pa11y-reporter-${name}`,
@@ -171,6 +195,7 @@ function loadReporter(name) {
 		console.error(error.stack);
 		process.exit(1);
 	}
+
 	if (!reporterMethods) {
 		console.error(`Reporter "${name}" could not be found`);
 		process.exit(1);
@@ -179,6 +204,13 @@ function loadReporter(name) {
 	return buildReporter(reporterMethods);
 }
 
+/**
+ * Check if the reporter supports this version of pa11y
+ * @param {String} reporterName - Name of the reporter
+ * @param {String} reporterSupportString - List of supported versions, e.g. '^5.0.0'
+ * @param {String} pa11yVersion - This version of pa11y
+ * @returns {void}
+ */
 function checkReporterCompatibility(reporterName, reporterSupportString, pa11yVersion) {
 	if (!reporterSupportString || !semver.satisfies(pa11yVersion, reporterSupportString)) {
 		console.error(`Error: The installed "${reporterName}" reporter does not support Pa11y ${pa11yVersion}`);
@@ -189,6 +221,12 @@ function checkReporterCompatibility(reporterName, reporterSupportString, pa11yVe
 	}
 }
 
+/**
+ * Traverses a number of directories trying to load a config file from them
+ * @param {String[]} stack - A list of directories
+ * @param {Object} defaultReturn - The object to return if no config is found
+ * @returns {Object} A config object
+ */
 function requireFirst(stack, defaultReturn) {
 	if (!stack.length) {
 		return defaultReturn;
@@ -203,6 +241,14 @@ function requireFirst(stack, defaultReturn) {
 	}
 }
 
+/**
+ * Calculates if there are any errors to be reported (i.e. above the threshold)
+ * This is used for example to return the correct status code on the CLI
+ * @param {String} level - The level of reporting required (warning, notice, etc.)
+ * @param {Object} issues - The issues found by the test
+ * @param {Number} threshold - The threshold specified as acceptable
+ * @returns {Number|false} The number of issues to report (truthy), or false if there are none
+ */
 function reportShouldFail(level, results, threshold) {
 	if (level === 'none') {
 		return false;
@@ -224,10 +270,21 @@ function isWarningOrError(result) {
 	return (result.type === 'warning' || result.type === 'error');
 }
 
+/**
+ * Create an array from a semicolon-separated string of options
+ * @param {String} val - The string of user-specified values
+ * @param {Array} array - The previous value, if any
+ * @returns {Array} Array with the parameters passed
+ */
 function collectOptions(val, array) {
 	return array.concat(val.split(';'));
 }
 
+/**
+ * Output environment info for debugging purposes
+ * @param {Object} pkg - The package.json object
+ * @returns {void}
+ */
 function outputEnvironmentInfo() {
 	const versions = {
 		pa11y: pkg.version,
