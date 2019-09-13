@@ -245,7 +245,7 @@ function requireFirst(stack, defaultReturn) {
  * Calculates if there are any errors to be reported (i.e. above the threshold)
  * This is used for example to return the correct status code on the CLI
  * @param {String} level - The level of reporting required (warning, notice, etc.)
- * @param {Object} issues - The issues found by the test
+ * @param {Object} results - The results found by the test
  * @param {Number} threshold - The threshold specified as acceptable
  * @returns {Number|false} The number of issues to report (truthy), or false if there are none
  */
