@@ -273,7 +273,7 @@ function isWarningOrError(result) {
 /**
  * Create an array from a semicolon-separated string of options
  * @param {String} val - The string of user-specified values
- * @param {Array} array - The previous value, if any
+ * @param {Array} array - The previous value(s), if any
  * @returns {Array} Array with the parameters passed
  */
 function collectOptions(val, array) {
