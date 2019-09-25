@@ -34,5 +34,8 @@
   "main": "./lib/runner.js",
   "scripts": {
     "test": "make ci"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
