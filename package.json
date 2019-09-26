@@ -59,5 +59,9 @@
   },
   "scripts": {
     "test": "make ci"
-  }
+  },
+  "files": [
+    "bin",
+    "lib"
+  ]
 }
