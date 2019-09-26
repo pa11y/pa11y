@@ -27,10 +27,8 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('sets headers on the tested page', () => {
 			assert.isArray(pa11yResponse.json);
-
-			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			assert.lengthEquals(noticeH2522, 1);
-			assert.strictEqual(noticeH2522[0].context, '<title>bar baz</title>');
+			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.strictEqual(pa11yResponse.json[0].context, '<title>bar baz</title>');
 		});
 
 	});
@@ -52,10 +50,8 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('tests the page using the specified HTTP method', () => {
 			assert.isArray(pa11yResponse.json);
-
-			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			assert.lengthEquals(noticeH2522, 1);
-			assert.strictEqual(noticeH2522[0].context, '<title>POST</title>');
+			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.strictEqual(pa11yResponse.json[0].context, '<title>POST</title>');
 		});
 
 	});
@@ -77,10 +73,8 @@ describe('CLI config', () => {
 		// the page title, so reading the title confirms that headers were sent by Pa11y
 		it('tests the page using the specified HTTP method', () => {
 			assert.isArray(pa11yResponse.json);
-
-			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			assert.lengthEquals(noticeH2522, 1);
-			assert.strictEqual(noticeH2522[0].context, '<title>foo=bar&amp;bar=baz</title>');
+			assert.lengthEquals(pa11yResponse.json, 1);
+			assert.strictEqual(pa11yResponse.json[0].context, '<title>foo=bar&amp;bar=baz</title>');
 		});
 
 	});

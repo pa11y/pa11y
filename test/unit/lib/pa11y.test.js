@@ -32,7 +32,7 @@ describe('lib/pa11y', () => {
 		extend = sinon.spy(require('node.extend'));
 		mockery.registerMock('node.extend', extend);
 
-		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`);
+		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`);
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
 		fs = require('../mock/fs-extra.mock');
@@ -122,7 +122,7 @@ describe('lib/pa11y', () => {
 
 		it('loads the HTML CodeSniffer JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`), 'utf-8');
+			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/vendor/HTMLCS.js`), 'utf-8');
 		});
 
 		it('loads the Pa11y runner JavaScript', () => {

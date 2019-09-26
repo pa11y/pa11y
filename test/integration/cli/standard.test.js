@@ -24,7 +24,7 @@ describe('CLI standard', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 10);
+			assert.lengthEquals(pa11yResponse.json, 4);
 			pa11yResponse.json.forEach(issue => {
 				assert.match(issue.code, /^WCAG2A\./);
 			});
@@ -47,7 +47,7 @@ describe('CLI standard', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 27);
+			assert.lengthEquals(pa11yResponse.json, 4);
 			pa11yResponse.json.forEach(issue => {
 				assert.match(issue.code, /^WCAG2AAA\./);
 			});
@@ -70,7 +70,7 @@ describe('CLI standard', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 7);
+			assert.lengthEquals(pa11yResponse.json, 1);
 			pa11yResponse.json.forEach(issue => {
 				assert.match(issue.code, /^Section508\./);
 			});
@@ -94,7 +94,7 @@ describe('CLI standard', () => {
 
 		it('outputs the expected issues', () => {
 			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 7);
+			assert.lengthEquals(pa11yResponse.json, 1);
 			pa11yResponse.json.forEach(issue => {
 				assert.match(issue.code, /^Section508\./);
 			});
