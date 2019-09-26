@@ -17,7 +17,7 @@ describe('CLI reporter JSON', () => {
 		});
 
 		it('outputs issues in JSON format', () => {
-			const json = JSON.parse(pa11yResponse.stdout);
+			const json = JSON.parse(pa11yResponse.output);
 			assert.isArray(json);
 			assert.lengthEquals(json, 1);
 		});
@@ -35,7 +35,7 @@ describe('CLI reporter JSON', () => {
 		});
 
 		it('outputs issues in JSON format', () => {
-			const json = JSON.parse(pa11yResponse.stdout);
+			const json = JSON.parse(pa11yResponse.output);
 			assert.isArray(json);
 			assert.lengthEquals(json, 1);
 		});
