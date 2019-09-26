@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.2.1 (2019-09-26)
+
+  * Revert a change that was causing pa11y to fail to run HTML_CS on pages using AMD modules. Fixes #471 and #487.
+
 ## 5.2.0 (2019-07-04)
 
   * Allow pa11y to use an existing puppeteer page instance (thanks @kevinatown)
