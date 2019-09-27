@@ -87,7 +87,11 @@ describe('lib/runner', () => {
 
 		it('runs HTML CodeSniffer', () => {
 			assert.calledOnce(global.window.HTMLCS.process);
-			assert.calledWith(global.window.HTMLCS.process, 'mock-standard', global.window.document);
+			assert.calledWith(
+				global.window.HTMLCS.process,
+				'mock-standard',
+				global.window.document
+			);
 		});
 
 		it('gets HTML CodeSniffer messages', () => {
@@ -201,11 +205,50 @@ describe('lib/runner', () => {
 
 				it('rejects with an error', () => {
 					assert.instanceOf(rejectedError, Error);
-					assert.strictEqual(rejectedError.message, 'mock-rule-5 is not a valid WCAG 2.0 rule');
+					assert.strictEqual(
+						rejectedError.message,
+						'mock-rule-5 is not a valid WCAG 2.0 rule'
+					);
 				});
 
 			});
 
+		});
+
+		describe('when the site is using AMD', () => {
+			let htmlcsModule;
+
+			beforeEach(async () => {
+				htmlcsModule = {
+					HTMLCS: {
+						process: sinon.stub().yieldsAsync(),
+						getMessages: sinon.stub().returns(issues)
+					}
+				};
+				// eslint-disable-next-line no-empty-function
+				global.window.define = () => {};
+				global.window.define.amd = true;
+				global.window.require = sinon.stub().callsFake((dependency, callback) => {
+					callback(htmlcsModule);
+				});
+
+				await runner.run(options, pa11y);
+			});
+
+			it('calls require', () => {
+				assert.calledOnce(global.window.require);
+				assert.calledOnce(htmlcsModule.HTMLCS.process);
+				sinon.assert.calledWith(
+					global.window.require,
+					sinon.match.array.deepEquals(['htmlcs']),
+					sinon.match.typeOf('function')
+				);
+				assert.calledWith(
+					htmlcsModule.HTMLCS.process,
+					'mock-standard',
+					global.window.document
+				);
+			});
 		});
 
 	});
