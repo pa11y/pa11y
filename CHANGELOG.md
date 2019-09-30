@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.2.0 (2019-09-30)
+
+  * Adds support for sites using AMD
+  
 ## 1.1.0 (2019-07-22)
 
   * Use NPM version of HTML CodeSniffer 2.4
