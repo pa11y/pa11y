@@ -31,4 +31,8 @@ describe('sanity checks', () => {
 	it('runs on https://link.springer.com', async () => {
 		await runTest('https://link.springer.com');
 	}).timeout(10000);
+
+	it('runs on https://www.bbc.co.uk', async () => {
+		await runTest('https://www.bbc.co.uk');
+	}).timeout(10000);
 });
