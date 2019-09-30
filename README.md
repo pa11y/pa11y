@@ -984,6 +984,7 @@ make test-unit-coverage  # Run the unit tests with coverage
 make test-integration    # Run the integration tests
 ```
 
+To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
 
 Support and Migration
 ---------------------
