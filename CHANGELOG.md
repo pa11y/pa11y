@@ -1,6 +1,16 @@
 
 # Changelog
 
+## 5.3.0 (2019-09-30)
+
+  * Adds support for [aXe](https://www.deque.com/axe/) test runner (thanks @rowanmanning)
+  * Adds support for multiple test runners (thanks @rowanmanning)
+  * Adds support for sites using `AMD` (thanks @joeyciechanowicz)
+  * Removes dependency on `fs-extra` (thanks @timnovis)
+  * Improves JSDoc typings (thanks @josebolos) 
+  * Inverts the order of `setViewport` and `goto` to prevent accidental page reloads (thanks @josebolos)
+  * Minor documentation updates (thanks @sjparkinson, @josebolos)
+
 ## 5.2.0 (2019-07-04)
 
   * Allow pa11y to use an existing puppeteer page instance (thanks @kevinatown)
