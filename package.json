@@ -34,24 +34,24 @@
   "dependencies": {
     "commander": "^3.0.2",
     "node.extend": "^2.0.2",
-    "p-timeout": "^2.0.1",
+    "p-timeout": "^3.2.0",
     "pa11y-reporter-cli": "^1.0.1",
     "pa11y-reporter-csv": "^1.0.0",
     "pa11y-reporter-json": "^1.0.0",
     "pa11y-runner-axe": "^1.0.1",
     "pa11y-runner-htmlcs": "^1.2.0",
-    "puppeteer": "^1.13.0",
-    "semver": "^5.6.0"
+    "puppeteer": "^1.20.0",
+    "semver": "^6.3.0"
   },
   "devDependencies": {
-    "@rowanmanning/make": "^1.0.1",
-    "eslint": "^6.0.1",
-    "mocha": "^6.1.4",
-    "mockery": "^2.0.0",
-    "nyc": "~13.2.0",
+    "@rowanmanning/make": "^1.2.0",
+    "eslint": "^6.5.1",
+    "mocha": "^6.2.1",
+    "mockery": "^2.1.0",
+    "nyc": "~14.1.1",
     "pa11y-lint-config": "^1.2.1",
-    "proclaim": "^3.5.1",
-    "sinon": "^7.0.0"
+    "proclaim": "^3.6.0",
+    "sinon": "^7.5.0"
   },
   "main": "./lib/pa11y.js",
   "bin": {
