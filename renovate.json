@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "commitBody": "Signed-off-by: {{{gitAuthor}}}",
+  "automerge": true,
+  "major": {
+    "automerge": false
+  }
+}
