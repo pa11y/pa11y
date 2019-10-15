@@ -78,7 +78,7 @@ You can specify a default set of [pa11y configurations] that should be used for 
 
 ```json
 {
-    "defaults": {
+    "default": {
         "timeout": 1000,
         "page": {
             "viewport": {
@@ -105,7 +105,7 @@ Each URL in your config file can be an object and specify [pa11y configurations]
 
 ```json
 {
-    "defaults": {
+    "default": {
         "timeout": 1000
     },
     "urls": [
