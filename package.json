@@ -19,7 +19,7 @@
     "node": ">=8"
   },
   "dependencies": {
-    "axe-core": "^3.1.2"
+    "axe-core": "^3.3.2"
   },
   "devDependencies": {
     "@rowanmanning/make": "^1.0.1",
