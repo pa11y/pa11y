@@ -51,13 +51,18 @@ Pa11y requires [Node.js][node] 8+ to run. If you need support for older versions
 
 ### OS X
 
-On a Mac, you can install the required dependency with [Homebrew][brew]:
+To install [Node.js][node] you can use [nvm][nvm]:
+```sh
+$ nvm install node
+```
+
+Alternatively on a Mac, you can install the required dependency with [Homebrew][brew]:
 
 ```sh
 $ brew install node
 ```
 
-Alternatively download pre-built packages from the [Node.js][node] website.
+You can also download pre-built packages from the [Node.js][node] website.
 
 ### Linux
 
@@ -978,6 +983,7 @@ make test-unit-coverage  # Run the unit tests with coverage
 make test-integration    # Run the integration tests
 ```
 
+To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
 
 Support and Migration
 ---------------------
@@ -1010,6 +1016,7 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [htmlcs-wcag2aaa-ruleset]: https://github.com/pa11y/pa11y/wiki/HTML-CodeSniffer-Rules
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
+[nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [puppeteer-browser]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser
 [puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions

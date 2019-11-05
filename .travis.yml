@@ -12,6 +12,14 @@ matrix:
     - node_js: '8'
       env: NODE=8
 
+    # Run tests
+    - node_js: '10'
+      env: NODE=10
+
+    # Run tests
+    - node_js: '12'
+      env: NODE=12
+
 # Build script
 script:
   - 'if [ $LINT ]; then make verify; fi'

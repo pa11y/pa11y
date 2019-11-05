@@ -52,11 +52,11 @@ describe('lib/pa11y', () => {
 		htmlCodeSnifferPath = '/mock/HTMLCS.js';
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
-		fs = require('../mock/fs-extra.mock');
-		mockery.registerMock('fs-extra', fs);
+		fs = require('../mock/fs.mock');
+		mockery.registerMock('fs', fs);
 
-		fs.readFile.withArgs(htmlCodeSnifferPath).resolves('mock-html-codesniffer-js');
-		fs.readFile.withArgs(pa11yRunnerPath).resolves('mock-pa11y-runner-js');
+		fs.readFile.withArgs(htmlCodeSnifferPath).yieldsAsync(undefined, 'mock-html-codesniffer-js');
+		fs.readFile.withArgs(pa11yRunnerPath).yieldsAsync(undefined, 'mock-pa11y-runner-js');
 
 		pkg = require('../../../package.json');
 
@@ -143,12 +143,12 @@ describe('lib/pa11y', () => {
 
 		it('loads the HTML CodeSniffer JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
 		});
 
 		it('loads the Pa11y runner JavaScript', () => {
 			assert.called(fs.readFile);
-			assert.calledWithExactly(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
 		});
 
 		it('verifies that the runner supports the current version of Pa11y', () => {
@@ -483,6 +483,21 @@ describe('lib/pa11y', () => {
 					});
 				});
 
+				describe('when triggered again', () => {
+					beforeEach(() => {
+						puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
+					});
+
+					it('calls `interceptedRequest.continue` with an empty object', () => {
+						assert.calledTwice(mockInterceptedRequest.continue);
+						assert.calledWith(mockInterceptedRequest.continue, {
+							method: options.method,
+							postData: options.postData,
+							headers: {}
+						});
+						assert.calledWith(mockInterceptedRequest.continue, {});
+					});
+				});
 			});
 
 		});
@@ -557,6 +572,20 @@ describe('lib/pa11y', () => {
 					});
 				});
 
+			});
+
+		});
+
+		describe('when `options.userAgent` is `false`', () => {
+
+			beforeEach(async () => {
+				puppeteer.mockPage.setUserAgent.resetHistory();
+				options.userAgent = false;
+				await pa11y(options);
+			});
+
+			it('automatically ignores warnings', () => {
+				assert.notCalled(puppeteer.mockPage.setUserAgent);
 			});
 
 		});
@@ -640,7 +669,8 @@ describe('lib/pa11y', () => {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {}
+					} catch (error) {
+					}
 				});
 
 				it('does not close the browser', () => {
@@ -661,6 +691,7 @@ describe('lib/pa11y', () => {
 				puppeteer.mockPage.close.resetHistory();
 				options.browser = puppeteer.mockBrowser;
 				options.page = puppeteer.mockPage;
+
 				await pa11y(options);
 			});
 
@@ -688,7 +719,8 @@ describe('lib/pa11y', () => {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {}
+					} catch (error) {
+					}
 				});
 
 				it('does not close the browser', () => {
@@ -701,6 +733,27 @@ describe('lib/pa11y', () => {
 
 			});
 
+		});
+
+		describe('when `options.page` and `options.ignoreUrl` are set', () => {
+
+			beforeEach(async () => {
+				extend.resetHistory();
+				puppeteer.launch.resetHistory();
+				puppeteer.mockBrowser.newPage.resetHistory();
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.close.resetHistory();
+				puppeteer.mockPage.goto.resetHistory();
+				options.browser = puppeteer.mockBrowser;
+				options.page = puppeteer.mockPage;
+				options.ignoreUrl = true;
+
+				await pa11y(options);
+			});
+
+			it('does not call page.goto', () => {
+				assert.notCalled(options.page.goto);
+			});
 		});
 
 		describe('when `options.page` is set without `options.browser`', () => {
@@ -768,8 +821,8 @@ describe('lib/pa11y', () => {
 				};
 				mockery.registerMock('node-module', mockRunnerNodeModule);
 
-				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').resolves('mock-runner-pa11y-node-module-js');
-				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').resolves('mock-runner-node-module-js');
+				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-pa11y-node-module-js');
+				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-node-module-js');
 
 				options.runners = [
 					'pa11y-node-module',
@@ -783,7 +836,6 @@ describe('lib/pa11y', () => {
 				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
 				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
 			});
-
 		});
 
 		describe('when `options.runners` is set and one of the runners does not support the current version of Pa11y', () => {
