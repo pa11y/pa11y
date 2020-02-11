@@ -215,7 +215,8 @@ function loadSitemapIntoConfig(program, config) {
 		null
 	);
 
-	return Promise.resolve()
+	function getUrlsFromSitemap(sitemapUrl, config) {
+		return Promise.resolve()
 		.then(() => {
 			return fetch(sitemapUrl);
 		})
@@ -226,6 +227,15 @@ function loadSitemapIntoConfig(program, config) {
 			const $ = cheerio.load(body, {
 				xmlMode: true
 			});
+
+			const isSitemapIndex = $('sitemapindex').length > 0;
+			if (isSitemapIndex) {
+				return Promise.all($('sitemap > loc').toArray().map(element => {
+					return getUrlsFromSitemap($(element).text(), config);
+				})).then(configs => {
+					return configs.pop();
+				});
+			}
 
 			$('url > loc').toArray().forEach(element => {
 				let url = $(element).text();
@@ -246,4 +256,7 @@ function loadSitemapIntoConfig(program, config) {
 			}
 			throw new Error(`The sitemap "${sitemapUrl}" could not be parsed`);
 		});
+	}
+
+	return getUrlsFromSitemap(sitemapUrl, config);
 }

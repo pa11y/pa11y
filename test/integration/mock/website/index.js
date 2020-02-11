@@ -13,7 +13,7 @@ function startWebsite(port, done) {
 		const urlPath = parseUrl(request.url).pathname;
 		const viewPath = `${__dirname}/html${urlPath}.html`;
 
-		if (urlPath === '/sitemap.xml') {
+		if (urlPath.includes('.xml')) {
 			response.writeHead(200, {
 				'Content-Type': 'text/xml'
 			});
