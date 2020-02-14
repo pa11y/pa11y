@@ -40,8 +40,6 @@ describe('lib/pa11y-ci', () => {
 	});
 
 	describe('.defaults', () => {
-		let defaults;
-
 		beforeEach(() => {
 			defaults = pa11yCi.defaults;
 		});
