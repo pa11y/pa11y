@@ -64,6 +64,9 @@ describe('lib/pa11y-ci', () => {
 			assert.strictEqual(defaults.wrapWidth, 80);
 		});
 
+		it('has a `useIncognitoBrowserContext` property', () => {
+			assert.strictEqual(defaults.useIncognitoBrowserContext, false);
+		});
 	});
 
 	describe('pa11yCi(urls, options)', () => {
@@ -240,74 +243,158 @@ describe('lib/pa11y-ci', () => {
 
 		});
 
-		describe('when URLs include additional configurations', () => {
 
-			beforeEach(async () => {
+	});
 
-				log.error = sinon.spy();
-				log.info = sinon.spy();
+	describe('when URLs include additional configurations', () => {
 
-				const mockBrowser = await puppeteer.launch();
+		let mockBrowser;
+		let userUrls;
+		let returnedPromise;
+		let userOptions;
 
-				userUrls = [
-					{
-						url: 'qux-url',
-						bar: 'baz',
-						threshold: 2,
-						concurrency: 4,
-						wrapWidth: 80,
-						browser: mockBrowser,
-						useIncognitoBrowserContext: false
-					}
-				];
+		beforeEach(async () => {
 
-				pa11y.reset();
-				pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: [
-					{
-						type: 'error',
-						message: 'Pa11y Result Error',
-						selector: '',
-						context: null
-					}
-				]});
+			log.error = sinon.spy();
+			log.info = sinon.spy();
+			userOptions = {
+				concurrency: 4,
+				log
+			};
 
-				returnedPromise = pa11yCi(userUrls, userOptions);
+			mockBrowser = await puppeteer.launch();
+
+			userUrls = [
+				{
+					url: 'qux-url',
+					bar: 'baz',
+					threshold: 2,
+					concurrency: 4,
+					wrapWidth: 80,
+					browser: mockBrowser,
+					useIncognitoBrowserContext: false
+				}
+			];
+
+			pa11y.reset();
+			pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: [
+				{
+					type: 'error',
+					message: 'Pa11y Result Error',
+					selector: '',
+					context: null
+				}
+			]});
+
+			returnedPromise = pa11yCi(userUrls, userOptions);
+		});
+
+		describe('.then()', () => {
+			let report;
+
+			beforeEach(done => {
+				returnedPromise.then(value => {
+					report = value;
+					done();
+				}).catch(done);
 			});
 
-			describe('.then()', () => {
-				let report;
+			it('Runs the Pa11y test runner on each of the URLs with configurations', () => {
+				assert.callCount(pa11y, 1);
+				assert.calledWith(pa11y, 'qux-url', userUrls[0]);
+			});
+			it('did not createIncognitoBrowserContext', () => {
+				assert.callCount(mockBrowser.createIncognitoBrowserContext, 0);
+			});
+			it('closes the browser context after the test runner completes', () => {
+				assert.callCount(mockBrowser.close, 1);
+			});
 
-				beforeEach(done => {
-					returnedPromise.then(value => {
-						report = value;
-						done();
-					}).catch(done);
-				});
+			it('correctly logs the number of errors for the URL', () => {
+				assert.calledWithMatch(log.info, /qux-url.*1 errors/i);
+			});
 
-				it('Runs the Pa11y test runner on each of the URLs with configurations', () => {
-					assert.callCount(pa11y, 1);
-					assert.calledWith(pa11y, 'qux-url', userUrls[0]);
-				});
+			describe('resolved object', () => {
 
-				it('correctly logs the number of errors for the URL', () => {
-					assert.calledWithMatch(log.info, /qux-url.*1 errors/i);
-				});
-
-				describe('resolved object', () => {
-
-					it('has a `results` property set to an object where keys are URLs and values are their results', () => {
-						assert.isObject(report.results);
-						assert.strictEqual(report.passes, 1);
-						assert.isArray(report.results['qux-url']);
-						assert.lengthEquals(report.results['qux-url'], 0);
-					});
-
+				it('has a `results` property set to an object where keys are URLs and values are their results', () => {
+					assert.isObject(report.results);
+					assert.strictEqual(report.passes, 1);
+					assert.isArray(report.results['qux-url']);
+					assert.lengthEquals(report.results['qux-url'], 0);
 				});
 
 			});
 
 		});
 
+	});
+
+
+	describe('when options specify useIncognitoBrowserContext: true', () => {
+		let mockBrowser;
+		let userUrls;
+		let returnedPromise;
+		let userOptions;
+
+		beforeEach(async () => {
+			log.error = sinon.spy();
+			log.info = sinon.spy();
+			userOptions = {
+				concurrency: 4,
+				log,
+				useIncognitoBrowserContext: true
+			};
+
+			mockBrowser = await puppeteer.launch();
+
+			userUrls = [
+				{
+					url: 'qux-url-1',
+					bar: 'baz',
+					threshold: 2,
+					concurrency: 4,
+					wrapWidth: 80,
+					browser: mockBrowser,
+					useIncognitoBrowserContext: true
+				},
+				{
+					url: 'qux-url-2',
+					bar: 'baz',
+					threshold: 2,
+					concurrency: 4,
+					wrapWidth: 80,
+					browser: mockBrowser,
+					useIncognitoBrowserContext: true
+				}
+			];
+
+			pa11y.reset();
+			returnedPromise = pa11yCi(userUrls, userOptions);
+		});
+
+		describe('.then()', () => {
+
+			beforeEach(done => {
+				returnedPromise
+					.then(() => done())
+					.catch(done);
+			});
+
+			it('closes each incognito browser context created during test runner execution', () => {
+				assert.callCount(
+					mockBrowser.createIncognitoBrowserContext,
+					2
+				);
+				assert.callCount(
+					mockBrowser.createIncognitoBrowserContext.close,
+					2
+				);
+			});
+
+			it('closes the browser context after the test runner completes', () => {
+				assert.callCount(mockBrowser.close, 1);
+			});
+		});
 	});
 
 });
