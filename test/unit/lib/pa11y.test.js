@@ -935,7 +935,7 @@ describe('lib/pa11y', () => {
 				pa11y('https://mock-url/', (error, results) => {
 					callbackError = error;
 					callbackResults = results;
-					done();
+					setTimeout(() => done(), 100);
 				});
 			});
 
