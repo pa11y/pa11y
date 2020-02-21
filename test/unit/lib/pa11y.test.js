@@ -935,7 +935,8 @@ describe('lib/pa11y', () => {
 				pa11y('https://mock-url/', (error, results) => {
 					callbackError = error;
 					callbackResults = results;
-					setTimeout(() => done(), 100);
+					// Must wait long enough for the state-cleanup function to close browser & page
+					setTimeout(() => done(), 250);
 				});
 			});
 
