@@ -11,7 +11,11 @@ const pa11y = require('../lib/pa11y');
 const semver = require('semver');
 
 configureProgram();
-runProgram();
+if (program.environment) {
+	outputEnvironmentInfo();
+} else {
+	runProgram();
+}
 
 /**
  * Parse the flags and arguments passed to the CLI
@@ -117,10 +121,6 @@ function handleHelp() {
  * @returns {void}
  */
 async function runProgram() {
-	if (program.environment) {
-		await outputEnvironmentInfo();
-		process.exit(0);
-	}
 	handleHelp();
 	const options = processOptions();
 	const report = loadReporter(options.reporter);
@@ -309,5 +309,6 @@ async function outputEnvironmentInfo() {
 	});
 
 	console.log(envData);
+	process.exit(0);
 }
 
