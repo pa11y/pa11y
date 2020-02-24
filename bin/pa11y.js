@@ -3,6 +3,7 @@
 
 const buildReporter = require('../lib/reporter');
 const extend = require('node.extend');
+const envinfo = require('envinfo');
 const path = require('path');
 const pkg = require('../package.json');
 const program = require('commander');
@@ -299,22 +300,15 @@ function collectOptions(val, array) {
 
 /**
  * Output environment info for debugging purposes
- * @param {Object} pkg - The package.json object
- * @returns {void}
+ * @returns {Promise} - resolves a string with environment information from envinfo
  */
-function outputEnvironmentInfo() {
-	const versions = {
-		pa11y: pkg.version,
-		node: process.version.replace('v', ''),
-		npm: '[unavailable]',
-		os: require('os').release()
-	};
-	try {
-		versions.npm = require('child_process').execSync('npm -v').toString().trim();
-	} catch (error) {}
+async function outputEnvironmentInfo() {
+	const envData = await envinfo.run({
+		System: ['OS', 'CPU', 'Memory', 'Shell'],
+		Binaries: ['Node', 'Yarn', 'npm'],
+		npmPackages: ['pa11y']
+	});
 
-	console.log(`Pa11y:      ${versions.pa11y}`);
-	console.log(`Node.js:    ${versions.node}`);
-	console.log(`npm:        ${versions.npm}`);
-	console.log(`OS:         ${versions.os} (${process.platform})`);
+	console.log(envData);
 }
+
