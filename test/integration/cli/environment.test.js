@@ -19,10 +19,11 @@ describe('CLI environment', () => {
 	});
 
 	it('respondes with information about the user\'s environment', () => {
-		assert.match(pa11yResponse.output, /pa11y:\s+\d+\.\d+\.\d+/i);
-		assert.match(pa11yResponse.output, /node\.js:\s+\d+\.\d+\.\d+/i);
-		assert.match(pa11yResponse.output, /npm:\s+\d+\.\d+\.\d+/i);
-		assert.match(pa11yResponse.output, /os:\s+[^(]+\s\([^)]+\)/i);
+		assert.match(pa11yResponse.output, /OS/);
+		assert.match(pa11yResponse.output, /CPU/);
+		assert.match(pa11yResponse.output, /Memory/);
+		assert.match(pa11yResponse.output, /Node/);
+		assert.match(pa11yResponse.output, /npm/);
 	});
 
 });
