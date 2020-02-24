@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "commander": "^3.0.2",
+    "envinfo": "7.5.0",
     "node.extend": "^2.0.2",
     "p-timeout": "^2.0.1",
     "pa11y-reporter-cli": "^1.0.1",
