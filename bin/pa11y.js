@@ -118,8 +118,7 @@ function handleHelp() {
  */
 async function runProgram() {
 	if (program.environment) {
-		const info = await outputEnvironmentInfo();
-		console.log(info);
+		await outputEnvironmentInfo();
 		process.exit(0);
 	}
 	handleHelp();
@@ -302,12 +301,13 @@ function collectOptions(val, array) {
  * Output environment info for debugging purposes
  * @returns {Promise} - resolves a string with environment information from envinfo
  */
-function outputEnvironmentInfo() {
-	return envinfo.run({
-		System: ['OS', 'CPU', 'Memory'],
+async function outputEnvironmentInfo() {
+	const envData = await envinfo.run({
+		System: ['OS', 'CPU', 'Memory', 'Shell'],
 		Binaries: ['Node', 'Yarn', 'npm'],
-		Browsers: ['Chrome', 'Firefox', 'Safari'],
-		npmPackages: ['pa11y', 'pa11y-ci', 'puppeteer', 'pa11y-runner-axe']
+		npmPackages: ['pa11y']
 	});
+
+	console.log(envData);
 }
 
