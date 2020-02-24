@@ -13,7 +13,6 @@ const semver = require('semver');
 configureProgram();
 if (program.environment) {
 	outputEnvironmentInfo();
-	process.exit(0);
 } else {
 	runProgram();
 }
@@ -310,5 +309,6 @@ async function outputEnvironmentInfo() {
 	});
 
 	console.log(envData);
+	process.exit(0);
 }
 
