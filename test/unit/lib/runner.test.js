@@ -22,7 +22,12 @@ describe('lib/runner', () => {
 					nodes: [
 						{
 							target: [
-								'mock-selector-1'
+								'mock-selector-1a'
+							]
+						},
+						{
+							target: [
+								'mock-selector-1b'
 							]
 						}
 					]
@@ -74,7 +79,13 @@ describe('lib/runner', () => {
 					nodes: [
 						{
 							target: [
-								'mock-selector-4'
+								'iframe-selector-1',
+								'mock-selector-4a'
+							]
+						},
+						{
+							target: [
+								'mock-selector-4b'
 							]
 						}
 					]
@@ -92,10 +103,18 @@ describe('lib/runner', () => {
 			}
 		};
 
-		global.window.document.querySelector.withArgs('mock-selector-1').returns('mock-element-1');
-		global.window.document.querySelector.withArgs('mock-selector-2').returns('mock-element-2');
-		global.window.document.querySelector.withArgs('mock-selector-3').returns('mock-element-3');
-		global.window.document.querySelector.withArgs('mock-selector-4').returns('mock-element-4');
+		global.window.document.querySelector
+			.withArgs('mock-selector-1a').returns('mock-element-1a');
+		global.window.document.querySelector
+			.withArgs('mock-selector-1b').returns('mock-element-1b');
+		global.window.document.querySelector
+			.withArgs('mock-selector-2').returns('mock-element-2');
+		global.window.document.querySelector
+			.withArgs('mock-selector-3').returns('mock-element-3');
+		global.window.document.querySelector
+			.withArgs('iframe-selector-1 mock-selector-4a').returns('mock-element-4a');
+		global.window.document.querySelector
+			.withArgs('mock-selector-4b').returns('mock-element-4b');
 
 		runner = require('../../../lib/runner');
 	});
@@ -113,7 +132,9 @@ describe('lib/runner', () => {
 	});
 
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
-		const scriptPath = `${path.resolve(__dirname, '..', '..', '..')}${path.normalize('/node_modules/axe-core')}/axe.min.js`;
+		const scriptPath =
+			`${path.resolve(__dirname, '..', '..', '..')}` +
+			`${path.normalize('/node_modules/axe-core')}/axe.min.js`;
 		assert.isArray(runner.scripts);
 		assert.deepEqual(runner.scripts, [scriptPath]);
 	});
@@ -144,7 +165,19 @@ describe('lib/runner', () => {
 					code: 'mock-id-1',
 					message: 'mock help 1 (mock-help-url-1)',
 					type: 'error',
-					element: 'mock-element-1',
+					element: 'mock-element-1a',
+					runnerExtras: {
+						description: 'mock description 1',
+						impact: 'mock impact 1',
+						help: 'mock help 1',
+						helpUrl: 'mock-help-url-1'
+					}
+				},
+				{
+					code: 'mock-id-1',
+					message: 'mock help 1 (mock-help-url-1)',
+					type: 'error',
+					element: 'mock-element-1b',
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'mock impact 1',
@@ -192,7 +225,19 @@ describe('lib/runner', () => {
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
 					type: 'warning',
-					element: 'mock-element-4',
+					element: 'mock-element-4a',
+					runnerExtras: {
+						description: 'mock description 4',
+						impact: 'mock impact 4',
+						help: 'mock help 4',
+						helpUrl: 'mock-help-url-4'
+					}
+				},
+				{
+					code: 'mock-id-4',
+					message: 'mock help 4 (mock-help-url-4)',
+					type: 'warning',
+					element: 'mock-element-4b',
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'mock impact 4',

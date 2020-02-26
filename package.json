@@ -16,24 +16,25 @@
   "bugs": "https://github.com/pa11y/pa11y-runner-axe/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=8.3"
   },
   "dependencies": {
-    "axe-core": "^3.4.0"
+    "axe-core": "^3.5.1"
   },
   "devDependencies": {
-    "@rowanmanning/make": "^1.2.0",
-    "eslint": "^6.6.0",
-    "mocha": "^6.2.2",
+    "@rowanmanning/make": "^2.0.0",
+    "eslint": "^6.8.0",
+    "mocha": "^7.0.1",
     "mockery": "^2.1.0",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.6.0",
-    "sinon": "^7.5.0"
+    "sinon": "^9.0.0"
   },
   "main": "./lib/runner.js",
   "scripts": {
-    "test": "make ci"
+    "test": "make ci",
+    "test:only": "make test"
   },
   "files": [
     "lib"
