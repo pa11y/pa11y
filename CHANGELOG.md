@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.0.2 (2019-02-26)
+
+  * Updates aXe core to 3.5.1
+  * Flattens the aXe results as multiple offences of the same WCAG rule are bundled under a single object
+
 ## 1.0.1 (2018-10-23)
 
   * Remove out-of-date note from README
