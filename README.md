@@ -80,11 +80,9 @@ You can specify a default set of [pa11y configurations] that should be used for 
 {
     "defaults": {
         "timeout": 1000,
-        "page": {
-            "viewport": {
-                "width": 320,
-                "height": 480
-            }
+        "viewport": {
+            "width": 320,
+            "height": 480
         }
     },
     "urls": [
