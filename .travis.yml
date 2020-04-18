@@ -1,7 +1,6 @@
 
 # Build matrix
 language: node_js
-sudo: required
 
 matrix:
   include:
@@ -13,18 +12,13 @@ matrix:
     # Run tests
     - node_js: '8'
 
-# Global environment variables
-env:
-  global:
-    - TEST_DATABASE=postgres://postgres:@localhost:5432/pa11y_sidekick_travis
+    # Run tests
+    - node_js: '10'
 
-# Services setup
-services:
-  - postgresql
+    # Run tests
+    - node_js: '12'
 
 # Build script
-before_script:
-  - psql -c "CREATE DATABASE pa11y_sidekick_travis" -U postgres
 script:
   - 'if [ $LINT ]; then make verify; fi'
   - 'if [ ! $LINT ]; then make test; fi'
