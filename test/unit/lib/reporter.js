@@ -4,12 +4,12 @@ const mockery = require('mockery');
 const assert = require('proclaim');
 
 describe('lib/reporter', () => {
-	let chalk;
+	let kleur;
 	let reporter;
 
 	beforeEach(() => {
-		chalk = require('../mock/chalk');
-		mockery.registerMock('chalk', chalk);
+		kleur = require('../mock/kleur');
+		mockery.registerMock('kleur', kleur);
 		reporter = require('../../../lib/reporter');
 	});
 

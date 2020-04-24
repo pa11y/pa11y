@@ -2,7 +2,7 @@
 
 const sinon = require('sinon');
 
-const chalk = {
+const kleur = {
 	cyan: sinon.stub().returnsArg(0),
 	green: sinon.stub().returnsArg(0),
 	grey: sinon.stub().returnsArg(0),
@@ -12,10 +12,10 @@ const chalk = {
 };
 
 // Allow for chaining
-for (const key1 of Object.keys(chalk)) {
-	for (const key2 of Object.keys(chalk)) {
-		chalk[key1][key2] = chalk[key2];
+for (const key1 of Object.keys(kleur)) {
+	for (const key2 of Object.keys(kleur)) {
+		kleur[key1][key2] = kleur[key2];
 	}
 }
 
-module.exports = chalk;
+module.exports = kleur;
