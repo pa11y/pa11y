@@ -10,10 +10,10 @@
   "author": "Team Pa11y",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pa11y-reporter-tsv/pa11y-reporter-tsv.git"
+    "url": "https://github.com/pa11y/pa11y-reporter-tsv.git"
   },
-  "homepage": "https://github.com/pa11y-reporter-tsv/pa11y-reporter-tsv",
-  "bugs": "https://github.com/pa11y-reporter-tsv/pa11y-reporter-tsv/issues",
+  "homepage": "https://github.com/pa11y/pa11y-reporter-tsv",
+  "bugs": "https://github.com/pa11y/pa11y-reporter-tsv/issues",
   "license": "LGPL-3.0",
   "engines": {
     "node": ">=8"
