@@ -30,5 +30,8 @@
   "main": "./lib/reporter.js",
   "scripts": {
     "test": "make ci"
-  }
+  },
+  "files": [
+    "lib"
+  ]
 }
