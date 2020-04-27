@@ -1,6 +1,6 @@
 {
   "name": "pa11y-runner-htmlcs",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A HTML CodeSniffer runner for Pa11y",
   "keywords": [
     "htmlcs",
@@ -16,7 +16,7 @@
   "bugs": "https://github.com/pa11y/pa11y-runner-htmlcs/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
     "html_codesniffer": "^2.5.1"
