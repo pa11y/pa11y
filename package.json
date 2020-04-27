@@ -19,16 +19,16 @@
     "node": ">=8"
   },
   "dependencies": {
-    "bfj": "^4.2.3"
+    "bfj": "^7.0.2"
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
-    "mocha": "^3.5.0",
-    "mockery": "^2.0.0",
-    "nyc": "^10.1.2",
-    "pa11y-lint-config": "^1.2.0",
-    "proclaim": "^3.4.4",
-    "sinon": "^3.2.0"
+    "eslint": "^6.8.0",
+    "mocha": "^7.1.1",
+    "mockery": "^2.1.0",
+    "nyc": "^15.0.1",
+    "pa11y-lint-config": "^1.2.1",
+    "proclaim": "^3.6.0",
+    "sinon": "^9.0.2"
   },
   "main": "./lib/reporter.js",
   "scripts": {
