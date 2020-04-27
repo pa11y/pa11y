@@ -10,10 +10,10 @@
   "author": "Team Pa11y",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pa11y-reporter-json/pa11y-reporter-json.git"
+    "url": "https://github.com/pa11y/pa11y-reporter-json.git"
   },
-  "homepage": "https://github.com/pa11y-reporter-json/pa11y-reporter-json",
-  "bugs": "https://github.com/pa11y-reporter-json/pa11y-reporter-json/issues",
+  "homepage": "https://github.com/pa11y/pa11y-reporter-json",
+  "bugs": "https://github.com/pa11y/pa11y-reporter-json/issues",
   "license": "LGPL-3.0",
   "engines": {
     "node": ">=8"
