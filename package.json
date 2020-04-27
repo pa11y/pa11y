@@ -1,6 +1,6 @@
 {
   "name": "pa11y-runner-axe",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "An aXe runner for Pa11y",
   "keywords": [
     "axe",
@@ -16,7 +16,7 @@
   "bugs": "https://github.com/pa11y/pa11y-runner-axe/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8.3"
+    "node": ">=10"
   },
   "dependencies": {
     "axe-core": "^3.5.3"
