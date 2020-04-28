@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-tsv",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Tab-Separated-Value reporter for Pa11y",
   "keywords": [
     "tsv",
@@ -16,7 +16,7 @@
   "bugs": "https://github.com/pa11y/pa11y-reporter-tsv/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
