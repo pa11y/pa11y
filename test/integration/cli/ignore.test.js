@@ -28,7 +28,7 @@ describe('CLI ignore', () => {
 
 			const responses = groupResponses(pa11yResponse.json);
 			assert.lengthEquals(responses.warning, 0);
-			assert.lengthEquals(responses.notice, 15);
+			assert.lengthEquals(responses.notice, 26);
 			assert.lengthEquals(responses.error, 1);
 		});
 
@@ -101,7 +101,7 @@ describe('CLI ignore', () => {
 
 			const responses = groupResponses(pa11yResponse.json);
 			assert.lengthEquals(responses.warning, 1);
-			assert.lengthEquals(responses.notice, 15);
+			assert.lengthEquals(responses.notice, 26);
 			assert.lengthEquals(responses.error, 0);
 
 			responses.notice.forEach(issue => {
