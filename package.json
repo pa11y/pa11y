@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-cli",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "The default command-line reporter for Pa11y",
   "keywords": [
     "cli",
@@ -16,7 +16,7 @@
   "bugs": "https://github.com/pa11y/pa11y-reporter-cli/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
     "kleur": "^3.0.3"
