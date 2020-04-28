@@ -1,26 +1,18 @@
-
 # Build matrix
 language: node_js
 matrix:
   include:
 
     # Run linter once
-    - node_js: '8'
+    - node_js: '10'
       env: LINT=true
 
     # Run tests
-    - node_js: '8'
-      env: NODE=8
-
-    # Run tests
     - node_js: '10'
-      env: NODE=10
-
-    # Run tests
     - node_js: '12'
-      env: NODE=12
+    - node_js: '14'
 
 # Build script
 script:
   - 'if [ $LINT ]; then make verify; fi'
-  - 'if [ $NODE ]; then make test; fi'
+  - 'if [ ! $LINT ]; then make test; fi'
