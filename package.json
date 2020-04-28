@@ -1,6 +1,6 @@
 {
   "name": "pa11y-reporter-json",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A JSON reporter for Pa11y",
   "keywords": [
     "json",
@@ -16,7 +16,7 @@
   "bugs": "https://github.com/pa11y/pa11y-reporter-json/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
     "bfj": "^7.0.2"

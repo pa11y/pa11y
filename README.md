@@ -1,4 +1,3 @@
-
 # Pa11y JSON Reporter
 
 A JSON reporter for [Pa11y 5.0](https://github.com/pa11y/pa11y).
@@ -9,21 +8,27 @@ A JSON reporter for [Pa11y 5.0](https://github.com/pa11y/pa11y).
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0 licensed][shield-license]][info-license]
 
-
 ## Table Of Contents
 
-- [Requirements](#requirements)
-- [Usage](#usage)
-  - [Command-Line](#command-line)
-  - [JavaScript](#javascript)
-- [Contributing](#contributing)
-- [License](#license)
-
+* [Requirements](#requirements)
+  * [Compatibility chart](#compatibility-chart)
+* [Usage](#usage)
+  * [Command-Line](#command-line)
+  * [JavaScript](#javascript)
+* [Contributing](#contributing)
+* [License](#license)
 
 ## Requirements
 
-Pa11y JSON Reporter is compatible with Pa11y 5.0. It will not work with older versions of Pa11y.
+Pa11y JSON Reporter is compatible with Pa11y 5 and later versions. It will not work with older versions of Pa11y.
 
+### Compatibility chart
+
+| Pa11y version | Pa11y CLI reporter version |
+|---------------|----------------------------|
+| 1.x - 4.x     | Unsupported                |
+| 5.x           | 1.x                        |
+| 6.x           | 2.x                        |
 
 ## Usage
 
@@ -56,14 +61,13 @@ pa11y('http://example.com').then(results => {
 });
 ```
 
-
 ## Contributing
 
 There are many ways to contribute to Pa11y JSON Reporter, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
 
 If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
 
-Please write unit tests for your code, and check that everything works by running the following before opening a <abbr title="pull request">PR</abbr>:
+Please write unit tests for your code, and check that everything works by running the following before opening a Pull Request:
 
 ```sh
 make ci
@@ -78,12 +82,10 @@ make test-unit           # Run the unit tests
 make test-unit-coverage  # Run the unit tests with coverage
 ```
 
-
 ## License
 
-Pa11y JSON Reporter is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].<br/>
+Pa11y JSON Reporter is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
 Copyright &copy; 2017, Team Pa11y
-
 
 [info-license]: LICENSE
 [info-npm]: https://www.npmjs.com/package/pa11y
