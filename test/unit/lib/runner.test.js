@@ -156,7 +156,11 @@ describe('lib/runner', () => {
 
 		it('runs aXe', () => {
 			assert.calledOnce(global.window.axe.run);
-			assert.calledWithExactly(global.window.axe.run);
+			assert.calledWithExactly(
+				global.window.axe.run,
+				global.window.document,
+				{}
+			);
 		});
 
 		it('resolves with processed and normalised issues', () => {
@@ -246,6 +250,84 @@ describe('lib/runner', () => {
 					}
 				}
 			]);
+		});
+
+		describe('when passing the Pa11y option', () => {
+			describe('rootElement', () => {
+				const cssSelector = '#main';
+
+				beforeEach(async () => {
+					options.rootElement = cssSelector;
+					await runner.run(options, pa11y);
+				});
+
+				it('sets the aXe context', () => {
+					assert.calledWithExactly(
+						global.window.axe.run,
+						cssSelector,
+						sinon.match.any
+					);
+				});
+			});
+
+			describe('standard', () => {
+				it('supports level A', async () => {
+					options.standard = 'WCAG2A';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['wcag2a', 'wcag21a', 'best-practice']
+						)
+					);
+				});
+
+				it('supports level AA', async () => {
+					options.standard = 'WCAG2AA';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['wcag2a', 'wcag21a', 'wcag2aa', 'wcag21aa', 'best-practice']
+						)
+					);
+				});
+
+				it('supports section 508', async () => {
+					options.standard = 'Section508';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['section508', 'best-practice']
+						)
+					);
+				});
+			});
+
+			describe('rules', () => {
+				beforeEach(async () => {
+					options.rules = ['color-contrast', 'autocomplete-valid'];
+					await runner.run(options, pa11y);
+				});
+
+				it('sets the aXe rules', () => {
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.has('rules', {
+							'color-contrast': {enabled: true},
+							'autocomplete-valid': {enabled: true}
+						})
+					);
+				});
+			});
 		});
 
 		describe('when aXe errors', () => {
