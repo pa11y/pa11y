@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.4.0 (2020-08-18)
+
+* Adds support for parsing sitemapindex (Thanks @42tte)
+* Better test coverage (Thanks @kkoskelin)
+* Updated dependencies and devDependencies
+* Less eslint warnings
+* Restrict dependency upgrades to bugfixes to avoid potential breakages when updating or integrating with other apps
+* Minor documentation improvements and fixes
+
+## 2.3.1 (2020-08-17)
+
+Add missing puppeteer dependency
+
 ## 2.3.0 (2019-05-14)
 
 * Add useIncognitoBrowserContext option for test runs

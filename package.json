@@ -1,6 +1,6 @@
 {
   "name": "pa11y-ci",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Pa11y CI is a CI-centric accessibility test runner, built using Pa11y",
   "keywords": [],
   "author": "Team Pa11y",
