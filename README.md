@@ -39,6 +39,12 @@ Run Pa11y using the HTML reporter:
 pa11y --reporter html http://example.com
 ```
 
+Run Pa11y and save HTML file of report:
+
+```sh
+pa11y --reporter html http://example.com > report.html
+```
+
 ### JavaScript
 
 Assuming you've installed both Pa11y and Pa11y HTML Reporter:
