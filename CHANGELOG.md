@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.3.1 (2020-08-17)
+
+  * Add missing puppeteer dependency
+
 ## 2.3.0 (2019-05-14)
 
   * Add useIncognitoBrowserContext option for test runs
