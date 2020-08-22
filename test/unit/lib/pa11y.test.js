@@ -1087,7 +1087,7 @@ describe('lib/pa11y', () => {
 			const result = pa11y.requireFirst(['potato', 'fs']);
 			assert.isDefined(result.readFile);
 		});
-		it('returns the first file when a match is found', () => {
+		it('returns the default if entire stack is not found', () => {
 			const result = pa11y.requireFirst(['potato'], {defaultValue: true});
 			assert(result.defaultValue);
 		});
