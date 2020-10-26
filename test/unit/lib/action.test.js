@@ -7,14 +7,14 @@ const sinon = require('sinon');
 describe('lib/action', () => {
 	let mockEvent;
 	let originalEvent;
-	let puppeteer;
+	let playwright;
 	let runAction;
 
 	beforeEach(() => {
 		mockEvent = {event: true};
 		originalEvent = global.Event;
 		global.Event = sinon.stub().returns(mockEvent);
-		puppeteer = require('../mock/puppeteer.mock');
+		playwright = require('../mock/playwright.mock');
 		runAction = require('../../../lib/action');
 	});
 
@@ -54,13 +54,13 @@ describe('lib/action', () => {
 					run: sinon.stub().resolves()
 				}
 			];
-			resolvedValue = await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'bar 123');
+			resolvedValue = await runAction(playwright.mockBrowser, playwright.mockPage, options, 'bar 123');
 		});
 
 		it('calls the run function that matches the given `actionString`', () => {
 			assert.notCalled(runAction.actions[0].run);
 			assert.calledOnce(runAction.actions[1].run);
-			assert.calledWith(runAction.actions[1].run, puppeteer.mockBrowser, puppeteer.mockPage, options);
+			assert.calledWith(runAction.actions[1].run, playwright.mockBrowser, playwright.mockPage, options);
 			assert.deepEqual(runAction.actions[1].run.firstCall.args[3], [
 				'bar'
 			]);
@@ -76,7 +76,7 @@ describe('lib/action', () => {
 			beforeEach(async () => {
 				runAction.actions[1].run.resetHistory();
 				try {
-					await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'baz 123');
+					await runAction(playwright.mockBrowser, playwright.mockPage, options, 'baz 123');
 				} catch (error) {
 					rejectedError = error;
 				}
@@ -97,7 +97,7 @@ describe('lib/action', () => {
 				actionRunnerError = new Error('action-runner-error');
 				runAction.actions[1].run.rejects(actionRunnerError);
 				try {
-					await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'bar 123');
+					await runAction(playwright.mockBrowser, playwright.mockPage, options, 'bar 123');
 				} catch (error) {
 					rejectedError = error;
 				}
@@ -168,12 +168,12 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'navigate to http://pa11y.org'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('clicks the specified element on the page', () => {
-				assert.calledOnce(puppeteer.mockPage.goto);
-				assert.calledWithExactly(puppeteer.mockPage.goto, matches[2]);
+				assert.calledOnce(playwright.mockPage.goto);
+				assert.calledWithExactly(playwright.mockPage.goto, matches[2]);
 			});
 
 			it('resolves with `undefined`', () => {
@@ -186,9 +186,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					navigateError = new Error('navigate to error');
-					puppeteer.mockPage.goto.rejects(navigateError);
+					playwright.mockPage.goto.rejects(navigateError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
@@ -252,12 +252,12 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'click element foo'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('clicks the specified element on the page', () => {
-				assert.calledOnce(puppeteer.mockPage.click);
-				assert.calledWithExactly(puppeteer.mockPage.click, matches[2]);
+				assert.calledOnce(playwright.mockPage.click);
+				assert.calledWithExactly(playwright.mockPage.click, matches[2]);
 			});
 
 			it('resolves with `undefined`', () => {
@@ -270,9 +270,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					clickError = new Error('click error');
-					puppeteer.mockPage.click.rejects(clickError);
+					playwright.mockPage.click.rejects(clickError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
@@ -348,14 +348,16 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'set field foo to bar'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('evaluates some JavaScript in the context of the page', () => {
-				assert.calledOnce(puppeteer.mockPage.evaluate);
-				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
-				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
-				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[3]);
+				assert.calledOnce(playwright.mockPage.evaluate);
+				assert.isFunction(playwright.mockPage.evaluate.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.evaluate.firstCall.args[1], {
+					targetSelector: matches[2],
+					desiredValue: matches[3]
+				});
 			});
 
 			describe('evaluated JavaScript', () => {
@@ -368,7 +370,10 @@ describe('lib/action', () => {
 					global.document = {
 						querySelector: sinon.stub().returns(mockElement)
 					};
-					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					resolvedValue = await playwright.mockPage.evaluate.firstCall.args[0]({
+						targetSelector: 'mock-selector',
+						desiredValue: 'mock-value'
+					});
 				});
 
 				afterEach(() => {
@@ -401,7 +406,10 @@ describe('lib/action', () => {
 					beforeEach(async () => {
 						const mockPrototypeElement = createMockPrototypeElement();
 						global.document.querySelector.returns(mockPrototypeElement);
-						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+						resolvedValue = await playwright.mockPage.evaluate.firstCall.args[0]({
+							targetSelector: 'mock-selector',
+							desiredValue: 'mock-value'
+						});
 					});
 
 					afterEach(() => {
@@ -437,7 +445,10 @@ describe('lib/action', () => {
 					beforeEach(async () => {
 						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+							await playwright.mockPage.evaluate.firstCall.args[0]({
+								targetSelector: 'mock-selector',
+								desiredValue: 'mock-value'
+							});
 						} catch (error) {
 							rejectedError = error;
 						}
@@ -461,9 +472,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.rejects(evaluateError);
+					playwright.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
@@ -533,14 +544,16 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'check field foo'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('evaluates some JavaScript in the context of the page', () => {
-				assert.calledOnce(puppeteer.mockPage.evaluate);
-				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
-				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[3]);
-				assert.isTrue(puppeteer.mockPage.evaluate.firstCall.args[2]);
+				assert.calledOnce(playwright.mockPage.evaluate);
+				assert.isFunction(playwright.mockPage.evaluate.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.evaluate.firstCall.args[1], {
+					targetSelector: matches[3],
+					isChecked: true
+				});
 			});
 
 			describe('evaluated JavaScript', () => {
@@ -553,7 +566,10 @@ describe('lib/action', () => {
 					global.document = {
 						querySelector: sinon.stub().returns(mockElement)
 					};
-					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-checked');
+					resolvedValue = await playwright.mockPage.evaluate.firstCall.args[0]({
+						targetSelector: 'mock-selector',
+						isChecked: 'mock-checked'
+					});
 				});
 
 				afterEach(() => {
@@ -588,7 +604,7 @@ describe('lib/action', () => {
 					beforeEach(async () => {
 						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-checked');
+							await playwright.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-checked');
 						} catch (error) {
 							rejectedError = error;
 						}
@@ -609,13 +625,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the field should be unchecked', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.evaluate.resetHistory();
+					playwright.mockPage.evaluate.resetHistory();
 					matches = 'uncheck field foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes a `false` negation parameter into the evaluate', () => {
-					assert.isFalse(puppeteer.mockPage.evaluate.firstCall.args[2]);
+					assert.isFalse(playwright.mockPage.evaluate.firstCall.args[1].isChecked);
 				});
 
 			});
@@ -626,9 +642,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.rejects(evaluateError);
+					playwright.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
@@ -698,12 +714,12 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'screen capture foo.png'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('captures the full screen', () => {
-				assert.calledOnce(puppeteer.mockPage.screenshot);
-				assert.calledWith(puppeteer.mockPage.screenshot, {
+				assert.calledOnce(playwright.mockPage.screenshot);
+				assert.calledWith(playwright.mockPage.screenshot, {
 					path: matches[3],
 					fullPage: true
 				});
@@ -719,9 +735,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					screenCaptureError = new Error('screen capture error');
-					puppeteer.mockPage.screenshot.rejects(screenCaptureError);
+					playwright.mockPage.screenshot.rejects(screenCaptureError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
@@ -855,16 +871,17 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'wait for path to be foo'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('waits for a function to evaluate to `true`', () => {
-				assert.calledOnce(puppeteer.mockPage.waitForFunction);
-				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
-				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {});
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'pathname');
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], matches[4]);
-				assert.isFalse(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
+				assert.calledOnce(playwright.mockPage.waitForFunction);
+				assert.isFunction(playwright.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.waitForFunction.firstCall.args[1], {
+					locationProperty: 'pathname',
+					value: matches[4],
+					isNegated: false
+				});
 			});
 
 			describe('evaluated JavaScript', () => {
@@ -878,7 +895,11 @@ describe('lib/action', () => {
 							'mock-property': 'value'
 						}
 					};
-					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', false);
+					returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+						locationProperty: 'mock-property',
+						value: 'value',
+						isNegated: false
+					});
 				});
 
 				afterEach(() => {
@@ -892,7 +913,11 @@ describe('lib/action', () => {
 				describe('when the location property does not match the expected value', () => {
 
 					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', false);
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							locationProperty: 'mock-property',
+							value: 'incorrect-value',
+							isNegated: false
+						});
 					});
 
 					it('returns `false`', () => {
@@ -904,7 +929,11 @@ describe('lib/action', () => {
 				describe('when the negated property is `true`', () => {
 
 					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', true);
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							locationProperty: 'mock-property',
+							value: 'value',
+							isNegated: true
+						});
 					});
 
 					it('returns `false`', () => {
@@ -916,7 +945,11 @@ describe('lib/action', () => {
 				describe('when the negated property is `true` and the location property does not match the expected value', () => {
 
 					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', true);
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							locationProperty: 'mock-property',
+							value: 'incorrect-value',
+							isNegated: true
+						});
 					});
 
 					it('returns `true`', () => {
@@ -934,13 +967,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "fragment"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for fragment to be foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].locationProperty, 'hash');
 				});
 
 			});
@@ -948,13 +981,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "hash"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for hash to be foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].locationProperty, 'hash');
 				});
 
 			});
@@ -962,13 +995,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "host"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for host to be foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'host');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].locationProperty, 'host');
 				});
 
 			});
@@ -976,13 +1009,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the subject is "url"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for url to be foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected property name into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'href');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].locationProperty, 'href');
 				});
 
 			});
@@ -990,13 +1023,13 @@ describe('lib/action', () => {
 			describe('when `matches` includes a negation like "to not be"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for path to not be foo'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes a `true` negation parameter into the wait function', () => {
-					assert.isTrue(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
+					assert.isTrue(playwright.mockPage.waitForFunction.firstCall.args[1].isNegated);
 				});
 
 			});
@@ -1123,17 +1156,19 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'wait for element .foo to be added'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('waits for a function to evaluate to `true`', () => {
-				assert.calledOnce(puppeteer.mockPage.waitForFunction);
-				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
-				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {
+				assert.calledOnce(playwright.mockPage.waitForFunction);
+				assert.isFunction(playwright.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.waitForFunction.firstCall.args[1], {
+					targetSelector: matches[2],
+					desiredState: matches[4]
+				});
+				assert.deepEqual(playwright.mockPage.waitForFunction.firstCall.args[2], {
 					polling: 200
 				});
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], matches[2]);
-				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], matches[4]);
 			});
 
 			describe('evaluated JavaScript', () => {
@@ -1147,7 +1182,10 @@ describe('lib/action', () => {
 					global.document = {
 						querySelector: sinon.stub().returns(null)
 					};
-					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'mock-state');
+					returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+						targetSelector: 'mock-selector',
+						desiredState: 'mock-state'
+					});
 				});
 
 				afterEach(() => {
@@ -1167,7 +1205,10 @@ describe('lib/action', () => {
 
 					beforeEach(() => {
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'added');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							targetSelector: 'mock-selector',
+							desiredState: 'added'
+						});
 					});
 
 					it('returns `true`', () => {
@@ -1179,7 +1220,10 @@ describe('lib/action', () => {
 				describe('when the selector does not return an element and the state is "added"', () => {
 
 					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'added');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							targetSelector: 'mock-selector',
+							desiredState: 'added'
+						});
 					});
 
 					it('returns `false`', () => {
@@ -1191,7 +1235,10 @@ describe('lib/action', () => {
 				describe('when the selector does not return an element and the state is "removed"', () => {
 
 					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'removed');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							targetSelector: 'mock-selector',
+							desiredState: 'removed'
+						});
 					});
 
 					it('returns `true`', () => {
@@ -1204,7 +1251,10 @@ describe('lib/action', () => {
 
 					beforeEach(() => {
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'removed');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							desiredSelector: 'mock-selector',
+							desiredState: 'removed'
+						});
 					});
 
 					it('returns `false`', () => {
@@ -1218,7 +1268,10 @@ describe('lib/action', () => {
 					beforeEach(() => {
 						mockElement.offsetWidth = 100;
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'visible');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							desiredSelector: 'mock-selector',
+							desiredState: 'visible'
+						});
 					});
 
 					it('returns `true`', () => {
@@ -1231,7 +1284,10 @@ describe('lib/action', () => {
 
 					beforeEach(() => {
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'visible');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							desiredSelector: 'mock-selector',
+							desiredState: 'visible'
+						});
 					});
 
 					it('returns `false`', () => {
@@ -1244,7 +1300,10 @@ describe('lib/action', () => {
 
 					beforeEach(() => {
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'hidden');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							desiredSelector: 'mock-selector',
+							desiredState: 'hidden'
+						});
 					});
 
 					it('returns `true`', () => {
@@ -1258,7 +1317,10 @@ describe('lib/action', () => {
 					beforeEach(() => {
 						mockElement.offsetWidth = 100;
 						global.document.querySelector.returns(mockElement);
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'hidden');
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]({
+							desiredSelector: 'mock-selector',
+							desiredState: 'hidden'
+						});
 					});
 
 					it('returns `false`', () => {
@@ -1276,13 +1338,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "removed"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be removed'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected state into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'removed');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].desiredState, 'removed');
 				});
 
 			});
@@ -1290,13 +1352,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "visible"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be visible'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected state into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'visible');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].desiredState, 'visible');
 				});
 
 			});
@@ -1304,13 +1366,13 @@ describe('lib/action', () => {
 			describe('when `matches` indicates that the state is "hidden"', () => {
 
 				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.resetHistory();
+					playwright.mockPage.waitForFunction.resetHistory();
 					matches = 'wait for element .foo to be hidden'.match(action.match);
-					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 				});
 
 				it('passes the expected state into the wait function', () => {
-					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'hidden');
+					assert.strictEqual(playwright.mockPage.waitForFunction.firstCall.args[1].desiredState, 'hidden');
 				});
 
 			});
@@ -1371,14 +1433,16 @@ describe('lib/action', () => {
 
 			beforeEach(async () => {
 				matches = 'wait for element foo to emit bar'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				resolvedValue = await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 			});
 
 			it('evaluates some JavaScript in the context of the page', () => {
-				assert.calledOnce(puppeteer.mockPage.evaluate);
-				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
-				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
-				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[3]);
+				assert.calledOnce(playwright.mockPage.evaluate);
+				assert.isFunction(playwright.mockPage.evaluate.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.evaluate.firstCall.args[1], {
+					targetSelector: matches[2],
+					desiredEvent: matches[3]
+				});
 			});
 
 			describe('evaluated JavaScript (evaluate)', () => {
@@ -1391,7 +1455,10 @@ describe('lib/action', () => {
 					global.document = {
 						querySelector: sinon.stub().returns(mockElement)
 					};
-					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
+					resolvedValue = await playwright.mockPage.evaluate.firstCall.args[0]({
+						targetSelector: 'mock-selector',
+						desiredEvent: 'mock-event-type'
+					});
 				});
 
 				afterEach(() => {
@@ -1443,7 +1510,10 @@ describe('lib/action', () => {
 					beforeEach(async () => {
 						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
+							await playwright.mockPage.evaluate.firstCall.args[0]({
+								targetSelector: 'mock-selector',
+								desiredEvent: 'mock-event-type'
+							});
 						} catch (error) {
 							rejectedError = error;
 						}
@@ -1458,9 +1528,9 @@ describe('lib/action', () => {
 			});
 
 			it('waits for a function to evaluate to `true`', () => {
-				assert.calledOnce(puppeteer.mockPage.waitForFunction);
-				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
-				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {
+				assert.calledOnce(playwright.mockPage.waitForFunction);
+				assert.isFunction(playwright.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(playwright.mockPage.waitForFunction.firstCall.args[2], {
 					polling: 200
 				});
 			});
@@ -1472,7 +1542,7 @@ describe('lib/action', () => {
 				beforeEach(() => {
 					originalWindow = global.window;
 					global.window = {};
-					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
+					returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]();
 				});
 
 				afterEach(() => {
@@ -1489,7 +1559,7 @@ describe('lib/action', () => {
 						/* eslint-disable no-underscore-dangle */
 						global.window._pa11yWaitForElementEventFired = true;
 						/* eslint-enable no-underscore-dangle */
-						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
+						returnValue = playwright.mockPage.waitForFunction.firstCall.args[0]();
 					});
 
 					it('returns `true`', () => {
@@ -1516,9 +1586,9 @@ describe('lib/action', () => {
 
 				beforeEach(async () => {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.rejects(evaluateError);
+					playwright.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(playwright.mockBrowser, playwright.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}

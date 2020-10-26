@@ -15,7 +15,7 @@ describe('lib/pa11y', () => {
 	let pa11yRunnerPath;
 	let pkg;
 	let promiseTimeout;
-	let puppeteer;
+	let playwright;
 	let runAction;
 	let semver;
 
@@ -63,10 +63,10 @@ describe('lib/pa11y', () => {
 		promiseTimeout = sinon.spy(require('p-timeout'));
 		mockery.registerMock('p-timeout', promiseTimeout);
 
-		puppeteer = require('../mock/puppeteer.mock');
-		mockery.registerMock('puppeteer', puppeteer);
+		playwright = require('../mock/playwright.mock');
+		mockery.registerMock('playwright', {chromium: playwright});
 
-		puppeteer.mockPage.evaluate.resolves(pa11yResults);
+		playwright.mockPage.evaluate.resolves(pa11yResults);
 
 		semver = require('../mock/semver.mock');
 		mockery.registerMock('semver', semver);
@@ -107,38 +107,31 @@ describe('lib/pa11y', () => {
 			assert.strictEqual(promiseTimeout.firstCall.args[2], `Pa11y timed out (${pa11y.defaults.timeout}ms)`);
 		});
 
-		it('launches puppeteer with `options.chromeLaunchConfig`', () => {
-			assert.calledOnce(puppeteer.launch);
-			assert.calledWithExactly(puppeteer.launch, pa11y.defaults.chromeLaunchConfig);
+		it('launches playwright with `options.chromeLaunchConfig`', () => {
+			assert.calledOnce(playwright.launch);
+			assert.calledWithExactly(playwright.launch, pa11y.defaults.chromeLaunchConfig);
 		});
 
 		it('creates a new page', () => {
-			assert.calledOnce(puppeteer.mockBrowser.newPage);
-			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
-		});
-
-		it('set the user agent', () => {
-			assert.calledOnce(puppeteer.mockPage.setUserAgent);
-			assert.calledWithExactly(puppeteer.mockPage.setUserAgent, pa11y.defaults.userAgent);
-		});
-
-		it('adds a console handler to the page', () => {
-			assert.called(puppeteer.mockPage.on);
-			assert.calledWith(puppeteer.mockPage.on, 'console');
-			assert.isFunction(puppeteer.mockPage.on.withArgs('console').firstCall.args[1]);
-		});
-
-		it('navigates to `url`', () => {
-			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle2',
-				timeout: pa11y.defaults.timeout
+			assert.calledOnce(playwright.mockBrowser.newPage);
+			assert.calledWithExactly(playwright.mockBrowser.newPage, {
+				viewport: pa11y.defaults.viewport,
+				userAgent: pa11y.defaults.userAgent
 			});
 		});
 
-		it('sets the viewport', () => {
-			assert.calledOnce(puppeteer.mockPage.setViewport);
-			assert.calledWith(puppeteer.mockPage.setViewport, pa11y.defaults.viewport);
+		it('adds a console handler to the page', () => {
+			assert.called(playwright.mockPage.on);
+			assert.calledWith(playwright.mockPage.on, 'console');
+			assert.isFunction(playwright.mockPage.on.withArgs('console').firstCall.args[1]);
+		});
+
+		it('navigates to `url`', () => {
+			assert.calledOnce(playwright.mockPage.goto);
+			assert.calledWith(playwright.mockPage.goto, 'https://mock-url/', {
+				waitUntil: 'networkidle',
+				timeout: pa11y.defaults.timeout
+			});
 		});
 
 		it('loads the HTML CodeSniffer JavaScript', () => {
@@ -157,20 +150,20 @@ describe('lib/pa11y', () => {
 		});
 
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', () => {
-			assert.called(puppeteer.mockPage.evaluate);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = \(\) => 'mock-htmlcs-runner'\s*;\s*$/);
+			assert.called(playwright.mockPage.evaluate);
+			assert.match(playwright.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
+			assert.match(playwright.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = \(\) => 'mock-htmlcs-runner'\s*;\s*$/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', () => {
-			assert.called(puppeteer.mockPage.evaluate);
-			assert.calledWith(puppeteer.mockPage.evaluate, 'mock-pa11y-runner-js');
+			assert.called(playwright.mockPage.evaluate);
+			assert.calledWith(playwright.mockPage.evaluate, 'mock-pa11y-runner-js');
 		});
 
 		it('evaluates some JavaScript in the context of the page', () => {
-			assert.called(puppeteer.mockPage.evaluate);
-			assert.isFunction(puppeteer.mockPage.evaluate.thirdCall.args[0]);
-			assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1], {
+			assert.called(playwright.mockPage.evaluate);
+			assert.isFunction(playwright.mockPage.evaluate.thirdCall.args[0]);
+			assert.deepEqual(playwright.mockPage.evaluate.thirdCall.args[1], {
 				hideElements: pa11y.defaults.hideElements,
 				ignore: [
 					'notice',
@@ -195,7 +188,7 @@ describe('lib/pa11y', () => {
 				options = {
 					mockOptions: true
 				};
-				returnValue = puppeteer.mockPage.evaluate.thirdCall.args[0](options);
+				returnValue = playwright.mockPage.evaluate.thirdCall.args[0](options);
 			});
 
 			it('calls `__pa11y.run` with the passed in options', () => {
@@ -212,8 +205,8 @@ describe('lib/pa11y', () => {
 		});
 
 		it('closes the browser', () => {
-			assert.calledOnce(puppeteer.mockBrowser.close);
-			assert.calledWithExactly(puppeteer.mockBrowser.close);
+			assert.calledOnce(playwright.mockBrowser.close);
+			assert.calledWithExactly(playwright.mockBrowser.close);
 		});
 
 		it('resolves with the Pa11y results', () => {
@@ -223,13 +216,13 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.resetHistory();
+				playwright.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('mock-url');
 			});
 
 			it('navigates to `url` with an `http` scheme added', () => {
-				assert.calledOnce(puppeteer.mockPage.goto);
-				assert.calledWith(puppeteer.mockPage.goto, 'http://mock-url');
+				assert.calledOnce(playwright.mockPage.goto);
+				assert.calledWith(playwright.mockPage.goto, 'http://mock-url');
 			});
 
 		});
@@ -237,13 +230,13 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme and starts with a slash', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.resetHistory();
+				playwright.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('/mock-path');
 			});
 
 			it('navigates to `url` with an `file` scheme added', () => {
-				assert.calledOnce(puppeteer.mockPage.goto);
-				assert.calledWith(puppeteer.mockPage.goto, 'file:///mock-path');
+				assert.calledOnce(playwright.mockPage.goto);
+				assert.calledWith(playwright.mockPage.goto, 'file:///mock-path');
 			});
 
 		});
@@ -251,14 +244,14 @@ describe('lib/pa11y', () => {
 		describe('when `url` does not have a scheme and starts with a period', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.goto.resetHistory();
+				playwright.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('./mock-path');
 			});
 
 			it('navigates to `url` with an `file` scheme added and a resolved path', () => {
 				const resolvedPath = path.resolve(process.cwd(), './mock-path');
-				assert.calledOnce(puppeteer.mockPage.goto);
-				assert.calledWith(puppeteer.mockPage.goto, `file://${resolvedPath}`);
+				assert.calledOnce(playwright.mockPage.goto);
+				assert.calledWith(playwright.mockPage.goto, `file://${resolvedPath}`);
 			});
 
 		});
@@ -269,8 +262,8 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				headlessChromeError = new Error('headless chrome error');
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.goto.rejects(headlessChromeError);
+				playwright.mockBrowser.close.resetHistory();
+				playwright.mockPage.goto.rejects(headlessChromeError);
 				try {
 					await pa11y('https://mock-url/');
 				} catch (error) {
@@ -279,8 +272,8 @@ describe('lib/pa11y', () => {
 			});
 
 			it('closes the browser', () => {
-				assert.calledOnce(puppeteer.mockBrowser.close);
-				assert.calledWithExactly(puppeteer.mockBrowser.close);
+				assert.calledOnce(playwright.mockBrowser.close);
+				assert.calledWithExactly(playwright.mockBrowser.close);
 			});
 
 			it('rejects with the error', () => {
@@ -316,9 +309,9 @@ describe('lib/pa11y', () => {
 		});
 
 		it('navigates to `options.url`', () => {
-			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle2',
+			assert.calledOnce(playwright.mockPage.goto);
+			assert.calledWith(playwright.mockPage.goto, 'https://mock-url/', {
+				waitUntil: 'networkidle',
 				timeout: options.timeout
 			});
 		});
@@ -330,7 +323,7 @@ describe('lib/pa11y', () => {
 				mockMessage = {
 					text: sinon.stub().returns('mock-message')
 				};
-				puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
+				playwright.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
 			});
 
 			it('logs the console message text with `options.log.debug`', () => {
@@ -377,14 +370,14 @@ describe('lib/pa11y', () => {
 		describe('when `options.includeNotices` is `false`', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeNotices = false;
 				await pa11y(options);
 			});
 
 			it('automatically ignores notices', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
+				assert.deepEqual(playwright.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
 				]);
@@ -395,14 +388,14 @@ describe('lib/pa11y', () => {
 		describe('when `options.includeNotices` is `true`', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeNotices = true;
 				await pa11y(options);
 			});
 
 			it('does not automatically ignore notices', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
+				assert.deepEqual(playwright.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'warning'
 				]);
 			});
@@ -412,14 +405,14 @@ describe('lib/pa11y', () => {
 		describe('when `options.includeWarnings` is `false`', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeWarnings = false;
 				await pa11y(options);
 			});
 
 			it('automatically ignores warnings', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
+				assert.deepEqual(playwright.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
 				]);
@@ -430,14 +423,14 @@ describe('lib/pa11y', () => {
 		describe('when `options.includeWarnings` is `true`', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeWarnings = true;
 				await pa11y(options);
 			});
 
 			it('does not automatically ignore warnings', () => {
-				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
+				assert.deepEqual(playwright.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice'
 				]);
 			});
@@ -447,21 +440,16 @@ describe('lib/pa11y', () => {
 		describe('when `options.postData` is set', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.on.resetHistory();
+				playwright.mockPage.on.resetHistory();
 				options.method = 'POST';
 				options.postData = 'mock-post-data';
 				await pa11y(options);
 			});
 
 			it('enables request interception', () => {
-				assert.calledOnce(puppeteer.mockPage.setRequestInterception);
-				assert.calledWithExactly(puppeteer.mockPage.setRequestInterception, true);
-			});
-
-			it('adds a request handler to the page', () => {
-				assert.called(puppeteer.mockPage.on);
-				assert.calledWith(puppeteer.mockPage.on, 'request');
-				assert.isFunction(puppeteer.mockPage.on.withArgs('request').firstCall.args[1]);
+				assert.calledOnce(playwright.mockPage.route);
+				assert.strictEqual(playwright.mockPage.route.firstCall.args[0], '**/*');
+				assert.isFunction(playwright.mockPage.route.firstCall.args[1]);
 			});
 
 			describe('request handler', () => {
@@ -471,7 +459,7 @@ describe('lib/pa11y', () => {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
-					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
+					playwright.mockPage.route.withArgs('**/*').firstCall.args[1](mockInterceptedRequest);
 				});
 
 				it('calls `interceptedRequest.continue` with the postData option', () => {
@@ -485,7 +473,7 @@ describe('lib/pa11y', () => {
 
 				describe('when triggered again', () => {
 					beforeEach(() => {
-						puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
+						playwright.mockPage.route.withArgs('**/*').firstCall.args[1](mockInterceptedRequest);
 					});
 
 					it('calls `interceptedRequest.continue` with an empty object', () => {
@@ -511,8 +499,8 @@ describe('lib/pa11y', () => {
 			});
 
 			it('generates a screenshot', () => {
-				assert.called(puppeteer.mockPage.screenshot);
-				assert.calledWith(puppeteer.mockPage.screenshot, {
+				assert.called(playwright.mockPage.screenshot);
+				assert.calledWith(playwright.mockPage.screenshot, {
 					path: options.screenCapture,
 					fullPage: true
 				});
@@ -522,7 +510,7 @@ describe('lib/pa11y', () => {
 				let rejectedError;
 
 				beforeEach(async () => {
-					puppeteer.mockPage.screenshot.rejects(new Error('screenshot failed'));
+					playwright.mockPage.screenshot.rejects(new Error('screenshot failed'));
 					try {
 						await pa11y(options);
 					} catch (error) {
@@ -541,7 +529,7 @@ describe('lib/pa11y', () => {
 		describe('when `options.headers` has properties', () => {
 
 			beforeEach(async () => {
-				puppeteer.mockPage.on.resetHistory();
+				playwright.mockPage.on.resetHistory();
 				options.headers = {
 					foo: 'bar',
 					bar: 'baz',
@@ -557,7 +545,7 @@ describe('lib/pa11y', () => {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
-					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
+					playwright.mockPage.route.withArgs('**/*').firstCall.args[1](mockInterceptedRequest);
 				});
 
 				it('calls `interceptedRequest.continue` with the headers option all lower-cased', () => {
@@ -576,19 +564,6 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.userAgent` is `false`', () => {
-
-			beforeEach(async () => {
-				puppeteer.mockPage.setUserAgent.resetHistory();
-				options.userAgent = false;
-				await pa11y(options);
-			});
-
-			it('automatically ignores warnings', () => {
-				assert.notCalled(puppeteer.mockPage.setUserAgent);
-			});
-
-		});
 
 		describe('when `options.actions` is set', () => {
 
@@ -603,8 +578,8 @@ describe('lib/pa11y', () => {
 
 			it('calls runAction with each action', () => {
 				assert.calledTwice(runAction);
-				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-1');
-				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-2');
+				assert.calledWith(runAction, playwright.mockBrowser, playwright.mockPage, extend.firstCall.returnValue, 'mock-action-1');
+				assert.calledWith(runAction, playwright.mockBrowser, playwright.mockPage, extend.firstCall.returnValue, 'mock-action-2');
 			});
 
 			describe('when an action rejects', () => {
@@ -633,24 +608,27 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				extend.resetHistory();
-				puppeteer.launch.resetHistory();
-				puppeteer.mockBrowser.newPage.resetHistory();
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.close.resetHistory();
+				playwright.launch.resetHistory();
+				playwright.mockBrowser.newPage.resetHistory();
+				playwright.mockBrowser.close.resetHistory();
+				playwright.mockPage.close.resetHistory();
 				options.browser = {
 					close: sinon.stub(),
-					newPage: sinon.stub().resolves(puppeteer.mockPage)
+					newPage: sinon.stub().resolves(playwright.mockPage)
 				};
 				await pa11y(options);
 			});
 
-			it('does not launch puppeteer', () => {
-				assert.notCalled(puppeteer.launch);
+			it('does not launch playwright', () => {
+				assert.notCalled(playwright.launch);
 			});
 
 			it('creates a new page using the passed in browser', () => {
 				assert.calledOnce(options.browser.newPage);
-				assert.calledWithExactly(options.browser.newPage);
+				assert.calledWithExactly(options.browser.newPage, {
+					viewport: pa11y.defaults.viewport,
+					userAgent: pa11y.defaults.userAgent
+				});
 			});
 
 			it('does not close the browser', () => {
@@ -658,7 +636,7 @@ describe('lib/pa11y', () => {
 			});
 
 			it('closes the page', () => {
-				assert.calledOnce(puppeteer.mockPage.close);
+				assert.calledOnce(playwright.mockPage.close);
 			});
 
 			describe('and an error occurs', () => {
@@ -666,7 +644,7 @@ describe('lib/pa11y', () => {
 
 				beforeEach(async () => {
 					headlessChromeError = new Error('headless chrome error');
-					puppeteer.mockPage.goto.rejects(headlessChromeError);
+					playwright.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
 					} catch (error) {
@@ -685,18 +663,18 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				extend.resetHistory();
-				puppeteer.launch.resetHistory();
-				puppeteer.mockBrowser.newPage.resetHistory();
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.close.resetHistory();
-				options.browser = puppeteer.mockBrowser;
-				options.page = puppeteer.mockPage;
+				playwright.launch.resetHistory();
+				playwright.mockBrowser.newPage.resetHistory();
+				playwright.mockBrowser.close.resetHistory();
+				playwright.mockPage.close.resetHistory();
+				options.browser = playwright.mockBrowser;
+				options.page = playwright.mockPage;
 
 				await pa11y(options);
 			});
 
-			it('does not launch puppeteer', () => {
-				assert.notCalled(puppeteer.launch);
+			it('does not launch playwright', () => {
+				assert.notCalled(playwright.launch);
 			});
 
 			it('does not open the page', () => {
@@ -716,7 +694,7 @@ describe('lib/pa11y', () => {
 
 				beforeEach(async () => {
 					headlessChromeError = new Error('headless chrome error');
-					puppeteer.mockPage.goto.rejects(headlessChromeError);
+					playwright.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
 					} catch (error) {
@@ -739,13 +717,13 @@ describe('lib/pa11y', () => {
 
 			beforeEach(async () => {
 				extend.resetHistory();
-				puppeteer.launch.resetHistory();
-				puppeteer.mockBrowser.newPage.resetHistory();
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.close.resetHistory();
-				puppeteer.mockPage.goto.resetHistory();
-				options.browser = puppeteer.mockBrowser;
-				options.page = puppeteer.mockPage;
+				playwright.launch.resetHistory();
+				playwright.mockBrowser.newPage.resetHistory();
+				playwright.mockBrowser.close.resetHistory();
+				playwright.mockPage.close.resetHistory();
+				playwright.mockPage.goto.resetHistory();
+				options.browser = playwright.mockBrowser;
+				options.page = playwright.mockPage;
 				options.ignoreUrl = true;
 
 				await pa11y(options);
@@ -760,7 +738,7 @@ describe('lib/pa11y', () => {
 			let rejectedError;
 
 			beforeEach(async () => {
-				options.page = puppeteer.mockPage;
+				options.page = playwright.mockPage;
 				try {
 					await pa11y(options);
 				} catch (error) {
@@ -800,7 +778,7 @@ describe('lib/pa11y', () => {
 			let mockRunnerPa11yNodeModule;
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				fs.readFile.resetHistory();
 
 				mockRunnerPa11yNodeModule = {
@@ -832,9 +810,9 @@ describe('lib/pa11y', () => {
 			});
 
 			it('evaluates all vendor script and runner JavaScript', () => {
-				assert.called(puppeteer.mockPage.evaluate);
-				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
-				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
+				assert.called(playwright.mockPage.evaluate);
+				assert.match(playwright.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
+				assert.match(playwright.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
 			});
 		});
 
@@ -843,7 +821,7 @@ describe('lib/pa11y', () => {
 			let rejectedError;
 
 			beforeEach(async () => {
-				puppeteer.mockPage.evaluate.resetHistory();
+				playwright.mockPage.evaluate.resetHistory();
 				fs.readFile.resetHistory();
 
 				mockRunnerNodeModule = {
@@ -900,9 +878,9 @@ describe('lib/pa11y', () => {
 		});
 
 		it('navigates to `url`', () => {
-			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle2',
+			assert.calledOnce(playwright.mockPage.goto);
+			assert.calledWith(playwright.mockPage.goto, 'https://mock-url/', {
+				waitUntil: 'networkidle',
 				timeout: pa11y.defaults.timeout
 			});
 		});
@@ -930,8 +908,8 @@ describe('lib/pa11y', () => {
 
 			beforeEach(done => {
 				headlessChromeError = new Error('headless chrome error');
-				puppeteer.mockBrowser.close.resetHistory();
-				puppeteer.mockPage.goto.rejects(headlessChromeError);
+				playwright.mockBrowser.close.resetHistory();
+				playwright.mockPage.goto.rejects(headlessChromeError);
 				pa11y('https://mock-url/', (error, results) => {
 					callbackError = error;
 					callbackResults = results;
@@ -940,8 +918,8 @@ describe('lib/pa11y', () => {
 			});
 
 			it('closes the browser', () => {
-				assert.calledOnce(puppeteer.mockBrowser.close);
-				assert.calledWithExactly(puppeteer.mockBrowser.close);
+				assert.calledOnce(playwright.mockBrowser.close);
+				assert.calledWithExactly(playwright.mockBrowser.close);
 			});
 
 			it('calls back with the error', () => {

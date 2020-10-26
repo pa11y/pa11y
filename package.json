@@ -41,7 +41,7 @@
     "pa11y-reporter-json": "^2.0.0",
     "pa11y-runner-axe": "^2.0.0",
     "pa11y-runner-htmlcs": "^2.0.0",
-    "puppeteer": "^2.1.1",
+    "playwright": "^1.5.1",
     "semver": "^5.7.1"
   },
   "devDependencies": {

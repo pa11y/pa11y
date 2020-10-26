@@ -2,16 +2,16 @@
 
 const sinon = require('sinon');
 
-const puppeteer = module.exports = {
+const playwright = module.exports = {
 	launch: sinon.stub()
 };
 
-const mockBrowser = puppeteer.mockBrowser = {
+const mockBrowser = playwright.mockBrowser = {
 	close: sinon.stub(),
 	newPage: sinon.stub()
 };
 
-const mockPage = (puppeteer.mockPage = {
+const mockPage = (playwright.mockPage = {
 	addScriptTag: sinon.stub().resolves(),
 	close: sinon.stub().resolves(),
 	click: sinon.stub().resolves(),
@@ -20,14 +20,14 @@ const mockPage = (puppeteer.mockPage = {
 	goto: sinon.stub().resolves(),
 	on: sinon.stub(),
 	removeListener: sinon.stub(),
+	route: sinon.stub().resolves(),
 	screenshot: sinon.stub().resolves(),
+	setDefaultTimeout: sinon.stub(),
 	setExtraHTTPHeaders: sinon.stub().resolves(),
 	setRequestInterception: sinon.stub().resolves(),
-	setUserAgent: sinon.stub().resolves(),
-	setViewport: sinon.stub().resolves(),
 	type: sinon.stub().resolves(),
 	waitForFunction: sinon.stub().resolves()
 });
 
-puppeteer.launch.resolves(mockBrowser);
+playwright.launch.resolves(mockBrowser);
 mockBrowser.newPage.resolves(mockPage);
