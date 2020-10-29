@@ -1021,6 +1021,10 @@ describe('lib/pa11y', () => {
 			assert.deepEqual(pa11y.defaults.method, 'GET');
 		});
 
+		it('has a `page` property', () => {
+			assert.isNull(pa11y.defaults.page);
+		});
+
 		it('has a `postData` property', () => {
 			assert.isNull(pa11y.defaults.postData);
 		});
