@@ -73,16 +73,8 @@ describe('lib/pa11y', () => {
 			}
 		});
 
-		// Current behavior
-		it('ignoring url in defaults does throw error', () => {
-			assert.isInstanceOf(pa11yError, Error);
-			assert.strictEqual(pa11yError.message, 'Cannot read property \'url\' of undefined');
-		});
-
-		// Expected behavior
 		it('ignoring url in defaults does not throw error', () => {
 			assert.isNotInstanceOf(pa11yError, Error);
-			assert.notStrictEqual(pa11yError.message, 'Cannot read property \'url\' of undefined');
 			assert.notCalled(page.goto);
 		});
 	});
