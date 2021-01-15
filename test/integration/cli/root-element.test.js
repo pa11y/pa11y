@@ -47,7 +47,7 @@ describe('CLI root-element', () => {
 			const responses = groupResponses(pa11yResponse.json);
 			assert.lengthEquals(responses.error, 1);
 			assert.lengthEquals(responses.warning, 1);
-			assert.lengthEquals(responses.notice, 15);
+			assert.lengthEquals(responses.notice, 26);
 		});
 
 	});

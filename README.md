@@ -9,12 +9,6 @@ Pa11y is your automated accessibility testing pal. It runs accessibility tests o
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0 licensed][shield-license]][info-license]
 
----
-
-:sparkles: ☑️ 👩‍🎨 **Hi! We’re working on improving the design and usability of the Pa11y website. You can help us enormously by [filling in our survey](https://forms.gle/ZJzFwbC7DCVT2CNh7). Thanks!**
-
----
-
 On the command line:
 
 ```sh
@@ -57,13 +51,18 @@ Pa11y requires [Node.js][node] 8+ to run. If you need support for older versions
 
 ### OS X
 
-On a Mac, you can install the required dependency with [Homebrew][brew]:
+To install [Node.js][node] you can use [nvm][nvm]:
+```sh
+$ nvm install node
+```
+
+Alternatively on a Mac, you can install the required dependency with [Homebrew][brew]:
 
 ```sh
 $ brew install node
 ```
 
-Alternatively download pre-built packages from the [Node.js][node] website.
+You can also download pre-built packages from the [Node.js][node] website.
 
 ### Linux
 
@@ -1017,6 +1016,7 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [htmlcs-wcag2aaa-ruleset]: https://github.com/pa11y/pa11y/wiki/HTML-CodeSniffer-Rules
 [node]: http://nodejs.org/
 [npm]: https://www.npmjs.com/
+[nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [puppeteer-browser]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser
 [puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions

@@ -3,6 +3,7 @@
 
 const buildReporter = require('../lib/reporter');
 const extend = require('node.extend');
+const envinfo = require('envinfo');
 const path = require('path');
 const pkg = require('../package.json');
 const program = require('commander');
@@ -10,7 +11,11 @@ const pa11y = require('../lib/pa11y');
 const semver = require('semver');
 
 configureProgram();
-runProgram();
+if (program.environment) {
+	outputEnvironmentInfo();
+} else {
+	runProgram();
+}
 
 /**
  * Parse the flags and arguments passed to the CLI
@@ -25,7 +30,8 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner'
+			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), ' +
+			'WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(
 			'-r, --reporter <reporter>',
@@ -91,7 +97,8 @@ function configureProgram() {
 		)
 		.option(
 			'-A, --add-rule <rule>',
-			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner',
+			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons ' +
+			'– only used by htmlcs runner',
 			collectOptions,
 			[]
 		)
@@ -100,22 +107,26 @@ function configureProgram() {
 }
 
 /**
+ * Handle help
+ * @returns {void}
+ */
+function handleHelp() {
+	if (!program.url || program.args[1]) {
+		program.help();
+	}
+}
+
+/**
  * Test the page and generate the results
  * @returns {void}
  */
 async function runProgram() {
-	if (program.environment) {
-		outputEnvironmentInfo();
-		process.exit(0);
-	}
-	if (!program.url || program.args[1]) {
-		program.help();
-	}
+	handleHelp();
 	const options = processOptions();
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
 	if (!program.debug) {
-		options.log.debug = () => {};
+		options.log.debug = () => { /* NoOp */ };
 	}
 	await report.begin(program.url);
 	try {
@@ -190,7 +201,10 @@ function loadReporter(name) {
 			path.join(process.cwd(), name)
 		], null);
 	} catch (error) {
-		console.error(`An error occurred when loading the "${name}" reporter. This is not an error`);
+		console.error(
+			`An error occurred when loading the "${name}" reporter. ` +
+			'This is not an error'
+		);
 		console.error('with Pa11y itself, please contact the creator of this reporter\n');
 		console.error(error.stack);
 		process.exit(1);
@@ -213,7 +227,10 @@ function loadReporter(name) {
  */
 function checkReporterCompatibility(reporterName, reporterSupportString, pa11yVersion) {
 	if (!reporterSupportString || !semver.satisfies(pa11yVersion, reporterSupportString)) {
-		console.error(`Error: The installed "${reporterName}" reporter does not support Pa11y ${pa11yVersion}`);
+		console.error(
+			`Error: The installed "${reporterName}" reporter does not support ` +
+			`Pa11y ${pa11yVersion}`
+		);
 		console.error('Please update your version of Pa11y or the reporter');
 		console.error(`Reporter Support: ${reporterSupportString}`);
 		console.error(`Pa11y Version:    ${pa11yVersion}`);
@@ -282,22 +299,16 @@ function collectOptions(val, array) {
 
 /**
  * Output environment info for debugging purposes
- * @param {Object} pkg - The package.json object
- * @returns {void}
+ * @returns {Promise} - resolves a string with environment information from envinfo
  */
-function outputEnvironmentInfo() {
-	const versions = {
-		pa11y: pkg.version,
-		node: process.version.replace('v', ''),
-		npm: '[unavailable]',
-		os: require('os').release()
-	};
-	try {
-		versions.npm = require('child_process').execSync('npm -v').toString().trim();
-	} catch (error) {}
+async function outputEnvironmentInfo() {
+	const envData = await envinfo.run({
+		System: ['OS', 'CPU', 'Memory', 'Shell'],
+		Binaries: ['Node', 'Yarn', 'npm'],
+		npmPackages: ['pa11y']
+	});
 
-	console.log(`Pa11y:      ${versions.pa11y}`);
-	console.log(`Node.js:    ${versions.node}`);
-	console.log(`npm:        ${versions.npm}`);
-	console.log(`OS:         ${versions.os} (${process.platform})`);
+	console.log(envData);
+	process.exit(0);
 }
+

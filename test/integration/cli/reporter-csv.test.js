@@ -20,7 +20,7 @@ describe('CLI reporter CSV', () => {
 
 		it('outputs issues in CSV format', () => {
 			const lines = pa11yResponse.stdout.trim().split('\n');
-			assert.lengthEquals(lines, 18);
+			assert.lengthEquals(lines, 29);
 			assert.strictEqual(lines[0], '"type","code","message","context","selector"');
 			lines.slice(1).forEach(line => {
 				assert.match(line, /^"(error|warning|notice)","[^"]+","[^"]+",(".*"|null),"[^"]*"$/i);

@@ -25,13 +25,13 @@ async function runExample() {
 
 		// Test http://example.com/ with our shared browser
 		const result1 = await pa11y('http://example.com/', {
-			browser: browser,
+			browser,
 			page: pages[0]
 		});
 
 		// Test http://example.com/otherpage/ with our shared browser
 		const result2 = await pa11y('http://example.com/otherpage/', {
-			browser: browser,
+			browser,
 			page: pages[1]
 		});
 
