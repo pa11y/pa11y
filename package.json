@@ -63,6 +63,7 @@
   },
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "npm-shrinkwrap.json"
   ]
 }
