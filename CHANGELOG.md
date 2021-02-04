@@ -1,5 +1,7 @@
 # Changelog
 
+* Migrate away from `make` commands in testing
+
 ## 6.0.0-alpha (2020-04-28)
 
 * Update HTML_CodeSniffer to 2.5.1, which includes support for WCAG 2.1

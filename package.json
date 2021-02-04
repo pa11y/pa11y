@@ -45,7 +45,6 @@
     "semver": "^5.7.1"
   },
   "devDependencies": {
-    "@rowanmanning/make": "^2.1.0",
     "eslint": "^6.8.0",
     "mocha": "^7.1.1",
     "mockery": "^2.1.0",
@@ -59,7 +58,12 @@
     "pa11y": "./bin/pa11y.js"
   },
   "scripts": {
-    "test": "make ci"
+    "lint": "eslint .",
+    "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
+    "test-unit": "mocha test/unit/**/*.test.js --recursive",
+    "test-coverage": "nyc --reporter=text --reporter=html mocha test/unit/**/*.test.js --recursive",
+    "test-integration": "mocha test/integration/**/*.test.js --recursive --timeout 10000 --slow 5000",
+    "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
   },
   "files": [
     "bin",
