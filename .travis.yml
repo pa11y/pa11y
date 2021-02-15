@@ -14,5 +14,5 @@ matrix:
 
 # Build script
 script:
-  - 'if [ $LINT ]; then make verify; fi'
-  - 'if [ ! $LINT ]; then make test; fi'
+  - 'if [ $LINT ]; then npm run lint; fi'
+  - 'if [ ! $LINT ]; then npm test; fi'
