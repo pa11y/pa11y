@@ -31,10 +31,20 @@ jobs:
         run: npm ci
         shell: bash
       - name: Try to run with Linter
-        run: 'if [ $LINT ]; then npm run lint; fi'
+        run:  |
+              if [ $LINT ]; then
+              echo 'LINT is set. Running linting.'
+              npm run lint
+              fi
         shell: bash
         env:
           LINT: ${{ matrix.lint }}
       - name: Try to run without Linter
-        run: 'if [ ! $LINT ]; then npm test; fi'
+        run:  |
+              if [ ! $LINT ]; then
+              echo 'LINT is not set. Running tests.'
+              npm test
+              fi
         shell: bash
+        env:
+          LINT: ${{ matrix.lint }}
