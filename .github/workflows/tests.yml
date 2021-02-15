@@ -10,7 +10,7 @@ on:
     branches: [ master ] # Run actions when a PR is pushed based on these branches
 
 jobs:
-  build:
+  checkout_and_test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -34,6 +34,8 @@ jobs:
       - name: Try to run with Linter
         run: 'if [ $LINT ]; then npm run lint; fi'
         shell: bash
+        env:
+          LINT: ${{env.lint}}
       - name: Try to run without Linter
         run: 'if [ ! $LINT ]; then npm test; fi'
         shell: bash
