@@ -16,8 +16,7 @@ jobs:
       matrix:
        include:
          - node-version: 10.x
-           env:
-            LINT: true
+           lint: true
          - node-version: 12.x
          - node-version: 14.x
 
@@ -35,7 +34,7 @@ jobs:
         run: 'if [ $LINT ]; then npm run lint; fi'
         shell: bash
         env:
-          LINT: $env.lint
+          LINT: ${{ matrix.lint }}
       - name: Try to run without Linter
         run: 'if [ ! $LINT ]; then npm test; fi'
         shell: bash
