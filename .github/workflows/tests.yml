@@ -35,7 +35,7 @@ jobs:
         run: 'if [ $LINT ]; then npm run lint; fi'
         shell: bash
         env:
-          LINT: ${{env.lint}}
+          LINT: $env.lint
       - name: Try to run without Linter
         run: 'if [ ! $LINT ]; then npm test; fi'
         shell: bash
