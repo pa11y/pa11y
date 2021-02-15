@@ -22,6 +22,12 @@ jobs:
          - node-version: 14.x
 
     steps:
+      - name: Checkout code from ${{ github.repository }}
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Try to run with Linter
         run: 'if [ $LINT ]; then make verify; fi'
         shell: bash
