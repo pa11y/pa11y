@@ -32,8 +32,8 @@ jobs:
         run: npm ci
         shell: bash
       - name: Try to run with Linter
-        run: 'if [ $LINT ]; then make verify; fi'
+        run: 'if [ $LINT ]; then npm run lint; fi'
         shell: bash
       - name: Try to run without Linter
-        run: 'if [ ! $LINT ]; then make test; fi'
+        run: 'if [ ! $LINT ]; then npm test; fi'
         shell: bash
