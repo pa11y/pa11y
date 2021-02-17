@@ -7,7 +7,6 @@ on:
   push:
     branches: # Run actions when code is committed to these branches
       - master
-      - github-actions
   pull_request:
     branches: # Run actions when a PR is pushed based on one of these branches
       - master
