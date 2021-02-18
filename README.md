@@ -970,17 +970,18 @@ If you're ready to contribute some code, clone this repo locally and commit your
 Please write unit tests for your code, and check that everything works by running the following before opening a <abbr title="pull request">PR</abbr>:
 
 ```sh
-make ci
+npm run lint
+npm test
 ```
 
 You can also run verifications and tests individually:
 
 ```sh
-make verify              # Verify all of the code (ESLint)
-make test                # Run all tests
-make test-unit           # Run the unit tests
-make test-unit-coverage  # Run the unit tests with coverage
-make test-integration    # Run the integration tests
+npm run lint                # Verify all of the code (ESLint)
+npm test                    # Run all tests
+npm run test-unit           # Run the unit tests
+npm run coverage            # Run the unit tests with coverage
+npm run test-integration    # Run the integration tests
 ```
 
 To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
