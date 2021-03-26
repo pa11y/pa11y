@@ -6,8 +6,8 @@ include node_modules/@rowanmanning/make/javascript/index.mk
 # [edit below this line]
 # ------------------------------------------------------------------------
 
-INTEGRATION_TIMEOUT = 10000
-INTEGRATION_SLOW = 5000
+INTEGRATION_TIMEOUT = 120000
+INTEGRATION_SLOW = 500
 
 
 # Build tasks
