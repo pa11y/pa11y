@@ -48,7 +48,6 @@
     "eslint": "^6.0.1",
     "mocha": "^6.1.4",
     "mockery": "^2.0.0",
-    "nyc": "~13.2.0",
     "pa11y-lint-config": "^1.2.1",
     "proclaim": "^3.5.1",
     "sinon": "^7.0.0"

@@ -19,7 +19,12 @@ describe('lib/pa11y', () => {
 	let runAction;
 	let semver;
 
-	beforeEach(() => {
+	beforeEach(function() {
+		// This setup function takes longer than the default 2000ms
+		//  when run from Github Actions, so it's necessary to increase
+		//  the timeout value.
+		// eslint-disable-next-line no-invalid-this
+		this.timeout(20000);
 
 		pa11yResults = {
 			mockResults: true
