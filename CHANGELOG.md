@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 5.3.1 (2021-04-01)
+
+  * Removed survey link from README.md file.
+
 ## 5.3.0 (2019-09-30)
 
   * Adds support for [aXe](https://www.deque.com/axe/) test runner (thanks @rowanmanning)
