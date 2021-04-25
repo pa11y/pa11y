@@ -27,7 +27,7 @@ describe('pa11y-ci (with a sitemap that can\'t be loaded)', () => {
 	before(() => {
 		return global.cliCall([
 			'--sitemap',
-			'http://notahost:8090/sitemap.xml',
+			'./foo/sitemap.xml',
 			'--config',
 			'empty'
 		]);
@@ -38,7 +38,7 @@ describe('pa11y-ci (with a sitemap that can\'t be loaded)', () => {
 	});
 
 	it('outputs an error message', () => {
-		assert.include(global.lastResult.output, 'http://notahost:8090/sitemap.xml');
+		assert.include(global.lastResult.output, './foo/sitemap.xml');
 		assert.include(global.lastResult.output, 'could not be loaded');
 	});
 

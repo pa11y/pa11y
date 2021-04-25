@@ -1,5 +1,5 @@
 {
 	"urls": [
-		"http://notahost:8090/erroring-1"
+		"./foo/erroring.html"
 	]
 }

@@ -17,12 +17,12 @@ describe('pa11y-ci (with a single erroring URL)', () => {
 	});
 
 	it('outputs a result notice for each URL', () => {
-		assert.include(global.lastResult.output, 'http://notahost:8090/erroring-1 - Failed to run');
+		assert.include(global.lastResult.output, './foo/erroring.html - Failed to run');
 	});
 
 	it('outputs error information', () => {
-		assert.include(global.lastResult.output, 'Errors in http://notahost:8090/erroring-1');
-		assert.include(global.lastResult.output, 'net::ERR_NAME_NOT_RESOLVED');
+		assert.include(global.lastResult.output, 'Errors in ./foo/erroring.html');
+		assert.include(global.lastResult.output, 'net::ERR_FILE_NOT_FOUND');
 	});
 
 	it('outputs a total erroring notice', () => {
@@ -45,13 +45,13 @@ describe('pa11y-ci (with multiple erroring URLs)', () => {
 	});
 
 	it('outputs a result notice for each URL', () => {
-		assert.include(global.lastResult.output, 'http://notahost:8090/erroring-1 - Failed to run');
+		assert.include(global.lastResult.output, './foo/erroring.html - Failed to run');
 		assert.include(global.lastResult.output, 'http://localhost:8090/timeout - Failed to run');
 	});
 
 	it('outputs error information', () => {
-		assert.include(global.lastResult.output, 'Errors in http://notahost:8090/erroring-1');
-		assert.include(global.lastResult.output, 'net::ERR_NAME_NOT_RESOLVED');
+		assert.include(global.lastResult.output, 'Errors in ./foo/erroring.html');
+		assert.include(global.lastResult.output, 'net::ERR_FILE_NOT_FOUND');
 		assert.include(global.lastResult.output, 'Errors in http://localhost:8090/timeout');
 		assert.include(global.lastResult.output, 'timed out');
 	});
