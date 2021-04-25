@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.1 (2021-04-25)
+
+* Upgrades pa11y to the latest 5.3.1 version
+* Fix a bug related to having to download puppeteer twice since pa11y 5.3.1 was release (#131).
+
 ## 2.4.0 (2020-08-18)
 
 * Adds support for parsing sitemapindex (Thanks @42tte)
