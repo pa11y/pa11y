@@ -9,7 +9,7 @@ sinon.assert.expose(assert, {
 	prefix: ''
 });
 
-beforeEach(() => {
+beforeEach(function() {
 	mockery.enable({
 		useCleanCache: true,
 		warnOnUnregistered: false,
@@ -17,7 +17,7 @@ beforeEach(() => {
 	});
 });
 
-afterEach(() => {
+afterEach(function() {
 	mockery.deregisterAll();
 	mockery.disable();
 });
