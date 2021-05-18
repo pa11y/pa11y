@@ -10,13 +10,13 @@ const rmdir = promisify(fs.rmdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-describe('CLI screen-capture', () => {
+describe('CLI screen-capture', function() {
 	let screenCaptureDirectory;
 	let screenCapturePath;
 
-	describe('when the `--screen-capture` flag is set', () => {
+	describe('when the `--screen-capture` flag is set', function() {
 
-		before(async () => {
+		before(async function() {
 			screenCaptureDirectory = path.join(__dirname, '/../tmp');
 			screenCapturePath = path.join(screenCaptureDirectory, '/test.png');
 			try {
@@ -29,12 +29,12 @@ describe('CLI screen-capture', () => {
 			});
 		});
 
-		after(async () => {
+		after(async function() {
 			await unlink(screenCapturePath);
 			await rmdir(screenCaptureDirectory);
 		});
 
-		it('saves a screen capture to the expected file', async () => {
+		it('saves a screen capture to the expected file', async function() {
 			const stats = await stat(screenCapturePath);
 			assert.isTrue(stats.isFile());
 		});

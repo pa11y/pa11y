@@ -7,12 +7,12 @@ const {groupResponses} = require('../helper/pa11y-responses');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI ignore', () => {
+describe('CLI ignore', function() {
 	let pa11yResponse;
 
-	describe('when the `--ignore` flag is set to "warning"', () => {
+	describe('when the `--ignore` flag is set to "warning"', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -23,7 +23,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores warnings', () => {
+		it('ignores warnings', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const responses = groupResponses(pa11yResponse.json);
@@ -34,9 +34,9 @@ describe('CLI ignore', () => {
 
 	});
 
-	describe('when the `--ignore` flag is set to "warning;notice"', () => {
+	describe('when the `--ignore` flag is set to "warning;notice"', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -47,7 +47,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores warnings and notices', () => {
+		it('ignores warnings and notices', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const responses = groupResponses(pa11yResponse.json);
@@ -58,9 +58,9 @@ describe('CLI ignore', () => {
 
 	});
 
-	describe('when the `--ignore` flag is set multiple times', () => {
+	describe('when the `--ignore` flag is set multiple times', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -72,7 +72,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores all of the flagged items', () => {
+		it('ignores all of the flagged items', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 1);
 			pa11yResponse.json.forEach(issue => {
@@ -83,9 +83,9 @@ describe('CLI ignore', () => {
 
 	});
 
-	describe('when the `--ignore` flag is set to an issue code', () => {
+	describe('when the `--ignore` flag is set to an issue code', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -96,7 +96,7 @@ describe('CLI ignore', () => {
 			});
 		});
 
-		it('ignores issues with the given code', () => {
+		it('ignores issues with the given code', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const responses = groupResponses(pa11yResponse.json);

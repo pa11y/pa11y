@@ -7,12 +7,12 @@ const {groupResponses} = require('../helper/pa11y-responses');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI root-element', () => {
+describe('CLI root-element', function() {
 	let pa11yResponse;
 
-	describe('when the `--root-element` flag is set to an existing element selector', () => {
+	describe('when the `--root-element` flag is set to an existing element selector', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/root-element`, {
 				arguments: [
 					'--root-element', '#example-root-element',
@@ -21,16 +21,16 @@ describe('CLI root-element', () => {
 			});
 		});
 
-		it('ignores issues outside of the root element', () => {
+		it('ignores issues outside of the root element', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when the `--root-element` flag is set to a non-existant element selector', () => {
+	describe('when the `--root-element` flag is set to a non-existant element selector', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/root-element`, {
 				arguments: [
 					'--include-notices',
@@ -41,7 +41,7 @@ describe('CLI root-element', () => {
 			});
 		});
 
-		it('defaults back to outputting all issues', () => {
+		it('defaults back to outputting all issues', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const responses = groupResponses(pa11yResponse.json);
