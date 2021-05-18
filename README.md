@@ -1025,7 +1025,7 @@ Copyright &copy; 2013–2019, Team Pa11y and contributors
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [semver range]: https://github.com/npm/node-semver#ranges
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
-[htmlcs]: http://squizlabs.github.com/HTML_CodeSniffer/
+[htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
 [windows-install]: https://github.com/TooTallNate/node-gyp#installation
 
 [info-license]: LICENSE
