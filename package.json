@@ -34,9 +34,9 @@
   "dependencies": {
     "commander": "^3.0.2",
     "envinfo": "^7.5.0",
+    "kleur": "^4.1.4",
     "node.extend": "^2.0.2",
     "p-timeout": "^2.0.1",
-    "pa11y-reporter-cli": "^2.0.0",
     "pa11y-reporter-csv": "^2.0.0",
     "pa11y-reporter-json": "^2.0.0",
     "pa11y-runner-axe": "^2.0.0",
