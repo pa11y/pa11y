@@ -1,0 +1,6 @@
+CONTRIBUTING.md
+Makefile
+.eslintignore
+.eslintrc.js
+.travis.yml
+test/
