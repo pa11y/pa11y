@@ -2,23 +2,23 @@
 
 const assert = require('proclaim');
 
-describe('lib/reporter', () => {
-	let reporter;
+describe('lib/reporters/csv', () => {
+	let csvReporter;
 
 	beforeEach(() => {
-		reporter = require('../../../lib/reporter');
+		csvReporter = require('../../../lib/reporters/csv');
 	});
 
 	it('is an object', () => {
-		assert.isObject(reporter);
+		assert.isObject(csvReporter);
 	});
 
 	it('has a `supports` property', () => {
-		assert.isString(reporter.supports);
+		assert.isString(csvReporter.supports);
 	});
 
 	it('has a `results` method', () => {
-		assert.isFunction(reporter.results);
+		assert.isFunction(csvReporter.results);
 	});
 
 	describe('.results(pa11yResults)', () => {
@@ -55,7 +55,7 @@ describe('lib/reporter', () => {
 		});
 
 		it('returns a CSV string representing the results', () => {
-			assert.strictEqual(reporter.results(mockPa11yResults), `
+			assert.strictEqual(csvReporter.results(mockPa11yResults), `
 				"type","code","message","context","selector"
 				"mock-type-1","mock-code-1","mock-message-1","mock-context-1","mock-selector-1"
 				"mock-type-2","mock-code-2","mock-message-2","mock-context-2","mock-selector-2"
@@ -66,27 +66,27 @@ describe('lib/reporter', () => {
 	});
 
 	it('has an `error` method', () => {
-		assert.isFunction(reporter.error);
+		assert.isFunction(csvReporter.error);
 	});
 
 	describe('.error(message)', () => {
 
 		it('returns the message unchanged', () => {
-			assert.strictEqual(reporter.error('mock message'), 'mock message');
+			assert.strictEqual(csvReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
 	it('does not have a `begin` method', () => {
-		assert.isUndefined(reporter.begin);
+		assert.isUndefined(csvReporter.begin);
 	});
 
 	it('does not have a `debug` method', () => {
-		assert.isUndefined(reporter.debug);
+		assert.isUndefined(csvReporter.debug);
 	});
 
 	it('does not have an `info` method', () => {
-		assert.isUndefined(reporter.info);
+		assert.isUndefined(csvReporter.info);
 	});
 
 });
