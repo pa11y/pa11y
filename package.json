@@ -32,6 +32,7 @@
     "node": ">=8"
   },
   "dependencies": {
+    "bfj": "^7.0.2",
     "commander": "^3.0.2",
     "envinfo": "^7.5.0",
     "kleur": "^4.1.4",
