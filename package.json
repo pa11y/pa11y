@@ -37,7 +37,6 @@
     "kleur": "^4.1.4",
     "node.extend": "^2.0.2",
     "p-timeout": "^2.0.1",
-    "pa11y-reporter-csv": "^2.0.0",
     "pa11y-runner-axe": "^2.0.0",
     "pa11y-runner-htmlcs": "^2.0.0",
     "puppeteer": "^2.1.1",
