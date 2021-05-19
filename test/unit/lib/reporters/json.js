@@ -4,26 +4,26 @@ const assert = require('proclaim');
 const mockery = require('mockery');
 const sinon = require('sinon');
 
-describe('lib/reporter', () => {
+describe('lib/reporters/json', () => {
 	let bfj;
-	let reporter;
+	let jsonReporter;
 
 	beforeEach(() => {
-		bfj = require('../mock/bfj');
+		bfj = require('../../mock/bfj');
 		mockery.registerMock('bfj', bfj);
-		reporter = require('../../../lib/reporter');
+		jsonReporter = require('../../../../lib/reporters/json');
 	});
 
 	it('is an object', () => {
-		assert.isObject(reporter);
+		assert.isObject(jsonReporter);
 	});
 
 	it('has a `supports` property', () => {
-		assert.isString(reporter.supports);
+		assert.isString(jsonReporter.supports);
 	});
 
 	it('has a `results` method', () => {
-		assert.isFunction(reporter.results);
+		assert.isFunction(jsonReporter.results);
 	});
 
 	describe('.results(pa11yResults)', () => {
@@ -36,7 +36,7 @@ describe('lib/reporter', () => {
 					'bar'
 				]
 			};
-			reporter.results(mockResults);
+			jsonReporter.results(mockResults);
 		});
 
 		it('creates a BFJ stream', () => {
@@ -106,27 +106,27 @@ describe('lib/reporter', () => {
 	});
 
 	it('has an `error` method', () => {
-		assert.isFunction(reporter.error);
+		assert.isFunction(jsonReporter.error);
 	});
 
 	describe('.error(message)', () => {
 
 		it('returns the message unchanged', () => {
-			assert.strictEqual(reporter.error('mock message'), 'mock message');
+			assert.strictEqual(jsonReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
 	it('does not have a `begin` method', () => {
-		assert.isUndefined(reporter.begin);
+		assert.isUndefined(jsonReporter.begin);
 	});
 
 	it('does not have a `debug` method', () => {
-		assert.isUndefined(reporter.debug);
+		assert.isUndefined(jsonReporter.debug);
 	});
 
 	it('does not have an `info` method', () => {
-		assert.isUndefined(reporter.info);
+		assert.isUndefined(jsonReporter.info);
 	});
 
 });
