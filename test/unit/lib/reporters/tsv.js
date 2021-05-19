@@ -2,23 +2,23 @@
 
 const assert = require('proclaim');
 
-describe('lib/reporter', () => {
-	let reporter;
+describe('lib/reporters/tsv', () => {
+	let tsvReporter;
 
 	beforeEach(() => {
-		reporter = require('../../../lib/reporter');
+		tsvReporter = require('../../../../lib/reporters/tsv');
 	});
 
 	it('is an object', () => {
-		assert.isObject(reporter);
+		assert.isObject(tsvReporter);
 	});
 
 	it('has a `supports` property', () => {
-		assert.isString(reporter.supports);
+		assert.isString(tsvReporter.supports);
 	});
 
 	it('has a `results` method', () => {
-		assert.isFunction(reporter.results);
+		assert.isFunction(tsvReporter.results);
 	});
 
 	describe('.results(pa11yResults)', () => {
@@ -55,7 +55,7 @@ describe('lib/reporter', () => {
 		});
 
 		it('returns a TSV string representing the results', () => {
-			assert.strictEqual(reporter.results(mockPa11yResults), `
+			assert.strictEqual(tsvReporter.results(mockPa11yResults), `
 				"type"	"code"	"message"	"context"	"selector"
 				"mock-type-1"	"mock-code-1"	"mock-message-1"	"mock-context-1"	"mock-selector-1"
 				"mock-type-2"	"mock-code-2"	"mock-message-2"	"mock-context-2"	"mock-selector-2"
@@ -66,27 +66,27 @@ describe('lib/reporter', () => {
 	});
 
 	it('has an `error` method', () => {
-		assert.isFunction(reporter.error);
+		assert.isFunction(tsvReporter.error);
 	});
 
 	describe('.error(message)', () => {
 
 		it('returns the message unchanged', () => {
-			assert.strictEqual(reporter.error('mock message'), 'mock message');
+			assert.strictEqual(tsvReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
 	it('does not have a `begin` method', () => {
-		assert.isUndefined(reporter.begin);
+		assert.isUndefined(tsvReporter.begin);
 	});
 
 	it('does not have a `debug` method', () => {
-		assert.isUndefined(reporter.debug);
+		assert.isUndefined(tsvReporter.debug);
 	});
 
 	it('does not have an `info` method', () => {
-		assert.isUndefined(reporter.info);
+		assert.isUndefined(tsvReporter.info);
 	});
 
 });
