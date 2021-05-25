@@ -215,7 +215,6 @@ describe('lib/option', function() {
 
 	describe('verifyOptions(options, allowedStandards)', function() {
 		const allowedStandards = [
-			'Section508',
 			'WCAG2A',
 			'WCAG2AA',
 			'WCAG2AAA'
@@ -236,7 +235,7 @@ describe('lib/option', function() {
 
 			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, 'Standard must be one of Section508, WCAG2A, WCAG2AA, WCAG2AAA');
+				assert.strictEqual(rejectedError.message, 'Standard must be one of WCAG2A, WCAG2AA, WCAG2AAA');
 			});
 		});
 
