@@ -193,13 +193,18 @@ function loadConfig(filePath) {
  * @returns {void}
  */
 function loadReporter(name) {
+
 	let reporterMethods;
 
 	try {
-		reporterMethods = requireFirst([
-			`pa11y-reporter-${name}`,
-			path.join(process.cwd(), name)
-		], null);
+		if (['json', 'cli', 'csv', 'tsv'].includes(name)) {
+			reporterMethods = require(`../lib/reporters/${name}`);
+		} else {
+			reporterMethods = requireFirst([
+				`pa11y-reporter-${name}`,
+				path.join(process.cwd(), name)
+			], null);
+		}
 	} catch (error) {
 		console.error(
 			`An error occurred when loading the "${name}" reporter. ` +

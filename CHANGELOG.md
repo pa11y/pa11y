@@ -1,9 +1,17 @@
 # Changelog
 
+* Migrate away from `make` commands in testing
+
 ## 6.0.0-alpha (2020-04-28)
 
 * Update HTML_CodeSniffer to 2.5.1, which includes support for WCAG 2.1
 * Drop support for Node.js versions older than 10.
+
+## 5.3.1 (2021-04-01)
+
+* Removed survey link from README.md file.
+* Update the HTML_CodeSniffer runner so it doesn't install a version with WCAG 2.1 rules. See [pa11y/pa11y-runner-htmlcs@f22d3d1](https://github.com/pa11y/pa11y-runner-htmlcs/commit/f22d3d1d65bba415ca3415eb526123b301ecdd64) for details.
+* Pin other dependencies in order to avoid problems like the one just mentioned.
 
 ## 5.3.0 (2019-09-30)
 
