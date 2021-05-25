@@ -30,7 +30,7 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), ' +
+			'the accessibility standard to use: WCAG2A, WCAG2AA (default), ' +
 			'WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(

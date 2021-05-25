@@ -93,7 +93,7 @@ Usage: pa11y [options] <url>
 
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
-    -s, --standard <name>          the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner
+    -s, --standard <name>          the accessibility standard to use: WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner
     -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
     -e, --runner <runner>          the test runners to use: htmlcs (default), axe
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
@@ -130,12 +130,6 @@ Run a test with CSV reporting and save to a file:
 
 ```
 pa11y --reporter csv http://example.com > report.csv
-```
-
-Run Pa11y with the Section508 ruleset:
-
-```
-pa11y --standard Section508 http://example.com
 ```
 
 Run Pa11y using [aXe] as a [test runner](#runners):
@@ -612,7 +606,7 @@ Defaults to:
 
 ### `rules` (array)
 
-An array of WCAG 2.0 guidelines that you'd like to include to the current standard. Note: These won't be applied to `Section508` standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
+An array of WCAG 2.0 guidelines that you'd like to include to the current standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
 
 ```js
 pa11y('http://example.com/', {
@@ -636,11 +630,11 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `Section508`, `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
+The accessibility standard to use when testing pages. This should be one of `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
 
 ```js
 pa11y('http://example.com/', {
-    standard: 'Section508'
+    standard: 'WCAG2A'
 });
 ```
 
