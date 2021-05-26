@@ -23,10 +23,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - node-version: 10.x
-            lint: true # Linter is run only once to shorten the total build time
           - node-version: 12.x
+            lint: true # Linter is run only once to shorten the total build time
           - node-version: 14.x
+          - node-version: 16.x
 
     steps:
       - name: Checkout code from ${{ github.repository }}
