@@ -1,6 +1,15 @@
 # Changelog
 
-* Migrate away from `make` commands in testing
+## 6.0.0 (2021-05-26)
+
+* Test against WCAG 2.1 rules when using the default HTML_CodeSniffer runner.
+* Upgrade puppeteer to v9, which reduces the number of browser crashes significantly.
+* Remove support for testing against Section 508 standard.
+* Replace `make` commands for testing with npm scripts (thanks @sonniesedge and @paazmaya).
+* Integrate the built-in reporters with the pa11y repo (thanks @joeyciechanowicz).
+* Improve resilience of tests and other quality of life improvements (thanks @sangitamane).
+* Improve `--environment` output (thanks @ryhinchey).
+* Drop support for Node.js versions older than 12.
 
 ## 6.0.0-alpha (2020-04-28)
 
