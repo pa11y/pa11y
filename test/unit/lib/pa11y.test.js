@@ -8,7 +8,6 @@ const sinon = require('sinon');
 describe('lib/pa11y', function() {
 	let extend;
 	let fs;
-	let htmlCodeSnifferRunner;
 	let htmlCodeSnifferPath;
 	let pa11y;
 	let pa11yResults;
@@ -40,23 +39,14 @@ describe('lib/pa11y', function() {
 
 		pkg = require('../../../package.json');
 
-		htmlCodeSnifferRunner = {
-			supports: 'mock-support-string',
-			scripts: [
-				'/mock/HTMLCS.js'
-			],
-			run: () => 'mock-htmlcs-runner'
-		};
-		mockery.registerMock('pa11y-runner-htmlcs', htmlCodeSnifferRunner);
-
-		htmlCodeSnifferPath = '/mock/HTMLCS.js';
+		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`);
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
 		fs = require('../mock/fs.mock');
 		mockery.registerMock('fs', fs);
 
-		fs.readFile.withArgs(htmlCodeSnifferPath).yieldsAsync(undefined, 'mock-html-codesniffer-js');
-		fs.readFile.withArgs(pa11yRunnerPath).yieldsAsync(undefined, 'mock-pa11y-runner-js');
+		fs.readFileSync.withArgs(htmlCodeSnifferPath).returns('mock-html-codesniffer-js');
+		fs.readFileSync.withArgs(pa11yRunnerPath).returns('mock-pa11y-runner-js');
 
 		pkg = require('../../../package.json');
 
@@ -73,7 +63,6 @@ describe('lib/pa11y', function() {
 		semver.satisfies.returns(true);
 
 		pa11y = require('../../../lib/pa11y');
-
 	});
 
 	afterEach(function() {
@@ -142,24 +131,19 @@ describe('lib/pa11y', function() {
 		});
 
 		it('loads the HTML CodeSniffer JavaScript', function() {
-			assert.called(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
+			assert.called(fs.readFileSync);
+			assert.calledWith(fs.readFileSync, htmlCodeSnifferPath, 'utf-8');
 		});
 
 		it('loads the Pa11y runner JavaScript', function() {
-			assert.called(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
-		});
-
-		it('verifies that the runner supports the current version of Pa11y', function() {
-			assert.calledOnce(semver.satisfies);
-			assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+			assert.called(fs.readFileSync);
+			assert.calledWith(fs.readFileSync, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
 		});
 
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = \(\) => 'mock-htmlcs-runner'\s*;\s*$/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options =>.*/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', function() {
@@ -294,7 +278,7 @@ describe('lib/pa11y', function() {
 	describe('pa11y(options)', function() {
 		let options;
 
-		beforeEach(async function() {
+		beforeEach(function() {
 			options = {
 				mockOptions: true,
 				timeout: 40000,
@@ -305,38 +289,43 @@ describe('lib/pa11y', function() {
 					info: sinon.stub()
 				}
 			};
-			await pa11y(options);
 		});
 
-		it('defaults the options object with `pa11y.defaults`', function() {
-			assert.calledOnce(extend);
-			assert.isObject(extend.firstCall.args[0]);
-			assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
-			assert.deepEqual(extend.firstCall.args[2], options);
-		});
-
-		it('navigates to `options.url`', function() {
-			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle2',
-				timeout: options.timeout
-			});
-		});
-
-		describe('console handler', function() {
-			let mockMessage;
-
-			beforeEach(function() {
-				mockMessage = {
-					text: sinon.stub().returns('mock-message')
-				};
-				puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
+		describe('with basic options', () => {
+			beforeEach(async () => {
+				await pa11y(options);
 			});
 
-			it('logs the console message text with `options.log.debug`', function() {
-				assert.calledWithExactly(options.log.debug, 'Browser Console: mock-message');
+			it('defaults the options object with `pa11y.defaults`', function() {
+				assert.calledOnce(extend);
+				assert.isObject(extend.firstCall.args[0]);
+				assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
+				assert.deepEqual(extend.firstCall.args[2], options);
 			});
 
+			it('navigates to `options.url`', function() {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
+					waitUntil: 'networkidle2',
+					timeout: options.timeout
+				});
+			});
+
+			describe('console handler', function() {
+				let mockMessage;
+
+				beforeEach(function() {
+					mockMessage = {
+						text: sinon.stub().returns('mock-message')
+					};
+					puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
+				});
+
+				it('logs the console message text with `options.log.debug`', function() {
+					assert.calledWithExactly(options.log.debug, 'Browser Console: mock-message');
+				});
+
+			});
 		});
 
 		describe('when `options.standard` is invalid', function() {
@@ -796,45 +785,56 @@ describe('lib/pa11y', function() {
 		});
 
 		describe('when `options.runners` is set', function() {
-			let mockRunnerNodeModule;
-			let mockRunnerPa11yNodeModule;
+			let mockRunnerNodeModule1;
+			let mockRunnerNodeModule2;
 
 			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
-				fs.readFile.resetHistory();
+				fs.readFileSync.resetHistory();
 
-				mockRunnerPa11yNodeModule = {
+				mockRunnerNodeModule1 = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-runner-pa11y-node-module/vendor.js'
+						'/mock-runner-node-module-1/vendor.js'
 					],
-					run: () => 'mock-runner-pa11y-node-module'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
 				};
-				mockery.registerMock('pa11y-runner-pa11y-node-module', mockRunnerPa11yNodeModule);
+				mockery.registerMock('node-module-1', mockRunnerNodeModule1);
 
-				mockRunnerNodeModule = {
+				mockRunnerNodeModule2 = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-runner-node-module/vendor.js'
+						'/mock-runner-node-module-2/vendor.js'
 					],
-					run: () => 'mock-runner-node-module'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
 				};
-				mockery.registerMock('node-module', mockRunnerNodeModule);
+				mockery.registerMock('node-module-2', mockRunnerNodeModule2);
 
-				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-pa11y-node-module-js');
-				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-node-module-js');
+				fs.readFileSync.withArgs('/mock-runner-node-module-1/vendor.js').returns('mock-runner-node-module-1-js');
+				fs.readFileSync.withArgs('/mock-runner-node-module-2/vendor.js').returns('mock-runner-node-module-2-js');
 
 				options.runners = [
-					'pa11y-node-module',
-					'node-module'
+					'node-module-1',
+					'node-module-2'
 				];
+
 				await pa11y(options);
+			});
+
+			it('loads all runner scripts', function() {
+				assert.calledThrice(fs.readFileSync);
 			});
 
 			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
-				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
-				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
+
+				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-1'\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/);
+				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-2'\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/);
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledTwice(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
 			});
 		});
 
@@ -844,7 +844,7 @@ describe('lib/pa11y', function() {
 
 			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
-				fs.readFile.resetHistory();
+				fs.readFileSync.resetHistory();
 
 				mockRunnerNodeModule = {
 					supports: 'mock-support-string',

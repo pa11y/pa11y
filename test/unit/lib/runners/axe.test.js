@@ -4,7 +4,7 @@ const assert = require('proclaim');
 const sinon = require('sinon');
 const path = require('path');
 
-describe('lib/runner', () => {
+describe('lib/runners/axe', () => {
 	let result;
 	let originalWindow;
 	let runner;

@@ -33,7 +33,7 @@ describe('CLI exit codes', function() {
 	// This has to be skipped for now, some ISPs hijack hostnames that can't
 	// be resolved (looking at you TalkTalk). We could do with finding a better
 	// way to test this later
-	describe.skip('when Pa11y is run on a page that can\'t be loaded', function() {
+	describe.skip(`when Pa11y is run on a page that can't be loaded`, function() {
 
 		before(async function() {
 			pa11yResponse = await runPa11yCli('notahost');
