@@ -3,7 +3,7 @@
 const assert = require('proclaim');
 const sinon = require('sinon');
 
-describe('lib/runner', () => {
+describe('lib/runners/htmlcs', () => {
 	let issues;
 	let originalWindow;
 	let runner;
@@ -46,7 +46,7 @@ describe('lib/runner', () => {
 			}
 		};
 
-		runner = require('../../../lib/runner');
+		runner = require('../../../../lib/runners/htmlcs');
 	});
 
 	afterEach(() => {
