@@ -23,7 +23,7 @@ describe('CLI reporter CSV', function() {
 			assert.lengthEquals(lines, 29);
 			assert.strictEqual(lines[0], '"type","code","message","context","selector"');
 			lines.slice(1).forEach(line => {
-				assert.match(line, /^"(error|warning|notice)","[^"]+","[^"]+",(".*"|null),"[^"]*"$/i);
+				assert.match(line, /^"(error|warning|notice)","[^"]+","[^"]+",(".*"),"[^"]*"$/i);
 			});
 		});
 
