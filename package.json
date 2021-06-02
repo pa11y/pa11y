@@ -32,9 +32,11 @@
     "node": ">=12"
   },
   "dependencies": {
+    "axe-core": "^4.0.2",
     "bfj": "~7.0.2",
     "commander": "~6.2.1",
     "envinfo": "~7.8.1",
+    "html_codesniffer": "^2.5.1",
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
@@ -60,7 +62,7 @@
     "lint": "eslint .",
     "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
     "test-unit": "mocha --file test/unit/setup.test.js test/unit/**/*.test.js --recursive",
-    "test-coverage": "nyc --reporter=text --reporter=html mocha --file test/unit/setup.test.js test/unit/**/*.test.js --recursive",
+    "test-coverage": "nyc --reporter=text --exclude 'lib/runners/*.js' --reporter=html -- npm run test-unit",
     "test-integration": "mocha --file test/integration/setup.test.js test/integration/**/*.test.js --recursive --timeout 10000 --slow 5000",
     "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
   },
