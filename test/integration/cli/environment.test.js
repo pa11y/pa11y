@@ -18,12 +18,13 @@ describe('CLI environment', function() {
 		assert.strictEqual(pa11yResponse.exitCode, 0);
 	});
 
-	it('respondes with information about the user\'s environment', function() {
+	it('responds with information about the user\'s environment', function() {
 		assert.match(pa11yResponse.output, /OS/);
 		assert.match(pa11yResponse.output, /CPU/);
 		assert.match(pa11yResponse.output, /Memory/);
 		assert.match(pa11yResponse.output, /Node/);
 		assert.match(pa11yResponse.output, /npm/);
+		assert.match(pa11yResponse.output, /pa11y/);
 	});
 
 });
