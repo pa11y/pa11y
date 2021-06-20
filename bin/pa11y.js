@@ -309,11 +309,9 @@ function collectOptions(val, array) {
 async function outputEnvironmentInfo() {
 	const envData = await envinfo.run({
 		System: ['OS', 'CPU', 'Memory', 'Shell'],
-		Binaries: ['Node', 'Yarn', 'npm'],
-		npmPackages: ['pa11y']
+		Binaries: ['Node', 'Yarn', 'npm']
 	});
-
-	console.log(envData);
+	console.log(`${envData}  pa11y: ${pkg.version}\n`);
 	process.exit(0);
 }
 
