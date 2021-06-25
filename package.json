@@ -40,8 +40,6 @@
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
-    "pa11y-runner-axe": "~2.0.0",
-    "pa11y-runner-htmlcs": "~2.0.0",
     "puppeteer": "~9.1.1",
     "semver": "~7.3.5"
   },
