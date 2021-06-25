@@ -6,7 +6,7 @@ describe('lib/reporters/csv', () => {
 	let csvReporter;
 
 	beforeEach(() => {
-		csvReporter = require('../../../lib/reporters/csv');
+		csvReporter = require('../../../../lib/reporters/csv');
 	});
 
 	it('is an object', () => {
