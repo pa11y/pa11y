@@ -313,7 +313,11 @@ describe('lib/runners/axe', () => {
 
 			describe('rules', () => {
 				beforeEach(async () => {
-					options.rules = ['color-contrast', 'autocomplete-valid'];
+					options.rules = ['color-contrast', 'autocomplete-valid', 'something-else'];
+					global.window.axe.getRules = sinon.stub().returns([
+						{ruleId: 'color-contrast'},
+						{ruleId: 'autocomplete-valid'}
+					]);
 					await runner.run(options, pa11y);
 				});
 
@@ -324,6 +328,28 @@ describe('lib/runners/axe', () => {
 						sinon.match.has('rules', {
 							'color-contrast': {enabled: true},
 							'autocomplete-valid': {enabled: true}
+						})
+					);
+				});
+			});
+
+			describe('ignore', () => {
+				beforeEach(async () => {
+					options.ignore = ['warning', 'notice', 'color-contrast', 'autocomplete-valid'];
+					global.window.axe.getRules = sinon.stub().returns([
+						{ruleId: 'color-contrast'},
+						{ruleId: 'autocomplete-valid'}
+					]);
+					await runner.run(options, pa11y);
+				});
+
+				it('sets the aXe ignore rules', () => {
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.has('rules', {
+							'color-contrast': {enabled: false},
+							'autocomplete-valid': {enabled: false}
 						})
 					);
 				});
