@@ -116,7 +116,7 @@ describe('lib/runners/axe', () => {
 		global.window.document.querySelector
 			.withArgs('mock-selector-4b').returns('mock-element-4b');
 
-		runner = require('../../../lib/runner');
+		runner = require('../../../../lib/runners/axe');
 	});
 
 	afterEach(() => {
@@ -133,7 +133,7 @@ describe('lib/runners/axe', () => {
 
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
 		const scriptPath =
-			`${path.resolve(__dirname, '..', '..', '..')}` +
+			`${path.resolve(__dirname, '..', '..', '..', '..')}` +
 			`${path.normalize('/node_modules/axe-core')}/axe.min.js`;
 		assert.isArray(runner.scripts);
 		assert.deepEqual(runner.scripts, [scriptPath]);

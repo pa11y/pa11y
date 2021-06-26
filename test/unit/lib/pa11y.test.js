@@ -143,7 +143,7 @@ describe('lib/pa11y', function() {
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options =>.*/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options\s*=>.*/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', function() {
