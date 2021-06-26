@@ -40,8 +40,6 @@
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
-    "pa11y-runner-axe": "~2.0.0",
-    "pa11y-runner-htmlcs": "~2.0.0",
     "puppeteer": "~9.1.1",
     "semver": "~7.3.5"
   },
@@ -61,8 +59,8 @@
   "scripts": {
     "lint": "eslint .",
     "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
-    "test-unit": "mocha --file test/unit/setup.test.js test/unit/**/*.test.js --recursive",
-    "test-coverage": "nyc --reporter=text --exclude 'lib/runners/*.js' --reporter=html -- npm run test-unit",
+    "test-unit": "mocha --file test/unit/setup.test.js 'test/unit/**/*.test.js' --recursive",
+    "test-coverage": "nyc --reporter=text --reporter=html -- npm run test-unit",
     "test-integration": "mocha --file test/integration/setup.test.js test/integration/**/*.test.js --recursive --timeout 10000 --slow 5000",
     "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
   },
