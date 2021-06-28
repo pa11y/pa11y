@@ -45,7 +45,7 @@ describe('lib/pa11y-ci', () => {
 		});
 
 		it('has a `concurrency` property', () => {
-			assert.strictEqual(defaults.concurrency, 2);
+			assert.strictEqual(defaults.concurrency, 1);
 		});
 
 		it('has a `log` property', () => {
@@ -65,7 +65,7 @@ describe('lib/pa11y-ci', () => {
 		});
 
 		it('has a `useIncognitoBrowserContext` property', () => {
-			assert.strictEqual(defaults.useIncognitoBrowserContext, false);
+			assert.strictEqual(defaults.useIncognitoBrowserContext, true);
 		});
 	});
 

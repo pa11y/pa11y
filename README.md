@@ -1,9 +1,9 @@
 
 # Pa11y CI
 
-Pa11y CI is a CI-centric accessibility test runner, built using [Pa11y].
+Pa11y CI is an accessibility test runner built using [Pa11y] focused on running on Continuous Integration environments.
 
-CI runs accessibility tests against multiple URLs and reports on any issues. This is best used during automated testing of your application and can act as a gatekeeper to stop a11y issues from making it to live.
+Pa11y CI runs accessibility tests against multiple URLs and reports on any issues. This is best used during automated testing of your application and can act as a gatekeeper to stop a11y issues from making it to live.
 
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
@@ -96,8 +96,8 @@ You can specify a default set of [pa11y configurations] that should be used for 
 
 Pa11y CI has a few of its own configurations which you can set as well:
 
-  - `concurrency`: The number of tests that should be run in parallel. Defaults to `2`.
-  - `useIncognitoBrowserContext`: Run test with an isolated incognito browser context, stops cookies being shared and modified between tests. Defaults to `false`.
+  - `concurrency`: The number of tests that should be run in parallel. Defaults to `1`.
+  - `useIncognitoBrowserContext`: Run test with an isolated incognito browser context, stops cookies being shared and modified between tests. Defaults to `true`.
 
 ### URL configuration
 
