@@ -204,51 +204,51 @@ function defaultConfig(config) {
 function loadSitemapIntoConfig(program, initialConfig) {
 	const sitemapFind = (
 		program.sitemapFind ?
-		new RegExp(program.sitemapFind, 'gi') :
-		null
+			new RegExp(program.sitemapFind, 'gi') :
+			null
 	);
 	const sitemapReplace = program.sitemapReplace || '';
 	const sitemapExclude = (
 		program.sitemapExclude ?
-		new RegExp(program.sitemapExclude, 'gi') :
-		null
+			new RegExp(program.sitemapExclude, 'gi') :
+			null
 	);
 
 	function getUrlsFromSitemap(sitemapUrl, config) {
 		return Promise.resolve()
-		.then(() => fetch(sitemapUrl))
-		.then(response => response.text())
-		.then(body => {
-			const $ = cheerio.load(body, {xmlMode: true});
+			.then(() => fetch(sitemapUrl))
+			.then(response => response.text())
+			.then(body => {
+				const $ = cheerio.load(body, {xmlMode: true});
 
-			const isSitemapIndex = $('sitemapindex').length > 0;
-			if (isSitemapIndex) {
-				return Promise.all($('sitemap > loc').toArray().map(element => {
-					return getUrlsFromSitemap($(element).text(), config);
-				})).then(configs => {
-					return configs.pop();
+				const isSitemapIndex = $('sitemapindex').length > 0;
+				if (isSitemapIndex) {
+					return Promise.all($('sitemap > loc').toArray().map(element => {
+						return getUrlsFromSitemap($(element).text(), config);
+					})).then(configs => {
+						return configs.pop();
+					});
+				}
+
+				$('url > loc').toArray().forEach(element => {
+					let url = $(element).text();
+					if (sitemapExclude && url.match(sitemapExclude)) {
+						return;
+					}
+					if (sitemapFind) {
+						url = url.replace(sitemapFind, sitemapReplace);
+					}
+					config.urls.push(url);
 				});
-			}
 
-			$('url > loc').toArray().forEach(element => {
-				let url = $(element).text();
-				if (sitemapExclude && url.match(sitemapExclude)) {
-					return;
+				return config;
+			})
+			.catch(error => {
+				if (error.stack && error.stack.includes('node-fetch')) {
+					throw new Error(`The sitemap "${sitemapUrl}" could not be loaded`);
 				}
-				if (sitemapFind) {
-					url = url.replace(sitemapFind, sitemapReplace);
-				}
-				config.urls.push(url);
+				throw new Error(`The sitemap "${sitemapUrl}" could not be parsed`);
 			});
-
-			return config;
-		})
-		.catch(error => {
-			if (error.stack && error.stack.includes('node-fetch')) {
-				throw new Error(`The sitemap "${sitemapUrl}" could not be loaded`);
-			}
-			throw new Error(`The sitemap "${sitemapUrl}" could not be parsed`);
-		});
 	}
 
 	return getUrlsFromSitemap(program.sitemap, initialConfig);
