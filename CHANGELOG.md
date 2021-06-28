@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.1 (2021-06-28)
+
+* Merge axe and htmlcs runners into repo
+* `--environment` flag now shows pa11y version correctly (thanks @aarongoldenthal)
+* Tests and dependency fixes for runners and reporters (thanks @aarongoldenthal)
+
 ## 6.0.0 (2021-05-26)
 
 * Test against WCAG 2.1 rules when using the default HTML_CodeSniffer runner.
