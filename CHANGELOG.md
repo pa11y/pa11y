@@ -1,9 +1,15 @@
 # Changelog
 
+## 2.4.2 (2021-06-28)
+
+* If Chrome crashes during startup, pa11y-ci will now retry to launch Chrome once before bailing out instead of giving up straight away
+* Add Docker examples to documentation
+* Reduce size of npm package (thanks @mfranzke)
+
 ## 2.4.1 (2021-04-25)
 
 * Upgrades pa11y to the latest 5.3.1 version
-* Fix a bug related to having to download puppeteer twice since pa11y 5.3.1 was release (#131).
+* Fix a bug related to having to download puppeteer twice since pa11y 5.3.1 was release (#131)
 
 ## 2.4.0 (2020-08-18)
 
