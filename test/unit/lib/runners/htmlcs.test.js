@@ -207,7 +207,7 @@ describe('lib/runners/htmlcs', () => {
 					assert.instanceOf(rejectedError, Error);
 					assert.strictEqual(
 						rejectedError.message,
-						'mock-rule-5 is not a valid WCAG 2.0 rule'
+						'mock-rule-5 is not a valid WCAG 2.1 rule'
 					);
 				});
 

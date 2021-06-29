@@ -96,7 +96,8 @@ describe('lib/runners/axe', () => {
 		originalWindow = global.window;
 		global.window = {
 			axe: {
-				run: sinon.stub().resolves(result)
+				run: sinon.stub().resolves(result),
+				getRules: sinon.stub().returns([])
 			},
 			document: {
 				querySelector: sinon.stub()
@@ -159,7 +160,7 @@ describe('lib/runners/axe', () => {
 			assert.calledWithExactly(
 				global.window.axe.run,
 				global.window.document,
-				{}
+				{rules: {}}
 			);
 		});
 
