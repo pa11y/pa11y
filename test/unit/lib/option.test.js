@@ -2,12 +2,12 @@
 
 const assert = require('proclaim');
 const path = require('path');
+const	{parseArguments, verifyOptions} = require('../../../lib/option');
 
 describe('lib/option', function() {
 	const noop = function() { /* No-op */ };
 
 	let defaults;
-	let option;
 
 	beforeEach(function() {
 		defaults = {
@@ -45,21 +45,19 @@ describe('lib/option', function() {
 			wait: 0
 		};
 
-		option = require('../../../lib/option');
 	});
 
 	it('is a function', function() {
-		assert.isFunction(option.parseArguments);
+		assert.isFunction(parseArguments);
 	});
 
 	describe('parseArguments(url, options, defaults, callback)', function() {
-		// eslint-disable-next-line no-unused-vars
 		let url;
 		let options;
-		// eslint-disable-next-line no-unused-vars
 		let callback;
 
 		beforeEach(function() {
+			callback = undefined;
 			options = {
 				mockOptions: true,
 				timeout: 60000,
@@ -118,8 +116,9 @@ describe('lib/option', function() {
 				wait: 0
 			};
 
-			[url, options, callback] = option.parseArguments('', options, defaults);
+			[url, options, callback] = parseArguments('', options, defaults);
 			assert.deepEqual(resultingOptions, options);
+			assert.isUndefined(callback, undefined);
 		});
 
 		it('returns the defaults when options are empty', function() {
@@ -161,13 +160,35 @@ describe('lib/option', function() {
 				wait: 0
 			};
 
-			[url, options, callback] = option.parseArguments('', {}, defaults);
+			[url, options, callback] = parseArguments('', {}, defaults);
 			assert.deepEqual(defaultsWithEmptyOptions, options);
+		});
+
+		describe('when defaults and options are both undefined', function() {
+			beforeEach(function() {
+				[url, options, callback] = parseArguments('');
+			});
+
+			it('returns an empty object', function() {
+				assert.deepEqual(options, {});
+			});
+		});
+
+		describe('when defaults and options are both undefined but a callback is provided', function() {
+			beforeEach(function() {
+				[url, options, callback] = parseArguments('', () => 'this is a callback');
+			});
+
+			it('returns an empty object', function() {
+				assert.isFunction(callback);
+				assert.equal(callback.call(), 'this is a callback');
+				assert.deepEqual(options, {});
+			});
 		});
 
 		describe('when defaults and options are both empty', function() {
 			beforeEach(function() {
-				[url, options, callback] = option.parseArguments('', {}, {});
+				[url, options, callback] = parseArguments('', {}, {});
 			});
 
 			it('returns an empty object', function() {
@@ -177,7 +198,7 @@ describe('lib/option', function() {
 
 		describe('when `url` does not have a scheme', function() {
 			beforeEach(function() {
-				[url, options, callback] = option.parseArguments('mock-url', {}, {});
+				[url, options, callback] = parseArguments('mock-url', {}, {});
 			});
 
 			it('navigates to `url` with an `http` scheme added', function() {
@@ -185,9 +206,20 @@ describe('lib/option', function() {
 			});
 		});
 
+		describe('when `url` does not have a scheme and is a valid local path', function() {
+			beforeEach(function() {
+				[url, options, callback] = parseArguments('README.md', {}, {});
+			});
+
+			it('navigates to `url` with a `file` scheme added', function() {
+				const resolvedPath = path.resolve(process.cwd(), './README.md');
+				assert.equal(url, `file://${resolvedPath}`);
+			});
+		});
+
 		describe('when `url` does not have a scheme and starts with a slash', function() {
 			beforeEach(function() {
-				[url, options, callback] = option.parseArguments('/mock-path', {}, {});
+				[url, options, callback] = parseArguments('/mock-path', {}, {});
 			});
 
 			it('navigates to `url` with a `file` scheme added', function() {
@@ -197,10 +229,10 @@ describe('lib/option', function() {
 
 		describe('when `url` does not have a scheme and starts with a period', function() {
 			beforeEach(function() {
-				[url, options, callback] = option.parseArguments('./mock-path', {}, {});
+				[url, options, callback] = parseArguments('./mock-path', {}, {});
 			});
 
-			it('navigates to `url` with an `file` scheme added and a resolved path', function() {
+			it('navigates to `url` with a `file` scheme added and a resolved path', function() {
 				const resolvedPath = path.resolve(process.cwd(), './mock-path');
 				assert.equal(url, `file://${resolvedPath}`);
 			});
@@ -210,7 +242,7 @@ describe('lib/option', function() {
 	});
 
 	it('is a function', function() {
-		assert.isFunction(option.verifyOptions);
+		assert.isFunction(verifyOptions);
 	});
 
 	describe('verifyOptions(options, allowedStandards)', function() {
@@ -227,7 +259,7 @@ describe('lib/option', function() {
 			beforeEach(function() {
 				options.standard = 'not-a-standard';
 				try {
-					option.verifyOptions(options, allowedStandards);
+					verifyOptions(options, allowedStandards);
 				} catch (error) {
 					rejectedError = error;
 				}
@@ -235,7 +267,7 @@ describe('lib/option', function() {
 
 			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, 'Standard must be one of WCAG2A, WCAG2AA, WCAG2AAA');
+				assert.strictEqual(rejectedError.message, `Standard must be one of ${allowedStandards.join(', ')}`);
 			});
 		});
 
@@ -248,7 +280,7 @@ describe('lib/option', function() {
 
 			beforeEach(function() {
 				try {
-					option.verifyOptions(options, allowedStandards);
+					verifyOptions(options, allowedStandards);
 				} catch (error) {
 					rejectedError = error;
 				}
@@ -269,7 +301,7 @@ describe('lib/option', function() {
 
 			beforeEach(function() {
 				try {
-					option.verifyOptions(options, allowedStandards);
+					verifyOptions(options, allowedStandards);
 				} catch (error) {
 					rejectedError = error;
 				}
