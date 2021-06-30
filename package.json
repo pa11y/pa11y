@@ -1,6 +1,6 @@
 {
   "name": "pa11y",
-  "version": "6.0.0-alpha",
+  "version": "6.0.1",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -29,37 +29,40 @@
   "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "dependencies": {
-    "commander": "^3.0.2",
-    "envinfo": "^7.5.0",
-    "node.extend": "^2.0.2",
-    "p-timeout": "^2.0.1",
-    "pa11y-reporter-cli": "^2.0.0",
-    "pa11y-reporter-csv": "^2.0.0",
-    "pa11y-reporter-json": "^2.0.0",
-    "pa11y-runner-axe": "^2.0.0",
-    "pa11y-runner-htmlcs": "^2.0.0",
-    "puppeteer": "^2.1.1",
-    "semver": "^5.7.1"
+    "axe-core": "^4.0.2",
+    "bfj": "~7.0.2",
+    "commander": "~6.2.1",
+    "envinfo": "~7.8.1",
+    "html_codesniffer": "^2.5.1",
+    "kleur": "~4.1.4",
+    "node.extend": "~2.0.2",
+    "p-timeout": "~4.1.0",
+    "puppeteer": "~9.1.1",
+    "semver": "~7.3.5"
   },
   "devDependencies": {
-    "@rowanmanning/make": "^2.1.0",
-    "eslint": "^6.8.0",
-    "mocha": "^7.1.1",
+    "eslint": "^7.27.0",
+    "mocha": "^8.4.0",
     "mockery": "^2.1.0",
-    "nyc": "^15.0.1",
-    "pa11y-lint-config": "^1.2.1",
+    "nyc": "^15.1.0",
+    "pa11y-lint-config": "^2.0.0",
     "proclaim": "^3.6.0",
-    "sinon": "^9.0.2"
+    "sinon": "^11.1.0"
   },
   "main": "./lib/pa11y.js",
   "bin": {
     "pa11y": "./bin/pa11y.js"
   },
   "scripts": {
-    "test": "make ci"
+    "lint": "eslint .",
+    "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
+    "test-unit": "mocha --file test/unit/setup.test.js 'test/unit/**/*.test.js' --recursive",
+    "test-coverage": "nyc --reporter=text --reporter=html -- npm run test-unit",
+    "test-integration": "mocha --file test/integration/setup.test.js test/integration/**/*.test.js --recursive --timeout 10000 --slow 5000",
+    "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
   },
   "files": [
     "bin",

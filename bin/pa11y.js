@@ -30,7 +30,7 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), ' +
+			'the accessibility standard to use: WCAG2A, WCAG2AA (default), ' +
 			'WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(
@@ -193,13 +193,18 @@ function loadConfig(filePath) {
  * @returns {void}
  */
 function loadReporter(name) {
+
 	let reporterMethods;
 
 	try {
-		reporterMethods = requireFirst([
-			`pa11y-reporter-${name}`,
-			path.join(process.cwd(), name)
-		], null);
+		if (['json', 'cli', 'csv', 'tsv'].includes(name)) {
+			reporterMethods = require(`../lib/reporters/${name}`);
+		} else {
+			reporterMethods = requireFirst([
+				`pa11y-reporter-${name}`,
+				path.join(process.cwd(), name)
+			], null);
+		}
 	} catch (error) {
 		console.error(
 			`An error occurred when loading the "${name}" reporter. ` +
@@ -304,11 +309,9 @@ function collectOptions(val, array) {
 async function outputEnvironmentInfo() {
 	const envData = await envinfo.run({
 		System: ['OS', 'CPU', 'Memory', 'Shell'],
-		Binaries: ['Node', 'Yarn', 'npm'],
-		npmPackages: ['pa11y']
+		Binaries: ['Node', 'Yarn', 'npm']
 	});
-
-	console.log(envData);
+	console.log(`${envData}  pa11y: ${pkg.version}\n`);
 	process.exit(0);
 }
 

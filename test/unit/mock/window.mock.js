@@ -19,13 +19,6 @@ module.exports = {
 		getMessages: sinon.stub().returns([]),
 		process: sinon.stub().yieldsAsync()
 	},
-	HTMLCS_Section508: {
-		sniffs: [
-			{
-				include: []
-			}
-		]
-	},
 	'HTMLCS_mock-standard': {
 		sniffs: [
 			{

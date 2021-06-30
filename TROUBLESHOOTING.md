@@ -1,6 +1,4 @@
-
 # Troubleshooting
-
 
 ## Common Issues
 
@@ -29,19 +27,6 @@ To debug this, you can use the `--screen-capture` flag or [`screenCapture` optio
 Pa11y doesn't currently support testing against iframe content from a parent page context. Any page that makes use of iframes, e.g. for displaying ads, may show different error, warning, and notice counts in Pa11y compared to the HTML_CodeSniffer browser bookmarklet.
 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
-
-### PhantomJS fails to run and returns exit code 127
-
-Pa11y spins up a PhantomJS instance to render the page, then injects HTML_Codesniffer into it and returns a report based on its findings. If PhantomJS cannot run due to broken executable, missing libraries or dependencies, or any other internal error that prevents it from running at all, it will return an exit code of 127.
-
-If this happens, running the phantomjs executable will usually provide more useful information, for example:
-
-```
-./node_modules/phantomjs/lib/phantom/bin/phantomjs: error while loading shared libraries: libfontconfig.so.1: cannot open shared object file: No such file or directory
-```
-
-We don't maintain PhantomJS, but there's a good chance someone has found the same problem before, so you can try to search in the PhantomJS repo for a solution. For example, for the error above, the fix would be to install the missing library, as shown in [phantomjs#10904](https://github.com/ariya/phantomjs/issues/10904) and [phantomjs#13597](https://github.com/ariya/phantomjs/issues/13597).
-
 
 ## Common Questions
 
@@ -111,18 +96,15 @@ We recommend using [actions][actions] (if the existing actions don't meet your n
 
 Pa11y doesn't check the hover state. Instead, you must test the contrast of the hover state for links manually.
 
-
 ## Check to see if the issue has been reported
 
 Check the [issue tracker][issues] for similar issues.
-
 
 ## Create an issue
 
 If all else fails, [create an issue][new-issue] and we'll help you.
 
 Please include your Node.js and Pa11y version numbers, as well as your operating system. It may be useful to run `pa11y --environment` – this outputs all the details we need to know about your machine to help us debug your issue.
-
 
 [actions]: https://github.com/pa11y/pa11y#actions
 [chromeLaunchConfig]: https://github.com/pa11y/pa11y#chromelaunchconfig-object

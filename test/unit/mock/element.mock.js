@@ -8,7 +8,7 @@ module.exports = {
 };
 
 
-const initMockElementProperties = () => {
+const initMockElementProperties = function() {
 	return {
 		addEventListener: sinon.stub(),
 		childNodes: [],
