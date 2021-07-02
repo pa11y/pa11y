@@ -30,9 +30,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        run: npm i
+        run: npm ci
       - name: Run linter
         if: ${{ matrix.lint }}
-        run: make verify
+        run: npm run lint
       - name: Run tests
-        run: make test
+        run: npm test

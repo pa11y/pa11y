@@ -32,7 +32,6 @@
     "wordwrap": "~1.0.0"
   },
   "devDependencies": {
-    "@rowanmanning/make": "^2.1.0",
     "eslint": "^7.27.0",
     "mocha": "^8.4.0",
     "mockery": "^2.1.0",
@@ -46,7 +45,12 @@
     "pa11y-ci": "./bin/pa11y-ci.js"
   },
   "scripts": {
-    "test": "make ci"
+    "lint": "eslint .",
+    "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
+    "test-unit": "mocha --file test/unit/setup.test.js 'test/unit/**/*.test.js' --recursive",
+    "test-coverage": "nyc --reporter=text --reporter=html mocha --file test/unit/setup.test.js 'test/unit/**/*.test.js' --recursive",
+    "test-integration": "mocha --file test/integration/setup.test.js 'test/integration/**/*.test.js' test/integration/teardown.test.js --recursive --timeout 10000 --slow 5000",
+    "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
   },
   "files": [
     "bin",
