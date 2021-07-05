@@ -4,17 +4,17 @@ const assert = require('proclaim');
 const mockery = require('mockery');
 const path = require('path');
 
-describe('lib/reporter', () => {
+describe('lib/reporters/html', () => {
 	let fs;
 	let hogan;
 	let reporter;
 
 	beforeEach(() => {
-		fs = require('../mock/fs');
+		fs = require('../../mock/fs');
 		mockery.registerMock('fs', fs);
-		hogan = require('../mock/hogan');
+		hogan = require('../../mock/hogan');
 		mockery.registerMock('hogan.js', hogan);
-		reporter = require('../../../lib/reporter');
+		reporter = require('../../../lib/reporters/html');
 	});
 
 	it('is an object', () => {
