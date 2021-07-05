@@ -14,7 +14,7 @@ describe('lib/reporters/html', () => {
 		mockery.registerMock('fs', fs);
 		hogan = require('../../mock/hogan');
 		mockery.registerMock('hogan.js', hogan);
-		reporter = require('../../../lib/reporters/html');
+		reporter = require('../../../../lib/reporters/html');
 	});
 
 	it('is an object', () => {
@@ -50,7 +50,7 @@ describe('lib/reporters/html', () => {
 
 		it('reads the report HTML template', () => {
 			assert.calledOnce(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/report.html`), 'utf-8');
+			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../../lib/reporters/report.html`), 'utf-8');
 		});
 
 		it('compiles the template string', () => {
