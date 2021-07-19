@@ -21,11 +21,15 @@ Pa11y CI runs accessibility tests against multiple URLs and reports on any issue
   - [Default configuration](#default-configuration)
   - [URL configuration](#url-configuration)
   - [Sitemaps](#sitemaps)
+  - [Reporters](#reporters)
+    - [Use Multiple reporters](#use-multiple-reporters)
+    - [Write a custom reporter](#write-a-custom-reporter)
   - [Docker](#docker)
 - [Tutorials and articles](#tutorials-and-articles)
 - [Contributing](#contributing)
 - [Support and Migration](#support-and-migration)
 - [Licence](#licence)
+
 
 
 ## Requirements
@@ -55,6 +59,7 @@ Options:
   -x, --sitemap-exclude <pattern>  a pattern to find in sitemaps and exclude any url that matches
   -j, --json                       Output results as JSON
   -T, --threshold <number>         permit this number of errors, warnings, or notices, otherwise fail with exit code 2
+  --reporter <reporter>            The reporter to use. Can be "cli", "json", an npm module, or a path to a local file.
 ```
 
 ### Configuration
@@ -139,6 +144,186 @@ The above would ensure that you run Pa11y CI against local URLs instead of the l
 
 If there are items in the sitemap that you'd like to exclude from the testing (for example PDFs) you can do so using the `--sitemap-exclude` flag.
 
+## Reporters
+
+Pa11y CI includes both a CLI reporter that outputs pa11y results to the console and a JSON reporter that outputs JSON-formatted results (to the console or a file). If no reporter is specified, the CLI reporter is selected by default.  You can use the `--reporter` option to define a single reporter. The option value can be:
+- `cli` for the included CLI reporter or `json` for the included JSON reporter
+- the path of a locally installed npm module (ie: `pa11y-reporter-html`)
+- the path to a local node module relative to the current working directory (ie: `./reporters/my-reporter.js`)
+- an absolute path to a node module (ie: `/root/user/me/reporters/my-reporter.js`)
+
+Example:
+
+```
+npm install pa11y-reporter-html --save
+pa11y-ci --reporter=pa11y-reporter-html http://pa11y.org/
+```
+
+**Note**: If custom reporter(s) are specified, the default CLI reporter will be overridden.
+
+### Use Multiple reporters
+
+You can use multiple reporters by setting them on the `defaults.reporters` array in your config.  The shorthand `cli` and `json` can be included to select the included reporters.
+
+```json
+{
+    "defaults": {
+        "reporters": [
+            "cli", // <-- this is the default reporter
+            "pa11y-reporter-html",
+            "./my-local-reporter.js"
+        ]
+    },
+    "urls": [
+        "http://pa11y.org/",
+        {
+            "url": "http://pa11y.org/contributing",
+            "timeout": 50000,
+            "screenCapture": "myDir/my-screen-capture.png"
+        }
+    ]
+}
+```
+
+**Note**: If the CLI `--reporter` option is specified, it will override any reporters specified in the config file.
+
+### Reporter options
+
+Reporters can be configured, when supported, by settings the reporter as an array with its options as the second item:
+
+```json
+{
+    "defaults": {
+        "reporters": [
+            "pa11y-reporter-html",
+            ["./my-local-reporter.js", { "option1": true }] // <-- note that this is an array
+        ]
+    },
+    "urls": [
+        "http://pa11y.org/",
+        {
+            "url": "http://pa11y.org/contributing",
+            "timeout": 50000,
+            "screenCapture": "myDir/my-screen-capture.png"
+        }
+    ]
+}
+```
+
+The included CLI reporter does not support any options.
+
+The included JSON reporter outputs the results to the console by default.  It can also accept a `fileName` with a relative or absolute file name where the JSON results will be written. Relative file name will be resolved from the current working directory.
+
+```json
+{
+    "defaults": {
+        "reporters": [
+            ["json", { "fileName": "./results.json" }] // <-- note that this is an array
+        ]
+    },
+    "urls": [
+        "http://pa11y.org/"
+    ]
+}
+```
+
+### Write a custom reporter
+
+Pa11y CI reporters use an interface similar to [pa11y reporters] and support the following optional methods:
+
+- `beforeAll(urls)`: called at the beginning of the process. `urls` is the URLs array defined in your config
+- `afterAll(report)` called at the very end of the process with the following arguments:
+  - `report`: pa11y-ci report object
+  - `config`: pa11y-ci configuration object
+- `begin(url)`: called before processing each URL. `url` is the URL being processed
+-  `results(results, config)` called after pa11y test run with the following arguments:
+    - `results`: pa11y results object [URL configuration object](#url-configuration)
+    - `config`: the current [URL configuration object](#url-configuration)
+- `error(error, url, config)`: called when a test run fails with the following arguments:
+    - `error`: pa11y error message
+    - `url`: the URL being processed
+    - `config`: the current [URL configuration object](#url-configuration)
+
+Here is an example of a custom reporter writing pa11y-ci report and errors to files:
+
+```js
+const fs = require('fs');
+const { createHash } = require('crypto');
+
+// create a unique filename from URL
+function fileName(url: any, prefix = '') {
+    const hash = createHash('md5').update(url).digest('hex');
+    return `${prefix}${hash}.json`;
+}
+
+exports.afterAll = function (report) {
+    return fs.promises.writeFile('report.json', JSON.stringify(report), 'utf8');
+}
+// write error details to an individual log for each URL
+exports.error = function (error, url) {
+    const data = JSON.stringify({url, error});
+    return fs.promises.writeFile(fileName(url, 'error-'), data, 'utf8');
+}
+```
+
+#### Configurable reporters
+
+A configurable reporter is a special kind of pa11y-ci reporter exporting a single factory function as its default export.
+
+When initialized, the function receives the user configured options (if any) and pa11y-ci configuration object as argument.
+
+For example, here is a reporter writing all results to a single configurable file:
+
+```js
+// ./my-reporter.js 
+
+const fs = require('fs');
+
+module.exports = function (options) {
+    // initialize an empty report data
+    const customReport = {
+        results: {},
+        errors: [],
+        violations: 0,
+    }
+
+    const fileName = options.fileName
+
+    return {
+        // add test results to the report
+        results(results) {
+            customReport.results[results.pageUrl] = results;
+            customReport.violations += results.issues.length;
+        },
+
+        // also store errors
+        error(error, url) {
+            customReport.errors.push({ error, url });
+        },
+
+        // write to a file
+        afterAll() {
+            const data = JSON.stringify(customReport);
+            return fs.promises.writeFile(fileName, data, 'utf8');
+        }
+    }
+};
+```
+
+```json
+// configuration file
+{
+    "defaults": {
+        "reporters": [
+            ["./my-reporter.js", { "fileName": "./my-report.json" }]
+        ]
+    },
+    "urls": [
+        ...
+    ]
+}
+```
+
 ### Docker
 
 If you want to run `pa11y-ci` in a Docker container then you can use the [`buildkite/puppeteer`](https://github.com/buildkite/docker-puppeteer) image as this installs Chrome and all the required libs to run headless chrome on Linux.
@@ -170,7 +355,6 @@ ADD config.json /usr/config.json
 
 ENTRYPOINT ["pa11y-ci", "-c", "/usr/config.json"]
 ```
-
 
 ## Tutorials and articles
 
@@ -227,6 +411,7 @@ Copyright &copy; 2016–2017, Team Pa11y
 [node.js]: https://nodejs.org/
 [pa11y]: https://github.com/pa11y/pa11y
 [pa11y configurations]: https://github.com/pa11y/pa11y#configuration
+[pa11y reporters]: https://github.com/pa11y/pa11y#reporters
 [sidekick-proposal]: https://github.com/pa11y/sidekick/blob/master/PROPOSAL.md
 [twitter]: https://twitter.com/pa11yorg
 

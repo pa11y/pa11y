@@ -1,0 +1,14 @@
+{
+	"defaults": {
+		"timeout": 100,
+		"reporters": [
+			"cli",
+			"./reporters/custom.js",
+            ["./reporters/custom.js", { "fileName": "./__output__/my-results.json"}]
+        ]
+	},
+	"urls": [
+		"http://localhost:8090/passing-1",
+		"http://localhost:8090/passing-2"
+	]
+}

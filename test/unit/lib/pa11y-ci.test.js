@@ -67,6 +67,11 @@ describe('lib/pa11y-ci', () => {
 		it('has a `useIncognitoBrowserContext` property', () => {
 			assert.strictEqual(defaults.useIncognitoBrowserContext, true);
 		});
+
+		it('has a cli reporter', () => {
+			assert.isArray(defaults.reporters);
+			assert.match(defaults.reporters[0], 'cli');
+		});
 	});
 
 	describe('pa11yCi(urls, options)', () => {
@@ -89,6 +94,7 @@ describe('lib/pa11y-ci', () => {
 
 			pa11yError = new Error('Pa11y Error');
 			pa11yResults = {
+				pageUrl: 'bar-url',
 				issues: [
 					{
 						type: 'error',
@@ -99,7 +105,8 @@ describe('lib/pa11y-ci', () => {
 				]
 			};
 
-			pa11y.withArgs('foo-url').resolves({issues: []});
+			pa11y.withArgs('foo-url').resolves({pageUrl: 'foo-url',
+				issues: []});
 			pa11y.withArgs('bar-url').resolves(pa11yResults);
 			pa11y.withArgs('baz-url').rejects(pa11yError);
 
@@ -126,8 +133,10 @@ describe('lib/pa11y-ci', () => {
 				assert.strictEqual(defaults.firstCall.args[2], pa11yCi.defaults);
 			});
 
-			it('deletes the `log` option', () => {
-				assert.isUndefined(defaults.firstCall.returnValue.log);
+			it('deletes the `log` and `reporters` option', () => {
+				const firstCallOptions = pa11y.getCall(0).args[1];
+				assert.doesNotInclude(firstCallOptions, 'log');
+				assert.doesNotInclude(firstCallOptions, 'reporters');
 			});
 
 			it('creates an Async.js queue with the expected concurrency', () => {
@@ -209,10 +218,15 @@ describe('lib/pa11y-ci', () => {
 				log.error = sinon.spy();
 				log.info = sinon.spy();
 
+				function fakeResolve(pageUrl) {
+					return Promise.resolve({pageUrl,
+						issues: []});
+				}
+
 				pa11y.reset();
-				pa11y.withArgs('foo-url').resolves({issues: []});
-				pa11y.withArgs('bar-url').resolves({issues: []});
-				pa11y.withArgs('baz-url').resolves({issues: []});
+				pa11y.withArgs('foo-url').callsFake(fakeResolve);
+				pa11y.withArgs('bar-url').callsFake(fakeResolve);
+				pa11y.withArgs('baz-url').callsFake(fakeResolve);
 
 				returnedPromise = pa11yCi(userUrls, userOptions);
 			});
@@ -277,14 +291,16 @@ describe('lib/pa11y-ci', () => {
 			];
 
 			pa11y.reset();
-			pa11y.withArgs('qux-url', userUrls[0]).resolves({issues: [
-				{
-					type: 'error',
-					message: 'Pa11y Result Error',
-					selector: '',
-					context: null
-				}
-			]});
+			pa11y.withArgs('qux-url', userUrls[0]).resolves({
+				pageUrl: 'qux-url',
+				issues: [
+					{
+						type: 'error',
+						message: 'Pa11y Result Error',
+						selector: '',
+						context: null
+					}
+				]});
 
 			returnedPromise = pa11yCi(userUrls, userOptions);
 		});
@@ -397,4 +413,127 @@ describe('lib/pa11y-ci', () => {
 		});
 	});
 
+	describe('reporters', () => {
+		let pa11yResults;
+		let returnedPromise;
+		let userUrls;
+		let userOptions;
+		let reporter;
+		let report;
+
+		beforeEach(done => {
+			reporter = require('../mock/reporter.mock')();
+			mockery.registerMock('my-pa11y-reporter', reporter);
+
+			userUrls = [
+				'foo-url',
+				'bar-url',
+				'baz-url'
+			];
+			userOptions = {
+				concurrency: 4,
+				log,
+				reporters: ['my-pa11y-reporter']
+			};
+
+			pa11yResults = {
+				pageUrl: 'bar-url',
+				issues: [
+					{
+						type: 'error',
+						message: 'Pa11y Result Error',
+						selector: '',
+						context: null
+					}
+				]
+			};
+
+			pa11y.withArgs('foo-url').resolves({pageUrl: 'foo-url',
+				issues: []});
+			pa11y.withArgs('bar-url').resolves(pa11yResults);
+			pa11y.withArgs('baz-url').resolves({pageUrl: 'baz-url',
+				issues: []});
+
+			returnedPromise = pa11yCi(userUrls, userOptions);
+
+			returnedPromise.then(value => {
+				report = value;
+				done();
+			}).catch(done);
+		});
+
+
+		it('calls the beforeAll method once', () => {
+			assert.calledWithMatch(reporter.beforeAll, userUrls);
+			assert.callCount(reporter.beforeAll, 1);
+		});
+		it('calls the afterAll method once', () => {
+			assert.calledWithMatch(reporter.afterAll, report, sinon.match.object);
+			assert.callCount(reporter.afterAll, 1);
+		});
+
+		it('calls the begin method for each URL', () => {
+			userUrls.forEach((url, i) => {
+				reporter.begin.getCall(i).calledWith(url);
+			});
+			assert.callCount(reporter.begin, userUrls.length);
+		});
+
+		it('calls the results method for each URL', () => {
+			userUrls.forEach((url, i) => {
+				const spyCall = reporter.results.getCall(i);
+				assert.calledWithMatch(
+					spyCall,
+					sinon.match({pageUrl: url,
+						issues: report.results[url]}),
+					sinon.match.object
+				);
+			});
+			assert.callCount(reporter.results, userUrls.length);
+		});
+
+	});
+
+	describe('multiple reporters', () => {
+		let userUrls;
+		let userOptions;
+		let optionReporter;
+		let reporter;
+
+		beforeEach(async () => {
+			reporter = require('../mock/reporter.mock')();
+			optionReporter = require('../mock/reporter-options.mock');
+			mockery.registerMock('my-reporter', reporter);
+			mockery.registerMock('option-reporter', optionReporter);
+
+			userUrls = [
+				'foo-url'
+			];
+			userOptions = {
+				concurrency: 4,
+				log,
+				reporters: ['my-reporter', ['option-reporter', {fileName: '/__TEST__.json'}], 'option-reporter']
+			};
+
+			pa11y.withArgs('foo-url').resolves({pageUrl: 'foo-url',
+				issues: []});
+
+			await pa11yCi(userUrls, userOptions);
+		});
+
+		it('calls reporters results methods', () => {
+			assert.calledOnce(reporter.results);
+			assert.callCount(optionReporter.$$resultsStub, 2);
+		});
+
+		it('calls option-reporter results with the correct options', () => {
+			// First time: custom option
+			const firstCall = optionReporter.$$resultsStub.getCall(0);
+			assert.calledWith(firstCall, 'foo-url', '/__TEST__.json');
+
+			// First time: default option
+			const secondCall = optionReporter.$$resultsStub.getCall(1);
+			assert.calledWith(secondCall, 'foo-url', '');
+		});
+	});
 });

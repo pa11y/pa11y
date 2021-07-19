@@ -1,11 +1,13 @@
 'use strict';
 
 const sinon = require('sinon');
+const merge = require('lodash/merge');
 
-const pa11y = module.exports = sinon.stub();
-
-const mockResults = module.exports.mockResults = {
+const mockResults = {
 	issues: []
 };
+const pa11y = sinon.stub().callsFake(pageUrl => Promise.resolve(merge({pageUrl}, mockResults)));
 
-pa11y.resolves(mockResults);
+module.exports = pa11y;
+
+module.exports.mockResults = mockResults;

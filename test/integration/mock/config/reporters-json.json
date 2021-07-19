@@ -1,0 +1,12 @@
+{
+	"defaults": {
+		"timeout": 100,
+		"reporters": [
+            ["json", { "fileName": "./__output__/results.json"}]
+        ]
+	},
+	"urls": [
+		"http://localhost:8090/passing-1",
+		"http://localhost:8090/passing-2"
+	]
+}
