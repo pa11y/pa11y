@@ -297,19 +297,6 @@ describe('lib/runners/axe', () => {
 						)
 					);
 				});
-
-				it('supports section 508', async () => {
-					options.standard = 'Section508';
-					await runner.run(options, pa11y);
-					assert.calledWithExactly(
-						global.window.axe.run,
-						sinon.match.any,
-						sinon.match.hasNested(
-							'runOnly.values',
-							['section508', 'best-practice']
-						)
-					);
-				});
 			});
 
 			describe('rules', () => {
