@@ -2,12 +2,12 @@
 
 const startMockWebsite = require('./mock/website');
 
-before(async () => {
+before(async function() {
 	global.mockWebsite = await startMockWebsite();
 	global.mockWebsiteAddress = `http://localhost:${global.mockWebsite.address().port}`;
 });
 
-after(() => {
+after(function() {
 	global.mockWebsite.close();
 	delete global.mockWebsite;
 	delete global.mockWebsiteAddress;

@@ -3,28 +3,28 @@
 const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
-describe('CLI exit codes', () => {
+describe('CLI exit codes', function() {
 	let pa11yResponse;
 
-	describe('when Pa11y is run on a page with no errors', () => {
+	describe('when Pa11y is run on a page with no errors', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`);
 		});
 
-		it('exits with a code of `0`', () => {
+		it('exits with a code of `0`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 
 	});
 
-	describe('when Pa11y is run on a page with errors', () => {
+	describe('when Pa11y is run on a page with errors', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`);
 		});
 
-		it('exits with a code of `2`', () => {
+		it('exits with a code of `2`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 2);
 		});
 
@@ -33,23 +33,23 @@ describe('CLI exit codes', () => {
 	// This has to be skipped for now, some ISPs hijack hostnames that can't
 	// be resolved (looking at you TalkTalk). We could do with finding a better
 	// way to test this later
-	describe.skip('when Pa11y is run on a page that can\'t be loaded', () => {
+	describe.skip(`when Pa11y is run on a page that can't be loaded`, function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli('notahost');
 		});
 
-		it('exits with a code of `1`', () => {
+		it('exits with a code of `1`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 1);
 		});
 
 	});
 
-	describe('when the `--level` flag is set to "warning"', () => {
+	describe('when the `--level` flag is set to "warning"', function() {
 
-		describe('and Pa11y is run on a page with no warnings or errors', () => {
+		describe('and Pa11y is run on a page with no warnings or errors', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--include-notices',
@@ -59,15 +59,15 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `0`', () => {
+			it('exits with a code of `0`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 0);
 			});
 
 		});
 
-		describe('and Pa11y is run on a page with warnings', () => {
+		describe('and Pa11y is run on a page with warnings', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 					arguments: [
 						'--include-notices',
@@ -77,7 +77,7 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `2`', () => {
+			it('exits with a code of `2`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 2);
 			});
 
@@ -85,11 +85,11 @@ describe('CLI exit codes', () => {
 
 	});
 
-	describe('when the `level` config is set to "warning"', () => {
+	describe('when the `level` config is set to "warning"', function() {
 
-		describe('and Pa11y is run on a page with no warnings or errors', () => {
+		describe('and Pa11y is run on a page with no warnings or errors', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--config', './mock/config/level-warning.json',
@@ -99,15 +99,15 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `0`', () => {
+			it('exits with a code of `0`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 0);
 			});
 
 		});
 
-		describe('and Pa11y is run on a page with warnings', () => {
+		describe('and Pa11y is run on a page with warnings', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 					arguments: [
 						'--config', './mock/config/level-warning.json',
@@ -117,7 +117,7 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `2`', () => {
+			it('exits with a code of `2`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 2);
 			});
 
@@ -125,11 +125,11 @@ describe('CLI exit codes', () => {
 
 	});
 
-	describe('when the `level` config is set to "warning" but the `--level` flag is set to "notice"', () => {
+	describe('when the `level` config is set to "warning" but the `--level` flag is set to "notice"', function() {
 
-		describe('and Pa11y is run on a page with no notices, warnings, or errors', () => {
+		describe('and Pa11y is run on a page with no notices, warnings, or errors', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--config', './mock/config/level-warning.json',
@@ -167,15 +167,15 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `0`', () => {
+			it('exits with a code of `0`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 0);
 			});
 
 		});
 
-		describe('and Pa11y is run on a page with notices', () => {
+		describe('and Pa11y is run on a page with notices', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--config', './mock/config/level-warning.json',
@@ -186,7 +186,7 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `2`', () => {
+			it('exits with a code of `2`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 2);
 			});
 
@@ -194,11 +194,11 @@ describe('CLI exit codes', () => {
 
 	});
 
-	describe('when the `--level` flag is set to "notice"', () => {
+	describe('when the `--level` flag is set to "notice"', function() {
 
-		describe('and Pa11y is run on a page with no notices, warnings, or errors', () => {
+		describe('and Pa11y is run on a page with no notices, warnings, or errors', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--include-notices',
@@ -235,15 +235,15 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `0`', () => {
+			it('exits with a code of `0`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 0);
 			});
 
 		});
 
-		describe('and Pa11y is run on a page with notices', () => {
+		describe('and Pa11y is run on a page with notices', function() {
 
-			before(async () => {
+			before(async function() {
 				pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
 					arguments: [
 						'--include-notices',
@@ -253,7 +253,7 @@ describe('CLI exit codes', () => {
 				});
 			});
 
-			it('exits with a code of `2`', () => {
+			it('exits with a code of `2`', function() {
 				assert.strictEqual(pa11yResponse.exitCode, 2);
 			});
 
@@ -261,9 +261,9 @@ describe('CLI exit codes', () => {
 
 	});
 
-	describe('when the `threshold` config is set to more than the number of errors present', () => {
+	describe('when the `threshold` config is set to more than the number of errors present', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
 					'--config', './mock/config/threshold-large.json',
@@ -273,15 +273,15 @@ describe('CLI exit codes', () => {
 			});
 		});
 
-		it('exits with a code of `0`', () => {
+		it('exits with a code of `0`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 
 	});
 
-	describe('when the `threshold` config is set to less than the number of errors present but the `--threshold` flag is set to more', () => {
+	describe('when the `threshold` config is set to less than the number of errors present but the `--threshold` flag is set to more', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
 					'--config', './mock/config/threshold-small.json',
@@ -292,15 +292,15 @@ describe('CLI exit codes', () => {
 			});
 		});
 
-		it('exits with a code of `0`', () => {
+		it('exits with a code of `0`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 
 	});
 
-	describe('when the `--threshold` flag is set to more than the number of errors present', () => {
+	describe('when the `--threshold` flag is set to more than the number of errors present', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
 					'--include-notices',
@@ -310,15 +310,15 @@ describe('CLI exit codes', () => {
 			});
 		});
 
-		it('exits with a code of `0`', () => {
+		it('exits with a code of `0`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 
 	});
 
-	describe('when the `--threshold` flag is set to exactly the number of errors present', () => {
+	describe('when the `--threshold` flag is set to exactly the number of errors present', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
 				arguments: [
 					'--include-notices',
@@ -328,7 +328,7 @@ describe('CLI exit codes', () => {
 			});
 		});
 
-		it('exits with a code of `0`', () => {
+		it('exits with a code of `0`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 0);
 		});
 

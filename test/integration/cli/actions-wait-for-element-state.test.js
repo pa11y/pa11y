@@ -6,12 +6,12 @@ const runPa11yCli = require('../helper/pa11y-cli');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI action "wait-for-element-state"', () => {
+describe('CLI action "wait-for-element-state"', function() {
 	let pa11yResponse;
 
-	describe('when waiting for an element to be added', () => {
+	describe('when waiting for an element to be added', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-added`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-added.json',
@@ -24,16 +24,16 @@ describe('CLI action "wait-for-element-state"', () => {
 		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
 		// JavaScript to remove the offending element and add the expected element, hence no a11y
 		// errors is proof of this successful action
-		it('waits for the element to be added before running tests', () => {
+		it('waits for the element to be added before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when waiting for an element to be removed', () => {
+	describe('when waiting for an element to be removed', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-removed`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-removed.json',
@@ -46,16 +46,16 @@ describe('CLI action "wait-for-element-state"', () => {
 		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
 		// JavaScript to remove the offending element and remove the expected element, hence no a11y
 		// errors is proof of this successful action
-		it('waits for the element to be removed before running tests', () => {
+		it('waits for the element to be removed before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when waiting for an element to be visible', () => {
+	describe('when waiting for an element to be visible', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-visible`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-visible.json',
@@ -68,16 +68,16 @@ describe('CLI action "wait-for-element-state"', () => {
 		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
 		// JavaScript to remove the offending element and make the expected element visible, hence
 		// no a11y errors is proof of this successful action
-		it('waits for the element to be visible before running tests', () => {
+		it('waits for the element to be visible before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when waiting for an element to be hidden', () => {
+	describe('when waiting for an element to be hidden', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-wait-for-element-state-hidden`, {
 				arguments: [
 					'--config', './mock/config/actions-wait-for-element-state-hidden.json',
@@ -90,7 +90,7 @@ describe('CLI action "wait-for-element-state"', () => {
 		// has an a11y error in the markup. When this action is performed the DOM is manupulated by
 		// JavaScript to remove the offending element and hide the expected element, hence no a11y
 		// errors is proof of this successful action
-		it('waits for the element to be hidden before running tests', () => {
+		it('waits for the element to be hidden before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});

@@ -1,9 +1,32 @@
 # Changelog
 
+## 6.0.1 (2021-06-28)
+
+* Merge axe and htmlcs runners into repo
+* `--environment` flag now shows pa11y version correctly (thanks @aarongoldenthal)
+* Tests and dependency fixes for runners and reporters (thanks @aarongoldenthal)
+
+## 6.0.0 (2021-05-26)
+
+* Test against WCAG 2.1 rules when using the default HTML_CodeSniffer runner.
+* Upgrade puppeteer to v9, which reduces the number of browser crashes significantly.
+* Remove support for testing against Section 508 standard.
+* Replace `make` commands for testing with npm scripts (thanks @sonniesedge and @paazmaya).
+* Integrate the built-in reporters with the pa11y repo (thanks @joeyciechanowicz).
+* Improve resilience of tests and other quality of life improvements (thanks @sangitamane).
+* Improve `--environment` output (thanks @ryhinchey).
+* Drop support for Node.js versions older than 12.
+
 ## 6.0.0-alpha (2020-04-28)
 
 * Update HTML_CodeSniffer to 2.5.1, which includes support for WCAG 2.1
 * Drop support for Node.js versions older than 10.
+
+## 5.3.1 (2021-04-01)
+
+* Removed survey link from README.md file.
+* Update the HTML_CodeSniffer runner so it doesn't install a version with WCAG 2.1 rules. See [pa11y/pa11y-runner-htmlcs@f22d3d1](https://github.com/pa11y/pa11y-runner-htmlcs/commit/f22d3d1d65bba415ca3415eb526123b301ecdd64) for details.
+* Pin other dependencies in order to avoid problems like the one just mentioned.
 
 ## 5.3.0 (2019-09-30)
 

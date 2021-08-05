@@ -10,8 +10,10 @@ const program = require('commander');
 const pa11y = require('../lib/pa11y');
 const semver = require('semver');
 
+const programOptions = program.opts();
+
 configureProgram();
-if (program.environment) {
+if (programOptions.environment) {
 	outputEnvironmentInfo();
 } else {
 	runProgram();
@@ -30,7 +32,7 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: Section508, WCAG2A, WCAG2AA (default), ' +
+			'the accessibility standard to use: WCAG2A, WCAG2AA (default), ' +
 			'WCAG2AAA – only used by htmlcs runner'
 		)
 		.option(
@@ -125,7 +127,7 @@ async function runProgram() {
 	const options = processOptions();
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
-	if (!program.debug) {
+	if (!programOptions.debug) {
 		options.log.debug = () => { /* NoOp */ };
 	}
 	await report.begin(program.url);
@@ -155,21 +157,21 @@ function processOptions() {
 		level: 'error',
 		reporter: 'cli',
 		threshold: 0
-	}, loadConfig(program.config), {
-		hideElements: program.hideElements,
-		ignore: (program.ignore.length ? program.ignore : undefined),
-		includeNotices: program.includeNotices,
-		includeWarnings: program.includeWarnings,
-		level: program.level,
-		reporter: program.reporter,
-		runners: (program.runner.length ? program.runner : undefined),
-		rootElement: program.rootElement,
-		rules: (program.addRule.length ? program.addRule : undefined),
-		screenCapture: program.screenCapture,
-		standard: program.standard,
-		threshold: program.threshold,
-		timeout: program.timeout,
-		wait: program.wait
+	}, loadConfig(programOptions.config), {
+		hideElements: programOptions.hideElements,
+		ignore: (programOptions.ignore.length ? programOptions.ignore : undefined),
+		includeNotices: programOptions.includeNotices,
+		includeWarnings: programOptions.includeWarnings,
+		level: programOptions.level,
+		reporter: programOptions.reporter,
+		runners: (programOptions.runner.length ? programOptions.runner : undefined),
+		rootElement: programOptions.rootElement,
+		rules: (programOptions.addRule.length ? programOptions.addRule : undefined),
+		screenCapture: programOptions.screenCapture,
+		standard: programOptions.standard,
+		threshold: programOptions.threshold,
+		timeout: programOptions.timeout,
+		wait: programOptions.wait
 	});
 	return options;
 }
@@ -193,13 +195,18 @@ function loadConfig(filePath) {
  * @returns {void}
  */
 function loadReporter(name) {
+
 	let reporterMethods;
 
 	try {
-		reporterMethods = requireFirst([
-			`pa11y-reporter-${name}`,
-			path.join(process.cwd(), name)
-		], null);
+		if (['json', 'cli', 'csv', 'tsv'].includes(name)) {
+			reporterMethods = require(`../lib/reporters/${name}`);
+		} else {
+			reporterMethods = requireFirst([
+				`pa11y-reporter-${name}`,
+				path.join(process.cwd(), name)
+			], null);
+		}
 	} catch (error) {
 		console.error(
 			`An error occurred when loading the "${name}" reporter. ` +
@@ -304,11 +311,9 @@ function collectOptions(val, array) {
 async function outputEnvironmentInfo() {
 	const envData = await envinfo.run({
 		System: ['OS', 'CPU', 'Memory', 'Shell'],
-		Binaries: ['Node', 'Yarn', 'npm'],
-		npmPackages: ['pa11y']
+		Binaries: ['Node', 'Yarn', 'npm']
 	});
-
-	console.log(envData);
+	console.log(`${envData}  pa11y: ${pkg.version}\n`);
 	process.exit(0);
 }
 

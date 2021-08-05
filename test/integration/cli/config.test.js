@@ -7,12 +7,12 @@ const runPa11yCli = require('../helper/pa11y-cli');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI config', () => {
+describe('CLI config', function() {
 	let pa11yResponse;
 
-	describe('when the configuration specifies headers', () => {
+	describe('when the configuration specifies headers', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/headers`, {
 				arguments: [
 					'--include-notices',
@@ -25,7 +25,7 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('sets headers on the tested page', () => {
+		it('sets headers on the tested page', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
@@ -35,9 +35,9 @@ describe('CLI config', () => {
 
 	});
 
-	describe('when the configuration specifies a method', () => {
+	describe('when the configuration specifies a method', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/method`, {
 				arguments: [
 					'--include-notices',
@@ -50,7 +50,7 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('tests the page using the specified HTTP method', () => {
+		it('tests the page using the specified HTTP method', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
@@ -60,9 +60,9 @@ describe('CLI config', () => {
 
 	});
 
-	describe('when the configuration specifies POST data', () => {
+	describe('when the configuration specifies POST data', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/post-data`, {
 				arguments: [
 					'--include-notices',
@@ -75,7 +75,7 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('tests the page using the specified HTTP method', () => {
+		it('tests the page using the specified HTTP method', function() {
 			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
@@ -85,9 +85,9 @@ describe('CLI config', () => {
 
 	});
 
-	describe('when the configuration specifies ignore rules', () => {
+	describe('when the configuration specifies ignore rules', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 				arguments: [
 					'--include-notices',
@@ -98,16 +98,16 @@ describe('CLI config', () => {
 			});
 		});
 
-		it('ignores the specified issues', () => {
+		it('ignores the specified issues', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when no configuration is specified but a `pa11y.json` file exists in the working directory', () => {
+	describe('when no configuration is specified but a `pa11y.json` file exists in the working directory', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -118,7 +118,7 @@ describe('CLI config', () => {
 			});
 		});
 
-		it('loads the default config', () => {
+		it('loads the default config', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});

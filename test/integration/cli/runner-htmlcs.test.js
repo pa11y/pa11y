@@ -8,9 +8,9 @@ require('../setup.test');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI runner HTML_CodeSniffer', () => {
+describe('CLI runner HTML_CodeSniffer', function() {
 
-	it('outputs the expected issues', async () => {
+	it('outputs the expected issues', async function() {
 		const pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 			arguments: [
 				'--runner', 'htmlcs',
@@ -25,7 +25,7 @@ describe('CLI runner HTML_CodeSniffer', () => {
 		});
 	});
 
-	it('runs on an AMD site', async () => {
+	it('runs on an AMD site', async function() {
 		const pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/AMD`, {
 			arguments: [
 				'--runner', 'htmlcs',
