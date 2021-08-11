@@ -144,7 +144,7 @@ Usage: pa11y [options] <url>
     -w, --wait <ms>                the time to wait before running tests in milliseconds
     -d, --debug                    output debug messages
     -S, --screen-capture <path>    a path to save a screen capture of the page to
-    -A, --add-rule <rule>          WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
+    -A, --add-rule <rule>          WCAG 2.1 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
     -h, --help                     output usage information
 ```
 
@@ -635,7 +635,7 @@ Defaults to:
 
 ### `rules` (array)
 
-An array of WCAG 2.0 guidelines that you'd like to include to the current standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
+An array of WCAG 2.1 guidelines that you'd like to include to the current standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
 
 ```js
 pa11y('https://example.com/', {
@@ -1019,7 +1019,7 @@ Copyright &copy; 2013–2021, Team Pa11y and contributors
 [5.x]: https://github.com/pa11y/pa11y/tree/5.x
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
-[htmlcs-wcag2aaa-ruleset]: https://github.com/pa11y/pa11y/wiki/HTML-CodeSniffer-Rules
+[htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
 [info-build]: https://github.com/pa11y/pa11y.github.io/actions/workflows/build-and-test.yml
 [info-license]: LICENSE
