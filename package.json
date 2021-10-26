@@ -32,17 +32,24 @@
     "node": ">=12"
   },
   "dependencies": {
+    "async": "^3.2.1",
     "axe-core": "^4.0.2",
     "bfj": "~7.0.2",
+    "chalk": "^4.1.2",
+    "cheerio": "^1.0.0-rc.10",
     "commander": "~8.0.0",
     "envinfo": "~7.8.1",
+    "globby": "^12.0.2",
     "hogan.js": "^3.0.2",
     "html_codesniffer": "^2.5.1",
     "kleur": "~4.1.4",
+    "lodash": "^4.17.21",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
+    "protocolify": "^4.0.0",
     "puppeteer": "~9.1.1",
-    "semver": "~7.3.5"
+    "semver": "~7.3.5",
+    "wordwrap": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^7.27.0",
