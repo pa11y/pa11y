@@ -18,7 +18,7 @@ describe('lib/helpers/loader', () => {
 		});
 
 		it('resolves npm modules', () => {
-			const loadReporter = require('../../../lib/helpers/loader');
+			const loadReporter = require('../../../../lib/helpers/loader');
 			const mock = {};
 			mockery.registerMock('my-reporter', mock);
 			const reporter = loadReporter('my-reporter');
@@ -31,7 +31,7 @@ describe('lib/helpers/loader', () => {
 			mockery.registerMock('fs', {
 				existsSync: () => true
 			});
-			const loadReporter = require('../../../lib/helpers/loader');
+			const loadReporter = require('../../../../lib/helpers/loader');
 
 			mockery.registerMock(path.join(process.cwd(), '/my-reporter.js'), mock);
 			const reporter = loadReporter('my-reporter.js');
@@ -41,7 +41,7 @@ describe('lib/helpers/loader', () => {
 		});
 
 		it('returns undefined if module is not resolved', () => {
-			const loadReporter = require('../../../lib/helpers/loader');
+			const loadReporter = require('../../../../lib/helpers/loader');
 
 			const reporter = loadReporter('my-reporter.js');
 

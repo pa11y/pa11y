@@ -4,7 +4,7 @@
 const assert = require('proclaim');
 const sinon = require('sinon');
 const cli = require('../../../../lib/reporters/cli');
-const defaults = require('../../../../lib/helpers/defaults');
+const defaults = require('../../../../../lib/helpers/defaults');
 
 describe('reporters/cli', () => {
 	const log = {
