@@ -1,0 +1,12 @@
+{
+	"defaults": {
+		"timeout": 100
+	},
+	"urls": [
+		"http://localhost:8090/passing-1",
+		{
+			"url": "http://localhost:8090/passing-2",
+			"timeout": 10000
+		}
+	]
+}
