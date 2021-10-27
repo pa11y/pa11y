@@ -28,7 +28,15 @@ function createMockWebsite() {
 		});
 		request.on('end', () => {
 			const url = parseUrl(request.url).pathname;
+
 			try {
+				if (url.includes('.xml')) {
+					response.writeHead(200, {
+						'Content-Type': 'text/xml'
+					});
+					return response.end(fs.readFileSync(`${__dirname}/${url}`, 'utf-8'));
+				}
+
 				let html = fs.readFileSync(`${__dirname}/html/${url}.html`, 'utf-8');
 				html = html.replace('{foo-header}', request.headers.foo);
 				html = html.replace('{bar-header}', request.headers.bar);

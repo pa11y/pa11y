@@ -2,6 +2,7 @@
 'use strict';
 
 const assert = require('proclaim');
+const path = require('path');
 
 describe('pa11y-ci (with no config file)', () => {
 
@@ -10,37 +11,33 @@ describe('pa11y-ci (with no config file)', () => {
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-default');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-default`);
 	});
 
 });
 
 describe('pa11y-ci (with a config file that has no extension)', () => {
-
-	before(() => {
-		return global.cliCall([
+	it('loads the expected config', async () => {
+		// TODO: refactor all tests to use async/await instead of a global state
+		const result = await global.cliCall([
 			'--config',
 			'extension-none'
 		]);
-	});
 
-	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-none');
+		assert.include(result.output, `${global.mockWebsiteAddress}/config-extension-none`);
 	});
 
 });
 
 describe('pa11y-ci (with a config file that has a "json" extension)', () => {
 
-	before(() => {
-		return global.cliCall([
+	it('loads the expected config', async () => {
+		const result = await global.cliCall([
 			'--config',
 			'extension-json'
 		]);
-	});
 
-	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-json');
+		assert.include(result.output, `${global.mockWebsiteAddress}/config-extension-json`);
 	});
 
 });
@@ -55,7 +52,7 @@ describe('pa11y-ci (with a config file that has a "js" extension)', () => {
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-js');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-extension-js`);
 	});
 
 });
@@ -70,7 +67,7 @@ describe('pa11y-ci (with a config file that has a "js" extension that returns a 
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-js-promise');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-extension-js-promise`);
 	});
 
 });
@@ -85,7 +82,7 @@ describe('pa11y-ci (with a config file that has a specified JSON extension)', ()
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-json');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-extension-json`);
 	});
 
 });
@@ -100,7 +97,7 @@ describe('pa11y-ci (with a config file that has a specified JS extension)', () =
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-js');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-extension-js`);
 	});
 
 });
@@ -110,12 +107,12 @@ describe('pa11y-ci (with a config file that has an absolute path)', () => {
 	before(() => {
 		return global.cliCall([
 			'--config',
-			`${__dirname}/mock/config/extension-json.json`
+			path.resolve(`${__dirname}/../mock/config/extension-json.json`)
 		]);
 	});
 
 	it('loads the expected config', () => {
-		assert.include(global.lastResult.output, 'http://localhost:8090/config-extension-json');
+		assert.include(global.lastResult.output, `${global.mockWebsiteAddress}/config-extension-json`);
 	});
 
 });

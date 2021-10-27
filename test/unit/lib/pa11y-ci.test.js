@@ -20,7 +20,9 @@ describe('lib/pa11y-ci', () => {
 		log = require('../mock/log.mock');
 
 		pa11y = require('../mock/pa11y.mock');
-		mockery.registerMock('pa11y', pa11y);
+		// Mockery uses exact patch matches, so we need to mock the path pa11y.js will be
+		// required from.
+		mockery.registerMock('./pa11y', pa11y);
 
 		queue = sinon.spy(require('async/queue'));
 		mockery.registerMock('async/queue', queue);
@@ -28,7 +30,7 @@ describe('lib/pa11y-ci', () => {
 		puppeteer = require('../mock/puppeteer.mock');
 		mockery.registerMock('puppeteer', puppeteer);
 
-		pa11yCi = require('../../..');
+		pa11yCi = require('../../../lib/pa11y-ci');
 	});
 
 	it('exports a function', () => {

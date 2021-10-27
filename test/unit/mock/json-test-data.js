@@ -10,7 +10,7 @@ module.exports.testResults = {
 		'./foo/erroring.html': [
 			new Error(`net::ERR_FILE_NOT_FOUND at file://${__dirname}/mock/config/foo/erroring.html`)
 		],
-		'http://localhost:8090/failing-1': [
+		[`${global.mockWebsiteAddress}/failing-1`]: [
 			{
 				code: 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2',
 				context: '<html><head>\n\t<meta charset="utf-8">\n...</html>',
@@ -22,7 +22,7 @@ module.exports.testResults = {
 				typeCode: 1
 			}
 		],
-		'http://localhost:8090/passing-1': []
+		[`${global.mockWebsiteAddress}/passing-1`]: []
 	}
 };
 
@@ -37,7 +37,7 @@ module.exports.testResultsOutput = {
 				message: `net::ERR_FILE_NOT_FOUND at file://${__dirname}/mock/config/foo/erroring.html`
 			}
 		],
-		'http://localhost:8090/failing-1': [
+		[`${global.mockWebsiteAddress}/failing-1`]: [
 			{
 				code: 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2',
 				context: '<html><head>\n\t<meta charset="utf-8">\n...</html>',
@@ -49,6 +49,6 @@ module.exports.testResultsOutput = {
 				typeCode: 1
 			}
 		],
-		'http://localhost:8090/passing-1': []
+		[`${global.mockWebsiteAddress}/passing-1`]: []
 	}
 };

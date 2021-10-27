@@ -11,82 +11,89 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const pa11yCi = require('..');
+const pa11yCi = require('../lib/pa11y-ci');
 const path = require('path');
 const globby = require('globby');
 const protocolify = require('protocolify');
 const pkg = require('../package.json');
-const commander = require('commander');
+const program = require('commander');
 
-
-// Here we're using Commander to specify the CLI options
-commander
-	.version(pkg.version)
-	.usage('[options] <paths>')
-	.option(
-		'-c, --config <path>',
-		'the path to a JSON or JavaScript config file'
-	)
-	.option(
-		'-s, --sitemap <url>',
-		'the path to a sitemap'
-	)
-	.option(
-		'-f, --sitemap-find <pattern>',
-		'a pattern to find in sitemaps. Use with --sitemap-replace'
-	)
-	.option(
-		'-r, --sitemap-replace <string>',
-		'a replacement to apply in sitemaps. Use with --sitemap-find'
-	)
-	.option(
-		'-x, --sitemap-exclude <pattern>',
-		'a pattern to find in sitemaps and exclude any url that matches'
-	)
-	.option(
-		'-j, --json',
-		'Output results as JSON'
-	)
-	.option(
-		'-T, --threshold <number>',
-		'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
-		'0'
-	).option(
-		'--reporter <reporter>',
-		'the reporter to use. Can be a npm module or a path to a local file.'
-	)
-	.parse(process.argv);
-
+configureProgram();
 // Parse the args into valid paths using glob and protocolify
-const urls = globby.sync(commander.args, {
+const urls = globby.sync(program.args, {
 	// Ensure not-found paths (like "google.com"), are returned
 	nonull: true
 }).map(protocolify);
+
+const programOptions = program.opts();
+
+/**
+ * Parse the flags and arguments passed to the CLI
+ * @returns {void}
+ */
+function configureProgram() {
+	program
+		.version(pkg.version)
+		.usage('[options] <paths>')
+		.option(
+			'-c, --config <path>',
+			'the path to a JSON or JavaScript config file'
+		)
+		.option(
+			'-s, --sitemap <url>',
+			'the path to a sitemap'
+		)
+		.option(
+			'-f, --sitemap-find <pattern>',
+			'a pattern to find in sitemaps. Use with --sitemap-replace'
+		)
+		.option(
+			'-r, --sitemap-replace <string>',
+			'a replacement to apply in sitemaps. Use with --sitemap-find'
+		)
+		.option(
+			'-x, --sitemap-exclude <pattern>',
+			'a pattern to find in sitemaps and exclude any url that matches'
+		)
+		.option(
+			'-j, --json',
+			'Output results as JSON'
+		)
+		.option(
+			'-T, --threshold <number>',
+			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2',
+			'0'
+		).option(
+			'--reporter <reporter>',
+			'the reporter to use. Can be a npm module or a path to a local file.'
+		)
+		.parse(process.argv);
+}
 
 // Start the promise chain to actually run everything
 Promise.resolve()
 	.then(() => {
 		// Load config based on the `--config` flag
-		return loadConfig(commander.config);
+		return loadConfig(programOptions.config);
 	})
 	.then(config => {
 		// Load a sitemap based on the `--sitemap` flag
-		if (commander.sitemap) {
-			return loadSitemapIntoConfig(commander, config);
+		if (programOptions.sitemap) {
+			return loadSitemapIntoConfig(programOptions, config);
 		}
 		return config;
 	})
 	.then(config => {
 		// Override config reporters with CLI argument
-		if (commander.reporter) {
-			config.defaults.reporters = [commander.reporter];
+		if (programOptions.reporter) {
+			config.defaults.reporters = [programOptions.reporter];
 		}
 		// Actually run Pa11y CI
 		return pa11yCi(urls.concat(config.urls || []), config.defaults);
 	})
 	.then(report => {
 		// Output JSON if asked for it
-		if (commander.json) {
+		if (programOptions.json) {
 			console.log(JSON.stringify(report, (key, value) => {
 				if (value instanceof Error) {
 					return {
@@ -98,7 +105,7 @@ Promise.resolve()
 		}
 		// Decide on an exit code based on whether
 		// errors are below threshold or everything passes
-		if (report.errors >= parseInt(commander.threshold, 10) && report.passes < report.total) {
+		if (report.errors >= parseInt(programOptions.threshold, 10) && report.passes < report.total) {
 			process.exit(2);
 		} else {
 			process.exit(0);
@@ -128,7 +135,7 @@ function loadConfig(configPath) {
 			if (!config) {
 				config = loadLocalConfigWithJson(configPath);
 			}
-			if (commander.config && !config) {
+			if (programOptions.config && !config) {
 				return reject(new Error(`The config file "${configPath}" could not be loaded`));
 			}
 		} catch (error) {
@@ -200,7 +207,7 @@ function defaultConfig(config) {
 	config.defaults.log = config.defaults.log || console;
 	// 	Setting to undefined rather than 0 allows for a fallback to the default
 	config.defaults.wrapWidth = process.stdout.columns || undefined;
-	if (commander.json) {
+	if (programOptions.json) {
 		delete config.defaults.log;
 	}
 	return config;
@@ -208,16 +215,16 @@ function defaultConfig(config) {
 
 // Load a sitemap from a remote URL, parse out the
 // URLs, and add them to an existing config object
-function loadSitemapIntoConfig(program, initialConfig) {
+function loadSitemapIntoConfig(initialConfig) {
 	const sitemapFind = (
-		program.sitemapFind ?
-			new RegExp(program.sitemapFind, 'gi') :
+		programOptions.sitemapFind ?
+			new RegExp(programOptions.sitemapFind, 'gi') :
 			null
 	);
-	const sitemapReplace = program.sitemapReplace || '';
+	const sitemapReplace = programOptions.sitemapReplace || '';
 	const sitemapExclude = (
-		program.sitemapExclude ?
-			new RegExp(program.sitemapExclude, 'gi') :
+		programOptions.sitemapExclude ?
+			new RegExp(programOptions.sitemapExclude, 'gi') :
 			null
 	);
 
@@ -258,5 +265,5 @@ function loadSitemapIntoConfig(program, initialConfig) {
 			});
 	}
 
-	return getUrlsFromSitemap(program.sitemap, initialConfig);
+	return getUrlsFromSitemap(programOptions.sitemap, initialConfig);
 }

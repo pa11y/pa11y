@@ -2,6 +2,6 @@
 
 module.exports = {
 	urls: [
-		'http://localhost:8090/config-extension-js'
+		`http://localhost:8090/config-extension-js`
 	]
 };

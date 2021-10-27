@@ -3,10 +3,10 @@
 
 const assert = require('proclaim');
 const sinon = require('sinon');
-const cli = require('../../../../lib/reporters/cli');
+const cli = require('../../../../../lib/reporters/ci/cli');
 const defaults = require('../../../../../lib/helpers/defaults');
 
-describe('reporters/cli', () => {
+describe('reporters/ci/cli', () => {
 	const log = {
 		info: sinon.stub(),
 		error: sinon.stub()

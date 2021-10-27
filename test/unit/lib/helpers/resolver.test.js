@@ -18,14 +18,14 @@ describe('lib/helpers/resolver', () => {
 		});
 
 		it('returns an empty array for non-array and empty array argument', () => {
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 
 			assert.deepEqual(resolveReporters({reporters: []}), []);
 			assert.deepEqual(resolveReporters({reporters: ''}), []);
 		});
 
 		it('omits non-string values', () => {
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 			const reporters = resolveReporters({reporters: [false, null, undefined]});
 			assert.equal(reporters.length, 0);
 		});
@@ -33,7 +33,7 @@ describe('lib/helpers/resolver', () => {
 		it('calls loadReporter', () => {
 			const loadStub = sinon.stub();
 			mockery.registerMock('./loader', loadStub);
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 			const mock1 = {mock1: true};
 			const mock2 = {mock2: true};
 			loadStub.onCall(0).returns(mock1);
@@ -49,12 +49,12 @@ describe('lib/helpers/resolver', () => {
 
 		it('resolves included reporters with shorthand notation', () => {
 			const includedReporters = ['cli', 'json'];
-			const reporterPath = '../../../lib/reporters';
+			const reporterPath = '../../../../lib/reporters/ci';
 			const includedReportersResolved = [require.resolve(`${reporterPath}/cli.js`),
 				require.resolve(`${reporterPath}/json.js`)];
 			const loaderStub = sinon.stub();
 			mockery.registerMock('./loader', loaderStub);
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 
 			resolveReporters({reporters: includedReporters});
 
@@ -63,7 +63,7 @@ describe('lib/helpers/resolver', () => {
 		});
 
 		it('accepts reporters as factory functions', () => {
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 			const reporters = resolveReporters(config);
 			assert.called(stubReporter);
 			assert.deepEqual(reporters, [mock]);
@@ -75,13 +75,13 @@ describe('lib/helpers/resolver', () => {
 				['my-reporter', reporterOptions]
 			];
 
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 			resolveReporters(config);
 			assert.calledWith(stubReporter, reporterOptions, config);
 		});
 
 		it('reporter options default to an empty object', () => {
-			const resolveReporters = require('../../../lib/helpers/resolver');
+			const resolveReporters = require('../../../../lib/helpers/resolver');
 			resolveReporters(config);
 			assert.calledWith(stubReporter, {}, config);
 		});
