@@ -79,7 +79,7 @@ Promise.resolve()
 	.then(config => {
 		// Load a sitemap based on the `--sitemap` flag
 		if (programOptions.sitemap) {
-			return loadSitemapIntoConfig(programOptions, config);
+			return loadSitemapIntoConfig(config);
 		}
 		return config;
 	})
