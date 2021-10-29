@@ -16,7 +16,7 @@ describe('lib/runners/axe', () => {
 				{
 					id: 'mock-id-1',
 					description: 'mock description 1',
-					impact: 'mock impact 1',
+					impact: 'critical',
 					help: 'mock help 1',
 					helpUrl: 'mock-help-url-1',
 					nodes: [
@@ -35,7 +35,7 @@ describe('lib/runners/axe', () => {
 				{
 					id: 'mock-id-2',
 					description: 'mock description 2',
-					impact: 'mock impact 2',
+					impact: 'serious',
 					help: 'mock help 2',
 					helpUrl: 'mock-help-url-2',
 					nodes: [
@@ -49,7 +49,7 @@ describe('lib/runners/axe', () => {
 				{
 					id: 'mock-id-no-nodes',
 					description: 'mock description no-nodes',
-					impact: 'mock impact no-nodes',
+					impact: 'moderate',
 					help: 'mock help no-nodes',
 					helpUrl: 'mock-help-url-no-nodes',
 					nodes: []
@@ -59,7 +59,7 @@ describe('lib/runners/axe', () => {
 				{
 					id: 'mock-id-3',
 					description: 'mock description 3',
-					impact: 'mock impact 3',
+					impact: 'minor',
 					help: 'mock help 3',
 					helpUrl: 'mock-help-url-3',
 					nodes: [
@@ -73,7 +73,7 @@ describe('lib/runners/axe', () => {
 				{
 					id: 'mock-id-4',
 					description: 'mock description 4',
-					impact: 'mock impact 4',
+					impact: 'not a supported impact level',
 					help: 'mock help 4',
 					helpUrl: 'mock-help-url-4',
 					nodes: [
@@ -173,7 +173,7 @@ describe('lib/runners/axe', () => {
 					element: 'mock-element-1a',
 					runnerExtras: {
 						description: 'mock description 1',
-						impact: 'mock impact 1',
+						impact: 'critical',
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -185,7 +185,7 @@ describe('lib/runners/axe', () => {
 					element: 'mock-element-1b',
 					runnerExtras: {
 						description: 'mock description 1',
-						impact: 'mock impact 1',
+						impact: 'critical',
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -197,7 +197,7 @@ describe('lib/runners/axe', () => {
 					element: 'mock-element-2',
 					runnerExtras: {
 						description: 'mock description 2',
-						impact: 'mock impact 2',
+						impact: 'serious',
 						help: 'mock help 2',
 						helpUrl: 'mock-help-url-2'
 					}
@@ -205,11 +205,11 @@ describe('lib/runners/axe', () => {
 				{
 					code: 'mock-id-no-nodes',
 					message: 'mock help no-nodes (mock-help-url-no-nodes)',
-					type: 'error',
+					type: 'warning',
 					element: null,
 					runnerExtras: {
 						description: 'mock description no-nodes',
-						impact: 'mock impact no-nodes',
+						impact: 'moderate',
 						help: 'mock help no-nodes',
 						helpUrl: 'mock-help-url-no-nodes'
 					}
@@ -217,11 +217,11 @@ describe('lib/runners/axe', () => {
 				{
 					code: 'mock-id-3',
 					message: 'mock help 3 (mock-help-url-3)',
-					type: 'warning',
+					type: 'notice',
 					element: 'mock-element-3',
 					runnerExtras: {
 						description: 'mock description 3',
-						impact: 'mock impact 3',
+						impact: 'minor',
 						help: 'mock help 3',
 						helpUrl: 'mock-help-url-3'
 					}
@@ -229,11 +229,11 @@ describe('lib/runners/axe', () => {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'warning',
+					type: 'error',
 					element: 'mock-element-4a',
 					runnerExtras: {
 						description: 'mock description 4',
-						impact: 'mock impact 4',
+						impact: 'not a supported impact level',
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
 					}
@@ -241,11 +241,11 @@ describe('lib/runners/axe', () => {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'warning',
+					type: 'error',
 					element: 'mock-element-4b',
 					runnerExtras: {
 						description: 'mock description 4',
-						impact: 'mock impact 4',
+						impact: 'not a supported impact level',
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
 					}
