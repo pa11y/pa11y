@@ -1042,7 +1042,7 @@ describe('lib/pa11y', function() {
 		});
 
 		it('has a `timeout` property', function() {
-			assert.strictEqual(pa11y.defaults.timeout, 30000);
+			assert.strictEqual(pa11y.defaults.timeout, 60000);
 		});
 
 		it('has a `userAgent` property', function() {
