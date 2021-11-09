@@ -1,0 +1,33 @@
+<!--
+This HTML file has an error in it that is removed via JavaScript
+when a field value is changed to "value"
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8"/>
+
+	<!-- Page title generates a notice -->
+	<title>Page Title</title>
+
+</head>
+<body>
+
+	<!-- Missing alt attribute generates an error -->
+	<img src="/path/to/image.jpg"/>
+
+	<label for="name-field">
+		<input type="text" name="name" id="name-field" value="a-default-value"/>
+	</label>
+
+	<script>
+		document.querySelector('#name-field').addEventListener('input', event => {
+			if (event.target.value === '') {
+				document.querySelector('img').remove();
+			}
+		});
+	</script>
+
+</body>
+</html>
