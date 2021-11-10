@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.1.0 (2021-11-09)
+
+* The axe runner now supports the same error level flags as the HTML_CodeSniffer runner.
+* Add `ignore-rules` section to axe runner config
+* Improve the logic to detect local files passed as an argument (thanks @kkoskelin)
+* Increase default timeout from 30 to 60 seconds (thanks @m1rp)
+* Update documentation to mention WCAG 2.1 instead of WCAG 2.0 when appropriate
+* Remove all mentions to Section 508 from the tool
+* Merge the example HTML reporter into this repo
+* Update dependencies
+* Downgrade package-lock.json file to v1 for compatibility with older versions of npm.
+
 ## 6.0.1 (2021-06-28)
 
 * Merge axe and htmlcs runners into repo
