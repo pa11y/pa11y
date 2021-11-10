@@ -579,6 +579,40 @@ describe('lib/action', function() {
 					assert.isUndefined(resolvedValue);
 				});
 
+				describe('with an element created from a prototype', function() {
+					beforeEach(async function() {
+						const mockPrototypeElement = createMockPrototypeElement();
+						global.document.querySelector.returns(mockPrototypeElement);
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					});
+
+					afterEach(function() {
+						global.document = originalDocument;
+					});
+
+					it('calls `document.querySelector` with the passed in selector', function() {
+						assert.calledTwice(global.document.querySelector);
+						assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+					});
+
+					it('clears the element `value` property to the passed in value', function() {
+						assert.strictEqual(mockElement.value, '');
+					});
+
+					it('triggers an input event on the element', function() {
+						assert.calledTwice(Event);
+						assert.calledWithExactly(Event, 'input', {
+							bubbles: true
+						});
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+					});
+
+					it('resolves with `undefined`', function() {
+						assert.isUndefined(resolvedValue);
+					});
+				});
+
 				describe('when an element with the given selector cannot be found', function() {
 					let rejectedError;
 
