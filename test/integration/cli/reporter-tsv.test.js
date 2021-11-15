@@ -23,7 +23,7 @@ describe('CLI reporter TSV', function() {
 			assert.lengthEquals(lines, 29);
 			assert.strictEqual(lines[0], '"type"\t"code"\t"message"\t"context"\t"selector"');
 			lines.slice(1).forEach(line => {
-				assert.match(line, /^"(error|warning|notice)"\t"[^"]+"\t"[^"]+"\t(".*")\t"[^"]*"$/i);
+				assert.match(line, /^"(error|warning|notice)"\t"[^"]+"\t"[^"]+"\t(".*"|null)\t"[^"]*"$/i);
 			});
 		});
 
@@ -46,7 +46,7 @@ describe('CLI reporter TSV', function() {
 			assert.lengthEquals(lines, 29);
 			assert.strictEqual(lines[0], '"type"\t"code"\t"message"\t"context"\t"selector"');
 			lines.slice(1).forEach(line => {
-				assert.match(line, /^"(error|warning|notice)"\t"[^"]+"\t"[^"]+"\t(".*")\t"[^"]*"$/i);
+				assert.match(line, /^"(error|warning|notice)"\t"[^"]+"\t"[^"]+"\t(".*"|null)\t"[^"]*"$/i);
 			});
 		});
 
