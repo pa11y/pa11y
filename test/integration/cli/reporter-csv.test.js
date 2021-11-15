@@ -29,4 +29,27 @@ describe('CLI reporter CSV', function() {
 
 	});
 
+	describe('when the `--reporter` config is set to "csv"', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
+				arguments: [
+					'--include-notices',
+					'--include-warnings',
+					'--config', './mock/config/reporter-csv.json'
+				]
+			});
+		});
+
+		it('outputs issues in CSV format', function() {
+			const lines = pa11yResponse.stdout.trim().split('\n');
+			assert.lengthEquals(lines, 29);
+			assert.strictEqual(lines[0], '"type","code","message","context","selector"');
+			lines.slice(1).forEach(line => {
+				assert.match(line, /^"(error|warning|notice)","[^"]+","[^"]+",(".*"),"[^"]*"$/i);
+			});
+		});
+
+	});
+
 });
