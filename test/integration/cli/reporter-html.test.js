@@ -19,6 +19,8 @@ describe('CLI reporter HTML', function() {
 		it('outputs issues in HTML format', function() {
 			assert.include(pa11yResponse.stdout,
 				`<h1>Accessibility Report For "${global.mockWebsiteAddress}/errors"</h1>`);
+			assert.match(pa11yResponse.stdout, /<span.*>1 errors<\/span>/);
+			assert.match(pa11yResponse.stdout, /<h2>Error:[^<]*<\/h2>/);
 		});
 
 	});
@@ -36,6 +38,8 @@ describe('CLI reporter HTML', function() {
 		it('outputs issues in HTML format', function() {
 			assert.include(pa11yResponse.stdout,
 				`<h1>Accessibility Report For "${global.mockWebsiteAddress}/errors"</h1>`);
+			assert.match(pa11yResponse.stdout, /<span.*>1 errors<\/span>/);
+			assert.match(pa11yResponse.stdout, /<h2>Error:[^<]*<\/h2>/);
 		});
 
 	});
