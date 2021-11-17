@@ -481,6 +481,187 @@ describe('lib/action', function() {
 
 	});
 
+
+	describe('clear-field-value action', function() {
+		let action;
+
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'clear-field-value';
+			});
+		});
+
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'clear-field-value');
+		});
+
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('clear .foo'.match(action.match), [
+					'clear .foo',
+					undefined,
+					'.foo'
+				]);
+				assert.deepEqual('clear field .foo'.match(action.match), [
+					'clear field .foo',
+					' field',
+					'.foo'
+				]);
+				assert.deepEqual('clear field .foo .bar .baz'.match(action.match), [
+					'clear field .foo .bar .baz',
+					' field',
+					'.foo .bar .baz'
+				]);
+			});
+
+		});
+
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'clear field foo'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			});
+
+			it('evaluates some JavaScript in the context of the page', function() {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
+			});
+
+			describe('evaluated JavaScript', function() {
+				let mockElement;
+				let originalDocument;
+
+				beforeEach(async function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+				});
+
+				afterEach(function() {
+					global.document = originalDocument;
+				});
+
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+				});
+
+				it('sets the element `value` property to empty', function() {
+					assert.strictEqual(mockElement.value, '');
+				});
+
+				it('triggers a change event on the element', function() {
+					assert.calledOnce(Event);
+					assert.calledWithExactly(Event, 'input', {
+						bubbles: true
+					});
+					assert.calledOnce(mockElement.dispatchEvent);
+					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+				});
+
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
+				});
+
+				describe('with an element created from a prototype', function() {
+					beforeEach(async function() {
+						const mockPrototypeElement = createMockPrototypeElement();
+						global.document.querySelector.returns(mockPrototypeElement);
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					});
+
+					afterEach(function() {
+						global.document = originalDocument;
+					});
+
+					it('calls `document.querySelector` with the passed in selector', function() {
+						assert.calledTwice(global.document.querySelector);
+						assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+					});
+
+					it('clears the element `value` property to the passed in value', function() {
+						assert.strictEqual(mockElement.value, '');
+					});
+
+					it('triggers an input event on the element', function() {
+						assert.calledTwice(Event);
+						assert.calledWithExactly(Event, 'input', {
+							bubbles: true
+						});
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+					});
+
+					it('resolves with `undefined`', function() {
+						assert.isUndefined(resolvedValue);
+					});
+				});
+
+				describe('when an element with the given selector cannot be found', function() {
+					let rejectedError;
+
+					beforeEach(async function() {
+						global.document.querySelector.returns(null);
+						try {
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+						} catch (error) {
+							rejectedError = error;
+						}
+					});
+
+					it('rejects with an error', function() {
+						assert.instanceOf(rejectedError, Error);
+					});
+
+				});
+
+			});
+
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
+			});
+
+			describe('when the evaluate fails', function() {
+				let evaluateError;
+				let rejectedError;
+
+				beforeEach(async function() {
+					evaluateError = new Error('evaluate error');
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
+					try {
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+					} catch (error) {
+						rejectedError = error;
+					}
+				});
+
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+				});
+
+			});
+
+		});
+	});
+
 	describe('check-field action', function() {
 		let action;
 
