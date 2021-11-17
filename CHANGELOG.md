@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.1.1 (2021-11-17)
+
+* Add `clear-field` action (thanks @amprew)
+* Fix html reporter and reporter integration tests (thanks @aarongoldenthal)
+
 ## 6.1.0 (2021-11-09)
 
 * The axe runner now supports the same error level flags as the HTML_CodeSniffer runner.
