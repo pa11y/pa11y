@@ -70,6 +70,7 @@ If you need a GUI, you can try [Koa11y](https://open-indy.github.io/Koa11y/). It
 * [Actions](#actions)
   * [Click Element](#click-element)
   * [Set Field Value](#set-field-value)
+  * [Clear Field Value](#clear-field-value)
   * [Check/Uncheck Field](#checkuncheck-field)
   * [Screen Capture](#screen-capture)
   * [Wait For Fragment/Path/URL](#wait-for-fragmentpathurl)
@@ -233,10 +234,9 @@ The command-line tool can report test results in a few different ways using the 
 
 * `cli`: output test results in a human-readable format
 * `csv`: output test results as comma-separated values
+* `html`: output test results as an HTML page
 * `json`: output test results as a JSON array
 * `tsv`: output test results as tab-separated values
-
-The Pa11y team maintain an additional [`html`](https://github.com/pa11y/pa11y-reporter-html) reporter that can be installed separately via `npm` and can be used as an example of how to build more complex reporters.
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
@@ -753,6 +753,7 @@ pa11y('https://example.com/', {
         'click element #tab-1',
         'wait for element #tab-1-content to be visible',
         'set field #fullname to John Doe',
+        'clear field #middlename',
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing',
         'screen capture example.png',
@@ -789,6 +790,18 @@ This allows you to set the value of a text-based input or select box by passing 
 pa11y('https://example.com/', {
     actions: [
         'set field #fullname to John Doe'
+    ]
+});
+```
+
+### Clear Field Value
+
+This allows you to clear the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `clear field <selector>`. E.g.
+
+```js
+pa11y('https://example.com/', {
+    actions: [
+        'clear field #middlename'
     ]
 });
 ```
@@ -1021,7 +1034,7 @@ Copyright &copy; 2013–2021, Team Pa11y and contributors
 [brew]: https://mxcl.github.com/homebrew/
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
-[info-build]: https://github.com/pa11y/pa11y.github.io/actions/workflows/build-and-test.yml
+[info-build]: https://github.com/pa11y/pa11y/actions/workflows/build-and-test.yml
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
