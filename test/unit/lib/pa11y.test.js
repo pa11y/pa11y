@@ -5,10 +5,9 @@ const mockery = require('mockery');
 const path = require('path');
 const sinon = require('sinon');
 
-describe('lib/pa11y', () => {
+describe('lib/pa11y', function() {
 	let extend;
 	let fs;
-	let htmlCodeSnifferRunner;
 	let htmlCodeSnifferPath;
 	let pa11y;
 	let pa11yResults;
@@ -19,7 +18,7 @@ describe('lib/pa11y', () => {
 	let runAction;
 	let semver;
 
-	beforeEach(() => {
+	beforeEach(function() {
 
 		pa11yResults = {
 			mockResults: true
@@ -40,23 +39,14 @@ describe('lib/pa11y', () => {
 
 		pkg = require('../../../package.json');
 
-		htmlCodeSnifferRunner = {
-			supports: 'mock-support-string',
-			scripts: [
-				'/mock/HTMLCS.js'
-			],
-			run: () => 'mock-htmlcs-runner'
-		};
-		mockery.registerMock('pa11y-runner-htmlcs', htmlCodeSnifferRunner);
-
-		htmlCodeSnifferPath = '/mock/HTMLCS.js';
+		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`);
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
 		fs = require('../mock/fs.mock');
 		mockery.registerMock('fs', fs);
 
-		fs.readFile.withArgs(htmlCodeSnifferPath).yieldsAsync(undefined, 'mock-html-codesniffer-js');
-		fs.readFile.withArgs(pa11yRunnerPath).yieldsAsync(undefined, 'mock-pa11y-runner-js');
+		fs.readFileSync.withArgs(htmlCodeSnifferPath).returns('mock-html-codesniffer-js');
+		fs.readFileSync.withArgs(pa11yRunnerPath).returns('mock-pa11y-runner-js');
 
 		pkg = require('../../../package.json');
 
@@ -73,62 +63,61 @@ describe('lib/pa11y', () => {
 		semver.satisfies.returns(true);
 
 		pa11y = require('../../../lib/pa11y');
-
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		/* eslint-disable no-underscore-dangle */
 		delete global.window;
 		/* eslint-enable no-underscore-dangle */
 	});
 
-	it('is a function', () => {
+	it('is a function', function() {
 		assert.isFunction(pa11y);
 	});
 
-	describe('pa11y(url)', () => {
+	describe('pa11y(url)', function() {
 		let resolvedValue;
 
-		beforeEach(async () => {
+		beforeEach(async function() {
 			resolvedValue = await pa11y('https://mock-url/');
 		});
 
-		it('defaults an empty options object with `pa11y.defaults`', () => {
+		it('defaults an empty options object with `pa11y.defaults`', function() {
 			assert.calledOnce(extend);
 			assert.isObject(extend.firstCall.args[0]);
 			assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
 			assert.deepEqual(extend.firstCall.args[2], {});
 		});
 
-		it('uses a promise timeout function', () => {
+		it('uses a promise timeout function', function() {
 			assert.calledOnce(promiseTimeout);
 			assert.instanceOf(promiseTimeout.firstCall.args[0], Promise);
 			assert.strictEqual(promiseTimeout.firstCall.args[1], pa11y.defaults.timeout);
 			assert.strictEqual(promiseTimeout.firstCall.args[2], `Pa11y timed out (${pa11y.defaults.timeout}ms)`);
 		});
 
-		it('launches puppeteer with `options.chromeLaunchConfig`', () => {
+		it('launches puppeteer with `options.chromeLaunchConfig`', function() {
 			assert.calledOnce(puppeteer.launch);
 			assert.calledWithExactly(puppeteer.launch, pa11y.defaults.chromeLaunchConfig);
 		});
 
-		it('creates a new page', () => {
+		it('creates a new page', function() {
 			assert.calledOnce(puppeteer.mockBrowser.newPage);
 			assert.calledWithExactly(puppeteer.mockBrowser.newPage);
 		});
 
-		it('set the user agent', () => {
+		it('set the user agent', function() {
 			assert.calledOnce(puppeteer.mockPage.setUserAgent);
 			assert.calledWithExactly(puppeteer.mockPage.setUserAgent, pa11y.defaults.userAgent);
 		});
 
-		it('adds a console handler to the page', () => {
+		it('adds a console handler to the page', function() {
 			assert.called(puppeteer.mockPage.on);
 			assert.calledWith(puppeteer.mockPage.on, 'console');
 			assert.isFunction(puppeteer.mockPage.on.withArgs('console').firstCall.args[1]);
 		});
 
-		it('navigates to `url`', () => {
+		it('navigates to `url`', function() {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle2',
@@ -136,38 +125,33 @@ describe('lib/pa11y', () => {
 			});
 		});
 
-		it('sets the viewport', () => {
+		it('sets the viewport', function() {
 			assert.calledOnce(puppeteer.mockPage.setViewport);
 			assert.calledWith(puppeteer.mockPage.setViewport, pa11y.defaults.viewport);
 		});
 
-		it('loads the HTML CodeSniffer JavaScript', () => {
-			assert.called(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`/mock/HTMLCS.js`), 'utf-8');
+		it('loads the HTML CodeSniffer JavaScript', function() {
+			assert.called(fs.readFileSync);
+			assert.calledWith(fs.readFileSync, htmlCodeSnifferPath, 'utf-8');
 		});
 
-		it('loads the Pa11y runner JavaScript', () => {
-			assert.called(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+		it('loads the Pa11y runner JavaScript', function() {
+			assert.called(fs.readFileSync);
+			assert.calledWith(fs.readFileSync, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
 		});
 
-		it('verifies that the runner supports the current version of Pa11y', () => {
-			assert.calledOnce(semver.satisfies);
-			assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
-		});
-
-		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', () => {
+		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = \(\) => 'mock-htmlcs-runner'\s*;\s*$/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options\s*=>.*/);
 		});
 
-		it('evaluates the the Pa11y runner JavaScript', () => {
+		it('evaluates the the Pa11y runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.calledWith(puppeteer.mockPage.evaluate, 'mock-pa11y-runner-js');
 		});
 
-		it('evaluates some JavaScript in the context of the page', () => {
+		it('evaluates some JavaScript in the context of the page', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.isFunction(puppeteer.mockPage.evaluate.thirdCall.args[0]);
 			assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1], {
@@ -187,75 +171,75 @@ describe('lib/pa11y', () => {
 			});
 		});
 
-		describe('evaluated JavaScript', () => {
+		describe('evaluated JavaScript', function() {
 			let options;
 			let returnValue;
 
-			beforeEach(() => {
+			beforeEach(function() {
 				options = {
 					mockOptions: true
 				};
 				returnValue = puppeteer.mockPage.evaluate.thirdCall.args[0](options);
 			});
 
-			it('calls `__pa11y.run` with the passed in options', () => {
+			it('calls `__pa11y.run` with the passed in options', function() {
 				/* eslint-disable no-underscore-dangle */
 				assert.calledOnce(global.window.__pa11y.run);
 				assert.calledWithExactly(global.window.__pa11y.run, options);
 				/* eslint-enable no-underscore-dangle */
 			});
 
-			it('returns the return value of `__pa11y.run`', () => {
+			it('returns the return value of `__pa11y.run`', function() {
 				assert.strictEqual(returnValue, pa11yResults);
 			});
 
 		});
 
-		it('closes the browser', () => {
+		it('closes the browser', function() {
 			assert.calledOnce(puppeteer.mockBrowser.close);
 			assert.calledWithExactly(puppeteer.mockBrowser.close);
 		});
 
-		it('resolves with the Pa11y results', () => {
+		it('resolves with the Pa11y results', function() {
 			assert.strictEqual(resolvedValue, pa11yResults);
 		});
 
-		describe('when `url` does not have a scheme', () => {
+		describe('when `url` does not have a scheme', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('mock-url');
 			});
 
-			it('navigates to `url` with an `http` scheme added', () => {
+			it('navigates to `url` with an `http` scheme added', function() {
 				assert.calledOnce(puppeteer.mockPage.goto);
 				assert.calledWith(puppeteer.mockPage.goto, 'http://mock-url');
 			});
 
 		});
 
-		describe('when `url` does not have a scheme and starts with a slash', () => {
+		describe('when `url` does not have a scheme and starts with a slash', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('/mock-path');
 			});
 
-			it('navigates to `url` with an `file` scheme added', () => {
+			it('navigates to `url` with an `file` scheme added', function() {
 				assert.calledOnce(puppeteer.mockPage.goto);
 				assert.calledWith(puppeteer.mockPage.goto, 'file:///mock-path');
 			});
 
 		});
 
-		describe('when `url` does not have a scheme and starts with a period', () => {
+		describe('when `url` does not have a scheme and starts with a period', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.goto.resetHistory();
 				resolvedValue = await pa11y('./mock-path');
 			});
 
-			it('navigates to `url` with an `file` scheme added and a resolved path', () => {
+			it('navigates to `url` with an `file` scheme added and a resolved path', function() {
 				const resolvedPath = path.resolve(process.cwd(), './mock-path');
 				assert.calledOnce(puppeteer.mockPage.goto);
 				assert.calledWith(puppeteer.mockPage.goto, `file://${resolvedPath}`);
@@ -263,11 +247,11 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when Headless Chrome errors', () => {
+		describe('when Headless Chrome errors', function() {
 			let headlessChromeError;
 			let rejectedError;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				headlessChromeError = new Error('headless chrome error');
 				puppeteer.mockBrowser.close.resetHistory();
 				puppeteer.mockPage.goto.rejects(headlessChromeError);
@@ -278,12 +262,12 @@ describe('lib/pa11y', () => {
 				}
 			});
 
-			it('closes the browser', () => {
+			it('closes the browser', function() {
 				assert.calledOnce(puppeteer.mockBrowser.close);
 				assert.calledWithExactly(puppeteer.mockBrowser.close);
 			});
 
-			it('rejects with the error', () => {
+			it('rejects with the error', function() {
 				assert.strictEqual(rejectedError, headlessChromeError);
 			});
 
@@ -291,10 +275,10 @@ describe('lib/pa11y', () => {
 
 	});
 
-	describe('pa11y(options)', () => {
+	describe('pa11y(options)', function() {
 		let options;
 
-		beforeEach(async () => {
+		beforeEach(function() {
 			options = {
 				mockOptions: true,
 				timeout: 40000,
@@ -305,44 +289,49 @@ describe('lib/pa11y', () => {
 					info: sinon.stub()
 				}
 			};
-			await pa11y(options);
 		});
 
-		it('defaults the options object with `pa11y.defaults`', () => {
-			assert.calledOnce(extend);
-			assert.isObject(extend.firstCall.args[0]);
-			assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
-			assert.deepEqual(extend.firstCall.args[2], options);
-		});
+		describe('with basic options', () => {
+			beforeEach(async () => {
+				await pa11y(options);
+			});
 
-		it('navigates to `options.url`', () => {
-			assert.calledOnce(puppeteer.mockPage.goto);
-			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
-				waitUntil: 'networkidle2',
-				timeout: options.timeout
+			it('defaults the options object with `pa11y.defaults`', function() {
+				assert.calledOnce(extend);
+				assert.isObject(extend.firstCall.args[0]);
+				assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
+				assert.deepEqual(extend.firstCall.args[2], options);
+			});
+
+			it('navigates to `options.url`', function() {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
+					waitUntil: 'networkidle2',
+					timeout: options.timeout
+				});
+			});
+
+			describe('console handler', function() {
+				let mockMessage;
+
+				beforeEach(function() {
+					mockMessage = {
+						text: sinon.stub().returns('mock-message')
+					};
+					puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
+				});
+
+				it('logs the console message text with `options.log.debug`', function() {
+					assert.calledWithExactly(options.log.debug, 'Browser Console: mock-message');
+				});
+
 			});
 		});
 
-		describe('console handler', () => {
-			let mockMessage;
-
-			beforeEach(() => {
-				mockMessage = {
-					text: sinon.stub().returns('mock-message')
-				};
-				puppeteer.mockPage.on.withArgs('console').firstCall.args[1](mockMessage);
-			});
-
-			it('logs the console message text with `options.log.debug`', () => {
-				assert.calledWithExactly(options.log.debug, 'Browser Console: mock-message');
-			});
-
-		});
-
-		describe('when `options.standard` is invalid', () => {
+		describe('when `options.standard` is invalid', function() {
 			let rejectedError;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				options.standard = 'not-a-standard';
 				try {
 					await pa11y(options);
@@ -351,16 +340,16 @@ describe('lib/pa11y', () => {
 				}
 			});
 
-			it('rejects with a descriptive error', () => {
+			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, 'Standard must be one of Section508, WCAG2A, WCAG2AA, WCAG2AAA');
+				assert.strictEqual(rejectedError.message, 'Standard must be one of WCAG2A, WCAG2AA, WCAG2AAA');
 			});
 
 		});
 
-		describe('when `options.ignore` has items with uppercase letters', () => {
+		describe('when `options.ignore` has items with uppercase letters', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				options.ignore = [
 					'MOCK-IGNORE'
@@ -368,22 +357,22 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			it('lowercases them', () => {
+			it('lowercases them', function() {
 				assert.include(extend.firstCall.args[0].ignore, 'mock-ignore');
 			});
 
 		});
 
-		describe('when `options.includeNotices` is `false`', () => {
+		describe('when `options.includeNotices` is `false`', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeNotices = false;
 				await pa11y(options);
 			});
 
-			it('automatically ignores notices', () => {
+			it('automatically ignores notices', function() {
 				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
@@ -392,16 +381,16 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.includeNotices` is `true`', () => {
+		describe('when `options.includeNotices` is `true`', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeNotices = true;
 				await pa11y(options);
 			});
 
-			it('does not automatically ignore notices', () => {
+			it('does not automatically ignore notices', function() {
 				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'warning'
 				]);
@@ -409,16 +398,16 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.includeWarnings` is `false`', () => {
+		describe('when `options.includeWarnings` is `false`', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeWarnings = false;
 				await pa11y(options);
 			});
 
-			it('automatically ignores warnings', () => {
+			it('automatically ignores warnings', function() {
 				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice',
 					'warning'
@@ -427,16 +416,16 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.includeWarnings` is `true`', () => {
+		describe('when `options.includeWarnings` is `true`', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
 				options.ignore = [];
 				options.includeWarnings = true;
 				await pa11y(options);
 			});
 
-			it('does not automatically ignore warnings', () => {
+			it('does not automatically ignore warnings', function() {
 				assert.deepEqual(puppeteer.mockPage.evaluate.thirdCall.args[1].ignore, [
 					'notice'
 				]);
@@ -444,37 +433,37 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.postData` is set', () => {
+		describe('when `options.postData` is set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.on.resetHistory();
 				options.method = 'POST';
 				options.postData = 'mock-post-data';
 				await pa11y(options);
 			});
 
-			it('enables request interception', () => {
+			it('enables request interception', function() {
 				assert.calledOnce(puppeteer.mockPage.setRequestInterception);
 				assert.calledWithExactly(puppeteer.mockPage.setRequestInterception, true);
 			});
 
-			it('adds a request handler to the page', () => {
+			it('adds a request handler to the page', function() {
 				assert.called(puppeteer.mockPage.on);
 				assert.calledWith(puppeteer.mockPage.on, 'request');
 				assert.isFunction(puppeteer.mockPage.on.withArgs('request').firstCall.args[1]);
 			});
 
-			describe('request handler', () => {
+			describe('request handler', function() {
 				let mockInterceptedRequest;
 
-				beforeEach(() => {
+				beforeEach(function() {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
 					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
-				it('calls `interceptedRequest.continue` with the postData option', () => {
+				it('calls `interceptedRequest.continue` with the postData option', function() {
 					assert.calledOnce(mockInterceptedRequest.continue);
 					assert.calledWith(mockInterceptedRequest.continue, {
 						method: options.method,
@@ -483,12 +472,12 @@ describe('lib/pa11y', () => {
 					});
 				});
 
-				describe('when triggered again', () => {
-					beforeEach(() => {
+				describe('when triggered again', function() {
+					beforeEach(function() {
 						puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 					});
 
-					it('calls `interceptedRequest.continue` with an empty object', () => {
+					it('calls `interceptedRequest.continue` with an empty object', function() {
 						assert.calledTwice(mockInterceptedRequest.continue);
 						assert.calledWith(mockInterceptedRequest.continue, {
 							method: options.method,
@@ -502,15 +491,15 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.screenCapture` is set', () => {
+		describe('when `options.screenCapture` is set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				options.screenCapture = 'mock.png';
 				await pa11y(options);
 			});
 
-			it('generates a screenshot', () => {
+			it('generates a screenshot', function() {
 				assert.called(puppeteer.mockPage.screenshot);
 				assert.calledWith(puppeteer.mockPage.screenshot, {
 					path: options.screenCapture,
@@ -518,10 +507,10 @@ describe('lib/pa11y', () => {
 				});
 			});
 
-			describe('when screenshot generation fails', () => {
+			describe('when screenshot generation fails', function() {
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					puppeteer.mockPage.screenshot.rejects(new Error('screenshot failed'));
 					try {
 						await pa11y(options);
@@ -530,7 +519,7 @@ describe('lib/pa11y', () => {
 					}
 				});
 
-				it('does not reject', () => {
+				it('does not reject', function() {
 					assert.isUndefined(rejectedError);
 				});
 
@@ -538,9 +527,9 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.headers` has properties', () => {
+		describe('when `options.headers` has properties', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.on.resetHistory();
 				options.headers = {
 					foo: 'bar',
@@ -550,17 +539,17 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			describe('request handler', () => {
+			describe('request handler', function() {
 				let mockInterceptedRequest;
 
-				beforeEach(() => {
+				beforeEach(function() {
 					mockInterceptedRequest = {
 						continue: sinon.stub()
 					};
 					puppeteer.mockPage.on.withArgs('request').firstCall.args[1](mockInterceptedRequest);
 				});
 
-				it('calls `interceptedRequest.continue` with the headers option all lower-cased', () => {
+				it('calls `interceptedRequest.continue` with the headers option all lower-cased', function() {
 					assert.calledOnce(mockInterceptedRequest.continue);
 					assert.calledWith(mockInterceptedRequest.continue, {
 						method: pa11y.defaults.method,
@@ -576,23 +565,23 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.userAgent` is `false`', () => {
+		describe('when `options.userAgent` is `false`', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.setUserAgent.resetHistory();
 				options.userAgent = false;
 				await pa11y(options);
 			});
 
-			it('automatically ignores warnings', () => {
+			it('automatically ignores warnings', function() {
 				assert.notCalled(puppeteer.mockPage.setUserAgent);
 			});
 
 		});
 
-		describe('when `options.actions` is set', () => {
+		describe('when `options.actions` is set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				options.actions = [
 					'mock-action-1',
@@ -601,17 +590,17 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			it('calls runAction with each action', () => {
+			it('calls runAction with each action', function() {
 				assert.calledTwice(runAction);
 				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-1');
 				assert.calledWith(runAction, puppeteer.mockBrowser, puppeteer.mockPage, extend.firstCall.returnValue, 'mock-action-2');
 			});
 
-			describe('when an action rejects', () => {
+			describe('when an action rejects', function() {
 				let actionError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					actionError = new Error('action error');
 					runAction.rejects(actionError);
 					try {
@@ -621,7 +610,7 @@ describe('lib/pa11y', () => {
 					}
 				});
 
-				it('rejects with the action error', () => {
+				it('rejects with the action error', function() {
 					assert.strictEqual(rejectedError, actionError);
 				});
 
@@ -629,9 +618,9 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.browser` is set', () => {
+		describe('when `options.browser` is set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
@@ -644,27 +633,27 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			it('does not launch puppeteer', () => {
+			it('does not launch puppeteer', function() {
 				assert.notCalled(puppeteer.launch);
 			});
 
-			it('creates a new page using the passed in browser', () => {
+			it('creates a new page using the passed in browser', function() {
 				assert.calledOnce(options.browser.newPage);
 				assert.calledWithExactly(options.browser.newPage);
 			});
 
-			it('does not close the browser', () => {
+			it('does not close the browser', function() {
 				assert.notCalled(options.browser.close);
 			});
 
-			it('closes the page', () => {
+			it('closes the page', function() {
 				assert.calledOnce(puppeteer.mockPage.close);
 			});
 
-			describe('and an error occurs', () => {
+			describe('and an error occurs', function() {
 				let headlessChromeError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					headlessChromeError = new Error('headless chrome error');
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
@@ -673,7 +662,7 @@ describe('lib/pa11y', () => {
 					}
 				});
 
-				it('does not close the browser', () => {
+				it('does not close the browser', function() {
 					assert.notCalled(options.browser.close);
 				});
 
@@ -681,9 +670,9 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.browser` and `options.page` is set', () => {
+		describe('when `options.browser` and `options.page` is set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
@@ -695,26 +684,26 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			it('does not launch puppeteer', () => {
+			it('does not launch puppeteer', function() {
 				assert.notCalled(puppeteer.launch);
 			});
 
-			it('does not open the page', () => {
+			it('does not open the page', function() {
 				assert.notCalled(options.browser.newPage);
 			});
 
-			it('does not close the browser', () => {
+			it('does not close the browser', function() {
 				assert.notCalled(options.browser.close);
 			});
 
-			it('does not close the page', () => {
+			it('does not close the page', function() {
 				assert.notCalled(options.page.close);
 			});
 
-			describe('and an error occurs', () => {
+			describe('and an error occurs', function() {
 				let headlessChromeError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					headlessChromeError = new Error('headless chrome error');
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
@@ -723,11 +712,11 @@ describe('lib/pa11y', () => {
 					}
 				});
 
-				it('does not close the browser', () => {
+				it('does not close the browser', function() {
 					assert.notCalled(options.browser.close);
 				});
 
-				it('does not close the page', () => {
+				it('does not close the page', function() {
 					assert.notCalled(options.page.close);
 				});
 
@@ -735,9 +724,9 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `options.page` and `options.ignoreUrl` are set', () => {
+		describe('when `options.page` and `options.ignoreUrl` are set', function() {
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				extend.resetHistory();
 				puppeteer.launch.resetHistory();
 				puppeteer.mockBrowser.newPage.resetHistory();
@@ -751,15 +740,15 @@ describe('lib/pa11y', () => {
 				await pa11y(options);
 			});
 
-			it('does not call page.goto', () => {
+			it('does not call page.goto', function() {
 				assert.notCalled(options.page.goto);
 			});
 		});
 
-		describe('when `options.page` is set without `options.browser`', () => {
+		describe('when `options.page` is set without `options.browser`', function() {
 			let rejectedError;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				options.page = puppeteer.mockPage;
 				try {
 					await pa11y(options);
@@ -768,17 +757,17 @@ describe('lib/pa11y', () => {
 				}
 			});
 
-			it('rejects with a descriptive error', () => {
+			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, 'The page option must only be set alongside the browser option');
 			});
 
 		});
 
-		describe('when `options.ignoreUrl` is set without `options.page`', () => {
+		describe('when `options.ignoreUrl` is set without `options.page`', function() {
 			let rejectedError;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				options.page = undefined;
 				options.ignoreUrl = true;
 				try {
@@ -788,63 +777,74 @@ describe('lib/pa11y', () => {
 				}
 			});
 
-			it('rejects with a descriptive error', () => {
+			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
 			});
 
 		});
 
-		describe('when `options.runners` is set', () => {
-			let mockRunnerNodeModule;
-			let mockRunnerPa11yNodeModule;
+		describe('when `options.runners` is set', function() {
+			let mockRunnerNodeModule1;
+			let mockRunnerNodeModule2;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
-				fs.readFile.resetHistory();
+				fs.readFileSync.resetHistory();
 
-				mockRunnerPa11yNodeModule = {
+				mockRunnerNodeModule1 = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-runner-pa11y-node-module/vendor.js'
+						'/mock-runner-node-module-1/vendor.js'
 					],
-					run: () => 'mock-runner-pa11y-node-module'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
 				};
-				mockery.registerMock('pa11y-runner-pa11y-node-module', mockRunnerPa11yNodeModule);
+				mockery.registerMock('node-module-1', mockRunnerNodeModule1);
 
-				mockRunnerNodeModule = {
+				mockRunnerNodeModule2 = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-runner-node-module/vendor.js'
+						'/mock-runner-node-module-2/vendor.js'
 					],
-					run: () => 'mock-runner-node-module'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
 				};
-				mockery.registerMock('node-module', mockRunnerNodeModule);
+				mockery.registerMock('node-module-2', mockRunnerNodeModule2);
 
-				fs.readFile.withArgs('/mock-runner-pa11y-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-pa11y-node-module-js');
-				fs.readFile.withArgs('/mock-runner-node-module/vendor.js').yieldsAsync(undefined, 'mock-runner-node-module-js');
+				fs.readFileSync.withArgs('/mock-runner-node-module-1/vendor.js').returns('mock-runner-node-module-1-js');
+				fs.readFileSync.withArgs('/mock-runner-node-module-2/vendor.js').returns('mock-runner-node-module-2-js');
 
 				options.runners = [
-					'pa11y-node-module',
-					'node-module'
+					'node-module-1',
+					'node-module-2'
 				];
+
 				await pa11y(options);
 			});
 
-			it('evaluates all vendor script and runner JavaScript', () => {
+			it('loads all runner scripts', function() {
+				assert.calledThrice(fs.readFileSync);
+			});
+
+			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
-				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-pa11y-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['pa11y-node-module'\] = \(\) => 'mock-runner-pa11y-node-module'\s*;\s*$/);
-				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module'\] = \(\) => 'mock-runner-node-module'\s*;\s*$/);
+
+				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-1'\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/);
+				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-2'\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/);
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledTwice(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
 			});
 		});
 
-		describe('when `options.runners` is set and one of the runners does not support the current version of Pa11y', () => {
+		describe('when `options.runners` is set and one of the runners does not support the current version of Pa11y', function() {
 			let mockRunnerNodeModule;
 			let rejectedError;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				puppeteer.mockPage.evaluate.resetHistory();
-				fs.readFile.resetHistory();
+				fs.readFileSync.resetHistory();
 
 				mockRunnerNodeModule = {
 					supports: 'mock-support-string',
@@ -868,7 +868,7 @@ describe('lib/pa11y', () => {
 				}
 			});
 
-			it('rejects with a descriptive error', () => {
+			it('rejects with a descriptive error', function() {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, [
 					`The installed "node-module" runner does not support Pa11y ${pkg.version}`,
@@ -882,24 +882,24 @@ describe('lib/pa11y', () => {
 
 	});
 
-	describe('pa11y(url, options)', () => {
+	describe('pa11y(url, options)', function() {
 		let options;
 
-		beforeEach(async () => {
+		beforeEach(async function() {
 			options = {
 				mockOptions: true
 			};
 			await pa11y('https://mock-url/', options);
 		});
 
-		it('defaults the options object with `pa11y.defaults`', () => {
+		it('defaults the options object with `pa11y.defaults`', function() {
 			assert.calledOnce(extend);
 			assert.isObject(extend.firstCall.args[0]);
 			assert.strictEqual(extend.firstCall.args[1], pa11y.defaults);
 			assert.deepEqual(extend.firstCall.args[2], options);
 		});
 
-		it('navigates to `url`', () => {
+		it('navigates to `url`', function() {
 			assert.calledOnce(puppeteer.mockPage.goto);
 			assert.calledWith(puppeteer.mockPage.goto, 'https://mock-url/', {
 				waitUntil: 'networkidle2',
@@ -909,7 +909,7 @@ describe('lib/pa11y', () => {
 
 	});
 
-	describe('pa11y(url, callback)', () => {
+	describe('pa11y(url, callback)', function() {
 		let callbackError;
 		let callbackResults;
 
@@ -921,11 +921,11 @@ describe('lib/pa11y', () => {
 			});
 		});
 
-		it('calls back with the Pa11y results', () => {
+		it('calls back with the Pa11y results', function() {
 			assert.strictEqual(callbackResults, pa11yResults);
 		});
 
-		describe('when something errors', () => {
+		describe('when something errors', function() {
 			let headlessChromeError;
 
 			beforeEach(done => {
@@ -939,12 +939,12 @@ describe('lib/pa11y', () => {
 				});
 			});
 
-			it('closes the browser', () => {
+			it('closes the browser', function() {
 				assert.calledOnce(puppeteer.mockBrowser.close);
 				assert.calledWithExactly(puppeteer.mockBrowser.close);
 			});
 
-			it('calls back with the error', () => {
+			it('calls back with the error', function() {
 				assert.strictEqual(callbackError, headlessChromeError);
 			});
 
@@ -952,111 +952,111 @@ describe('lib/pa11y', () => {
 
 	});
 
-	it('has an `isValidAction` method which aliases `action.isValidAction`', () => {
+	it('has an `isValidAction` method which aliases `action.isValidAction`', function() {
 		assert.isFunction(pa11y.isValidAction);
 		assert.strictEqual(pa11y.isValidAction, runAction.isValidAction);
 	});
 
-	it('has a `defaults` property', () => {
+	it('has a `defaults` property', function() {
 		assert.isObject(pa11y.defaults);
 	});
 
-	describe('.defaults', () => {
+	describe('.defaults', function() {
 
-		it('has an `actions` property', () => {
+		it('has an `actions` property', function() {
 			assert.deepEqual(pa11y.defaults.actions, []);
 		});
 
-		it('has a `browser` property', () => {
+		it('has a `browser` property', function() {
 			assert.isNull(pa11y.defaults.browser);
 		});
 
-		it('has a `chromeLaunchConfig` property', () => {
+		it('has a `chromeLaunchConfig` property', function() {
 			assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
 				ignoreHTTPSErrors: true
 			});
 		});
 
-		it('has a `headers` property', () => {
+		it('has a `headers` property', function() {
 			assert.deepEqual(pa11y.defaults.headers, {});
 		});
 
-		it('has a `hideElements` property', () => {
+		it('has a `hideElements` property', function() {
 			assert.isNull(pa11y.defaults.hideElements);
 		});
 
-		it('has an `ignore` property', () => {
+		it('has an `ignore` property', function() {
 			assert.deepEqual(pa11y.defaults.ignore, []);
 		});
 
-		it('has an `ignoreUrl` property', () => {
+		it('has an `ignoreUrl` property', function() {
 			assert.isFalse(pa11y.defaults.ignoreUrl);
 		});
 
-		it('has an `includeNotices` property', () => {
+		it('has an `includeNotices` property', function() {
 			assert.isFalse(pa11y.defaults.includeNotices);
 		});
 
-		it('has an `includeWarnings` property', () => {
+		it('has an `includeWarnings` property', function() {
 			assert.isFalse(pa11y.defaults.includeWarnings);
 		});
 
-		it('has a `log` property', () => {
+		it('has a `log` property', function() {
 			assert.isObject(pa11y.defaults.log);
 		});
 
-		it('has a `log.debug` method', () => {
+		it('has a `log.debug` method', function() {
 			assert.isFunction(pa11y.defaults.log.debug);
 		});
 
-		it('has a `log.error` method', () => {
+		it('has a `log.error` method', function() {
 			assert.isFunction(pa11y.defaults.log.error);
 		});
 
-		it('has a `log.info` method', () => {
+		it('has a `log.info` method', function() {
 			assert.isFunction(pa11y.defaults.log.info);
 		});
 
-		it('has a `method` property', () => {
+		it('has a `method` property', function() {
 			assert.deepEqual(pa11y.defaults.method, 'GET');
 		});
 
-		it('has a `postData` property', () => {
+		it('has a `postData` property', function() {
 			assert.isNull(pa11y.defaults.postData);
 		});
 
-		it('has a `rootElement` property', () => {
+		it('has a `rootElement` property', function() {
 			assert.isNull(pa11y.defaults.rootElement);
 		});
 
-		it('has a `rules` property', () => {
+		it('has a `rules` property', function() {
 			assert.deepEqual(pa11y.defaults.rules, []);
 		});
 
-		it('has a `screenCapture` property', () => {
+		it('has a `screenCapture` property', function() {
 			assert.isNull(pa11y.defaults.screenCapture);
 		});
 
-		it('has a `standard` property', () => {
+		it('has a `standard` property', function() {
 			assert.strictEqual(pa11y.defaults.standard, 'WCAG2AA');
 		});
 
-		it('has a `timeout` property', () => {
-			assert.strictEqual(pa11y.defaults.timeout, 30000);
+		it('has a `timeout` property', function() {
+			assert.strictEqual(pa11y.defaults.timeout, 60000);
 		});
 
-		it('has a `userAgent` property', () => {
+		it('has a `userAgent` property', function() {
 			assert.strictEqual(pa11y.defaults.userAgent, `pa11y/${pkg.version}`);
 		});
 
-		it('has a `viewport` property', () => {
+		it('has a `viewport` property', function() {
 			assert.deepEqual(pa11y.defaults.viewport, {
 				width: 1280,
 				height: 1024
 			});
 		});
 
-		it('has a `wait` property', () => {
+		it('has a `wait` property', function() {
 			assert.strictEqual(pa11y.defaults.wait, 0);
 		});
 

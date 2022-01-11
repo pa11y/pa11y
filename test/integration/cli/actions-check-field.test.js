@@ -6,12 +6,12 @@ const runPa11yCli = require('../helper/pa11y-cli');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI action "check-field"', () => {
+describe('CLI action "check-field"', function() {
 	let pa11yResponse;
 
-	describe('when the field exists and is unchecked', () => {
+	describe('when the field exists and is unchecked', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-check-field`, {
 				arguments: [
 					'--config', './mock/config/actions-check-field-on.json',
@@ -23,16 +23,16 @@ describe('CLI action "check-field"', () => {
 		// The test file ../mock/html/actions-check-field.html which we test here has an a11y error
 		// in the markup. When this action is performed the DOM is manupulated by JavaScript to
 		// remove the offending element, hence no a11y errors is proof of this successful action
-		it('checks the field before running tests', () => {
+		it('checks the field before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when the field exists and is checked', () => {
+	describe('when the field exists and is checked', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-check-field`, {
 				arguments: [
 					'--config', './mock/config/actions-check-field-off.json',
@@ -44,16 +44,16 @@ describe('CLI action "check-field"', () => {
 		// The test file ../mock/html/actions-check-field.html which we test here has an a11y error
 		// in the markup. When this action is performed the DOM is manupulated by JavaScript to
 		// remove the offending element, hence no a11y errors is proof of this successful action
-		it('checks the field before running tests', () => {
+		it('checks the field before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when the field does not exist', () => {
+	describe('when the field does not exist', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--config', './mock/config/actions-check-field-on.json'
@@ -61,11 +61,11 @@ describe('CLI action "check-field"', () => {
 			});
 		});
 
-		it('exits with a code of `1`', () => {
+		it('exits with a code of `1`', function() {
 			assert.strictEqual(pa11yResponse.exitCode, 1);
 		});
 
-		it('outputs an error', () => {
+		it('outputs an error', function() {
 			assert.match(pa11yResponse.output, /failed action/i);
 			assert.match(pa11yResponse.output, /no element matching selector "#unchecked-field"/i);
 		});

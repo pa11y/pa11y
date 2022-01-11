@@ -6,12 +6,12 @@ const runPa11yCli = require('../helper/pa11y-cli');
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI wait', () => {
+describe('CLI wait', function() {
 	let pa11yResponse;
 
-	describe('when the `--wait` flag is set', () => {
+	describe('when the `--wait` flag is set', function() {
 
-		before(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/wait`, {
 				arguments: [
 					'--wait', '2100',
@@ -20,7 +20,7 @@ describe('CLI wait', () => {
 			});
 		});
 
-		it('waits for the specified amount of time before running tests', () => {
+		it('waits for the specified amount of time before running tests', function() {
 			assert.isArray(pa11yResponse.json);
 			assert.lengthEquals(pa11yResponse.json, 0);
 		});
