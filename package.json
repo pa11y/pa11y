@@ -46,12 +46,9 @@
   },
   "devDependencies": {
     "eslint": "^7.27.0",
-    "mocha": "^8.4.0",
-    "mockery": "^2.1.0",
-    "nyc": "^15.1.0",
-    "pa11y-lint-config": "^2.0.0",
-    "proclaim": "^3.6.0",
-    "sinon": "^11.1.0"
+    "eslint-plugin-jest": "^25.3.4",
+    "jest": "^27.4.7",
+    "pa11y-lint-config": "^2.0.0"
   },
   "main": "./lib/pa11y.js",
   "bin": {
@@ -59,11 +56,10 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "verify-coverage": "nyc check-coverage --lines 90 --functions 90 --branches 90",
-    "test-unit": "mocha --file test/unit/setup.test.js 'test/unit/**/*.test.js' --recursive",
-    "test-coverage": "nyc --reporter=text --reporter=html -- npm run test-unit",
-    "test-integration": "mocha --file test/integration/setup.test.js test/integration/**/*.test.js --recursive --timeout 10000 --slow 5000",
-    "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration"
+    "test-unit": "jest test/unit",
+    "test-coverage": "jest test/unit --coverage",
+    "test-integration": "MOCK_SERVER_PORT=8081 jest test/integration",
+    "test": "MOCK_SERVER_PORT=8081 jest --coverage"
   },
   "files": [
     "bin",

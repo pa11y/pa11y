@@ -1,15 +1,14 @@
 'use strict';
 
-const assert = require('proclaim');
 const path = require('path');
 const	{parseArguments, verifyOptions} = require('../../../lib/option');
 
-describe('lib/option', function() {
-	const noop = function() { /* No-op */ };
+describe('lib/option', () => {
+	const noop = () => { /* No-op */ };
 
 	let defaults;
 
-	beforeEach(function() {
+	beforeEach(() => {
 		defaults = {
 			actions: [],
 			browser: null,
@@ -47,16 +46,16 @@ describe('lib/option', function() {
 
 	});
 
-	it('is a function', function() {
-		assert.isFunction(parseArguments);
+	it('is a function', () => {
+		expect(parseArguments).toEqual(expect.any(Function));
 	});
 
-	describe('parseArguments(url, options, defaults, callback)', function() {
+	describe('parseArguments(url, options, defaults, callback)', () => {
 		let url;
 		let options;
 		let callback;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			callback = undefined;
 			options = {
 				mockOptions: true,
@@ -74,7 +73,7 @@ describe('lib/option', function() {
 			};
 		});
 
-		it('defaults the options object with `pa11y.defaults`', function() {
+		it('defaults the options object with `pa11y.defaults`', () => {
 			const resultingOptions = {
 				actions: [],
 				browser: null,
@@ -117,11 +116,11 @@ describe('lib/option', function() {
 			};
 
 			[url, options, callback] = parseArguments('', options, defaults);
-			assert.deepEqual(resultingOptions, options);
-			assert.isUndefined(callback, undefined);
+			expect(resultingOptions).toEqual(options);
+			expect(callback).toBeUndefined();
 		});
 
-		it('returns the defaults when options are empty', function() {
+		it('returns the defaults when options are empty', () => {
 			const defaultsWithEmptyOptions = {
 				actions: [],
 				browser: null,
@@ -161,102 +160,102 @@ describe('lib/option', function() {
 			};
 
 			[url, options, callback] = parseArguments('', {}, defaults);
-			assert.deepEqual(defaultsWithEmptyOptions, options);
+			expect(defaultsWithEmptyOptions).toEqual(options);
 		});
 
-		describe('when defaults and options are both undefined', function() {
-			beforeEach(function() {
+		describe('when defaults and options are both undefined', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('');
 			});
 
-			it('returns an empty object', function() {
-				assert.deepEqual(options, {});
+			it('returns an empty object', () => {
+				expect(options).toEqual({});
 			});
 		});
 
-		describe('when defaults and options are both undefined but a callback is provided', function() {
-			beforeEach(function() {
+		describe('when defaults and options are both undefined but a callback is provided', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('', () => 'this is a callback');
 			});
 
-			it('returns an empty object', function() {
-				assert.isFunction(callback);
-				assert.equal(callback.call(), 'this is a callback');
-				assert.deepEqual(options, {});
+			it('returns an empty object', () => {
+				expect(callback).toEqual(expect.any(Function));
+				expect(callback.call()).toEqual('this is a callback');
+				expect(options).toEqual({});
 			});
 		});
 
-		describe('when defaults and options are both empty', function() {
-			beforeEach(function() {
+		describe('when defaults and options are both empty', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('', {}, {});
 			});
 
-			it('returns an empty object', function() {
-				assert.deepEqual(options, {});
+			it('returns an empty object', () => {
+				expect(options).toEqual({});
 			});
 		});
 
-		describe('when `url` does not have a scheme', function() {
-			beforeEach(function() {
+		describe('when `url` does not have a scheme', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('mock-url', {}, {});
 			});
 
-			it('navigates to `url` with an `http` scheme added', function() {
-				assert.equal(url, 'http://mock-url');
+			it('navigates to `url` with an `http` scheme added', () => {
+				expect(url).toEqual('http://mock-url');
 			});
 		});
 
-		describe('when `url` does not have a scheme and is a valid local path', function() {
-			beforeEach(function() {
+		describe('when `url` does not have a scheme and is a valid local path', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('README.md', {}, {});
 			});
 
-			it('navigates to `url` with a `file` scheme added', function() {
+			it('navigates to `url` with a `file` scheme added', () => {
 				const resolvedPath = path.resolve(process.cwd(), './README.md');
-				assert.equal(url, `file://${resolvedPath}`);
+				expect(url).toEqual(`file://${resolvedPath}`);
 			});
 		});
 
-		describe('when `url` does not have a scheme and starts with a slash', function() {
-			beforeEach(function() {
+		describe('when `url` does not have a scheme and starts with a slash', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('/mock-path', {}, {});
 			});
 
-			it('navigates to `url` with a `file` scheme added', function() {
-				assert.equal(url, 'file:///mock-path');
+			it('navigates to `url` with a `file` scheme added', () => {
+				expect(url).toEqual('file:///mock-path');
 			});
 		});
 
-		describe('when `url` does not have a scheme and starts with a period', function() {
-			beforeEach(function() {
+		describe('when `url` does not have a scheme and starts with a period', () => {
+			beforeEach(() => {
 				[url, options, callback] = parseArguments('./mock-path', {}, {});
 			});
 
-			it('navigates to `url` with a `file` scheme added and a resolved path', function() {
+			it('navigates to `url` with a `file` scheme added and a resolved path', () => {
 				const resolvedPath = path.resolve(process.cwd(), './mock-path');
-				assert.equal(url, `file://${resolvedPath}`);
+				expect(url).toEqual(`file://${resolvedPath}`);
 			});
 
 		});
 
 	});
 
-	it('is a function', function() {
-		assert.isFunction(verifyOptions);
+	it('is a function', () => {
+		expect(verifyOptions).toEqual(expect.any(Function));
 	});
 
-	describe('verifyOptions(options, allowedStandards)', function() {
+	describe('verifyOptions(options, allowedStandards)', () => {
 		const allowedStandards = [
 			'WCAG2A',
 			'WCAG2AA',
 			'WCAG2AAA'
 		];
 
-		describe('when `options.standard` is invalid', function() {
+		describe('when `options.standard` is invalid', () => {
 			const options = {};
 			let rejectedError;
 
-			beforeEach(function() {
+			beforeEach(() => {
 				options.standard = 'not-a-standard';
 				try {
 					verifyOptions(options, allowedStandards);
@@ -265,20 +264,20 @@ describe('lib/option', function() {
 				}
 			});
 
-			it('rejects with a descriptive error', function() {
-				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, `Standard must be one of ${allowedStandards.join(', ')}`);
+			it('rejects with a descriptive error', () => {
+				expect(rejectedError).toEqual(expect.any(Error));
+				expect(rejectedError.message).toEqual(`Standard must be one of ${allowedStandards.join(', ')}`);
 			});
 		});
 
-		describe('when puppeteer\'s `options.page` is present but `options.browser` is missing', function() {
+		describe('when puppeteer\'s `options.page` is present but `options.browser` is missing', () => {
 			const options = {
 				page: {},
 				standard: 'WCAG2AA'
 			};
 			let rejectedError;
 
-			beforeEach(function() {
+			beforeEach(() => {
 				try {
 					verifyOptions(options, allowedStandards);
 				} catch (error) {
@@ -286,20 +285,20 @@ describe('lib/option', function() {
 				}
 			});
 
-			it('rejects with a descriptive error', function() {
-				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, 'The page option must only be set alongside the browser option');
+			it('rejects with a descriptive error', () => {
+				expect(rejectedError).toEqual(expect.any(Error));
+				expect(rejectedError.message).toEqual('The page option must only be set alongside the browser option');
 			});
 		});
 
-		describe('when `ignoreUrl` is present but `options.page` is missing', function() {
+		describe('when `ignoreUrl` is present but `options.page` is missing', () => {
 			const options = {
 				ignoreUrl: true,
 				standard: 'WCAG2AA'
 			};
 			let rejectedError;
 
-			beforeEach(function() {
+			beforeEach(() => {
 				try {
 					verifyOptions(options, allowedStandards);
 				} catch (error) {
@@ -307,9 +306,9 @@ describe('lib/option', function() {
 				}
 			});
 
-			it('rejects with a descriptive error', function() {
-				assert.instanceOf(rejectedError, Error);
-				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
+			it('rejects with a descriptive error', () => {
+				expect(rejectedError).toEqual(expect.any(Error));
+				expect(rejectedError.message).toEqual('The ignoreUrl option must only be set alongside the page option');
 			});
 		});
 	});

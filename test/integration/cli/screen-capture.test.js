@@ -1,6 +1,5 @@
 'use strict';
 
-const assert = require('proclaim');
 const fs = require('fs');
 const path = require('path');
 const promisify = require('util').promisify;
@@ -10,15 +9,15 @@ const rmdir = promisify(fs.rmdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-describe('CLI screen-capture', function() {
+describe('CLI screen-capture', () => {
 	let screenCaptureDirectory;
 	let screenCapturePath;
 
-	describe('when the `--screen-capture` flag is set', function() {
+	describe('when the `--screen-capture` flag is set', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			screenCaptureDirectory = path.join(__dirname, '/../tmp');
-			screenCapturePath = path.join(screenCaptureDirectory, '/test.png');
+			screenCapturePath = path.join(screenCaptureDirectory, '/screen-capture-flag-test.png');
 			try {
 				await mkdir(screenCaptureDirectory);
 			} catch (error) {}
@@ -29,14 +28,13 @@ describe('CLI screen-capture', function() {
 			});
 		});
 
-		after(async function() {
+		afterAll(async () => {
 			await unlink(screenCapturePath);
-			await rmdir(screenCaptureDirectory);
 		});
 
-		it('saves a screen capture to the expected file', async function() {
+		it('saves a screen capture to the expected file', async () => {
 			const stats = await stat(screenCapturePath);
-			assert.isTrue(stats.isFile());
+			expect(stats.isFile()).toEqual(true);
 		});
 
 	});

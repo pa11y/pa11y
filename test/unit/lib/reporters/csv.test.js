@@ -1,24 +1,18 @@
 'use strict';
 
-const assert = require('proclaim');
+const csvReporter = require('../../../../lib/reporters/csv');
 
 describe('lib/reporters/csv', () => {
-	let csvReporter;
-
-	beforeEach(() => {
-		csvReporter = require('../../../../lib/reporters/csv');
-	});
-
 	it('is an object', () => {
-		assert.isObject(csvReporter);
+		expect(typeof csvReporter).toBe('object');
 	});
 
 	it('has a `supports` property', () => {
-		assert.isString(csvReporter.supports);
+		expect(csvReporter.supports).toEqual(expect.any(String));
 	});
 
 	it('has a `results` method', () => {
-		assert.isFunction(csvReporter.results);
+		expect(csvReporter.results).toEqual(expect.any(Function));
 	});
 
 	describe('.results(pa11yResults)', () => {
@@ -55,7 +49,7 @@ describe('lib/reporters/csv', () => {
 		});
 
 		it('returns a CSV string representing the results', () => {
-			assert.strictEqual(csvReporter.results(mockPa11yResults), `
+			expect(csvReporter.results(mockPa11yResults)).toEqual(`
 				"type","code","message","context","selector"
 				"mock-type-1","mock-code-1","mock-message-1","mock-context-1","mock-selector-1"
 				"mock-type-2","mock-code-2","mock-message-2","mock-context-2","mock-selector-2"
@@ -66,27 +60,27 @@ describe('lib/reporters/csv', () => {
 	});
 
 	it('has an `error` method', () => {
-		assert.isFunction(csvReporter.error);
+		expect(csvReporter.error).toEqual(expect.any(Function));
 	});
 
 	describe('.error(message)', () => {
 
 		it('returns the message unchanged', () => {
-			assert.strictEqual(csvReporter.error('mock message'), 'mock message');
+			expect(csvReporter.error('mock message')).toEqual('mock message');
 		});
 
 	});
 
 	it('does not have a `begin` method', () => {
-		assert.isUndefined(csvReporter.begin);
+		expect(csvReporter.begin).toBeUndefined();
 	});
 
 	it('does not have a `debug` method', () => {
-		assert.isUndefined(csvReporter.debug);
+		expect(csvReporter.debug).toBeUndefined();
 	});
 
 	it('does not have an `info` method', () => {
-		assert.isUndefined(csvReporter.info);
+		expect(csvReporter.info).toBeUndefined();
 	});
 
 });
