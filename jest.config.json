@@ -1,5 +1,8 @@
 {
 	"clearMocks": true,
+	"collectCoverageFrom": [
+		"lib/**/*.js"
+	],
 	"coverageThreshold": {
 		"global": {
 			"branches": 90,

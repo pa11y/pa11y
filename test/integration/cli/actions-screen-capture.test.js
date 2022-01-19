@@ -5,7 +5,6 @@ const path = require('path');
 const promisify = require('util').promisify;
 const runPa11yCli = require('../helper/pa11y-cli');
 const mkdir = promisify(fs.mkdir);
-const rmdir = promisify(fs.rmdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 

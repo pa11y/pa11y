@@ -21,10 +21,10 @@ describe('lib/reporter', () => {
 		beforeEach(() => {
 			consoleLogSpy = jest
 				.spyOn(global.console, 'log')
-				.mockImplementation(() => {});
+				.mockReturnValue();
 			consoleErrorSpy = jest
 				.spyOn(global.console, 'error')
-				.mockImplementation(() => {});
+				.mockReturnValue();
 			methods = {
 				supports: 'mock supports',
 				begin: jest.fn(),

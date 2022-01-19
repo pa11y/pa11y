@@ -88,6 +88,7 @@ describe('lib/runners/axe', () => {
 			}
 		};
 
+		// eslint-disable-next-line complexity
 		global.window.document.querySelector.mockImplementation(selector => {
 			switch (selector) {
 				case 'mock-selector-1a':
