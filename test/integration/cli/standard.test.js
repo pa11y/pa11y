@@ -1,17 +1,16 @@
 'use strict';
 
-const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI standard', function() {
+describe('CLI standard', () => {
 	let pa11yResponse;
 
-	describe('when the `--standard` flag is set to "WCAG2A"', function() {
+	describe('when the `--standard` flag is set to "WCAG2A"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -22,19 +21,19 @@ describe('CLI standard', function() {
 			});
 		});
 
-		it('outputs the expected issues', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 15);
+		it('outputs the expected issues', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+			expect(pa11yResponse.json).toHaveLength(15);
 			pa11yResponse.json.forEach(issue => {
-				assert.match(issue.code, /^WCAG2A\./);
+				expect(issue.code).toMatch(/^WCAG2A\./);
 			});
 		});
 
 	});
 
-	describe('when the `--standard` flag is set to "WCAG2AAA"', function() {
+	describe('when the `--standard` flag is set to "WCAG2AAA"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -45,19 +44,19 @@ describe('CLI standard', function() {
 			});
 		});
 
-		it('outputs the expected issues', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 43);
+		it('outputs the expected issues', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+			expect(pa11yResponse.json).toHaveLength(43);
 			pa11yResponse.json.forEach(issue => {
-				assert.match(issue.code, /^WCAG2AAA\./);
+				expect(issue.code).toMatch(/^WCAG2AAA\./);
 			});
 		});
 
 	});
 
-	describe('when the `standard` config is set to "WCAG2AAA" but the `--standard` flag is set to "WCAG2AA"', function() {
+	describe('when the `standard` config is set to "WCAG2AAA" but the `--standard` flag is set to "WCAG2AA"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--config', './mock/config/standard.json',
@@ -69,11 +68,11 @@ describe('CLI standard', function() {
 			});
 		});
 
-		it('outputs the expected issues', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 28);
+		it('outputs the expected issues', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+			expect(pa11yResponse.json).toHaveLength(28);
 			pa11yResponse.json.forEach(issue => {
-				assert.match(issue.code, /^WCAG2AA\./);
+				expect(issue.code).toMatch(/^WCAG2AA\./);
 			});
 		});
 

@@ -1,14 +1,13 @@
 'use strict';
 
-const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
-describe('CLI reporter CLI', function() {
+describe('CLI reporter CLI', () => {
 	let pa11yResponse;
 
-	describe('when the `--reporter` flag is set to "cli"', function() {
+	describe('when the `--reporter` flag is set to "cli"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--reporter', 'cli'
@@ -16,17 +15,17 @@ describe('CLI reporter CLI', function() {
 			});
 		});
 
-		it('outputs issues to CLI', function() {
-			assert.match(pa11yResponse.stdout, /^Results for URL: .*\/errors$/im);
-			assert.match(pa11yResponse.stdout, /^.*Error: .*$/im);
-			assert.match(pa11yResponse.stdout, /^1 Errors$/im);
+		it('outputs issues to CLI', () => {
+			expect(pa11yResponse.stdout).toMatch(/^Results for URL: .*\/errors$/im);
+			expect(pa11yResponse.stdout).toMatch(/^.*Error: .*$/im);
+			expect(pa11yResponse.stdout).toMatch(/^1 Errors$/im);
 		});
 
 	});
 
-	describe('when the `reporter` config is set to "cli"', function() {
+	describe('when the `reporter` config is set to "cli"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--config', './mock/config/reporter-cli.json'
@@ -34,10 +33,10 @@ describe('CLI reporter CLI', function() {
 			});
 		});
 
-		it('outputs issues to CLI', function() {
-			assert.match(pa11yResponse.stdout, /^Results for URL: .*\/errors$/im);
-			assert.match(pa11yResponse.stdout, /^.*Error: .*$/im);
-			assert.match(pa11yResponse.stdout, /^1 Errors$/im);
+		it('outputs issues to CLI', () => {
+			expect(pa11yResponse.stdout).toMatch(/^Results for URL: .*\/errors$/im);
+			expect(pa11yResponse.stdout).toMatch(/^.*Error: .*$/im);
+			expect(pa11yResponse.stdout).toMatch(/^1 Errors$/im);
 		});
 
 	});

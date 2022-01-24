@@ -1,17 +1,16 @@
 'use strict';
 
-const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI action "set-field-value"', function() {
+describe('CLI action "set-field-value"', () => {
 	let pa11yResponse;
 
-	describe('when the field exists', function() {
+	describe('when the field exists', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/actions-set-field-value`, {
 				arguments: [
 					'--config', './mock/config/actions-set-field-value.json',
@@ -23,16 +22,15 @@ describe('CLI action "set-field-value"', function() {
 		// The test file ../mock/html/actions-set-field-value.html which we test here has an a11y
 		// error in the markup. When this action is performed the DOM is manupulated by JavaScript
 		// to remove the offending element, hence no a11y errors is proof of this successful action
-		it('sets the field value before running tests', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 0);
+		it('sets the field value before running tests', () => {
+			expect(pa11yResponse.json).toHaveLength(0);
 		});
 
 	});
 
-	describe('when the field does not exist', function() {
+	describe('when the field does not exist', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--config', './mock/config/actions-set-field-value.json'
@@ -40,13 +38,13 @@ describe('CLI action "set-field-value"', function() {
 			});
 		});
 
-		it('exits with a code of `1`', function() {
-			assert.strictEqual(pa11yResponse.exitCode, 1);
+		it('exits with a code of `1`', () => {
+			expect(pa11yResponse.exitCode).toEqual(1);
 		});
 
-		it('outputs an error', function() {
-			assert.match(pa11yResponse.output, /failed action/i);
-			assert.match(pa11yResponse.output, /no element matching selector "#name-field"/i);
+		it('outputs an error', () => {
+			expect(pa11yResponse.output).toMatch(/failed action/i);
+			expect(pa11yResponse.output).toMatch(/no element matching selector "#name-field"/i);
 		});
 
 	});

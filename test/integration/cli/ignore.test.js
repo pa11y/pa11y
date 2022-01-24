@@ -1,18 +1,17 @@
 'use strict';
 
-const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 const {groupResponses} = require('../helper/pa11y-responses');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI ignore', function() {
+describe('CLI ignore', () => {
 	let pa11yResponse;
 
-	describe('when the `--ignore` flag is set to "warning"', function() {
+	describe('when the `--ignore` flag is set to "warning"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -23,20 +22,20 @@ describe('CLI ignore', function() {
 			});
 		});
 
-		it('ignores warnings', function() {
-			assert.isArray(pa11yResponse.json);
+		it('ignores warnings', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
 
 			const responses = groupResponses(pa11yResponse.json);
-			assert.lengthEquals(responses.warning, 0);
-			assert.lengthEquals(responses.notice, 26);
-			assert.lengthEquals(responses.error, 1);
+			expect(responses.warning).toHaveLength(0);
+			expect(responses.notice).toHaveLength(26);
+			expect(responses.error).toHaveLength(1);
 		});
 
 	});
 
-	describe('when the `--ignore` flag is set to "warning;notice"', function() {
+	describe('when the `--ignore` flag is set to "warning;notice"', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -47,20 +46,20 @@ describe('CLI ignore', function() {
 			});
 		});
 
-		it('ignores warnings and notices', function() {
-			assert.isArray(pa11yResponse.json);
+		it('ignores warnings and notices', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
 
 			const responses = groupResponses(pa11yResponse.json);
-			assert.lengthEquals(responses.warning, 0);
-			assert.lengthEquals(responses.notice, 0);
-			assert.lengthEquals(responses.error, 1);
+			expect(responses.warning).toHaveLength(0);
+			expect(responses.notice).toHaveLength(0);
+			expect(responses.error).toHaveLength(1);
 		});
 
 	});
 
-	describe('when the `--ignore` flag is set multiple times', function() {
+	describe('when the `--ignore` flag is set multiple times', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -72,20 +71,19 @@ describe('CLI ignore', function() {
 			});
 		});
 
-		it('ignores all of the flagged items', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
+		it('ignores all of the flagged items', () => {
+			expect(pa11yResponse.json).toHaveLength(1);
 			pa11yResponse.json.forEach(issue => {
-				assert.notStrictEqual(issue.type, 'warning');
-				assert.notStrictEqual(issue.type, 'notice');
+				expect(issue.type).not.toEqual('warning');
+				expect(issue.type).not.toEqual('notice');
 			});
 		});
 
 	});
 
-	describe('when the `--ignore` flag is set to an issue code', function() {
+	describe('when the `--ignore` flag is set to an issue code', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -96,16 +94,16 @@ describe('CLI ignore', function() {
 			});
 		});
 
-		it('ignores issues with the given code', function() {
-			assert.isArray(pa11yResponse.json);
+		it('ignores issues with the given code', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
 
 			const responses = groupResponses(pa11yResponse.json);
-			assert.lengthEquals(responses.warning, 1);
-			assert.lengthEquals(responses.notice, 26);
-			assert.lengthEquals(responses.error, 0);
+			expect(responses.warning).toHaveLength(1);
+			expect(responses.notice).toHaveLength(26);
+			expect(responses.error).toHaveLength(0);
 
 			responses.notice.forEach(issue => {
-				assert.notStrictEqual(issue.code, 'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2');
+				expect(issue.code).not.toEqual('WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2');
 			});
 		});
 

@@ -1,24 +1,19 @@
 'use strict';
 
-const assert = require('proclaim');
+const tsvReporter = require('../../../../lib/reporters/tsv');
 
 describe('lib/reporters/tsv', () => {
-	let tsvReporter;
-
-	beforeEach(() => {
-		tsvReporter = require('../../../../lib/reporters/tsv');
-	});
 
 	it('is an object', () => {
-		assert.isObject(tsvReporter);
+		expect(typeof tsvReporter).toBe('object');
 	});
 
 	it('has a `supports` property', () => {
-		assert.isString(tsvReporter.supports);
+		expect(tsvReporter.supports).toEqual(expect.any(String));
 	});
 
 	it('has a `results` method', () => {
-		assert.isFunction(tsvReporter.results);
+		expect(tsvReporter.results).toEqual(expect.any(Function));
 	});
 
 	describe('.results(pa11yResults)', () => {
@@ -55,7 +50,7 @@ describe('lib/reporters/tsv', () => {
 		});
 
 		it('returns a TSV string representing the results', () => {
-			assert.strictEqual(tsvReporter.results(mockPa11yResults), `
+			expect(tsvReporter.results(mockPa11yResults)).toEqual(`
 				"type"	"code"	"message"	"context"	"selector"
 				"mock-type-1"	"mock-code-1"	"mock-message-1"	"mock-context-1"	"mock-selector-1"
 				"mock-type-2"	"mock-code-2"	"mock-message-2"	"mock-context-2"	"mock-selector-2"
@@ -66,27 +61,27 @@ describe('lib/reporters/tsv', () => {
 	});
 
 	it('has an `error` method', () => {
-		assert.isFunction(tsvReporter.error);
+		expect(tsvReporter.error).toEqual(expect.any(Function));
 	});
 
 	describe('.error(message)', () => {
 
 		it('returns the message unchanged', () => {
-			assert.strictEqual(tsvReporter.error('mock message'), 'mock message');
+			expect(tsvReporter.error('mock message')).toEqual('mock message');
 		});
 
 	});
 
 	it('does not have a `begin` method', () => {
-		assert.isUndefined(tsvReporter.begin);
+		expect(tsvReporter.begin).toBeUndefined();
 	});
 
 	it('does not have a `debug` method', () => {
-		assert.isUndefined(tsvReporter.debug);
+		expect(tsvReporter.debug).toBeUndefined();
 	});
 
 	it('does not have an `info` method', () => {
-		assert.isUndefined(tsvReporter.info);
+		expect(tsvReporter.info).toBeUndefined();
 	});
 
 });
