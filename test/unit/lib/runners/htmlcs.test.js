@@ -1,15 +1,12 @@
 'use strict';
 
-const assert = require('proclaim');
-const sinon = require('sinon');
+const runner = require('../../../../lib/runners/htmlcs');
 
 describe('lib/runners/htmlcs', () => {
 	let issues;
 	let originalWindow;
-	let runner;
 
 	beforeEach(() => {
-
 		issues = [
 			{
 				code: 'mock-code-1',
@@ -41,12 +38,10 @@ describe('lib/runners/htmlcs', () => {
 		global.window = {
 			document: 'mock-document',
 			HTMLCS: {
-				process: sinon.stub().yieldsAsync(),
-				getMessages: sinon.stub().returns(issues)
+				process: jest.fn(),
+				getMessages: jest.fn().mockReturnValue(issues)
 			}
 		};
-
-		runner = require('../../../../lib/runners/htmlcs');
 	});
 
 	afterEach(() => {
@@ -54,78 +49,88 @@ describe('lib/runners/htmlcs', () => {
 	});
 
 	it('is an object', () => {
-		assert.isObject(runner);
+		expect(typeof runner).toBe('object');
 	});
 
 	it('has a `supports` property set to a string', () => {
-		assert.isString(runner.supports);
+		expect(runner.supports).toEqual(expect.any(String));
 	});
 
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
-		assert.isArray(runner.scripts);
-		assert.lengthEquals(runner.scripts, 1);
-		assert.isTrue(runner.scripts[0].endsWith('node_modules/html_codesniffer/build/HTMLCS.js'));
+		expect(runner.scripts).toHaveLength(1);
+		expect(
+			runner.scripts[0].endsWith(
+				'node_modules/html_codesniffer/build/HTMLCS.js'
+			)
+		).toEqual(true);
 	});
 
 	it('has a `run` method', () => {
-		assert.isFunction(runner.run);
+		expect(runner.run).toEqual(expect.any(Function));
 	});
 
 	describe('.run(options, pa11y)', () => {
 		let options;
 		let pa11y;
-		let resolvedValue;
 
-		beforeEach(async () => {
+		beforeEach(() => {
 			options = {
 				rules: [],
 				standard: 'mock-standard'
 			};
 			pa11y = {};
-			resolvedValue = await runner.run(options, pa11y);
 		});
 
-		it('runs HTML CodeSniffer', () => {
-			assert.calledOnce(global.window.HTMLCS.process);
-			assert.calledWith(
-				global.window.HTMLCS.process,
-				'mock-standard',
-				global.window.document
-			);
-		});
+		describe('without error', () => {
+			let resolvedValue;
 
-		it('gets HTML CodeSniffer messages', () => {
-			assert.calledOnce(global.window.HTMLCS.getMessages);
-			assert.calledWithExactly(global.window.HTMLCS.getMessages);
-		});
+			beforeEach(async () => {
+				window.HTMLCS.process.mockImplementationOnce((_, __, callback) => callback());
+				resolvedValue = await runner.run(options, pa11y);
+			});
 
-		it('resolves with processed and normalised issues', () => {
-			assert.deepEqual(resolvedValue, [
-				{
-					code: 'mock-code-1',
-					message: 'mock message 1',
-					type: 'error',
-					element: 'mock-element-1'
-				},
-				{
-					code: 'mock-code-2',
-					message: 'mock message 2',
-					type: 'warning',
-					element: 'mock-element-2'
-				},
-				{
-					code: 'mock-code-3',
-					message: 'mock message 3',
-					type: 'notice',
-					element: 'mock-element-3'
-				},
-				{
-					code: 'mock-code-4',
-					message: 'mock message 4',
-					type: 'unknown',
-					element: 'mock-element-4'
-				}
-			]);
+			it('runs HTML CodeSniffer', () => {
+				expect(global.window.HTMLCS.process).toHaveBeenCalledTimes(1);
+				expect(global.window.HTMLCS.process).toHaveBeenCalledWith(
+					'mock-standard',
+					global.window.document,
+					expect.any(Function)
+				);
+			});
+
+			it('gets HTML CodeSniffer messages', () => {
+				expect(global.window.HTMLCS.getMessages).toHaveBeenCalledTimes(1);
+				expect(global.window.HTMLCS.getMessages).toHaveBeenCalledWith();
+			});
+
+			it('resolves with processed and normalised issues', () => {
+				expect(resolvedValue).toEqual([
+					{
+						code: 'mock-code-1',
+						message: 'mock message 1',
+						type: 'error',
+						element: 'mock-element-1'
+					},
+					{
+						code: 'mock-code-2',
+						message: 'mock message 2',
+						type: 'warning',
+						element: 'mock-element-2'
+					},
+					{
+						code: 'mock-code-3',
+						message: 'mock message 3',
+						type: 'notice',
+						element: 'mock-element-3'
+					},
+					{
+						code: 'mock-code-4',
+						message: 'mock message 4',
+						type: 'unknown',
+						element: 'mock-element-4'
+					}
+				]);
+			});
 		});
 
 		describe('when HTML CodeSniffer errors', () => {
@@ -134,9 +139,7 @@ describe('lib/runners/htmlcs', () => {
 
 			beforeEach(async () => {
 				htmlcsError = new Error('htmlcs error');
-				window.HTMLCS.process.reset();
-				window.HTMLCS.process.yieldsAsync(htmlcsError);
-				window.HTMLCS.getMessages.reset();
+				window.HTMLCS.process.mockImplementationOnce((_, __, callback) => callback(htmlcsError));
 				try {
 					await runner.run(options, pa11y);
 				} catch (error) {
@@ -145,24 +148,20 @@ describe('lib/runners/htmlcs', () => {
 			});
 
 			it('rejects with the HTML CodeSniffer error', () => {
-				assert.strictEqual(rejectedError, htmlcsError);
+				expect(rejectedError).toEqual(htmlcsError);
 			});
 
 			it('does not get HTML CodeSniffer messages', () => {
-				assert.notCalled(window.HTMLCS.getMessages);
+				expect(window.HTMLCS.getMessages).not.toHaveBeenCalled();
 			});
-
 		});
 
 		describe('when the rules option is set', () => {
-
 			beforeEach(async () => {
 				global.window['HTMLCS_mock-standard'] = {
 					sniffs: [
 						{
-							include: [
-								'mock-rule-1'
-							]
+							include: ['mock-rule-1']
 						}
 					]
 				};
@@ -174,28 +173,22 @@ describe('lib/runners/htmlcs', () => {
 						'mock-rule-4'
 					]
 				};
-				options.rules = [
-					'mock-rule-2',
-					'mock-rule-3'
-				];
-				resolvedValue = await runner.run(options, pa11y);
+				options.rules = ['mock-rule-2', 'mock-rule-3'];
+				window.HTMLCS.process.mockImplementationOnce((_, __, callback) => callback());
+				await runner.run(options, pa11y);
 			});
 
 			it('adds the specified rules to the standard', () => {
-				assert.deepEqual(global.window['HTMLCS_mock-standard'].sniffs[0].include, [
-					'mock-rule-1',
-					'mock-rule-2',
-					'mock-rule-3'
-				]);
+				expect(
+					global.window['HTMLCS_mock-standard'].sniffs[0].include
+				).toEqual(['mock-rule-1', 'mock-rule-2', 'mock-rule-3']);
 			});
 
 			describe('and one of the rules does not exist', () => {
 				let rejectedError;
 
 				beforeEach(async () => {
-					options.rules = [
-						'mock-rule-5'
-					];
+					options.rules = ['mock-rule-5'];
 					try {
 						await runner.run(options, pa11y);
 					} catch (error) {
@@ -204,15 +197,12 @@ describe('lib/runners/htmlcs', () => {
 				});
 
 				it('rejects with an error', () => {
-					assert.instanceOf(rejectedError, Error);
-					assert.strictEqual(
-						rejectedError.message,
+					expect(rejectedError).toEqual(expect.any(Error));
+					expect(rejectedError.message).toEqual(
 						'mock-rule-5 is not a valid WCAG 2.1 rule'
 					);
 				});
-
 			});
-
 		});
 
 		describe('when the site is using AMD', () => {
@@ -221,14 +211,14 @@ describe('lib/runners/htmlcs', () => {
 			beforeEach(async () => {
 				htmlcsModule = {
 					HTMLCS: {
-						process: sinon.stub().yieldsAsync(),
-						getMessages: sinon.stub().returns(issues)
+						process: jest.fn().mockImplementationOnce((_, __, callback) => callback()),
+						getMessages: jest.fn().mockReturnValue(issues)
 					}
 				};
 				// eslint-disable-next-line no-empty-function
 				global.window.define = () => {};
 				global.window.define.amd = true;
-				global.window.require = sinon.stub().callsFake((dependency, callback) => {
+				global.window.require = jest.fn((dependency, callback) => {
 					callback(htmlcsModule);
 				});
 
@@ -236,21 +226,18 @@ describe('lib/runners/htmlcs', () => {
 			});
 
 			it('calls require', () => {
-				assert.calledOnce(global.window.require);
-				assert.calledOnce(htmlcsModule.HTMLCS.process);
-				sinon.assert.calledWith(
-					global.window.require,
-					sinon.match.array.deepEquals(['htmlcs']),
-					sinon.match.typeOf('function')
+				expect(global.window.require).toHaveBeenCalledTimes(1);
+				expect(htmlcsModule.HTMLCS.process).toHaveBeenCalledTimes(1);
+				expect(global.window.require).toHaveBeenCalledWith(
+					['htmlcs'],
+					expect.any(Function)
 				);
-				assert.calledWith(
-					htmlcsModule.HTMLCS.process,
+				expect(htmlcsModule.HTMLCS.process).toHaveBeenCalledWith(
 					'mock-standard',
-					global.window.document
+					global.window.document,
+					expect.any(Function)
 				);
 			});
 		});
-
 	});
-
 });

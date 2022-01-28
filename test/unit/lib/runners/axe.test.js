@@ -1,16 +1,13 @@
 'use strict';
 
-const assert = require('proclaim');
-const sinon = require('sinon');
 const path = require('path');
+const runner = require('../../../../lib/runners/axe');
 
 describe('lib/runners/axe', () => {
 	let result;
 	let originalWindow;
-	let runner;
 
 	beforeEach(() => {
-
 		result = {
 			violations: [
 				{
@@ -21,14 +18,10 @@ describe('lib/runners/axe', () => {
 					helpUrl: 'mock-help-url-1',
 					nodes: [
 						{
-							target: [
-								'mock-selector-1a'
-							]
+							target: ['mock-selector-1a']
 						},
 						{
-							target: [
-								'mock-selector-1b'
-							]
+							target: ['mock-selector-1b']
 						}
 					]
 				},
@@ -40,9 +33,7 @@ describe('lib/runners/axe', () => {
 					helpUrl: 'mock-help-url-2',
 					nodes: [
 						{
-							target: [
-								'mock-selector-2'
-							]
+							target: ['mock-selector-2']
 						}
 					]
 				},
@@ -64,9 +55,7 @@ describe('lib/runners/axe', () => {
 					helpUrl: 'mock-help-url-3',
 					nodes: [
 						{
-							target: [
-								'mock-selector-3'
-							]
+							target: ['mock-selector-3']
 						}
 					]
 				},
@@ -78,15 +67,10 @@ describe('lib/runners/axe', () => {
 					helpUrl: 'mock-help-url-4',
 					nodes: [
 						{
-							target: [
-								'iframe-selector-1',
-								'mock-selector-4a'
-							]
+							target: ['iframe-selector-1', 'mock-selector-4a']
 						},
 						{
-							target: [
-								'mock-selector-4b'
-							]
+							target: ['mock-selector-4b']
 						}
 					]
 				}
@@ -96,28 +80,33 @@ describe('lib/runners/axe', () => {
 		originalWindow = global.window;
 		global.window = {
 			axe: {
-				run: sinon.stub().resolves(result),
-				getRules: sinon.stub().returns([])
+				run: jest.fn().mockResolvedValue(result),
+				getRules: jest.fn().mockReturnValue([])
 			},
 			document: {
-				querySelector: sinon.stub()
+				querySelector: jest.fn()
 			}
 		};
 
-		global.window.document.querySelector
-			.withArgs('mock-selector-1a').returns('mock-element-1a');
-		global.window.document.querySelector
-			.withArgs('mock-selector-1b').returns('mock-element-1b');
-		global.window.document.querySelector
-			.withArgs('mock-selector-2').returns('mock-element-2');
-		global.window.document.querySelector
-			.withArgs('mock-selector-3').returns('mock-element-3');
-		global.window.document.querySelector
-			.withArgs('iframe-selector-1 mock-selector-4a').returns('mock-element-4a');
-		global.window.document.querySelector
-			.withArgs('mock-selector-4b').returns('mock-element-4b');
-
-		runner = require('../../../../lib/runners/axe');
+		// eslint-disable-next-line complexity
+		global.window.document.querySelector.mockImplementation(selector => {
+			switch (selector) {
+				case 'mock-selector-1a':
+					return 'mock-element-1a';
+				case 'mock-selector-1b':
+					return 'mock-element-1b';
+				case 'mock-selector-2':
+					return 'mock-element-2';
+				case 'mock-selector-3':
+					return 'mock-element-3';
+				case 'iframe-selector-1 mock-selector-4a':
+					return 'mock-element-4a';
+				case 'mock-selector-4b':
+					return 'mock-element-4b';
+				default:
+					return null;
+			}
+		});
 	});
 
 	afterEach(() => {
@@ -125,132 +114,137 @@ describe('lib/runners/axe', () => {
 	});
 
 	it('is an object', () => {
-		assert.isObject(runner);
+		expect(typeof runner).toBe('object');
 	});
 
 	it('has a `supports` property set to a string', () => {
-		assert.isString(runner.supports);
+		expect(runner.supports).toEqual(expect.any(String));
 	});
 
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', () => {
 		const scriptPath =
 			`${path.resolve(__dirname, '..', '..', '..', '..')}` +
 			`${path.normalize('/node_modules/axe-core')}/axe.min.js`;
-		assert.isArray(runner.scripts);
-		assert.deepEqual(runner.scripts, [scriptPath]);
+		expect(runner.scripts.length).toBeGreaterThan(0);
+		expect(runner.scripts).toEqual([scriptPath]);
 	});
 
 	it('has a `run` method', () => {
-		assert.isFunction(runner.run);
+		expect(runner.run).toEqual(expect.any(Function));
 	});
 
 	describe('.run(options, pa11y)', () => {
 		let options;
 		let pa11y;
-		let resolvedValue;
 
-		beforeEach(async () => {
+		beforeEach(() => {
 			options = {};
 			pa11y = {};
-			resolvedValue = await runner.run(options, pa11y);
 		});
 
-		it('runs aXe', () => {
-			assert.calledOnce(global.window.axe.run);
-			assert.calledWithExactly(
-				global.window.axe.run,
-				global.window.document,
-				{rules: {}}
-			);
-		});
+		describe('with no options', () => {
+			let resolvedValue;
 
-		it('resolves with processed and normalised issues', () => {
-			assert.deepEqual(resolvedValue, [
-				{
-					code: 'mock-id-1',
-					message: 'mock help 1 (mock-help-url-1)',
-					type: 'error',
-					element: 'mock-element-1a',
-					runnerExtras: {
-						description: 'mock description 1',
-						impact: 'critical',
-						help: 'mock help 1',
-						helpUrl: 'mock-help-url-1'
+			beforeEach(async () => {
+				resolvedValue = await runner.run(options, pa11y);
+			});
+
+			it('runs aXe', () => {
+				expect(global.window.axe.run).toHaveBeenCalledTimes(1);
+				expect(global.window.axe.run).toHaveBeenCalledWith(
+					global.window.document,
+					{rules: {}}
+				);
+			});
+
+			it('resolves with processed and normalised issues', () => {
+				expect(resolvedValue).toEqual([
+					{
+						code: 'mock-id-1',
+						message: 'mock help 1 (mock-help-url-1)',
+						type: 'error',
+						element: 'mock-element-1a',
+						runnerExtras: {
+							description: 'mock description 1',
+							impact: 'critical',
+							help: 'mock help 1',
+							helpUrl: 'mock-help-url-1'
+						}
+					},
+					{
+						code: 'mock-id-1',
+						message: 'mock help 1 (mock-help-url-1)',
+						type: 'error',
+						element: 'mock-element-1b',
+						runnerExtras: {
+							description: 'mock description 1',
+							impact: 'critical',
+							help: 'mock help 1',
+							helpUrl: 'mock-help-url-1'
+						}
+					},
+					{
+						code: 'mock-id-2',
+						message: 'mock help 2 (mock-help-url-2)',
+						type: 'error',
+						element: 'mock-element-2',
+						runnerExtras: {
+							description: 'mock description 2',
+							impact: 'serious',
+							help: 'mock help 2',
+							helpUrl: 'mock-help-url-2'
+						}
+					},
+					{
+						code: 'mock-id-no-nodes',
+						message: 'mock help no-nodes (mock-help-url-no-nodes)',
+						type: 'warning',
+						element: null,
+						runnerExtras: {
+							description: 'mock description no-nodes',
+							impact: 'moderate',
+							help: 'mock help no-nodes',
+							helpUrl: 'mock-help-url-no-nodes'
+						}
+					},
+					{
+						code: 'mock-id-3',
+						message: 'mock help 3 (mock-help-url-3)',
+						type: 'notice',
+						element: 'mock-element-3',
+						runnerExtras: {
+							description: 'mock description 3',
+							impact: 'minor',
+							help: 'mock help 3',
+							helpUrl: 'mock-help-url-3'
+						}
+					},
+					{
+						code: 'mock-id-4',
+						message: 'mock help 4 (mock-help-url-4)',
+						type: 'error',
+						element: 'mock-element-4a',
+						runnerExtras: {
+							description: 'mock description 4',
+							impact: 'not a supported impact level',
+							help: 'mock help 4',
+							helpUrl: 'mock-help-url-4'
+						}
+					},
+					{
+						code: 'mock-id-4',
+						message: 'mock help 4 (mock-help-url-4)',
+						type: 'error',
+						element: 'mock-element-4b',
+						runnerExtras: {
+							description: 'mock description 4',
+							impact: 'not a supported impact level',
+							help: 'mock help 4',
+							helpUrl: 'mock-help-url-4'
+						}
 					}
-				},
-				{
-					code: 'mock-id-1',
-					message: 'mock help 1 (mock-help-url-1)',
-					type: 'error',
-					element: 'mock-element-1b',
-					runnerExtras: {
-						description: 'mock description 1',
-						impact: 'critical',
-						help: 'mock help 1',
-						helpUrl: 'mock-help-url-1'
-					}
-				},
-				{
-					code: 'mock-id-2',
-					message: 'mock help 2 (mock-help-url-2)',
-					type: 'error',
-					element: 'mock-element-2',
-					runnerExtras: {
-						description: 'mock description 2',
-						impact: 'serious',
-						help: 'mock help 2',
-						helpUrl: 'mock-help-url-2'
-					}
-				},
-				{
-					code: 'mock-id-no-nodes',
-					message: 'mock help no-nodes (mock-help-url-no-nodes)',
-					type: 'warning',
-					element: null,
-					runnerExtras: {
-						description: 'mock description no-nodes',
-						impact: 'moderate',
-						help: 'mock help no-nodes',
-						helpUrl: 'mock-help-url-no-nodes'
-					}
-				},
-				{
-					code: 'mock-id-3',
-					message: 'mock help 3 (mock-help-url-3)',
-					type: 'notice',
-					element: 'mock-element-3',
-					runnerExtras: {
-						description: 'mock description 3',
-						impact: 'minor',
-						help: 'mock help 3',
-						helpUrl: 'mock-help-url-3'
-					}
-				},
-				{
-					code: 'mock-id-4',
-					message: 'mock help 4 (mock-help-url-4)',
-					type: 'error',
-					element: 'mock-element-4a',
-					runnerExtras: {
-						description: 'mock description 4',
-						impact: 'not a supported impact level',
-						help: 'mock help 4',
-						helpUrl: 'mock-help-url-4'
-					}
-				},
-				{
-					code: 'mock-id-4',
-					message: 'mock help 4 (mock-help-url-4)',
-					type: 'error',
-					element: 'mock-element-4b',
-					runnerExtras: {
-						description: 'mock description 4',
-						impact: 'not a supported impact level',
-						help: 'mock help 4',
-						helpUrl: 'mock-help-url-4'
-					}
-				}
-			]);
+				]);
+			});
 		});
 
 		describe('when passing the Pa11y option', () => {
@@ -263,10 +257,10 @@ describe('lib/runners/axe', () => {
 				});
 
 				it('sets the aXe context', () => {
-					assert.calledWithExactly(
-						global.window.axe.run,
+					expect(
+						global.window.axe.run).toHaveBeenCalledWith(
 						cssSelector,
-						sinon.match.any
+						expect.anything()
 					);
 				});
 			});
@@ -275,47 +269,66 @@ describe('lib/runners/axe', () => {
 				it('supports level A', async () => {
 					options.standard = 'WCAG2A';
 					await runner.run(options, pa11y);
-					assert.calledWithExactly(
-						global.window.axe.run,
-						sinon.match.any,
-						sinon.match.hasNested(
-							'runOnly.values',
-							['wcag2a', 'wcag21a', 'best-practice']
-						)
+					expect(
+						global.window.axe.run).toHaveBeenCalledWith(
+						expect.anything(),
+						expect.objectContaining({
+							rules: {},
+							runOnly: {
+								type: 'tags',
+								values: ['wcag2a',
+									'wcag21a',
+									'best-practice']
+							}
+						})
 					);
 				});
 
 				it('supports level AA', async () => {
 					options.standard = 'WCAG2AA';
 					await runner.run(options, pa11y);
-					assert.calledWithExactly(
-						global.window.axe.run,
-						sinon.match.any,
-						sinon.match.hasNested(
-							'runOnly.values',
-							['wcag2a', 'wcag21a', 'wcag2aa', 'wcag21aa', 'best-practice']
-						)
+					expect(
+						global.window.axe.run).toHaveBeenCalledWith(
+						expect.anything(),
+						expect.objectContaining({
+							rules: {},
+							runOnly: {
+								type: 'tags',
+								values: ['wcag2a',
+									'wcag21a',
+									'wcag2aa',
+									'wcag21aa',
+									'best-practice']
+							}
+						})
 					);
 				});
 			});
 
 			describe('rules', () => {
 				beforeEach(async () => {
-					options.rules = ['color-contrast', 'autocomplete-valid', 'something-else'];
-					global.window.axe.getRules = sinon.stub().returns([
-						{ruleId: 'color-contrast'},
-						{ruleId: 'autocomplete-valid'}
-					]);
+					options.rules = [
+						'color-contrast',
+						'autocomplete-valid',
+						'something-else'
+					];
+					global.window.axe.getRules = jest
+						.fn()
+						.mockReturnValue([
+							{ruleId: 'color-contrast'},
+							{ruleId: 'autocomplete-valid'}
+						]);
 					await runner.run(options, pa11y);
 				});
 
 				it('sets the aXe rules', () => {
-					assert.calledWithExactly(
-						global.window.axe.run,
-						sinon.match.any,
-						sinon.match.has('rules', {
-							'color-contrast': {enabled: true},
-							'autocomplete-valid': {enabled: true}
+					expect(global.window.axe.run).toHaveBeenCalledWith(
+						expect.anything(),
+						expect.objectContaining({
+							rules: {
+								'color-contrast': {enabled: true},
+								'autocomplete-valid': {enabled: true}
+							}
 						})
 					);
 				});
@@ -323,21 +336,29 @@ describe('lib/runners/axe', () => {
 
 			describe('ignore', () => {
 				beforeEach(async () => {
-					options.ignore = ['warning', 'notice', 'color-contrast', 'autocomplete-valid'];
-					global.window.axe.getRules = sinon.stub().returns([
-						{ruleId: 'color-contrast'},
-						{ruleId: 'autocomplete-valid'}
-					]);
+					options.ignore = [
+						'warning',
+						'notice',
+						'color-contrast',
+						'autocomplete-valid'
+					];
+					global.window.axe.getRules = jest
+						.fn()
+						.mockReturnValue([
+							{ruleId: 'color-contrast'},
+							{ruleId: 'autocomplete-valid'}
+						]);
 					await runner.run(options, pa11y);
 				});
 
 				it('sets the aXe ignore rules', () => {
-					assert.calledWithExactly(
-						global.window.axe.run,
-						sinon.match.any,
-						sinon.match.has('rules', {
-							'color-contrast': {enabled: false},
-							'autocomplete-valid': {enabled: false}
+					expect(global.window.axe.run).toHaveBeenCalledWith(
+						expect.anything(),
+						expect.objectContaining({
+							rules: {
+								'color-contrast': {enabled: false},
+								'autocomplete-valid': {enabled: false}
+							}
 						})
 					);
 				});
@@ -350,8 +371,8 @@ describe('lib/runners/axe', () => {
 
 			beforeEach(async () => {
 				axeError = new Error('axe error');
-				window.axe.run.reset();
-				window.axe.run.rejects(axeError);
+				window.axe.run.mockReset();
+				window.axe.run.mockRejectedValue(axeError);
 				try {
 					await runner.run(options, pa11y);
 				} catch (error) {
@@ -360,11 +381,8 @@ describe('lib/runners/axe', () => {
 			});
 
 			it('rejects with the aXe error', () => {
-				assert.strictEqual(rejectedError, axeError);
+				expect(rejectedError).toEqual(axeError);
 			});
-
 		});
-
 	});
-
 });

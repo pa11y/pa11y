@@ -1,18 +1,17 @@
 'use strict';
 
-const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 const {groupResponses} = require('../helper/pa11y-responses');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI output', function() {
+describe('CLI output', () => {
 	let pa11yResponse;
 
-	describe('when Pa11y is run on a page with errors, warnings, and notices', function() {
+	describe('when Pa11y is run on a page with errors, warnings, and notices', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--reporter', 'json'
@@ -20,44 +19,43 @@ describe('CLI output', function() {
 			});
 		});
 
-		it('outputs the expected issues', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 1);
+		it('outputs the expected issues', () => {
+			expect(pa11yResponse.json).toHaveLength(1);
 		});
 
-		it('does not output notices', function() {
+		it('does not output notices', () => {
 			const notices = pa11yResponse.json.filter(foundIssue => foundIssue.type === 'notice');
-			assert.lengthEquals(notices, 0);
+			expect(notices).toHaveLength(0);
 		});
 
-		it('does not output warnings', function() {
+		it('does not output warnings', () => {
 			const warnings = pa11yResponse.json.filter(foundIssue => foundIssue.type === 'warning');
-			assert.lengthEquals(warnings, 0);
+			expect(warnings).toHaveLength(0);
 		});
 
-		it('outputs errors', function() {
+		it('outputs errors', () => {
 			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'error');
-			assert.isObject(issue);
+			expect(typeof issue).toBe('object');
 
 			// Issue code
-			assert.isString(issue.code);
-			assert.match(issue.code, /^WCAG2AA\./);
+			expect(issue.code).toEqual(expect.any(String));
+			expect(issue.code).toMatch(/^WCAG2AA\./);
 
 			// Issue message, context, and selector
-			assert.isString(issue.message);
-			assert.strictEqual(issue.context, '<html><head>\n\n\t<meta charset="utf-8">...</html>');
-			assert.strictEqual(issue.selector, 'html');
+			expect(issue.message).toEqual(expect.any(String));
+			expect(issue.context).toEqual('<html><head>\n\n\t<meta charset="utf-8">...</html>');
+			expect(issue.selector).toEqual('html');
 
 			// Issue type
-			assert.strictEqual(issue.type, 'error');
-			assert.strictEqual(issue.typeCode, 1);
+			expect(issue.type).toEqual('error');
+			expect(issue.typeCode).toEqual(1);
 		});
 
 	});
 
-	describe('when Pa11y is run on a page with errors, warnings, and notices and the `--include-notices`/`--include-warnings` flags are set', function() {
+	describe('when Pa11y is run on a page with errors, warnings, and notices and the `--include-notices`/`--include-warnings` flags are set', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -67,75 +65,75 @@ describe('CLI output', function() {
 			});
 		});
 
-		it('outputs the expected issues', function() {
-			assert.isArray(pa11yResponse.json);
+		it('outputs the expected issues', () => {
+			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
 
 			const responses = groupResponses(pa11yResponse.json);
 
-			assert.lengthEquals(responses.error, 1);
-			assert.lengthEquals(responses.warning, 1);
-			assert.lengthEquals(responses.notice, 26);
+			expect(responses.error).toHaveLength(1);
+			expect(responses.warning).toHaveLength(1);
+			expect(responses.notice).toHaveLength(26);
 		});
 
-		it('outputs notices', function() {
+		it('outputs notices', () => {
 			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'notice');
-			assert.isObject(issue);
+			expect(typeof issue).toBe('object');
 
 			// Issue code
-			assert.isString(issue.code);
-			assert.match(issue.code, /^WCAG2AA\./);
+			expect(issue.code).toEqual(expect.any(String));
+			expect(issue.code).toMatch(/^WCAG2AA\./);
 
 			// Issue message, context, and selector
-			assert.isString(issue.message);
-			assert.strictEqual(issue.context, '<title>Page Title</title>');
-			assert.strictEqual(issue.selector, 'html > head > title');
+			expect(issue.message).toEqual(expect.any(String));
+			expect(issue.context).toEqual('<title>Page Title</title>');
+			expect(issue.selector).toEqual('html > head > title');
 
 			// Issue type
-			assert.strictEqual(issue.type, 'notice');
-			assert.strictEqual(issue.typeCode, 3);
+			expect(issue.type).toEqual('notice');
+			expect(issue.typeCode).toEqual(3);
 		});
 
-		it('outputs warnings', function() {
+		it('outputs warnings', () => {
 			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'warning');
-			assert.isObject(issue);
+			expect(typeof issue).toBe('object');
 
 			// Issue code
-			assert.isString(issue.code);
-			assert.match(issue.code, /^WCAG2AA\./);
+			expect(issue.code).toEqual(expect.any(String));
+			expect(issue.code).toMatch(/^WCAG2AA\./);
 
 			// Issue message, context, and selector
-			assert.isString(issue.message);
-			assert.strictEqual(issue.context, '<img src="/path/to/image.jpg" alt="">');
-			assert.strictEqual(issue.selector, 'html > body > img');
+			expect(issue.message).toEqual(expect.any(String));
+			expect(issue.context).toEqual('<img src="/path/to/image.jpg" alt="">');
+			expect(issue.selector).toEqual('html > body > img');
 
 			// Issue type
-			assert.strictEqual(issue.type, 'warning');
-			assert.strictEqual(issue.typeCode, 2);
+			expect(issue.type).toEqual('warning');
+			expect(issue.typeCode).toEqual(2);
 		});
 
-		it('outputs errors', function() {
+		it('outputs errors', () => {
 			const issue = pa11yResponse.json.find(foundIssue => foundIssue.type === 'error');
-			assert.isObject(issue);
+			expect(typeof issue).toBe('object');
 
 			// Issue code
-			assert.isString(issue.code);
-			assert.match(issue.code, /^WCAG2AA\./);
+			expect(issue.code).toEqual(expect.any(String));
+			expect(issue.code).toMatch(/^WCAG2AA\./);
 
 			// Issue message, context, and selector
-			assert.isString(issue.message);
-			assert.strictEqual(issue.context, '<html><head>\n\n\t<meta charset="utf-8">...</html>');
-			assert.strictEqual(issue.selector, 'html');
+			expect(issue.message).toEqual(expect.any(String));
+			expect(issue.context).toEqual('<html><head>\n\n\t<meta charset="utf-8">...</html>');
+			expect(issue.selector).toEqual('html');
 
 			// Issue type
-			assert.strictEqual(issue.type, 'error');
-			assert.strictEqual(issue.typeCode, 1);
+			expect(issue.type).toEqual('error');
+			expect(issue.typeCode).toEqual(1);
 		});
 
 	});
 
-	describe('when the issues on the page have varying selectors', function() {
+	describe('when the issues on the page have varying selectors', () => {
 
-		before(async function() {
+		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/selectors`, {
 				arguments: [
 					'--reporter', 'json'
@@ -143,11 +141,10 @@ describe('CLI output', function() {
 			});
 		});
 
-		it('outputs issues with the expected selectors', function() {
-			assert.isArray(pa11yResponse.json);
-			assert.lengthEquals(pa11yResponse.json, 8);
+		it('outputs issues with the expected selectors', () => {
+			expect(pa11yResponse.json).toHaveLength(8);
 			const selectors = pa11yResponse.json.map(issue => issue.selector);
-			assert.deepEqual(selectors, [
+			expect(selectors).toEqual([
 				'html > body > img:nth-child(1)',
 				'#image2',
 				'#image3',

@@ -1,0 +1,17 @@
+{
+	"clearMocks": true,
+	"collectCoverageFrom": [
+		"lib/**/*.js"
+	],
+	"coverageThreshold": {
+		"global": {
+			"branches": 90,
+			"functions": 90,
+			"lines": 90,
+			"statements": -10
+		}
+	},
+	"globalSetup": "./test/integration/global-setup.js",
+	"globalTeardown": "./test/integration/global-teardown.js",
+	"setupFilesAfterEnv": ["./test/integration/setup-env.js"]
+}

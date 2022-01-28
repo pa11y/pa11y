@@ -4,3 +4,4 @@ coverage
 node_modules
 npm-debug.log
 test/integration/tmp
+.npmrc
