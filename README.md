@@ -5,7 +5,7 @@ Pa11y is your automated accessibility testing pal. It runs accessibility tests o
 [![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
-[![LGPL-3.0 licensed][shield-license]][info-license]
+[![LGPL-3.0-only licensed][shield-license]][info-license]
 
 On the command line:
 
@@ -1026,7 +1026,7 @@ If you're opening issues related to these, please mention the version that the i
 
 ## License
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0)][info-license].  
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].
 Copyright &copy; 2013–2021, Team Pa11y and contributors
 
 [5.x]: https://github.com/pa11y/pa11y/tree/5.x
