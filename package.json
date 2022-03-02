@@ -34,7 +34,6 @@
   "dependencies": {
     "axe-core": "~4.2.1",
     "bfj": "~7.0.2",
-    "commander": "~8.0.0",
     "envinfo": "~7.8.1",
     "hogan.js": "~3.0.2",
     "html_codesniffer": "~2.5.1",
@@ -45,6 +44,7 @@
     "semver": "~7.3.5"
   },
   "devDependencies": {
+    "commander": "~8.0.0",
     "eslint": "^7.27.0",
     "eslint-plugin-jest": "^25.3.4",
     "jest": "^27.4.7",
