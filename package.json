@@ -32,12 +32,12 @@
     "node": ">=12"
   },
   "dependencies": {
-    "axe-core": "^4.0.2",
+    "axe-core": "~4.2.1",
     "bfj": "~7.0.2",
     "commander": "~8.0.0",
     "envinfo": "~7.8.1",
-    "hogan.js": "^3.0.2",
-    "html_codesniffer": "^2.5.1",
+    "hogan.js": "~3.0.2",
+    "html_codesniffer": "~2.5.1",
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
