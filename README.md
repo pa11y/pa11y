@@ -1047,7 +1047,7 @@ Copyright &copy; 2013–2021, Team Pa11y and contributors
 [puppeteer-page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
 [puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
 [semver range]: https://github.com/npm/node-semver#ranges
-[shield-build]: https://github.com/pa11y/pa11y/actions/workflows/build-and-test.yml/badge.svg
+[shield-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml/badge.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg
 [shield-npm]: https://img.shields.io/npm/v/pa11y.svg
