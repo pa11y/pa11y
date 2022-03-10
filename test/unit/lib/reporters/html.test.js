@@ -2,11 +2,11 @@
 
 const path = require('path');
 const fs = require('fs');
-const hogan = require('hogan.js');
+const mustache = require('mustache');
 const reporter = require('../../../../lib/reporters/html');
 
 jest.mock('fs', () => require('../../mocks/fs.mock'));
-jest.mock('hogan.js', () => require('../../mocks/hogan.mock'));
+jest.mock('mustache', () => require('../../mocks/mustache.mock'));
 
 describe('lib/reporters/html', () => {
 	it('is an object', () => {
@@ -37,7 +37,7 @@ describe('lib/reporters/html', () => {
 			};
 			fs.readFile
 				.mockImplementationOnce((_, __, handler) => handler(null, 'mock template content'));
-			hogan.mockTemplate.render.mockReturnValue('mock rendered template');
+			mustache.render.mockReturnValue('mock rendered template');
 
 			resolvedValue = await reporter.results(mockPa11yResults);
 		});
@@ -53,17 +53,15 @@ describe('lib/reporters/html', () => {
 			);
 		});
 
-		it('compiles the template string', () => {
-			expect(hogan.compile).toHaveBeenCalledTimes(1);
-			expect(hogan.compile).toHaveBeenCalledWith('mock template content');
-		});
-
 		it('renders the template with a context object that uses the Pa11y results', () => {
-			expect(hogan.mockTemplate.render).toHaveBeenCalledTimes(1);
-			expect(typeof hogan.mockTemplate.render.mock.calls[0][0]).toBe(
+			expect(mustache.render).toHaveBeenCalledTimes(1);
+			expect(typeof mustache.render.mock.calls[0][0]).toBe(
+				'string'
+			);
+			expect(typeof mustache.render.mock.calls[0][1]).toBe(
 				'object'
 			);
-			const renderContext = hogan.mockTemplate.render.mock.calls[0][0];
+			const renderContext = mustache.render.mock.calls[0][1];
 			expect(renderContext.date).toEqual(expect.any(Date));
 			expect(renderContext.documentTitle).toEqual(
 				mockPa11yResults.documentTitle
