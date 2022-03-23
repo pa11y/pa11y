@@ -1016,7 +1016,7 @@ We also maintain a [migration guide](MIGRATION.md) to help you migrate.
 | :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
 | :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
 | :heart:         | 6             | N/A                | 12+              | N/A              |
-| :warning:       | 5             | 5.3                | 8+               | 2021-11-25       |
+| :skull:         | 5             | 5.3                | 8+               | 2021-11-25       |
 | :skull:         | 4             | 4.13               | 4–8              | 2018-08-15       |
 | :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
 | :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
