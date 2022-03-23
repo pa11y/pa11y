@@ -23,8 +23,6 @@ pa11y('https://example.com/').then((results) => {
 });
 ```
 
-If you need a GUI, you can try [Koa11y](https://open-indy.github.io/Koa11y/). It's a desktop application for Windows, OSX and Linux that uses Pa11y to run accessibility tests.
-
 ## Table of contents
 
 * [Table of contents](#table-of-contents)
