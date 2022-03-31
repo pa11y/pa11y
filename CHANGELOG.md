@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0 (2022-03-31)
+
+* Replace hogan.js with mustache in the HTML reporter (thanks @wit-0-bit)
+* Increase verbosity of actions when debug is enabled (thanks @m1rp)
+* Several documentation fixes (thanks @gabalafou, @manuelmeister, @LorenzoAncora)
+
 ## 6.1.1 (2021-11-17)
 
 * Add `clear-field` action (thanks @amprew)
