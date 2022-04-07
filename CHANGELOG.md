@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.1 (2022-04-07)
+
+* Fix a circular reference error when parsing the console logs. Thanks @alycia-docusign for reporting the issue and @jefflward for suggesting a fix.
+
 ## 6.2.0 (2022-03-31)
 
 * Replace hogan.js with mustache in the HTML reporter (thanks @wit-0-bit)
