@@ -318,13 +318,18 @@ describe('lib/pa11y', () => {
 
 				beforeEach(() => {
 					mockMessage = {
-						text: jest.fn().mockReturnValue('mock-message')
+						text: jest.fn().mockReturnValue('mock-message'),
+						location: jest.fn().mockReturnValue({
+							url: 'https://mock-url/',
+							lineNumber: 1,
+							columnNumber: 1
+						})
 					};
 					getCallMatching('console', puppeteer.mockPage.on)[1](mockMessage);
 				});
 
 				it('logs the console message text with `options.log.debug`', () => {
-					expect(options.log.debug).toHaveBeenCalledWith('Browser Console: mock-message');
+					expect(options.log.debug).toHaveBeenCalledWith('Browser Console: mock-url:1:1 mock-message');
 				});
 
 			});
