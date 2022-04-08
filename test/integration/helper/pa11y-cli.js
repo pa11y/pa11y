@@ -20,7 +20,7 @@ function runPa11yCli(url, options = {}) {
 	options.arguments.push(url);
 
 	return new Promise((resolve, reject) => {
-		const binPath = path.resolve(`${__dirname}/../../../bin/pa11y.js`);
+		const binFile = path.resolve(__dirname, '../../../bin/pa11y.js');
 
 		const response = {
 			exitCode: '',
@@ -30,7 +30,7 @@ function runPa11yCli(url, options = {}) {
 			stdout: ''
 		};
 
-		const pa11yProcess = spawn(binPath, options.arguments, {
+		const pa11yProcess = spawn('node', [binFile, ...options.arguments], {
 			cwd: options.workingDirectory,
 			env: options.environment
 		});
