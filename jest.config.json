@@ -13,6 +13,5 @@
 	},
 	"globalSetup": "./test/integration/global-setup.js",
 	"globalTeardown": "./test/integration/global-teardown.js",
-	"setupFiles": ["./test/setup.js"],
 	"setupFilesAfterEnv": ["./test/integration/setup-env.js"]
 }
