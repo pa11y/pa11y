@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const http = require('http');
+const path = require('path');
 const parseUrl = require('url').parse;
 
 module.exports = startMockWebsite;
@@ -29,7 +30,8 @@ function createMockWebsite() {
 		request.on('end', () => {
 			const url = parseUrl(request.url).pathname;
 			try {
-				let html = fs.readFileSync(`${__dirname}/html/${url}.html`, 'utf-8');
+				const viewPath = path.join(__dirname, 'html', `${url}.html`);
+				let html = fs.readFileSync(viewPath, 'utf-8');
 				html = html.replace('{foo-header}', request.headers.foo);
 				html = html.replace('{bar-header}', request.headers.bar);
 				html = html.replace('{method}', request.method);
