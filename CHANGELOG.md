@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.2 (2022-04-08)
+
+* Fix a crash when a page logs a warning or an error.
+
 ## 6.2.1 (2022-04-07)
 
 * Fix a circular reference error when parsing the console logs. Thanks @alycia-docusign for reporting the issue and @jefflward for suggesting a fix.
