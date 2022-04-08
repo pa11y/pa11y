@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const	{parseArguments, verifyOptions} = require('../../../lib/option');
+const {parseArguments, verifyOptions} = require('../../../lib/option');
 
 describe('lib/option', () => {
 	const noop = () => { /* No-op */ };
@@ -216,13 +216,15 @@ describe('lib/option', () => {
 			});
 		});
 
-		describe('when `url` does not have a scheme and starts with a slash', () => {
+		describe('when `url` does not have a scheme and is an absolute path', () => {
+			const absolutePath = path.resolve(process.cwd(), './mock-path');
+
 			beforeEach(() => {
-				[url, options, callback] = parseArguments('/mock-path', {}, {});
+				[url, options, callback] = parseArguments(absolutePath, {}, {});
 			});
 
 			it('navigates to `url` with a `file` scheme added', () => {
-				expect(url).toEqual('file:///mock-path');
+				expect(url).toEqual(`file://${absolutePath}`);
 			});
 		});
 
