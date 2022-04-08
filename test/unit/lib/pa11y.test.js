@@ -318,12 +318,13 @@ describe('lib/pa11y', () => {
 
 				beforeEach(() => {
 					mockMessage = {
-						text: jest.fn().mockReturnValue('mock-message'),
 						location: jest.fn().mockReturnValue({
 							url: 'https://mock-url/',
 							lineNumber: 1,
 							columnNumber: 1
-						})
+						}),
+						text: jest.fn().mockReturnValue('mock-message'),
+						type: jest.fn().mockReturnValue('log')
 					};
 					getCallMatching('console', puppeteer.mockPage.on)[1](mockMessage);
 				});
