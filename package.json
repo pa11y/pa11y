@@ -58,8 +58,8 @@
     "lint": "eslint .",
     "test-unit": "jest test/unit",
     "test-coverage": "jest test/unit --coverage",
-    "test-integration": "MOCK_SERVER_PORT=8081 jest test/integration",
-    "test": "MOCK_SERVER_PORT=8081 jest --coverage"
+    "test-integration": "jest test/integration",
+    "test": "jest --coverage"
   },
   "files": [
     "bin",
