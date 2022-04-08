@@ -9,32 +9,34 @@ on:
       - master
   pull_request:
     branches: # Run actions when a PR is pushed based on one of these branches
-      - master
-      - 1.x
-      - 2.x
-      - 3.x
-      - 4.x
-      - 5.x
-      - 5.2.x
+      - '**'
 
 jobs:
   checkout_and_test:
-    runs-on: ubuntu-latest
+    name: Node v${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        node: [12, 14, 16]
         include:
-          - node-version: 12.x
+          - os: ubuntu-latest
+            node: 12
             lint: true # Linter is run only once to shorten the total build time
-          - node-version: 14.x
-          - node-version: 16.x
 
     steps:
+      - name: Set git config
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+        if: runner.os == 'Windows'
       - name: Checkout code from ${{ github.repository }}
-        uses: actions/checkout@v2
-      - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - name: Setup node ${{ matrix.node }}
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ matrix.node }}
       - name: Install dependencies
         run: npm ci
       - name: Run linter
