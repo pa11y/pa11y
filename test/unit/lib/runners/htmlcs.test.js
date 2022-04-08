@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const runner = require('../../../../lib/runners/htmlcs');
 
 describe('lib/runners/htmlcs', () => {
@@ -60,7 +61,7 @@ describe('lib/runners/htmlcs', () => {
 		expect(runner.scripts).toHaveLength(1);
 		expect(
 			runner.scripts[0].endsWith(
-				'node_modules/html_codesniffer/build/HTMLCS.js'
+				path.join('node_modules', 'html_codesniffer', 'build', 'HTMLCS.js')
 			)
 		).toEqual(true);
 	});
