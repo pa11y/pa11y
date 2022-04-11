@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.3 (2022-04-11)
+
+* Revert console logging behaviour which was still causing problems on some sites.
+
 ## 6.2.2 (2022-04-08)
 
 * Fix a crash when a page logs a warning or an error.
