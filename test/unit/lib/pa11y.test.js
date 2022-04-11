@@ -330,7 +330,7 @@ describe('lib/pa11y', () => {
 				});
 
 				it('logs the console message text with `options.log.debug`', () => {
-					expect(options.log.debug).toHaveBeenCalledWith('Browser Console: mock-url:1:1 mock-message');
+					expect(options.log.debug).toHaveBeenCalledWith('Browser Console: mock-message');
 				});
 
 			});
