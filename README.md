@@ -1040,10 +1040,10 @@ Copyright &copy; 2013–2021, Team Pa11y and contributors
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[puppeteer-browser]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser
-[puppeteer-launch]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions
-[puppeteer-page]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page
-[puppeteer-viewport]: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetviewportviewport
+[puppeteer-browser]: https://pptr.dev/next/api/puppeteer.browser
+[puppeteer-launch]: https://pptr.dev/next/api/puppeteer.puppeteerlaunchoptions
+[puppeteer-page]: https://pptr.dev/api/puppeteer.page
+[puppeteer-viewport]: https://pptr.dev/api/puppeteer.page.setviewport
 [semver range]: https://github.com/npm/node-semver#ranges
 [shield-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml/badge.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
