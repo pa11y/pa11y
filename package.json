@@ -41,7 +41,7 @@
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
-    "puppeteer": "~9.1.1",
+    "puppeteer": "~19.2.2",
     "semver": "~7.3.5"
   },
   "devDependencies": {
