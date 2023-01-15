@@ -23,7 +23,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pa11y/pa11y.git"
+    "url": "https://github.com/sternecker/pa11y.git"
   },
   "homepage": "https://github.com/pa11y/pa11y",
   "bugs": "https://github.com/pa11y/pa11y/issues",
@@ -41,7 +41,7 @@
     "kleur": "~4.1.4",
     "node.extend": "~2.0.2",
     "p-timeout": "~4.1.0",
-    "puppeteer": "~9.2.2",
+    "puppeteer": "~19.5.2",
     "semver": "~7.3.5"
   },
   "devDependencies": {
