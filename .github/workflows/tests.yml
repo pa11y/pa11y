@@ -27,7 +27,7 @@ jobs:
             lint: true # Linter is run only once to shorten the total build time
           - node-version: 16.x
           - node-version: 18.x
-          - node-version: 19.2.x
+          - node-version: 19.x
 
     steps:
       - name: Checkout code from ${{ github.repository }}
