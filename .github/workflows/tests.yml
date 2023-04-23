@@ -23,11 +23,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - node-version: 14.x
-            lint: true # Linter is run only once to shorten the total build time
           - node-version: 16.x
+            lint: true # Linter is run only once to shorten the total build time
           - node-version: 18.x
-          - node-version: 19.x
           - node-version: 20.x
 
     steps:
