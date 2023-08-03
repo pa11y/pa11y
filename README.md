@@ -702,7 +702,7 @@ This allows you to click or double click an element by passing in a CSS selector
 ```js
 pa11y(url, {
     actions: [
-        'click element #tab-1'
+        'click element #tab-1',
         'double click element #tab-2'
     ]
 });
