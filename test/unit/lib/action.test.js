@@ -226,15 +226,24 @@ describe('lib/action', function() {
 				assert.deepEqual('click .foo'.match(action.match), [
 					'click .foo',
 					undefined,
+					undefined,
 					'.foo'
 				]);
 				assert.deepEqual('click element .foo'.match(action.match), [
 					'click element .foo',
+					undefined,
 					' element',
 					'.foo'
 				]);
 				assert.deepEqual('click element .foo .bar .baz'.match(action.match), [
 					'click element .foo .bar .baz',
+					undefined,
+					' element',
+					'.foo .bar .baz'
+				]);
+				expect(Array.from('double click element .foo .bar .baz'.match(clickElementAction.match))).toEqual([
+					'double click element .foo .bar .baz',
+					'double ',
 					' element',
 					'.foo .bar .baz'
 				]);
@@ -257,7 +266,50 @@ describe('lib/action', function() {
 
 			it('clicks the specified element on the page', function() {
 				assert.calledOnce(puppeteer.mockPage.click);
-				assert.calledWithExactly(puppeteer.mockPage.click, matches[2]);
+				expect(puppeteer.mockPage.click).toHaveBeenCalledWith(clickElementMatches[3], {});
+			});
+
+			it('resolves with `undefined`', () => {
+				expect(clickElementResolvedValue).toBeUndefined();
+			});
+
+			describe('when the click fails', () => {
+				let clickError;
+				let clickElementRejectedError;
+
+				beforeEach(async () => {
+					clickError = new Error('click error');
+					puppeteer.mockPage.click.mockRejectedValueOnce(clickError);
+					try {
+						await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
+					} catch (error) {
+						clickElementRejectedError = error;
+					}
+				});
+
+				it('rejects with a new error', () => {
+					expect(clickElementRejectedError).not.toEqual(clickError);
+					expect(clickElementRejectedError).toEqual(expect.any(Error));
+					expect(clickElementRejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				});
+
+			});
+
+		});
+
+		describe('.run(browser, page, options, matches) double click', () => {
+			let clickElementMatches;
+			let clickElementResolvedValue;
+
+			beforeEach(async () => {
+				global.document.querySelector.mockReturnValue(mockElement);
+				clickElementMatches = 'double click element foo'.match(clickElementAction.match);
+				clickElementResolvedValue = await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
+			});
+
+			it('clicks the specified element on the page', () => {
+				expect(puppeteer.mockPage.click).toHaveBeenCalledTimes(1);
+				expect(puppeteer.mockPage.click).toHaveBeenCalledWith(clickElementMatches[3], {'clickCount': 2});
 			});
 
 			it('resolves with `undefined`', function() {
