@@ -21,10 +21,7 @@
     "José Bolos (https://github.com/josebolos)",
     "Joey Ciechanowicz (https://github.com/joeyciechanowicz)"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pa11y/pa11y.git"
-  },
+  "repository": "github:pa11y/pa11y",
   "homepage": "https://github.com/pa11y/pa11y",
   "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0-only",
