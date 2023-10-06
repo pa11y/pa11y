@@ -29,7 +29,7 @@
   "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0-only",
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "dependencies": {
     "axe-core": "~4.7.0",

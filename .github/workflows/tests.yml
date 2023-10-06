@@ -22,10 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - node-version: 16.x
-          - node-version: 18.x
-          - node-version: 20.x
+        node-version: [18, 20]
     steps:
       - name: Checkout code from ${{ github.repository }}
         uses: actions/checkout@v2
