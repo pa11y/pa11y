@@ -9,8 +9,8 @@ on:
       - '**'
 
 jobs:
-  checkout_and_test:
-    name: Node v${{ matrix.node-version }} on ${{ matrix.os }}
+  test:
+    name: Lint and test on ${{ matrix.os }} with Node.js ${{ matrix.node-version }} 
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
