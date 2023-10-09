@@ -21,7 +21,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
         node-version: [18, 20]
     steps:
-      - name: Set git config
+      - name: Normalise line-ending handling in Git
         shell: bash
         run: |
           git config --global core.autocrlf false
