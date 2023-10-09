@@ -1,14 +1,11 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests.
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: Build and lint
 
 on:
   push:
-    branches: # Run actions when code is committed to these branches
+    branches:
       - master
   pull_request:
-    branches: # Run actions when a PR is pushed based on one of these branches
+    branches:
       - '**'
 
 jobs:
@@ -26,15 +23,10 @@ jobs:
         run: |
           git config --global core.autocrlf false
         if: runner.os == 'Windows'
-      - name: Checkout code from ${{ github.repository }}
-        uses: actions/checkout@v3
-      - name: Setup node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Run linter
-        run: npm run lint
-      - name: Run tests
-        run: npm test
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
