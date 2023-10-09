@@ -4,8 +4,6 @@ on:
       - main
       - master
   pull_request:
-    branches:
-      - '**'
 
 jobs:
   test:
