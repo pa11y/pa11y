@@ -1,5 +1,3 @@
-name: Build and lint
-
 on:
   push:
     branches:
