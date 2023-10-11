@@ -225,14 +225,16 @@ describe('lib/pa11y', () => {
 
 		});
 
-		describe('when `url` does not have a scheme and starts with a slash', () => {
+		describe('when `url` does not have a scheme and is an absolute path', () => {
+			const absolutePath = path.resolve(process.cwd(), './mock-path');
+
 			beforeEach(async () => {
-				await pa11y('/mock-path');
+				await pa11y(absolutePath);
 			});
 
 			it('navigates to `url` with an `file` scheme added', () => {
 				expect(puppeteer.mockPage.goto).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.goto).toHaveBeenCalledWith('file:///mock-path', expect.anything());
+				expect(puppeteer.mockPage.goto).toHaveBeenCalledWith(`file://${absolutePath}`, expect.anything());
 			});
 
 		});
