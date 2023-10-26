@@ -1,0 +1,37 @@
+on:
+  release:
+    types: [created, edited, published]
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Dry run only'
+        required: true
+        default: true
+        type: boolean
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      
+      - name: Publish package
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
+        if: >
+          (github.event_name == 'release' && github.event.action == 'published') ||
+          (github.event_name == 'workflow_dispatch' && !inputs.dryRun)
+        run: npm publish
+      
+      - name: Publish package (dry run)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
+        if: >
+          (github.event_name == 'release' && github.event.action != 'published') ||
+          (github.event_name == 'workflow_dispatch' && inputs.dryRun)
+        run: npm publish --dry-run
