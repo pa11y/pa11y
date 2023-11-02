@@ -93,10 +93,12 @@ Pa11y requires [Node.js][node] 12+ to run. If you need support for older version
 
 ### Linux and macOS
 
-To install [Node.js][node] you can use [nvm][nvm]:
+To install [Node.js][node] you can use [nvm][nvm]. For example, to install with `nvm` with [Homebrew][brew], and then install the latest version of Node:
 
 ```sh
+brew install nvm
 nvm install node
+nvm install-latest-npm
 ```
 
 Alternatively, you can also download pre-built packages from the [Node.js][node] website for your operating system.
