@@ -99,13 +99,7 @@ To install [Node.js][node] you can use [nvm][nvm]:
 nvm install node
 ```
 
-You can also install Node.js using a package manager like for example [Homebrew][brew]:
-
-```sh
-brew install node
-```
-
-Alternatively, you can also download pre-built packages from the [Node.js][node] website for your particular Operating System.
+Alternatively, you can also download pre-built packages from the [Node.js][node] website for your operating system.
 
 ### Windows
 
