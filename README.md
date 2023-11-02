@@ -89,7 +89,7 @@ pa11y('https://example.com/').then((results) => {
 
 ## Requirements
 
-Pa11y requires [Node.js][node] 12+ to run. If you need support for older versions of Node.js, then please use [Pa11y 5.x][5.x].
+Pa11y 7 requires [Node.js][node] 18 or 20 to run. An older version of Node.js can be used with a [previous major version](#support-and-migration) of Pa11y.
 
 ### Linux and macOS
 
@@ -1003,27 +1003,28 @@ To debug a test file you need to ensure that [setup.test.js](test/integration/se
 
 ## Support and Migration
 
-Pa11y major versions are normally supported for 6 months after their last minor release. This means that patch-level changes will be added and bugs will be fixed. The table below outlines the end-of-support dates for major versions, and the last minor release for that version.
+We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
 
-We also maintain a [migration guide](MIGRATION.md) to help you migrate.
+When we release a new major version we will continue to support the previous major version for 6 months. This support will be limited to fixes for critical bugs and security issues. If you're opening an issue related to this project, please mention the specific version that the issue affects.
 
-| :grey_question: | Major Version | Last Minor Release | Node.js Versions | Support End Date |
-| :-------------- | :------------ | :----------------- | :--------------- | :--------------- |
-| :heart:         | 6             | N/A                | 12+              | N/A              |
-| :skull:         | 5             | 5.3                | 8+               | 2021-11-25       |
-| :skull:         | 4             | 4.13               | 4–8              | 2018-08-15       |
-| :skull:         | 3             | 3.8                | 0.12–6           | 2016-12-05       |
-| :skull:         | 2             | 2.4                | 0.10–0.12        | 2016-10-16       |
-| :skull:         | 1             | 1.7                | 0.10             | 2016-06-08       |
+The following table lists the major versions available and, for each previous major version, its end-of-support date, and its final minor version released.
 
-If you're opening issues related to these, please mention the version that the issue relates to.
+| Major version | Final minor version   | Node.js support  | Support end date |
+| :------------ | :-------------------- | :--------------- | :--------------- |
+| 7             |                       | 18, 20           | ✅ Current major version |
+| 6             | 6.2.3                 | 12, 14, 16       | 2023-05-03       |
+| 5             | 5.3                   | 8, 10, 12        | 2021-11-25       |
+| 4             | 4.13                  | 4, 6, 8          | 2018-08-15       |
+| 3             | 3.8                   | 0.12, 4          | 2016-12-05       |
+| 2             | 2.4                   | 0.10, 0.12       | 2016-10-16       |
+| 1             | 1.7                   | 0.10             | 2016-06-08       |
+
 
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].
 Copyright &copy; 2013–2021, Team Pa11y and contributors
 
-[5.x]: https://github.com/pa11y/pa11y/tree/5.x
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
