@@ -65,7 +65,7 @@
 
 ## 5.3.0 (2019-09-30)
 
-* Adds support for [aXe](https://www.deque.com/axe/) test runner (thanks @rowanmanning)
+* Adds support for [axe](https://www.deque.com/axe/) test runner (thanks @rowanmanning)
 * Adds support for multiple test runners (thanks @rowanmanning)
 * Adds support for sites using `AMD` (thanks @joeyciechanowicz)
 * Removes dependency on `fs-extra` (thanks @timnovis)
