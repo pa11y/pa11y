@@ -169,7 +169,7 @@ Run Pa11y using [axe] as a [test runner](#runners):
 pa11y --runner axe https://example.com
 ```
 
-Run Pa11y using [axe] _and_ [HTML CodeSniffer][htmlcs] as [test runners](#runners):
+Run Pa11y using [axe] _and_ [HTML_CodeSniffer][htmlcs] as [test runners](#runners):
 
 ```sh
 pa11y --runner axe --runner htmlcs https://example.com
@@ -293,7 +293,7 @@ pa11y('https://example.com/', {
 });
 ```
 
-Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML CodeSniffer. It looks like this:
+Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML_CodeSniffer. It looks like this:
 
 ```js
 {
@@ -727,7 +727,7 @@ Defaults to:
 
 ### `wait` (number)
 
-The time in milliseconds to wait before running HTML CodeSniffer on the page.
+The time in milliseconds to wait before running HTML_CodeSniffer on the page.
 
 ```js
 pa11y('https://example.com/', {
@@ -897,7 +897,7 @@ pa11y('https://example.com/', {
 Pa11y supports multiple test runners which return different results. The built-in test runners are:
 
 * `axe`: run tests using [axe-core][axe].
-* `htmlcs` (default): run tests using [HTML CodeSniffer][htmlcs]
+* `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
 
 You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
 
