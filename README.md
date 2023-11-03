@@ -248,7 +248,7 @@ The following locations will be checked:
 A Pa11y reporter _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the reporter supports:
 
 ```js
-exports.supports = '^5.0.0';
+exports.supports = '^7.0.0';
 ```
 
 A reporter should export the following methods, which should all return strings. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
@@ -916,7 +916,7 @@ The following locations will be checked:
 A Pa11y runner _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the runner supports:
 
 ```js
-exports.supports = '^5.0.0';
+exports.supports = '^7.0.0';
 ```
 
 A Pa11y runner _must_ export a property named `scripts`. This is an array of strings which are paths to scripts which need to load before the tests can be run. This may be empty:
