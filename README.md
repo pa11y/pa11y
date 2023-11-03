@@ -10,7 +10,7 @@ Pa11y is your automated accessibility testing pal. It runs accessibility tests o
 On the command line:
 
 ```sh
-pa11y https://example.com/
+pa11y https://example.com
 ```
 
 In JavaScript:
@@ -18,8 +18,8 @@ In JavaScript:
 ```js
 const pa11y = require('pa11y');
 
-pa11y('https://example.com/').then((results) => {
-    // Do something with the results
+pa11y('https://example.com').then((results) => {
+    // Use the results
 });
 ```
 
