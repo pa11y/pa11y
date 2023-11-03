@@ -143,36 +143,36 @@ Usage: pa11y [options] <url>
     -h, --help                     output usage information
 ```
 
-### Running Tests
+### Testing with `pa11y`
 
-Run an accessibility test against a URL:
+Find accessibility issues at a URL:
 
 ```sh
 pa11y https://example.com
 ```
 
-Run an accessibility test against a file (absolute paths only, not relative):
+The default [test runner](#runners) is [HTML_CodeSniffer][htmlcs], but [axe] is also supported. To use `axe`:
+
+```sh
+pa11y https://example.com --runner axe
+```
+
+Use both axe and HTML_CodeSniffer in the same run:
+
+```sh
+pa11y https://example.com --runner axe --runner htmlcs
+```
+
+Generate results in CSV format, and output to a file, `report.csv`:
+
+```sh
+pa11y https://example.com > report.csv --reporter csv 
+```
+
+Find accessibility issues in a local HTML file (absolute paths only, not relative):
 
 ```sh
 pa11y ./path/to/your/file.html
-```
-
-Run a test with CSV reporting and save to a file:
-
-```sh
-pa11y --reporter csv https://example.com > report.csv
-```
-
-Run Pa11y using [axe] as a [test runner](#runners):
-
-```sh
-pa11y --runner axe https://example.com
-```
-
-Run Pa11y using [axe] _and_ [HTML_CodeSniffer][htmlcs] as [test runners](#runners):
-
-```sh
-pa11y --runner axe --runner htmlcs https://example.com
 ```
 
 ### Exit Codes
