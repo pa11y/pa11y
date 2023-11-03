@@ -25,67 +25,66 @@ pa11y('https://example.com').then((results) => {
 
 ## Table of contents
 
-* [Table of contents](#table-of-contents)
-* [Requirements](#requirements)
-  * [Linux and macOS](#linux-and-macos)
-  * [Windows](#windows)
-* [Command-line interface](#command-line-interface)
-  * [Testing with `pa11y`](#testing-with-pa11y)
-  * [Exit codes](#exit-codes)
-  * [Command-line configuration](#command-line-configuration)
-  * [Ignoring](#ignoring)
-  * [Reporters](#reporters)
-* [JavaScript interface](#javascript-interface)
-  * [Transforming the results](#transforming-the-results)
-  * [`async`/`await`](#asyncawait)
-  * [Callback interface](#callback-interface)
-  * [Validating actions](#validating-actions)
-* [Configuration](#configuration)
-  * [`actions` (array)](#actions-array)
-  * [`browser` (Browser) and `page` (Page)](#browser-browser-and-page-page)
-  * [`chromeLaunchConfig` (object)](#chromelaunchconfig-object)
-  * [`headers` (object)](#headers-object)
-  * [`hideElements` (string)](#hideelements-string)
-  * [`ignore` (array)](#ignore-array)
-  * [`ignoreUrl` (boolean)](#ignoreurl-boolean)
-  * [`includeNotices` (boolean)](#includenotices-boolean)
-  * [`includeWarnings` (boolean)](#includewarnings-boolean)
-  * [`level` (string)](#level-string)
-  * [`log` (object)](#log-object)
-  * [`method` (string)](#method-string)
-  * [`postData` (string)](#postdata-string)
-  * [`reporter` (string)](#reporter-string)
-  * [`rootElement` (element)](#rootelement-element)
-  * [`runners` (array)](#runners-array)
-  * [`rules` (array)](#rules-array)
-  * [`screenCapture` (string)](#screencapture-string)
-  * [`standard` (string)](#standard-string)
-  * [`threshold` (number)](#threshold-number)
-  * [`timeout` (number)](#timeout-number)
-  * [`userAgent` (string)](#useragent-string)
-  * [`viewport` (object)](#viewport-object)
-  * [`wait` (number)](#wait-number)
-* [Actions](#actions)
-  * [Click Element](#click-element)
-  * [Set Field Value](#set-field-value)
-  * [Clear Field Value](#clear-field-value)
-  * [Check/Uncheck Field](#checkuncheck-field)
-  * [Screen Capture](#screen-capture)
-  * [Wait For Fragment/Path/URL](#wait-for-fragmentpathurl)
-  * [Wait For Element State](#wait-for-element-state)
-  * [Wait For Element Event](#wait-for-element-event)
-  * [Navigate To URL](#navigate-to-url)
-* [Runners](#runners)
-* [Examples](#examples)
-  * [Basic example](#basic-example)
-  * [Multiple URLs example](#multiple-urls-example)
-  * [Actions example](#actions-example)
-  * [Puppeteer example](#puppeteer-example)
-* [Common questions and troubleshooting](#common-questions-and-troubleshooting)
-* [Tutorials and articles](#tutorials-and-articles)
-* [Contributing](#contributing)
-* [Support and igration](#support-and-migration)
-* [License](#license)
+- [Requirements](#requirements)
+  - [Linux and macOS](#linux-and-macos)
+  - [Windows](#windows)
+- [Command-line interface](#command-line-interface)
+  - [Testing with `pa11y`](#testing-with-pa11y)
+  - [Exit codes](#exit-codes)
+  - [Command-line configuration](#command-line-configuration)
+  - [Ignoring](#ignoring)
+  - [Reporters](#reporters)
+- [JavaScript interface](#javascript-interface)
+  - [Transforming the results](#transforming-the-results)
+  - [`async`/`await`](#asyncawait)
+  - [Callback interface](#callback-interface)
+  - [Validating actions](#validating-actions)
+- [Configuration](#configuration)
+  - [`actions` (array)](#actions-array)
+  - [`browser` (Browser) and `page` (Page)](#browser-browser-and-page-page)
+  - [`chromeLaunchConfig` (object)](#chromelaunchconfig-object)
+  - [`headers` (object)](#headers-object)
+  - [`hideElements` (string)](#hideelements-string)
+  - [`ignore` (array)](#ignore-array)
+  - [`ignoreUrl` (boolean)](#ignoreurl-boolean)
+  - [`includeNotices` (boolean)](#includenotices-boolean)
+  - [`includeWarnings` (boolean)](#includewarnings-boolean)
+  - [`level` (string)](#level-string)
+  - [`log` (object)](#log-object)
+  - [`method` (string)](#method-string)
+  - [`postData` (string)](#postdata-string)
+  - [`reporter` (string)](#reporter-string)
+  - [`rootElement` (element)](#rootelement-element)
+  - [`runners` (array)](#runners-array)
+  - [`rules` (array)](#rules-array)
+  - [`screenCapture` (string)](#screencapture-string)
+  - [`standard` (string)](#standard-string)
+  - [`threshold` (number)](#threshold-number)
+  - [`timeout` (number)](#timeout-number)
+  - [`userAgent` (string)](#useragent-string)
+  - [`viewport` (object)](#viewport-object)
+  - [`wait` (number)](#wait-number)
+- [Actions](#actions)
+  - [`click element`](#click-element)
+  - [`set field value`](#set-field-value)
+  - [Clear Field Value](#clear-field-value)
+  - [Check/Uncheck Field](#checkuncheck-field)
+  - [Screen Capture](#screen-capture)
+  - [Wait For Fragment/Path/URL](#wait-for-fragmentpathurl)
+  - [Wait For Element State](#wait-for-element-state)
+  - [Wait For Element Event](#wait-for-element-event)
+  - [Navigate To URL](#navigate-to-url)
+- [Runners](#runners)
+- [Examples](#examples)
+  - [Basic example](#basic-example)
+  - [Multiple URLs example](#multiple-urls-example)
+  - [Actions example](#actions-example)
+  - [Puppeteer example](#puppeteer-example)
+- [Common questions and troubleshooting](#common-questions-and-troubleshooting)
+- [Tutorials and articles](#tutorials-and-articles)
+- [Contributing](#contributing)
+- [Support and igration](#support-and-migration)
+- [License](#license)
 
 ## Requirements
 
@@ -179,16 +178,16 @@ pa11y ./path/to/your/file.html
 
 The command-line tool uses the following exit codes:
 
-* `0`: Pa11y ran successfully, and there are no errors
-* `1`: Pa11y failed run due to a technical fault
-* `2`: Pa11y ran successfully but there are errors in the page
+- `0`: Pa11y ran successfully, and there are no errors
+- `1`: Pa11y failed run due to a technical fault
+- `2`: Pa11y ran successfully but there are errors in the page
 
 By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
-* `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
-* `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
-* `notice`: exit with a code of `2` on errors, warnings, and notices
-* `none`: always exit with a code of `0`
+- `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
+- `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
+- `notice`: exit with a code of `2` on errors, warnings, and notices
+- `none`: always exit with a code of `0`
 
 ### Command-line configuration
 
@@ -226,11 +225,11 @@ pa11y https://example.com --threshold 10
 
 The command-line tool can report test results in a few different ways using the `--reporter` flag. The built-in reporters are:
 
-* `cli`: output test results in a human-readable format
-* `csv`: output test results as comma-separated values
-* `html`: output test results as an HTML page
-* `json`: output test results as a JSON array
-* `tsv`: output test results as tab-separated values
+- `cli`: output test results in a human-readable format
+- `csv`: output test results as comma-separated values
+- `html`: output test results as an HTML page
+- `json`: output test results as a JSON array
+- `tsv`: output test results as tab-separated values
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
