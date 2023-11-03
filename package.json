@@ -42,7 +42,7 @@
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
     "p-timeout": "~4.1.0",
-    "puppeteer": "~21.2.0",
+    "puppeteer": "^20.9.0",
     "semver": "~7.5.4"
   },
   "devDependencies": {
