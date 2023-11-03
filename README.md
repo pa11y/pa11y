@@ -195,7 +195,7 @@ By default, only accessibility issues with a type of `error` will exit with a co
 The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
 ```sh
-pa11y --config ./path/to/config.json https://example.com
+pa11y https://example.com --config ./path/to/config.json 
 ```
 
 If any configuration is set both in a configuration file and also as a command-line option, the value set in the latter will take priority.
@@ -207,19 +207,19 @@ For more information on configuring Pa11y, see the [configuration documentation]
 The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```sh
-pa11y --ignore "issue-code-1;issue-code-2" https://example.com
+pa11y https://example.com --ignore "issue-code-1;issue-code-2" 
 ```
 
 or by using the flag multiple times:
 
 ```sh
-pa11y --ignore issue-code-1 --ignore issue-code-2 https://example.com
+pa11y https://example.com --ignore issue-code-1 --ignore issue-code-2 
 ```
 
 Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
 
 ```sh
-pa11y --threshold 10 https://example.com
+pa11y https://example.com --threshold 10 
 ```
 
 ### Reporters
@@ -235,7 +235,7 @@ The command-line tool can report test results in a few different ways using the 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```sh
-pa11y --reporter rainbows https://example.com
+pa11y https://example.com --reporter rainbows 
 ```
 
 The following locations will be checked:
