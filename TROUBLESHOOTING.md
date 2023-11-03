@@ -8,13 +8,13 @@ If you're testing against an AngularJS app, you may have trouble testing against
 
 You could also use a timeout to give your view time to load, but this is unreliable.
 
-### Why does Pa11y give different results to the HTML CodeSniffer bookmarklet?
+### Why does Pa11y give different results to the HTML_CodeSniffer bookmarklet?
 
 Pa11y uses Headless Chrome as a web browser to load the DOM content and can only analyze what is provided.
 
 If parts of the DOM are been loaded after the document is first generated, you may get results that differ from the bookmarklet which runs in the browser and can test against the complete DOM.
 
-If you use Pa11y and HTML CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML CodeSniffer][sniff-issue].
+If you use Pa11y and HTML_CodeSniffer CLI you will find that you get the same results, which will both differ from the bookmarklet, a similar issue was highlighted by [HTML_CodeSniffer][sniff-issue].
 
 ### Why does Pa11y give different results each time it runs?
 

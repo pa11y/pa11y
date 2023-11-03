@@ -43,7 +43,7 @@ You can force Pa11y to include warnings and notices again by using the `--includ
 The command-line interface in 5.0 is similar to 4.0, but there are a few key changes.
 
 * The `--verify-page` flag has been removed, as page verification can be achieved with screen-shots or observing the debug output
-* The `--htmlcs` flag has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
+* The `--htmlcs` flag has been removed, you can no longer configure the version of HTML_CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML_CodeSniffer, we'll be reviewing how we allow this again in future
 * The `--port` flag has been removed, as this is not required to run multiple Headless Chrome instances
 
 ### JavaScript interface
@@ -68,7 +68,7 @@ Configuration options have had an update between 4.0 and 5.0:
 
 * The `allowedStandards` option has been removed. This can still be set by manually adding entries to `pa11y.allowedStandards`
 * The `beforeScript` option has been removed in favour of using actions (if the existing actions don't meet your needs, [please let us know](https://github.com/pa11y/pa11y/issues/228))
-* The `htmlcs` option has been removed, you can no longer configure the version of HTML CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML CodeSniffer, we'll be reviewing how we allow this again in future
+* The `htmlcs` option has been removed, you can no longer configure the version of HTML_CodeSniffer that Pa11y uses. An alternative would be to fork Pa11y for your individual use and replace HTML_CodeSniffer, we'll be reviewing how we allow this again in future
 * The `page` option has been removed, as this was specific to PhantomJS. You can set the following options to achieve the same results:
   * `page.headers` can now be set with a new `headers` option
   * `page.settings.data` can now be set with a new `postData` option
@@ -120,7 +120,7 @@ The command-line interface in 2.0 is similar to 1.0, but there are a few key cha
 * The `--useragent` flag has been removed, this is now managed through the config file
 * The `--viewport` flag has been removed, this is now managed through the config file
 * The `--strict` flag has been removed, this is controlled through the new `--level` flag
-* HTML CodeSniffer is now loaded from a local file by default so tests can be run offline
+* HTML_CodeSniffer is now loaded from a local file by default so tests can be run offline
 
 ### JavaScript interface
 
