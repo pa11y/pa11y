@@ -29,15 +29,15 @@ pa11y('https://example.com').then((results) => {
 * [Requirements](#requirements)
   * [Linux and macOS](#linux-and-macos)
   * [Windows](#windows)
-* [Command-Line Interface](#command-line-interface)
-  * [Running Tests](#running-tests)
-  * [Exit Codes](#exit-codes)
-  * [Command-Line Configuration](#command-line-configuration)
+* [Command-line interface](#command-line-interface)
+  * [Testing with `pa11y`](#testing-with-pa11y)
+  * [Exit codes](#exit-codes)
+  * [Command-line configuration](#command-line-configuration)
   * [Ignoring](#ignoring)
   * [Reporters](#reporters)
-* [JavaScript Interface](#javascript-interface)
-  * [Transforming the Results](#transforming-the-results)
-  * [Async/Await](#asyncawait)
+* [JavaScript interface](#javascript-interface)
+  * [Transforming the results](#transforming-the-results)
+  * [`async`/`await`](#asyncawait)
   * [Callback interface](#callback-interface)
   * [Validating actions](#validating-actions)
 * [Configuration](#configuration)
@@ -77,14 +77,14 @@ pa11y('https://example.com').then((results) => {
   * [Navigate To URL](#navigate-to-url)
 * [Runners](#runners)
 * [Examples](#examples)
-  * [Basic Example](#basic-example)
-  * [Multiple Example](#multiple-example)
-  * [Actions Example](#actions-example)
-  * [Puppeteer Example](#puppeteer-example)
-* [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
+  * [Basic example](#basic-example)
+  * [Multiple URLs example](#multiple-urls-example)
+  * [Actions example](#actions-example)
+  * [Puppeteer example](#puppeteer-example)
+* [Common questions and troubleshooting](#common-questions-and-troubleshooting)
 * [Tutorials and articles](#tutorials-and-articles)
 * [Contributing](#contributing)
-* [Support and Migration](#support-and-migration)
+* [Support and igration](#support-and-migration)
 * [License](#license)
 
 ## Requirements
@@ -107,7 +107,7 @@ Alternatively, you can also download pre-built packages from the [Node.js][node]
 
 On Windows 10, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
 
-## Command-Line Interface
+## Command-line interface
 
 Install Pa11y globally with [npm][npm]:
 
@@ -175,7 +175,7 @@ Find accessibility issues in a local HTML file (absolute paths only, not relativ
 pa11y ./path/to/your/file.html
 ```
 
-### Exit Codes
+### Exit codes
 
 The command-line tool uses the following exit codes:
 
@@ -190,7 +190,7 @@ By default, only accessibility issues with a type of `error` will exit with a co
 * `notice`: exit with a code of `2` on errors, warnings, and notices
 * `none`: always exit with a code of `0`
 
-### Command-Line Configuration
+### Command-line configuration
 
 The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
@@ -261,7 +261,7 @@ info(message); // Called when an information message is reported
 results(results); // Called with the results of a test run
 ```
 
-## JavaScript Interface
+## JavaScript interface
 
 Install Pa11y with [npm][npm] or add to your `package.json`:
 
@@ -313,7 +313,7 @@ Pa11y resolves with a `results` object, containing details about the page and ac
 }
 ```
 
-### Transforming the Results
+### Transforming the results
 
 If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
 
@@ -324,7 +324,7 @@ const htmlReporter = require('pa11y/reporter/html');
 const html = await htmlReporter.results(results);
 ```
 
-### Async/Await
+### `async`/`await`
 
 Because Pa11y is promise based, you can use `async` functions and the `await` keyword:
 
@@ -952,23 +952,23 @@ The `run` method _must_ resolve with an array of Pa11y issues. These follow the 
 
 ## Examples
 
-### Basic Example
+### Basic example
 
 Run Pa11y on a URL and output the results. [See the example](example/basic/index.js).
 
-### Multiple Example
+### Multiple URLs example
 
 Run Pa11y on multiple URLs at once and output the results. [See the example](example/multiple/index.js).
 
-### Actions Example
+### Actions example
 
 Step through some actions before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/actions/index.js).
 
-### Puppeteer Example
+### Puppeteer example
 
 Pass in pre-created Puppeteer browser and page instances so that you can reuse them between tests. [See the example](example/puppeteer/index.js).
 
-## Common Questions and Troubleshooting
+## Common questions and troubleshooting
 
 See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
@@ -1001,7 +1001,7 @@ npm run test-integration    # Run the integration tests
 
 To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
 
-## Support and Migration
+## Support and migration
 
 We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
 
