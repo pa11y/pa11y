@@ -43,7 +43,7 @@
     "node.extend": "~2.0.3",
     "p-timeout": "~4.1.0",
     "puppeteer": "~19.10.1",
-    "semver": "~7.5.0"
+    "semver": "~7.5.4"
   },
   "devDependencies": {
     "eslint": "^8.52.0",
