@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.0 (2023-11-06)
+
+* Pending.
+
 ## 6.2.3 (2022-04-11)
 
 * Revert console logging behaviour which was still causing problems on some sites.

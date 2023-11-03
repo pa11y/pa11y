@@ -4,11 +4,16 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 
 ## Table of contents
 
+* [Migrating from 6.0 to 7.0](#migrating-from-60-to-70)
 * [Migrating from 5.0 to 6.0](#migrating-from-50-to-60)
 * [Migrating from 4.0 to 5.0](#migrating-from-40-to-50)
 * [Migrating from 3.0 to 4.0](#migrating-from-30-to-40)
 * [Migrating from 2.0 to 3.0](#migrating-from-20-to-30)
 * [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
+
+## Migrating from 6.0 to 7.0
+
+Pending.
 
 ## Migrating from 5.0 to 6.0
 
