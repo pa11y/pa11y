@@ -23,6 +23,7 @@ describe('CLI action "wait-for-element-event"', () => {
 		// a11y error in the markup. When this action is performed the DOM is manupulated by JavaScript
 		// to remove the offending element, hence no a11y errors is proof of this successful action
 		it('waits for the element to emit the event before running tests', () => {
+			expect(pa11yResponse.exitCode).toEqual(0);
 			expect(pa11yResponse.json).toHaveLength(0);
 		});
 
