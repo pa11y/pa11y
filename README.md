@@ -160,7 +160,7 @@ pa11y https://example.com --threshold 10
 
 ### Reporters
 
-The command-line tool can report test results in a few different ways using the `--reporter` flag. The built-in reporters are:
+The command-line tool can provide test results in a few different ways using the `--reporter` flag. The built-in reporters are:
 
 - `cli`: output test results in a human-readable format
 - `csv`: output test results as comma-separated values
@@ -181,25 +181,25 @@ The following locations will be checked:
 <cwd>/rainbows
 ```
 
-A Pa11y reporter _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the reporter supports:
+A Pa11y reporter _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the reporter supports:
 
 ```js
 exports.supports = '^7.0.0';
 ```
 
-A reporter should export the following methods, which should all return strings. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
+A reporter should export the following methods, each returning one string. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
 
 ```js
 begin(); // Called when pa11y starts
 error(message); // Called when a technical error is reported
 debug(message); // Called when a debug message is reported
 info(message); // Called when an information message is reported
-results(results); // Called with the results of a test run
+results(results); // Called with a test run's results
 ```
 
 ## JavaScript interface
 
-Install Pa11y with [npm][npm] or add to your `package.json`:
+Add Pa11y to your project with [npm][npm], most commonly as a development dependency:
 
 ```sh
 npm install pa11y
@@ -219,7 +219,7 @@ pa11y(url).then((results) => {
 });
 ```
 
-Pa11y can also be run with [some options](#configuration):
+Pa11y can also be run with [options](#configuration):
 
 ```js
 pa11y('https://example.com/', {
@@ -229,12 +229,12 @@ pa11y('https://example.com/', {
 });
 ```
 
-Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML_CodeSniffer. It looks like this:
+Pa11y resolves with a `results` object, containing details about the page, and an array of accessibility issues found by the test runner:
 
 ```js
 {
-    documentTitle: 'The title of the page that was tested',
-    pageUrl: 'The URL that Pa11y was run against',
+    pageUrl: 'The tested URL',
+    documentTitle: 'Title of the page under test',
     issues: [
         {
             code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
@@ -244,14 +244,13 @@ Pa11y resolves with a `results` object, containing details about the page and ac
             type: 'error',
             typeCode: 1
         }
-        // more issues appear here
     ]
 }
 ```
 
 ### Transforming the results
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
+If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
 
 ```js
 // Assuming you've already run tests, and the results
@@ -262,7 +261,7 @@ const html = await htmlReporter.results(results);
 
 ### `async`/`await`
 
-Because Pa11y is promise based, you can use `async` functions and the `await` keyword:
+Pa11y uses promises,  so you can use `async` functions and the `await` keyword:
 
 ```js
 async function runPa11y() {
@@ -280,11 +279,11 @@ runPa11y();
 
 ### Callback interface
 
-If you would rather use callbacks than promises or `async`/`await`, then Pa11y supports this. This interface should be considered legacy, however, and may not appear in the next major version of Pa11y:
+For those who prefer callbacks to promises:
 
 ```js
-pa11y('https://example.com/', (error, results) => {
-    // Do something with the results or handle the error
+pa11y(url, (error, results) => {
+    // Use results, handle error
 });
 ```
 
@@ -701,7 +700,7 @@ Below is a reference of all the available actions and what they do on the page. 
 
 ### Click Element
 
-This allows you to click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
+Clicks an element:
 
 ```js
 pa11y(url, {
@@ -831,7 +830,7 @@ pa11y(url, {
 
 ## Runners
 
-Pa11y supports multiple test runners which return different results. The built-in test runners are:
+Pa11y supports multiple test runners which return different results. The built-in options are:
 
 * `axe`: run tests using [axe-core][axe].
 * `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
@@ -839,18 +838,18 @@ Pa11y supports multiple test runners which return different results. The built-i
 You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
 
 ```sh
-pa11y --runner my-testing-tool https://example.com
+pa11y https://example.com --runner custom-tool
 ```
 
 The following locations will be checked:
 
 ```sh
-<cwd>/node_modules/pa11y-runner-my-testing-tool
-<cwd>/node_modules/my-testing-tool
-<cwd>/my-testing-tool
+<cwd>/node_modules/pa11y-runner-custom-tool
+<cwd>/node_modules/custom-tool
+<cwd>/custom-tool
 ```
 
-A Pa11y runner _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the runner supports:
+A Pa11y runner _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the runner supports:
 
 ```js
 exports.supports = '^7.0.0';
@@ -870,20 +869,20 @@ The `run` method _must not_ use anything that's been imported using `require`, a
 
 The `run` method is called with two arguments:
 
-* `options`: Options specified in the test runner
-* `pa11y`: The Pa11y test runner, which includes some helper methods:
-  * `pa11y.getElementContext(element)`: Get a short HTML context snippet for an element
-  * `pa11y.getElementSelector(element)`: Get a unique selector with which you can select this element in a page
+- `options`: Options specified in the test runner
+- `pa11y`: The Pa11y test runner, which includes some helper methods:
+  - `pa11y.getElementContext(element)`: Get a short HTML context snippet for an element
+  - `pa11y.getElementSelector(element)`: Get a unique selector with which you can select this element in a page
 
 The `run` method _must_ resolve with an array of Pa11y issues. These follow the format:
 
 ```js
 {
-    code: '123', // An ID or code which identifies this error
-    element: {}, // The HTML element this issue relates to, or null if no element is found
-    message: 'example', // A descriptive message outlining the issue
-    type: 'error', // A type of "error", "warning", or "notice"
-    runnerExtras: {} // Additional data that your runner can provide, but isn't used by Pa11y
+    code: '123', // An identifier for this error
+    element: {}, // The HTML element this issue relates to; `null` if no element is involved
+    message: 'example', // A description of the issue
+    type: 'error', // 'error', 'warning', or 'notice'
+    runnerExtras: {} // Additional data a runner is free to provide; unused by Pa11y itself
 }
 ```
 
@@ -915,7 +914,7 @@ You can find some useful tutorials and articles in the [Tutorials section](https
 
 ## Contributing
 
-There are many ways to contribute to Pa11y, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
+There are many ways to contribute to Pa11y, some of which we describe in the [contributing guide](CONTRIBUTING.md) for this repo.
 
 If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
 
@@ -929,18 +928,19 @@ npm test
 You can also run verifications and tests individually:
 
 ```sh
-npm run lint                # Verify all of the code (ESLint)
-npm test                    # Run all tests
-npm run test-unit           # Run the unit tests
-npm run coverage            # Run the unit tests with coverage
-npm run test-integration    # Run the integration tests
+npm run lint                # Lint the code
+npm test                    # Run every test
+npm run test-unit           # Run only the unit tests
+npm run coverage            # Run the unit tests, reporting coverage
+npm run test-integration    # Run only the integration tests
 ```
 
-To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
+When debugging, remember that [setup.test.js](test/integration/setup.test.js) is responsible for the lifecycle of the integration test server, and must run before the first test file.
 
 ## Support and migration
 
-We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
+> [!NOTE]
+> We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
 
 When we release a new major version we will continue to support the previous major version for 6 months. This support will be limited to fixes for critical bugs and security issues. If you're opening an issue related to this project, please mention the specific version that the issue affects.
 
