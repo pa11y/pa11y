@@ -254,7 +254,7 @@ If you wish to transform these results with the command-line reporters, then you
 ```js
 // Assuming you've already run tests, and the results
 // are available in a `results` variable:
-const htmlReporter = require('pa11y/reporter/html');
+const htmlReporter = require('pa11y/lib/reporters/html');
 const html = await htmlReporter.results(results);
 ```
 
