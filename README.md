@@ -214,8 +214,8 @@ const pa11y = require('pa11y');
 Run Pa11y against a URL, the `pa11y` function returns a [Promise]:
 
 ```js
-pa11y('https://example.com/').then((results) => {
-    // Do something with the results
+pa11y(url).then((results) => {
+    // Use the results
 });
 ```
 
@@ -267,10 +267,11 @@ Because Pa11y is promise based, you can use `async` functions and the `await` ke
 ```js
 async function runPa11y() {
     try {
-        const results = await pa11y('https://example.com/');
-        // Do something with the results
-    } catch (error) {
-        // Handle the error
+        const results = await pa11y(url);
+        // Use the results
+    }
+    catch (error) {
+        // Handle error
     }
 }
 
@@ -309,7 +310,7 @@ Below is a reference of all the options that are available:
 Actions to be run before Pa11y tests the page. There are quite a few different actions available in Pa11y, the [Actions documentation](#actions) outlines each of them.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'set field #username to exampleUser',
         'set field #password to password1234',
@@ -339,7 +340,7 @@ const browser = await puppeteer.launch({
     ignoreHTTPSErrors: true
 });
 
-pa11y('https://example.com/', {
+pa11y(url, {
     browser: browser
 });
 
@@ -355,7 +356,7 @@ Defaults to `null`.
 Launch options for the Headless Chrome instance. [See the Puppeteer documentation for more information][puppeteer-launch].
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     chromeLaunchConfig: {
         executablePath: '/path/to/Chrome',
         ignoreHTTPSErrors: false
@@ -376,7 +377,7 @@ Defaults to:
 A key-value map of request headers to send when testing a web page.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         Cookie: 'foo=bar'
     }
@@ -390,7 +391,7 @@ Defaults to an empty object.
 A CSS selector to hide elements from testing, selectors can be comma separated. Elements matching this selector will be hidden from testing by styling them with `visibility: hidden`.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     hideElements: '.advert, #modal, div[aria-role=presentation]'
 });
 ```
@@ -400,7 +401,7 @@ pa11y('https://example.com/', {
 An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`. Note: `warning` and `notice` messages are ignored by default.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     ignore: [
         'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'
     ]
@@ -417,7 +418,7 @@ Whether to use the provided [Puppeteer Page instance][puppeteer-page] as is or u
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
 
-pa11y('https://example.com/', {
+pa11y(url, {
     ignoreUrl: true,
     page: page,
     browser: browser
@@ -431,7 +432,7 @@ Defaults to `false`.
 Whether to include results with a type of `notice` in the Pa11y report. Issues with a type of `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     includeNotices: true
 });
 ```
@@ -443,7 +444,7 @@ Defaults to `false`.
 Whether to include results with a type of `warning` in the Pa11y report. Issues with a type of `warning` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     includeWarnings: true
 });
 ```
@@ -467,7 +468,7 @@ Defaults to `error`. Note this configuration is only available when using Pa11y 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     log: {
         debug: console.log,
         error: console.error,
@@ -483,7 +484,7 @@ Each of these defaults to an empty function.
 The HTTP method to use when running Pa11y.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     method: 'POST'
 });
 ```
@@ -495,7 +496,7 @@ Defaults to `GET`.
 The HTTP POST data to send when running Pa11y. This should be combined with a `Content-Type` header. E.g to send form data:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
     },
@@ -507,7 +508,7 @@ pa11y('https://example.com/', {
 Or to send JSON data:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         'Content-Type': 'application/json'
     },
@@ -535,7 +536,7 @@ Defaults to `cli`. Note this configuration is only available when using Pa11y on
 The root element for testing a subset of the page opposed to the full document.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     rootElement: '#main'
 });
 ```
@@ -547,7 +548,7 @@ Defaults to `null`, meaning the full document will be tested. If the specified r
 An array of runner names which correspond to existing and installed [Pa11y runners](#runners). If a runner is not found then Pa11y will error.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     runners: [
         'axe',
         'htmlcs'
@@ -568,7 +569,7 @@ Defaults to:
 An array of WCAG 2.1 guidelines that you'd like to include to the current standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     rules: [
         'Principle1.Guideline1_3.1_3_1_AAA'
     ]
@@ -580,7 +581,7 @@ pa11y('https://example.com/', {
 A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     screenCapture: `${__dirname}/my-screen-capture.png`
 });
 ```
@@ -592,7 +593,7 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 The accessibility standard to use when testing pages. This should be one of `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     standard: 'WCAG2A'
 });
 ```
@@ -618,7 +619,7 @@ The time in milliseconds that a test should be allowed to run before calling bac
 Please note that this is the timeout for the _entire_ test run (including time to initialise Chrome, load the page, and run the tests).
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     timeout: 500
 });
 ```
@@ -630,7 +631,7 @@ Defaults to `30000`.
 The `User-Agent` header to send with Pa11y requests. This is helpful to identify Pa11y in your logs.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     userAgent: 'A11Y TESTS'
 });
 ```
@@ -642,7 +643,7 @@ Defaults to `pa11y/<version>`.
 The viewport configuration. This can have any of the properties supported by the [puppeteer `setViewport` method][puppeteer-viewport].
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     viewport: {
         width: 320,
         height: 480,
@@ -666,7 +667,7 @@ Defaults to:
 The time in milliseconds to wait before running HTML_CodeSniffer on the page.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     wait: 500
 });
 ```
@@ -678,7 +679,7 @@ Defaults to `0`.
 Actions are additional interactions that you can make Pa11y perform before the tests are run. They allow you to do things like click on a button, enter a value in a form, wait for a redirect, or wait for the URL fragment to change:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-1',
         'wait for element #tab-1-content to be visible',
@@ -703,7 +704,7 @@ Below is a reference of all the available actions and what they do on the page. 
 This allows you to click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-1'
     ]
@@ -717,7 +718,7 @@ You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/
 This allows you to set the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `set field <selector> to <value>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'set field #fullname to John Doe'
     ]
@@ -729,7 +730,7 @@ pa11y('https://example.com/', {
 This allows you to clear the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `clear field <selector>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'clear field #middlename'
     ]
@@ -741,7 +742,7 @@ pa11y('https://example.com/', {
 This allows you to check or uncheck checkbox and radio inputs by passing in a CSS selector. This action takes the form `check field <selector>` or `uncheck field <selector>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing'
@@ -754,7 +755,7 @@ pa11y('https://example.com/', {
 This allows you to capture the screen between other actions, useful to verify that the page looks as you expect before the Pa11y test runs. This action takes the form `screen capture <file-path>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'screen capture example.png'
     ]
@@ -775,7 +776,7 @@ This allows you to pause the test until a condition is met, and the page has eit
 E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #login-link',
         'wait for path to be /login'
@@ -795,7 +796,7 @@ This allows you to pause the test until an element on the page (matching a CSS s
 E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-2',
         'wait for element #tab-1 to be hidden'
@@ -808,7 +809,7 @@ pa11y('https://example.com/', {
 This allows you to pause the test until an element on the page (matching a CSS selector) emits an event. This will wait until Pa11y times out so it should be used after another action that would trigger the event. This action takes the form `wait for element <selector> to emit <event-type>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-2',
         'wait for element #tab-panel-to to emit content-loaded'
@@ -821,7 +822,7 @@ pa11y('https://example.com/', {
 This action allows you to navigate to a new URL if, for example, the URL is inaccessible using other methods. This action takes the form `navigate to <url>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'navigate to https://another-example.com'
     ]
