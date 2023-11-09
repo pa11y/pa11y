@@ -203,7 +203,7 @@ results(results); // Called with a test run's results
 Add Pa11y to your project with [npm][npm], most commonly as a development dependency:
 
 ```sh
-npm install pa11y
+npm install pa11y --save-dev
 ```
 
 Require Pa11y:
@@ -223,10 +223,9 @@ pa11y(url).then((results) => {
 Pa11y can also be run with [options](#configuration):
 
 ```js
-pa11y('https://example.com/', {
-    // Options go here
-}).then((results) => {
-    // Do something with the results
+const options = { /* ... */ };
+pa11y(url, options)).then((results) => {
+    // Use the results
 });
 ```
 
