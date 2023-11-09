@@ -967,7 +967,7 @@ Copyright &copy; 2013–2023, Team Pa11y and contributors
 [brew]: https://mxcl.github.com/homebrew/
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
-[info-build]: https://github.com/pa11y/pa11y/actions/workflows/build-and-test.yml
+[info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
