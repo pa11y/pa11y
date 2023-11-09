@@ -697,7 +697,7 @@ pa11y(url, {
 
 Below is a reference of all the available actions and what they do on the page. Some of these take time to complete so you may need to increase the `timeout` option if you have a large set of actions.
 
-### Click Element
+### `click element <selector>`
 
 Clicks an element:
 
@@ -711,9 +711,9 @@ pa11y(url, {
 
 You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types.
 
-### Set Field Value
+### `set field <selector> to <value>`
 
-This allows you to set the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `set field <selector> to <value>`. E.g.
+Sets the value of a text-based `input` or `select`:
 
 ```js
 pa11y(url, {
@@ -723,9 +723,9 @@ pa11y(url, {
 });
 ```
 
-### Clear Field Value
+### `clear field <selector>`
 
-This allows you to clear the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `clear field <selector>`. E.g.
+Clears the value of a text-based `input` or `select`:
 
 ```js
 pa11y(url, {
@@ -735,9 +735,9 @@ pa11y(url, {
 });
 ```
 
-### Check/Uncheck Field
+### `check field <selector>`, `uncheck field <selector>`
 
-This allows you to check or uncheck checkbox and radio inputs by passing in a CSS selector. This action takes the form `check field <selector>` or `uncheck field <selector>`. E.g.
+Checks/unchecks an `input` of type `radio` or `checkbox`:
 
 ```js
 pa11y(url, {
@@ -748,9 +748,9 @@ pa11y(url, {
 });
 ```
 
-### Screen Capture
+### `screen capture <to-file-path.png>`
 
-This allows you to capture the screen between other actions, useful to verify that the page looks as you expect before the Pa11y test runs. This action takes the form `screen capture <file-path>`. E.g.
+Captures the screen, saving the image to a file, which can be useful between actions for debugging, or just for visual reassurance:
 
 ```js
 pa11y(url, {
@@ -760,7 +760,9 @@ pa11y(url, {
 });
 ```
 
-### Wait For Fragment/Path/URL
+### `wait for`
+
+#### `wait for <fragment|path|url>`
 
 This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. You can also wait until the page does **not** have a given fragment, path, or URL using the `to not be` syntax. This action takes one of the forms:
 
@@ -782,7 +784,7 @@ pa11y(url, {
 });
 ```
 
-### Wait For Element State
+#### `wait for element`'s state
 
 This allows you to pause the test until an element on the page (matching a CSS selector) is either added, removed, visible, or hidden. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. This action takes one of the forms:
 
@@ -802,7 +804,7 @@ pa11y(url, {
 });
 ```
 
-### Wait For Element Event
+#### `wait for element`'s event
 
 This allows you to pause the test until an element on the page (matching a CSS selector) emits an event. This will wait until Pa11y times out so it should be used after another action that would trigger the event. This action takes the form `wait for element <selector> to emit <event-type>`. E.g.
 
@@ -815,7 +817,7 @@ pa11y(url, {
 });
 ```
 
-### Navigate To URL
+### `navigate to <url>`
 
 This action allows you to navigate to a new URL if, for example, the URL is inaccessible using other methods. This action takes the form `navigate to <url>`. E.g.
 
