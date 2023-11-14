@@ -20,13 +20,14 @@ after an event has been emitted.
 	<div id="event-target">will emit an event</div>
 
 	<script>
+		const timeoutSufficientToAvoidTestFlake = 5000;
 		const eventTarget = document.querySelector('#event-target');
 		eventTarget.addEventListener('example-event', () => {
 			document.querySelector('img').remove();
 		});
 		setTimeout(() => {
 			eventTarget.dispatchEvent(new Event('example-event'));
-		}, 2000);
+		}, timeoutSufficientToAvoidTestFlake);
 	</script>
 
 </body>

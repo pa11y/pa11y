@@ -13,7 +13,7 @@ describe('CLI wait', () => {
 		beforeAll(async () => {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/wait`, {
 				arguments: [
-					'--wait', '2100',
+					'--wait', '2500',
 					'--reporter', 'json'
 				]
 			});
