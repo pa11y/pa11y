@@ -848,7 +848,7 @@ describe('lib/pa11y', () => {
 				expect(rejectedError.message).toEqual([
 					`The installed "node-module" runner does not support Pa11y ${pkg.version}`,
 					'Please update your version of Pa11y or the runner',
-					'Reporter Support: mock-support-string',
+					'Runner Support: mock-support-string',
 					`Pa11y Version:    ${pkg.version}`
 				].join('\n'));
 			});
