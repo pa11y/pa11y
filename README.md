@@ -766,12 +766,12 @@ pa11y(url, {
 
 This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. You can also wait until the page does **not** have a given fragment, path, or URL using the `to not be` syntax. This action takes one of the forms:
 
-* `wait for fragment to be <fragment>` (including the preceding `#`)
-* `wait for fragment to not be <fragment>` (including the preceding `#`)
-* `wait for path to be <path>` (including the preceding `/`)
-* `wait for path to not be <path>` (including the preceding `/`)
-* `wait for url to be <url>`
-* `wait for url to not be <url>`
+- `wait for fragment to be <fragment>` (including the preceding `#`)
+- `wait for fragment to not be <fragment>` (including the preceding `#`)
+- `wait for path to be <path>` (including the preceding `/`)
+- `wait for path to not be <path>` (including the preceding `/`)
+- `wait for url to be <url>`
+- `wait for url to not be <url>`
 
 E.g.
 
@@ -788,10 +788,10 @@ pa11y(url, {
 
 This allows you to pause the test until an element on the page (matching a CSS selector) is either added, removed, visible, or hidden. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. This action takes one of the forms:
 
-* `wait for element <selector> to be added`
-* `wait for element <selector> to be removed`
-* `wait for element <selector> to be visible`
-* `wait for element <selector> to be hidden`
+- `wait for element <selector> to be added`
+- `wait for element <selector> to be removed`
+- `wait for element <selector> to be visible`
+- `wait for element <selector> to be hidden`
 
 E.g.
 
@@ -833,8 +833,8 @@ pa11y(url, {
 
 Pa11y supports multiple test runners which return different results. The built-in options are:
 
-* `axe`: run tests using [axe-core][axe].
-* `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
+- `axe`: run tests using [axe-core][axe].
+- `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
 
 You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
 
@@ -956,7 +956,6 @@ The following table lists the major versions available and, for each previous ma
 | `3`           | `3.8`                 | `0.12`, `4`      | 2016-12-05       |
 | `2`           | `2.4`                 | `0.10`, `0.12`   | 2016-10-16       |
 | `1`           | `1.7`                 | `0.10`           | 2016-06-08       |
-
 
 ## License
 
