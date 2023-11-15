@@ -934,8 +934,6 @@ npm run test-integration    # Run the integration tests alone
 npm run coverage            # Run the unit tests alone, reporting coverage
 ```
 
-When debugging, remember that [setup.test.js](test/integration/setup.test.js) is responsible for the lifecycle of the integration test server, and must run before the first test file.
-
 ## Support and migration
 
 > [!TIP]
