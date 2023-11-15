@@ -1,6 +1,4 @@
-
-Contributing Guide
-==================
+# Contributing Guide
 
 Thanks for getting involved :tada:
 
@@ -8,14 +6,12 @@ The Pa11y team loves to see new contributors, and we strive to provide a welcomi
 
 Our website outlines the many ways that you can contribute to Pa11y:
 
-  - [Help us to talk to our users][communications]
-  - [Help us out with design][designers]
-  - [Help us with our code][developers]
+- [Help us to talk to our users][communications]
+- [Help us out with design][designers]
+- [Help us with our code][developers]
 
-
-
-[code-of-conduct]: http://pa11y.org/contributing/code-of-conduct/
-[communications]: http://pa11y.org/contributing/communications/
-[companies]: http://pa11y.org/contributing/companies/
-[designers]: http://pa11y.org/contributing/designers/
-[developers]: http://pa11y.org/contributing/developers/
+[code-of-conduct]: https://pa11y.org/contributing/code-of-conduct/
+[communications]: https://pa11y.org/contributing/communications/
+[companies]: https://pa11y.org/contributing/companies/
+[designers]: https://pa11y.org/contributing/designers/
+[developers]: https://pa11y.org/contributing/developers/
