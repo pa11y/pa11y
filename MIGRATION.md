@@ -13,7 +13,9 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 
 ## Migrating from 6.0 to 7.0
 
-Pending.
+Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above.
+
+We've also upgraded to Puppeteer `20`, up from `9`, and to more recent major versions of several other dependencies - see [Pa11y's changelog](CHANGELOG.md) for the list. Those changes should not affect most users of Pa11y.
 
 ## Migrating from 5.0 to 6.0
 
