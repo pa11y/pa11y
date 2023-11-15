@@ -922,18 +922,16 @@ If you're ready to contribute some code, clone this repo locally and commit your
 Please write unit tests for your code, and check that everything works by running the following before opening a pull request:
 
 ```sh
-npm run lint
-npm test
+npm run lint                # Lint the code
+npm test                    # Run every test, reporting coverage
 ```
 
-You can also run verifications and tests individually:
+You can also run test suites individually:
 
 ```sh
-npm run lint                # Lint the code
-npm test                    # Run every test
-npm run test-unit           # Run only the unit tests
-npm run coverage            # Run the unit tests, reporting coverage
-npm run test-integration    # Run only the integration tests
+npm run test-unit           # Run the unit tests alone
+npm run test-integration    # Run the integration tests alone
+npm run coverage            # Run the unit tests alone, reporting coverage
 ```
 
 When debugging, remember that [setup.test.js](test/integration/setup.test.js) is responsible for the lifecycle of the integration test server, and must run before the first test file.
