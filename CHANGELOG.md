@@ -1,8 +1,30 @@
 # Changelog
 
-## 7.0.0 (2023-11-06)
+## 7.0.0 (2023-11-16)
 
-* Pending.
+### Changes
+
+#### Breaking
+
+* Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
+* Upgrade `axe-core` and all but two other dependencies to latest; use new support policy by @danyalaytekin in https://github.com/pa11y/pa11y/pull/680
+
+#### Other changes
+
+* Support versions of Ubuntu above `20.04` (thanks @aarongoldenthal)
+* Fix mistakes in documentation about runners (thanks @aarongoldenthal)
+* Update stale links in documentation (thanks @gavinr)
+* Support macOS and Windows (thanks @aarongoldenthal)
+* Update support policy
+
+### New contributors
+
+* @gavinr made [their first contribution](https://github.com/pa11y/pa11y/pull/657)
+* @danyalaytekin [made their first contribution](https://github.com/pa11y/pa11y/pull/678)
+
+### Full diff
+
+* [6.2.3...7.0.0](https://github.com/pa11y/pa11y/compare/6.2.3...7.0.0)
 
 ## 6.2.3 (2022-04-11)
 
