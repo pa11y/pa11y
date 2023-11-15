@@ -917,7 +917,7 @@ You can find some useful tutorials and articles in the [Tutorials section](https
 
 There are many ways to contribute to Pa11y, some of which we describe in the [contributing guide](CONTRIBUTING.md) for this repo.
 
-If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
+If you're ready to contribute some code, clone this repo, commit your code to a new branch, then create a pull request to bring your changes into `main`. If you're an external contributor, [fork this repo][fork-pa11y] first, then follow the same process.
 
 Please write unit tests for your code, and check that everything works by running the following before opening a pull request:
 
@@ -960,6 +960,7 @@ Copyright &copy; 2013–2023, Team Pa11y and contributors
 
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
+[fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
 [info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
