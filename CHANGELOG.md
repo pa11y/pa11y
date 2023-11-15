@@ -17,7 +17,7 @@
 
 ### New contributors
 
-* @gavinr made [their first contribution](https://github.com/pa11y/pa11y/pull/657)
+* @gavinr [made their first contribution](https://github.com/pa11y/pa11y/pull/657)
 * @danyalaytekin [made their first contribution](https://github.com/pa11y/pa11y/pull/678)
 
 ### Full diff
