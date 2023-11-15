@@ -4,17 +4,15 @@
 
 ### Changes
 
-#### Breaking
-
-* Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
-* Upgrade `axe-core` and all but two other dependencies to latest; use new support policy by @danyalaytekin in https://github.com/pa11y/pa11y/pull/680
-
-#### Other changes
-
-* Support versions of Ubuntu above `20.04` (thanks @aarongoldenthal)
+* **Breaking**: Upgrade Node.js support: Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
+* **Breaking**: Upgrade dependency `puppeteer` to `20` from `9`: this may affect Pa11y's operating system support and the behaviour of Pa11y's browser automation
+* **Breaking**: Upgrade dependency `commander` to `11` from `8`
+* **Breaking**: Upgrade dependency `bfj` to `8` from `7`
+* Upgrade `axe-core` to `~4.8.2` from `~4.2.1`
+* Support versions of Ubuntu above `20.04` without further configuration (thanks @aarongoldenthal)
+* Increase confidence in macOS and Windows support (thanks @aarongoldenthal)
 * Fix mistakes in documentation about runners (thanks @aarongoldenthal)
 * Update stale links in documentation (thanks @gavinr)
-* Support macOS and Windows (thanks @aarongoldenthal)
 * Update support policy
 
 ### New contributors
