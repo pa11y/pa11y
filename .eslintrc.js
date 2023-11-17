@@ -5,6 +5,7 @@ const extending =
 	typeof rules.extends === 'string' ?
 		[rules.extends] :
 		rules.extends ?? [];
+};
 
 module.exports = {
 	...rules,
