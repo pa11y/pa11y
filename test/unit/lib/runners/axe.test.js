@@ -155,7 +155,7 @@ describe('lib/runners/axe', function() {
 			resolvedValue = await runner.run(options, pa11y);
 		});
 
-		it('runs aXe', function() {
+		it('runs axe', function() {
 			assert.calledOnce(global.window.axe.run);
 			assert.calledWithExactly(
 				global.window.axe.run,
@@ -262,7 +262,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe context', function() {
+				it('sets the axe context', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						cssSelector,
@@ -309,7 +309,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe rules', function() {
+				it('sets the axe rules', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						sinon.match.any,
@@ -331,7 +331,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe ignore rules', function() {
+				it('sets the axe ignore rules', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						sinon.match.any,
@@ -344,7 +344,7 @@ describe('lib/runners/axe', function() {
 			});
 		});
 
-		describe('when aXe errors', function() {
+		describe('when axe errors', function() {
 			let axeError;
 			let rejectedError;
 
@@ -359,7 +359,7 @@ describe('lib/runners/axe', function() {
 				}
 			});
 
-			it('rejects with the aXe error', function() {
+			it('rejects with the axe error', function() {
 				assert.strictEqual(rejectedError, axeError);
 			});
 
