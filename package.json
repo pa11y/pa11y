@@ -76,6 +76,7 @@
     "pa11y": "./bin/pa11y.js"
   },
   "scripts": {
+    "start": "pa11y --environment && pa11y",
     "lint": "eslint .",
     "test": "npm run test-coverage && npm run verify-coverage && npm run test-integration",
     "test-coverage": "c8 -- npm run test-unit",
