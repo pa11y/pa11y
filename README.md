@@ -586,7 +586,11 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
+The accessibility standard to use when testing pages. This should be one of:
+
+- `WCAG2A`
+- `WCAG2AA`
+- `WCAG2AAA` (this level is currently used only by Pa11y's runner for HTML_CodeSniffer)
 
 ```js
 pa11y(url, {
