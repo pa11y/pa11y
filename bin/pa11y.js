@@ -32,8 +32,8 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: WCAG2A, WCAG2AA (default), ' +
-			'WCAG2AAA – only used by htmlcs runner'
+			'the accessibility standard to use: WCAG2AAA (only used by htmlcs), ' +
+			'WCAG2AA (default), or WCAG2A'
 		)
 		.option(
 			'-r, --reporter <reporter>',

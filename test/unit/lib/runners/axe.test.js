@@ -149,7 +149,7 @@ describe('lib/runners/axe', () => {
 				resolvedValue = await runner.run(options, pa11y);
 			});
 
-			it('runs aXe', () => {
+			it('runs axe', () => {
 				expect(global.window.axe.run).toHaveBeenCalledTimes(1);
 				expect(global.window.axe.run).toHaveBeenCalledWith(
 					global.window.document,
@@ -256,7 +256,7 @@ describe('lib/runners/axe', () => {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe context', () => {
+				it('sets the axe context', () => {
 					expect(
 						global.window.axe.run).toHaveBeenCalledWith(
 						cssSelector,
@@ -294,11 +294,13 @@ describe('lib/runners/axe', () => {
 							rules: {},
 							runOnly: {
 								type: 'tags',
-								values: ['wcag2a',
+								values: [
+									'wcag2a',
 									'wcag21a',
 									'wcag2aa',
 									'wcag21aa',
-									'best-practice']
+									'best-practice'
+								]
 							}
 						})
 					);
@@ -321,7 +323,7 @@ describe('lib/runners/axe', () => {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe rules', () => {
+				it('sets the axe rules', () => {
 					expect(global.window.axe.run).toHaveBeenCalledWith(
 						expect.anything(),
 						expect.objectContaining({
@@ -351,7 +353,7 @@ describe('lib/runners/axe', () => {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe ignore rules', () => {
+				it('sets the axe ignore rules', () => {
 					expect(global.window.axe.run).toHaveBeenCalledWith(
 						expect.anything(),
 						expect.objectContaining({
@@ -365,7 +367,7 @@ describe('lib/runners/axe', () => {
 			});
 		});
 
-		describe('when aXe errors', () => {
+		describe('when axe errors', () => {
 			let axeError;
 			let rejectedError;
 
@@ -380,7 +382,7 @@ describe('lib/runners/axe', () => {
 				}
 			});
 
-			it('rejects with the aXe error', () => {
+			it('rejects with the axe error', () => {
 				expect(rejectedError).toEqual(axeError);
 			});
 		});
