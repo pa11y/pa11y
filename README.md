@@ -697,7 +697,7 @@ Below is a reference of all the available actions and what they do on the page. 
 
 ### `click element <selector>`
 
-This allows you to click or double click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
+This allows you to click or double click an element by passing in a CSS selector. This action can take the form `click element <selector>`, or, for a double click, `double click element <selector>`. E.g.
 
 ```js
 pa11y(url, {
