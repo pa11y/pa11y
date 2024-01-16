@@ -956,7 +956,7 @@ The following table lists the major versions available and, for each previous ma
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
-Copyright &copy; 2013–2023, Team Pa11y and contributors
+Copyright &copy; 2013–2024, Team Pa11y and contributors
 
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
