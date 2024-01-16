@@ -5,13 +5,23 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run lint
+
   test:
-    name: Lint and test on ${{ matrix.os }} with Node.js ${{ matrix.node-version }} 
+    name: test (${{ matrix.os }}, node ${{ matrix.node-version }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [18, 20]
     steps:
       - name: Normalise line-ending handling in Git
@@ -23,7 +33,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install -g npm@10.2.2
       - run: npm ci
-      - run: npm run lint
       - run: npm test

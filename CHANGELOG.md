@@ -1,5 +1,29 @@
 # Changelog
 
+## 7.0.0 (2024-01-16)
+
+### Changes
+
+* **Breaking**: Upgrade Node.js support: Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
+* **Breaking**: Upgrade dependency `puppeteer` to `20` from `9`: this may affect Pa11y's operating system support and the behaviour of Pa11y's browser automation
+* **Breaking**: Upgrade dependency `commander` to `11` from `8`
+* **Breaking**: Upgrade dependency `bfj` to `8` from `7`
+* Upgrade `axe-core` to `~4.8.2` from `~4.2.1`
+* Support versions of Ubuntu above `20.04` without further configuration (thanks @aarongoldenthal)
+* Increase confidence in macOS and Windows support (thanks @aarongoldenthal)
+* Fix mistakes in documentation about runners (thanks @aarongoldenthal)
+* Update stale links in documentation (thanks @gavinr)
+* Update support policy
+
+### New contributors
+
+* @gavinr [made their first contribution](https://github.com/pa11y/pa11y/pull/657)
+* @danyalaytekin [made their first contribution](https://github.com/pa11y/pa11y/pull/678)
+
+### Full diff
+
+* [6.2.3...7.0.0](https://github.com/pa11y/pa11y/compare/6.2.3...7.0.0)
+
 ## 6.2.3 (2022-04-11)
 
 * Revert console logging behaviour which was still causing problems on some sites.

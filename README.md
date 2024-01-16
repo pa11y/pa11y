@@ -10,7 +10,7 @@ Pa11y is your automated accessibility testing pal. It runs accessibility tests o
 On the command line:
 
 ```sh
-pa11y https://example.com/
+pa11y https://example.com
 ```
 
 In JavaScript:
@@ -18,74 +18,10 @@ In JavaScript:
 ```js
 const pa11y = require('pa11y');
 
-pa11y('https://example.com/').then((results) => {
-    // Do something with the results
+pa11y('https://example.com').then((results) => {
+    // Use the results
 });
 ```
-
-## Table of contents
-
-* [Table of contents](#table-of-contents)
-* [Requirements](#requirements)
-  * [Linux and macOS](#linux-and-macos)
-  * [Windows](#windows)
-* [Command-Line Interface](#command-line-interface)
-  * [Running Tests](#running-tests)
-  * [Exit Codes](#exit-codes)
-  * [Command-Line Configuration](#command-line-configuration)
-  * [Ignoring](#ignoring)
-  * [Reporters](#reporters)
-* [JavaScript Interface](#javascript-interface)
-  * [Transforming the Results](#transforming-the-results)
-  * [Async/Await](#asyncawait)
-  * [Callback interface](#callback-interface)
-  * [Validating actions](#validating-actions)
-* [Configuration](#configuration)
-  * [`actions` (array)](#actions-array)
-  * [`browser` (Browser) and `page` (Page)](#browser-browser-and-page-page)
-  * [`chromeLaunchConfig` (object)](#chromelaunchconfig-object)
-  * [`headers` (object)](#headers-object)
-  * [`hideElements` (string)](#hideelements-string)
-  * [`ignore` (array)](#ignore-array)
-  * [`ignoreUrl` (boolean)](#ignoreurl-boolean)
-  * [`includeNotices` (boolean)](#includenotices-boolean)
-  * [`includeWarnings` (boolean)](#includewarnings-boolean)
-  * [`level` (string)](#level-string)
-  * [`log` (object)](#log-object)
-  * [`method` (string)](#method-string)
-  * [`postData` (string)](#postdata-string)
-  * [`reporter` (string)](#reporter-string)
-  * [`rootElement` (element)](#rootelement-element)
-  * [`runners` (array)](#runners-array)
-  * [`rules` (array)](#rules-array)
-  * [`screenCapture` (string)](#screencapture-string)
-  * [`standard` (string)](#standard-string)
-  * [`threshold` (number)](#threshold-number)
-  * [`timeout` (number)](#timeout-number)
-  * [`userAgent` (string)](#useragent-string)
-  * [`viewport` (object)](#viewport-object)
-  * [`wait` (number)](#wait-number)
-* [Actions](#actions)
-  * [Click Element](#click-element)
-  * [Set Field Value](#set-field-value)
-  * [Clear Field Value](#clear-field-value)
-  * [Check/Uncheck Field](#checkuncheck-field)
-  * [Screen Capture](#screen-capture)
-  * [Wait For Fragment/Path/URL](#wait-for-fragmentpathurl)
-  * [Wait For Element State](#wait-for-element-state)
-  * [Wait For Element Event](#wait-for-element-event)
-  * [Navigate To URL](#navigate-to-url)
-* [Runners](#runners)
-* [Examples](#examples)
-  * [Basic Example](#basic-example)
-  * [Multiple Example](#multiple-example)
-  * [Actions Example](#actions-example)
-  * [Puppeteer Example](#puppeteer-example)
-* [Common Questions and Troubleshooting](#common-questions-and-troubleshooting)
-* [Tutorials and articles](#tutorials-and-articles)
-* [Contributing](#contributing)
-* [Support and Migration](#support-and-migration)
-* [License](#license)
 
 ## Requirements
 
@@ -107,7 +43,7 @@ Alternatively, you can also download pre-built packages from the [Node.js][node]
 
 On Windows 10, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
 
-## Command-Line Interface
+## Command-line interface
 
 Install Pa11y globally with [npm][npm]:
 
@@ -143,59 +79,59 @@ Usage: pa11y [options] <url>
     -h, --help                     output usage information
 ```
 
-### Running Tests
+### Testing with `pa11y`
 
-Run an accessibility test against a URL:
+Find accessibility issues at a URL:
 
 ```sh
 pa11y https://example.com
 ```
 
-Run an accessibility test against a file (absolute paths only, not relative):
+The default [test runner](#runners) is [HTML_CodeSniffer][htmlcs], but [axe] is also supported. To use `axe`:
+
+```sh
+pa11y https://example.com --runner axe
+```
+
+Use both axe and HTML_CodeSniffer in the same run:
+
+```sh
+pa11y https://example.com --runner axe --runner htmlcs
+```
+
+Generate results in CSV format, and output to a file, `report.csv`:
+
+```sh
+pa11y https://example.com > report.csv --reporter csv 
+```
+
+Find accessibility issues in a local HTML file (absolute paths only, not relative):
 
 ```sh
 pa11y ./path/to/your/file.html
 ```
 
-Run a test with CSV reporting and save to a file:
-
-```sh
-pa11y --reporter csv https://example.com > report.csv
-```
-
-Run Pa11y using [axe] as a [test runner](#runners):
-
-```sh
-pa11y --runner axe https://example.com
-```
-
-Run Pa11y using [axe] _and_ [HTML_CodeSniffer][htmlcs] as [test runners](#runners):
-
-```sh
-pa11y --runner axe --runner htmlcs https://example.com
-```
-
-### Exit Codes
+### Exit codes
 
 The command-line tool uses the following exit codes:
 
-* `0`: Pa11y ran successfully, and there are no errors
-* `1`: Pa11y failed run due to a technical fault
-* `2`: Pa11y ran successfully but there are errors in the page
+- `0`: Pa11y ran successfully, and there are no errors
+- `1`: Pa11y failed run due to a technical fault
+- `2`: Pa11y ran successfully but there are errors in the page
 
 By default, only accessibility issues with a type of `error` will exit with a code of `2`. This is configurable with the `--level` flag which can be set to one of the following:
 
-* `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
-* `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
-* `notice`: exit with a code of `2` on errors, warnings, and notices
-* `none`: always exit with a code of `0`
+- `error`: exit with a code of `2` on errors only, exit with a code of `0` on warnings and notices
+- `warning`: exit with a code of `2` on errors and warnings, exit with a code of `0` on notices
+- `notice`: exit with a code of `2` on errors, warnings, and notices
+- `none`: always exit with a code of `0`
 
-### Command-Line Configuration
+### Command-line configuration
 
 The command-line tool can be configured with a JSON file as well as arguments. By default it will look for a `pa11y.json` file in the current directory, but you can change this with the `--config` flag:
 
 ```sh
-pa11y --config ./path/to/config.json https://example.com
+pa11y https://example.com --config ./path/to/config.json 
 ```
 
 If any configuration is set both in a configuration file and also as a command-line option, the value set in the latter will take priority.
@@ -207,35 +143,35 @@ For more information on configuring Pa11y, see the [configuration documentation]
 The ignore flag can be used in several different ways. Separated by semi-colons:
 
 ```sh
-pa11y --ignore "issue-code-1;issue-code-2" https://example.com
+pa11y https://example.com --ignore "issue-code-1;issue-code-2" 
 ```
 
 or by using the flag multiple times:
 
 ```sh
-pa11y --ignore issue-code-1 --ignore issue-code-2 https://example.com
+pa11y https://example.com --ignore issue-code-1 --ignore issue-code-2 
 ```
 
 Pa11y can also ignore notices, warnings, and errors up to a threshold number. This might be useful if you're using CI and don't want to break your build. The following example will return exit code 0 on a page with 9 errors, and return exit code 2 on a page with 10 or more errors.
 
 ```sh
-pa11y --threshold 10 https://example.com
+pa11y https://example.com --threshold 10 
 ```
 
 ### Reporters
 
-The command-line tool can report test results in a few different ways using the `--reporter` flag. The built-in reporters are:
+The command-line tool can provide test results in a few different ways using the `--reporter` flag. The built-in reporters are:
 
-* `cli`: output test results in a human-readable format
-* `csv`: output test results as comma-separated values
-* `html`: output test results as an HTML page
-* `json`: output test results as a JSON array
-* `tsv`: output test results as tab-separated values
+- `cli`: output test results in a human-readable format
+- `csv`: output test results as comma-separated values
+- `html`: output test results as an HTML page
+- `json`: output test results as a JSON array
+- `tsv`: output test results as tab-separated values
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
 ```sh
-pa11y --reporter rainbows https://example.com
+pa11y https://example.com --reporter rainbows 
 ```
 
 The following locations will be checked:
@@ -245,28 +181,28 @@ The following locations will be checked:
 <cwd>/rainbows
 ```
 
-A Pa11y reporter _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the reporter supports:
+A Pa11y reporter _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the reporter supports:
 
 ```js
-exports.supports = '^5.0.0';
+exports.supports = '^7.0.0';
 ```
 
-A reporter should export the following methods, which should all return strings. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
+A reporter should export the following methods, each returning one string. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
 
 ```js
 begin(); // Called when pa11y starts
 error(message); // Called when a technical error is reported
 debug(message); // Called when a debug message is reported
 info(message); // Called when an information message is reported
-results(results); // Called with the results of a test run
+results(results); // Called with a test run's results
 ```
 
-## JavaScript Interface
+## JavaScript interface
 
-Install Pa11y with [npm][npm] or add to your `package.json`:
+Add Pa11y to your project with [npm][npm], most commonly as a development dependency:
 
 ```sh
-npm install pa11y
+npm install pa11y --save-dev
 ```
 
 Require Pa11y:
@@ -278,27 +214,26 @@ const pa11y = require('pa11y');
 Run Pa11y against a URL, the `pa11y` function returns a [Promise]:
 
 ```js
-pa11y('https://example.com/').then((results) => {
-    // Do something with the results
+pa11y(url).then((results) => {
+    // Use the results
 });
 ```
 
-Pa11y can also be run with [some options](#configuration):
+Pa11y can also be run with [options](#configuration):
 
 ```js
-pa11y('https://example.com/', {
-    // Options go here
-}).then((results) => {
-    // Do something with the results
+const options = { /* ... */ };
+pa11y(url, options)).then((results) => {
+    // Use the results
 });
 ```
 
-Pa11y resolves with a `results` object, containing details about the page and accessibility issues from HTML_CodeSniffer. It looks like this:
+Pa11y resolves with a `results` object, containing details about the page, and an array of accessibility issues found by the test runner:
 
 ```js
 {
-    documentTitle: 'The title of the page that was tested',
-    pageUrl: 'The URL that Pa11y was run against',
+    pageUrl: 'The tested URL',
+    documentTitle: 'Title of the page under test',
     issues: [
         {
             code: 'WCAG2AA.Principle1.Guideline1_1.1_1_1.H30.2',
@@ -308,33 +243,33 @@ Pa11y resolves with a `results` object, containing details about the page and ac
             type: 'error',
             typeCode: 1
         }
-        // more issues appear here
     ]
 }
 ```
 
-### Transforming the Results
+### Transforming the results
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters all expose a `process` method:
+If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
 
 ```js
 // Assuming you've already run tests, and the results
 // are available in a `results` variable:
-const htmlReporter = require('pa11y/reporter/html');
+const htmlReporter = require('pa11y/lib/reporters/html');
 const html = await htmlReporter.results(results);
 ```
 
-### Async/Await
+### `async`/`await`
 
-Because Pa11y is promise based, you can use `async` functions and the `await` keyword:
+Pa11y uses promises,  so you can use `async` functions and the `await` keyword:
 
 ```js
 async function runPa11y() {
     try {
-        const results = await pa11y('https://example.com/');
-        // Do something with the results
-    } catch (error) {
-        // Handle the error
+        const results = await pa11y(url);
+        // Use the results
+    }
+    catch (error) {
+        // Handle error
     }
 }
 
@@ -343,11 +278,11 @@ runPa11y();
 
 ### Callback interface
 
-If you would rather use callbacks than promises or `async`/`await`, then Pa11y supports this. This interface should be considered legacy, however, and may not appear in the next major version of Pa11y:
+For those who prefer callbacks to promises:
 
 ```js
-pa11y('https://example.com/', (error, results) => {
-    // Do something with the results or handle the error
+pa11y(url, (error, results) => {
+    // Use results, handle error
 });
 ```
 
@@ -373,7 +308,7 @@ Below is a reference of all the options that are available:
 Actions to be run before Pa11y tests the page. There are quite a few different actions available in Pa11y, the [Actions documentation](#actions) outlines each of them.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'set field #username to exampleUser',
         'set field #password to password1234',
@@ -403,7 +338,7 @@ const browser = await puppeteer.launch({
     ignoreHTTPSErrors: true
 });
 
-pa11y('https://example.com/', {
+pa11y(url, {
     browser: browser
 });
 
@@ -419,7 +354,7 @@ Defaults to `null`.
 Launch options for the Headless Chrome instance. [See the Puppeteer documentation for more information][puppeteer-launch].
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     chromeLaunchConfig: {
         executablePath: '/path/to/Chrome',
         ignoreHTTPSErrors: false
@@ -440,7 +375,7 @@ Defaults to:
 A key-value map of request headers to send when testing a web page.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         Cookie: 'foo=bar'
     }
@@ -454,7 +389,7 @@ Defaults to an empty object.
 A CSS selector to hide elements from testing, selectors can be comma separated. Elements matching this selector will be hidden from testing by styling them with `visibility: hidden`.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     hideElements: '.advert, #modal, div[aria-role=presentation]'
 });
 ```
@@ -464,7 +399,7 @@ pa11y('https://example.com/', {
 An array of result codes and types that you'd like to ignore. You can find the codes for each rule in the console output and the types are `error`, `warning`, and `notice`. Note: `warning` and `notice` messages are ignored by default.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     ignore: [
         'WCAG2AA.Principle3.Guideline3_1.3_1_1.H57.2'
     ]
@@ -481,7 +416,7 @@ Whether to use the provided [Puppeteer Page instance][puppeteer-page] as is or u
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
 
-pa11y('https://example.com/', {
+pa11y(url, {
     ignoreUrl: true,
     page: page,
     browser: browser
@@ -495,7 +430,7 @@ Defaults to `false`.
 Whether to include results with a type of `notice` in the Pa11y report. Issues with a type of `notice` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     includeNotices: true
 });
 ```
@@ -507,7 +442,7 @@ Defaults to `false`.
 Whether to include results with a type of `warning` in the Pa11y report. Issues with a type of `warning` are not directly actionable and so they are excluded by default. You can include them by using this option:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     includeWarnings: true
 });
 ```
@@ -531,7 +466,7 @@ Defaults to `error`. Note this configuration is only available when using Pa11y 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     log: {
         debug: console.log,
         error: console.error,
@@ -547,7 +482,7 @@ Each of these defaults to an empty function.
 The HTTP method to use when running Pa11y.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     method: 'POST'
 });
 ```
@@ -559,7 +494,7 @@ Defaults to `GET`.
 The HTTP POST data to send when running Pa11y. This should be combined with a `Content-Type` header. E.g to send form data:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
     },
@@ -571,7 +506,7 @@ pa11y('https://example.com/', {
 Or to send JSON data:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     headers: {
         'Content-Type': 'application/json'
     },
@@ -599,7 +534,7 @@ Defaults to `cli`. Note this configuration is only available when using Pa11y on
 The root element for testing a subset of the page opposed to the full document.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     rootElement: '#main'
 });
 ```
@@ -611,7 +546,7 @@ Defaults to `null`, meaning the full document will be tested. If the specified r
 An array of runner names which correspond to existing and installed [Pa11y runners](#runners). If a runner is not found then Pa11y will error.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     runners: [
         'axe',
         'htmlcs'
@@ -632,7 +567,7 @@ Defaults to:
 An array of WCAG 2.1 guidelines that you'd like to include to the current standard. You can find the codes for each guideline in the [HTML Code Sniffer WCAG2AAA ruleset][htmlcs-wcag2aaa-ruleset]. **Note:** only used by htmlcs runner.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     rules: [
         'Principle1.Guideline1_3.1_3_1_AAA'
     ]
@@ -644,7 +579,7 @@ pa11y('https://example.com/', {
 A file path to save a screen capture of the tested page to. The screen will be captured immediately after the Pa11y tests have run so that you can verify that the expected page was tested.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     screenCapture: `${__dirname}/my-screen-capture.png`
 });
 ```
@@ -656,7 +591,7 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 The accessibility standard to use when testing pages. This should be one of `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     standard: 'WCAG2A'
 });
 ```
@@ -682,7 +617,7 @@ The time in milliseconds that a test should be allowed to run before calling bac
 Please note that this is the timeout for the _entire_ test run (including time to initialise Chrome, load the page, and run the tests).
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     timeout: 500
 });
 ```
@@ -694,7 +629,7 @@ Defaults to `30000`.
 The `User-Agent` header to send with Pa11y requests. This is helpful to identify Pa11y in your logs.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     userAgent: 'A11Y TESTS'
 });
 ```
@@ -706,7 +641,7 @@ Defaults to `pa11y/<version>`.
 The viewport configuration. This can have any of the properties supported by the [puppeteer `setViewport` method][puppeteer-viewport].
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     viewport: {
         width: 320,
         height: 480,
@@ -730,7 +665,7 @@ Defaults to:
 The time in milliseconds to wait before running HTML_CodeSniffer on the page.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     wait: 500
 });
 ```
@@ -742,7 +677,7 @@ Defaults to `0`.
 Actions are additional interactions that you can make Pa11y perform before the tests are run. They allow you to do things like click on a button, enter a value in a form, wait for a redirect, or wait for the URL fragment to change:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-1',
         'wait for element #tab-1-content to be visible',
@@ -762,12 +697,12 @@ pa11y('https://example.com/', {
 
 Below is a reference of all the available actions and what they do on the page. Some of these take time to complete so you may need to increase the `timeout` option if you have a large set of actions.
 
-### Click Element
+### `click element <selector>`
 
-This allows you to click an element by passing in a CSS selector. This action takes the form `click element <selector>`. E.g.
+Clicks an element:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-1'
     ]
@@ -776,36 +711,36 @@ pa11y('https://example.com/', {
 
 You can use any valid [query selector](https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector), including classes and types.
 
-### Set Field Value
+### `set field <selector> to <value>`
 
-This allows you to set the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `set field <selector> to <value>`. E.g.
+Sets the value of a text-based `input` or `select`:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'set field #fullname to John Doe'
     ]
 });
 ```
 
-### Clear Field Value
+### `clear field <selector>`
 
-This allows you to clear the value of a text-based input or select box by passing in a CSS selector and value. This action takes the form `clear field <selector>`. E.g.
+Clears the value of a text-based `input` or `select`:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'clear field #middlename'
     ]
 });
 ```
 
-### Check/Uncheck Field
+### `check field <selector>`, `uncheck field <selector>`
 
-This allows you to check or uncheck checkbox and radio inputs by passing in a CSS selector. This action takes the form `check field <selector>` or `uncheck field <selector>`. E.g.
+Checks/unchecks an `input` of type `radio` or `checkbox`:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'check field #terms-and-conditions',
         'uncheck field #subscribe-to-marketing'
@@ -813,33 +748,35 @@ pa11y('https://example.com/', {
 });
 ```
 
-### Screen Capture
+### `screen capture <to-file-path.png>`
 
-This allows you to capture the screen between other actions, useful to verify that the page looks as you expect before the Pa11y test runs. This action takes the form `screen capture <file-path>`. E.g.
+Captures the screen, saving the image to a file, which can be useful between actions for debugging, or just for visual reassurance:
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'screen capture example.png'
     ]
 });
 ```
 
-### Wait For Fragment/Path/URL
+### `wait for`
+
+#### `wait for <fragment|path|url>`
 
 This allows you to pause the test until a condition is met, and the page has either a given fragment, path, or URL. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. You can also wait until the page does **not** have a given fragment, path, or URL using the `to not be` syntax. This action takes one of the forms:
 
-* `wait for fragment to be <fragment>` (including the preceding `#`)
-* `wait for fragment to not be <fragment>` (including the preceding `#`)
-* `wait for path to be <path>` (including the preceding `/`)
-* `wait for path to not be <path>` (including the preceding `/`)
-* `wait for url to be <url>`
-* `wait for url to not be <url>`
+- `wait for fragment to be <fragment>` (including the preceding `#`)
+- `wait for fragment to not be <fragment>` (including the preceding `#`)
+- `wait for path to be <path>` (including the preceding `/`)
+- `wait for path to not be <path>` (including the preceding `/`)
+- `wait for url to be <url>`
+- `wait for url to not be <url>`
 
 E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #login-link',
         'wait for path to be /login'
@@ -847,19 +784,19 @@ pa11y('https://example.com/', {
 });
 ```
 
-### Wait For Element State
+#### `wait for element`'s state
 
 This allows you to pause the test until an element on the page (matching a CSS selector) is either added, removed, visible, or hidden. This will wait until Pa11y times out so it should be used after another action that would trigger the change in state. This action takes one of the forms:
 
-* `wait for element <selector> to be added`
-* `wait for element <selector> to be removed`
-* `wait for element <selector> to be visible`
-* `wait for element <selector> to be hidden`
+- `wait for element <selector> to be added`
+- `wait for element <selector> to be removed`
+- `wait for element <selector> to be visible`
+- `wait for element <selector> to be hidden`
 
 E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-2',
         'wait for element #tab-1 to be hidden'
@@ -867,12 +804,12 @@ pa11y('https://example.com/', {
 });
 ```
 
-### Wait For Element Event
+#### `wait for element`'s event
 
 This allows you to pause the test until an element on the page (matching a CSS selector) emits an event. This will wait until Pa11y times out so it should be used after another action that would trigger the event. This action takes the form `wait for element <selector> to emit <event-type>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'click element #tab-2',
         'wait for element #tab-panel-to to emit content-loaded'
@@ -880,12 +817,12 @@ pa11y('https://example.com/', {
 });
 ```
 
-### Navigate To URL
+### `navigate to <url>`
 
 This action allows you to navigate to a new URL if, for example, the URL is inaccessible using other methods. This action takes the form `navigate to <url>`. E.g.
 
 ```js
-pa11y('https://example.com/', {
+pa11y(url, {
     actions: [
         'navigate to https://another-example.com'
     ]
@@ -894,29 +831,29 @@ pa11y('https://example.com/', {
 
 ## Runners
 
-Pa11y supports multiple test runners which return different results. The built-in test runners are:
+Pa11y supports multiple test runners which return different results. The built-in options are:
 
-* `axe`: run tests using [axe-core][axe].
-* `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
+- `axe`: run tests using [axe-core][axe].
+- `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
 
 You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
 
 ```sh
-pa11y --runner my-testing-tool https://example.com
+pa11y https://example.com --runner custom-tool
 ```
 
 The following locations will be checked:
 
 ```sh
-<cwd>/node_modules/pa11y-runner-my-testing-tool
-<cwd>/node_modules/my-testing-tool
-<cwd>/my-testing-tool
+<cwd>/node_modules/pa11y-runner-custom-tool
+<cwd>/node_modules/custom-tool
+<cwd>/custom-tool
 ```
 
-A Pa11y runner _must_ export a property named `supports`. This is a [semver range] (as a string) which indicates which versions of Pa11y the runner supports:
+A Pa11y runner _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the runner supports:
 
 ```js
-exports.supports = '^5.0.0';
+exports.supports = '^7.0.0';
 ```
 
 A Pa11y runner _must_ export a property named `scripts`. This is an array of strings which are paths to scripts which need to load before the tests can be run. This may be empty:
@@ -933,42 +870,42 @@ The `run` method _must not_ use anything that's been imported using `require`, a
 
 The `run` method is called with two arguments:
 
-* `options`: Options specified in the test runner
-* `pa11y`: The Pa11y test runner, which includes some helper methods:
-  * `pa11y.getElementContext(element)`: Get a short HTML context snippet for an element
-  * `pa11y.getElementSelector(element)`: Get a unique selector with which you can select this element in a page
+- `options`: Options specified in the test runner
+- `pa11y`: The Pa11y test runner, which includes some helper methods:
+  - `pa11y.getElementContext(element)`: Get a short HTML context snippet for an element
+  - `pa11y.getElementSelector(element)`: Get a unique selector with which you can select this element in a page
 
 The `run` method _must_ resolve with an array of Pa11y issues. These follow the format:
 
 ```js
 {
-    code: '123', // An ID or code which identifies this error
-    element: {}, // The HTML element this issue relates to, or null if no element is found
-    message: 'example', // A descriptive message outlining the issue
-    type: 'error', // A type of "error", "warning", or "notice"
-    runnerExtras: {} // Additional data that your runner can provide, but isn't used by Pa11y
+    code: '123', // An identifier for this error
+    element: {}, // The HTML element this issue relates to; `null` if no element is involved
+    message: 'example', // A description of the issue
+    type: 'error', // 'error', 'warning', or 'notice'
+    runnerExtras: {} // Additional data a runner is free to provide; unused by Pa11y itself
 }
 ```
 
 ## Examples
 
-### Basic Example
+### Basic example
 
 Run Pa11y on a URL and output the results. [See the example](example/basic/index.js).
 
-### Multiple Example
+### Multiple URLs example
 
 Run Pa11y on multiple URLs at once and output the results. [See the example](example/multiple/index.js).
 
-### Actions Example
+### Actions example
 
 Step through some actions before Pa11y runs. This example logs into a fictional site then waits until the account page has loaded before running Pa11y. [See the example](example/actions/index.js).
 
-### Puppeteer Example
+### Puppeteer example
 
 Pass in pre-created Puppeteer browser and page instances so that you can reuse them between tests. [See the example](example/puppeteer/index.js).
 
-## Common Questions and Troubleshooting
+## Common questions and troubleshooting
 
 See our [Troubleshooting guide](TROUBLESHOOTING.md) to get the answers to common questions about Pa11y, along with some ideas to help you troubleshoot any problems.
 
@@ -978,32 +915,29 @@ You can find some useful tutorials and articles in the [Tutorials section](https
 
 ## Contributing
 
-There are many ways to contribute to Pa11y, we cover these in the [contributing guide](CONTRIBUTING.md) for this repo.
+There are many ways to contribute to Pa11y, some of which we describe in the [contributing guide](CONTRIBUTING.md) for this repo.
 
-If you're ready to contribute some code, clone this repo locally and commit your code on a new branch.
+If you're ready to contribute some code, clone this repo, commit your code to a new branch, then create a pull request to bring your changes into `main`. If you're an external contributor, [fork this repo][fork-pa11y] first, then follow the same process.
 
 Please write unit tests for your code, and check that everything works by running the following before opening a pull request:
 
 ```sh
-npm run lint
-npm test
+npm run lint                # Lint the code
+npm test                    # Run every test, reporting coverage
 ```
 
-You can also run verifications and tests individually:
+You can also run test suites individually:
 
 ```sh
-npm run lint                # Verify all of the code (ESLint)
-npm test                    # Run all tests
-npm run test-unit           # Run the unit tests
-npm run coverage            # Run the unit tests with coverage
-npm run test-integration    # Run the integration tests
+npm run test-unit           # Run the unit tests alone
+npm run test-integration    # Run the integration tests alone
+npm run coverage            # Run the unit tests alone, reporting coverage
 ```
 
-To debug a test file you need to ensure that [setup.test.js](test/integration/setup.test.js) is ran before the test file. This adds a `before/each` to start and stop the integration test server.
+## Support and migration
 
-## Support and Migration
-
-We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
+> [!TIP]
+> We maintain a [migration guide](MIGRATION.md) to help you migrate between major versions.
 
 When we release a new major version we will continue to support the previous major version for 6 months. This support will be limited to fixes for critical bugs and security issues. If you're opening an issue related to this project, please mention the specific version that the issue affects.
 
@@ -1011,25 +945,25 @@ The following table lists the major versions available and, for each previous ma
 
 | Major version | Final minor version   | Node.js support  | Support end date |
 | :------------ | :-------------------- | :--------------- | :--------------- |
-| 7             |                       | 18, 20           | ✅ Current major version |
-| 6             | 6.2.3                 | 12, 14, 16       | 2023-05-03       |
-| 5             | 5.3                   | 8, 10, 12        | 2021-11-25       |
-| 4             | 4.13                  | 4, 6, 8          | 2018-08-15       |
-| 3             | 3.8                   | 0.12, 4          | 2016-12-05       |
-| 2             | 2.4                   | 0.10, 0.12       | 2016-10-16       |
-| 1             | 1.7                   | 0.10             | 2016-06-08       |
-
+| `7`           |                       | `18`, `20`       | ✅ Current major version |
+| `6`           | `6.2`                 | `12`, `14`, `16` | July 2024        |
+| `5`           | `5.3`                 | `8`, `10`, `12`  | 2021-11-25       |
+| `4`           | `4.13`                | `4`, `6`, `8`    | 2018-08-15       |
+| `3`           | `3.8`                 | `0.12`, `4`      | 2016-12-05       |
+| `2`           | `2.4`                 | `0.10`, `0.12`   | 2016-10-16       |
+| `1`           | `1.7`                 | `0.10`           | 2016-06-08       |
 
 ## License
 
-Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].
-Copyright &copy; 2013–2021, Team Pa11y and contributors
+Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
+Copyright &copy; 2013–2024, Team Pa11y and contributors
 
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
+[fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
-[info-build]: https://github.com/pa11y/pa11y/actions/workflows/build-and-test.yml
+[info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
 [info-license]: LICENSE
 [info-node]: package.json
 [info-npm]: https://www.npmjs.com/package/pa11y
