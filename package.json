@@ -35,7 +35,7 @@
     "axe-core": "~4.8.3",
     "bfj": "~8.0.0",
     "commander": "~11.1.0",
-    "envinfo": "~7.11.0",
+    "envinfo": "~7.11.1",
     "html_codesniffer": "~2.5.1",
     "kleur": "~4.1.5",
     "mustache": "~4.2.0",
