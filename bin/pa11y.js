@@ -6,7 +6,7 @@ const extend = require('node.extend');
 const envinfo = require('envinfo');
 const path = require('path');
 const pkg = require('../package.json');
-const program = require('commander');
+const {program} = require('commander');
 const pa11y = require('../lib/pa11y');
 const semver = require('semver');
 
