@@ -45,7 +45,7 @@
     "semver": "~7.6.0"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-jest": "^27.9.0",
     "jest": "^29.7.0",
     "pa11y-lint-config": "^3.0.0"
