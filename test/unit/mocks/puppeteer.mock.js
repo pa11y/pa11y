@@ -8,7 +8,7 @@ const mockPage = {
 	focus: jest.fn(),
 	goto: jest.fn(),
 	on: jest.fn(),
-	removeListener: jest.fn(),
+	off: jest.fn(),
 	screenshot: jest.fn(),
 	setExtraHTTPHeaders: jest.fn(),
 	setRequestInterception: jest.fn(),
