@@ -14,7 +14,7 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 
 ## Migrating from 7.0 to 8.0
 
-Pa11y 8 upgrades to Puppeteer 22, which defaults to using the [_new_ headless mode](https://developer.chrome.com/docs/chromium/new-headless) in Chrome. Note that this headless implementation is different from the previous headless mode, but is closer to the headful Chrome behavior. This can have performance implications, see the [Puppeteer docs](https://github.com/puppeteer/puppeteer?tab=readme-ov-file#default-runtime-settings) for more information.
+Pa11y 8 upgrades Puppeteer to version 22, a major update which defaults to Chrome's [_new_ headless mode](https://developer.chrome.com/docs/chromium/new-headless) to more closely mimic the behavior of headful Chrome. This may affect performance; see the [Puppeteer docs](https://github.com/puppeteer/puppeteer?tab=readme-ov-file#default-runtime-settings) for more information.
 
 * If you were using a `chromeLaunchConfig` with `headless: 'new'`, change to `headless: true` or remove the `headless` setting as `true` is now the default.
 * If you were using a `chromeLaunchConfig` with `headless: true` or no `headless` setting, and want to continue use the previous headless mode, change to `headless: 'shell'`.
