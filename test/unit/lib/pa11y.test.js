@@ -21,7 +21,6 @@ describe('lib/pa11y', () => {
 	let puppeteer;
 	let extend;
 	let semver;
-	let promiseTimeout;
 
 	beforeEach(() => {
 		pa11yResults = {
@@ -56,15 +55,10 @@ describe('lib/pa11y', () => {
 				return jest.fn(actual);
 			});
 			jest.doMock('semver', () => require('../mocks/semver.mock'));
-			jest.doMock('p-timeout', () => {
-				const actual = jest.requireActual('p-timeout');
-				return jest.fn(actual);
-			});
 
 			extend = require('node.extend');
 			puppeteer = require('puppeteer');
 			semver = require('semver');
-			promiseTimeout = require('p-timeout');
 
 			puppeteer.mockPage.evaluate.mockResolvedValue(pa11yResults);
 
@@ -96,13 +90,6 @@ describe('lib/pa11y', () => {
 			expect(typeof extend.mock.calls[0][0]).toBe('object');
 			expect(extend.mock.calls[0][1]).toEqual(pa11y.defaults);
 			expect(extend.mock.calls[0][2]).toEqual({});
-		});
-
-		it('uses a promise timeout function', () => {
-			expect(promiseTimeout).toHaveBeenCalledTimes(1);
-			expect(promiseTimeout.mock.calls[0][0]).toEqual(expect.any(Promise));
-			expect(promiseTimeout.mock.calls[0][1]).toEqual(pa11y.defaults.timeout);
-			expect(promiseTimeout.mock.calls[0][2]).toEqual(`Pa11y timed out (${pa11y.defaults.timeout}ms)`);
 		});
 
 		it('launches puppeteer with `options.chromeLaunchConfig`', () => {

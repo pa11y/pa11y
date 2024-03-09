@@ -40,7 +40,6 @@
     "kleur": "~4.1.5",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
-    "p-timeout": "~4.1.0",
     "puppeteer": "^22.3.0",
     "semver": "~7.6.0"
   },
