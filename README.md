@@ -931,7 +931,7 @@ You can also run test suites individually:
 ```sh
 npm run test-unit           # Run the unit tests alone
 npm run test-integration    # Run the integration tests alone
-npm run coverage            # Run the unit tests alone, reporting coverage
+npm run test-coverage       # Run the unit tests alone, reporting coverage
 ```
 
 ## Support and migration
