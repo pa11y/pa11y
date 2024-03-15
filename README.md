@@ -943,20 +943,21 @@ When we release a new major version we will continue to support the previous maj
 
 The following table lists the major versions available and, for each previous major version, its end-of-support date, and its final minor version released.
 
-| Major version | Final minor version   | Node.js support  | Support end date |
-| :------------ | :-------------------- | :--------------- | :--------------- |
-| `7`           |                       | `18`, `20`       | ✅ Current major version |
-| `6`           | `6.2`                 | `12`, `14`, `16` | July 2024        |
-| `5`           | `5.3`                 | `8`, `10`, `12`  | 2021-11-25       |
-| `4`           | `4.13`                | `4`, `6`, `8`    | 2018-08-15       |
-| `3`           | `3.8`                 | `0.12`, `4`      | 2016-12-05       |
-| `2`           | `2.4`                 | `0.10`, `0.12`   | 2016-10-16       |
-| `1`           | `1.7`                 | `0.10`           | 2016-06-08       |
+| Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
+| :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
+| `8`           |                     | `18`, `20`       | `^22`             | ✅ Current major version |
+| `7`           | `7.0`               | `18`, `20`       | `^20`             | October 2024             |
+| `6`           | `6.2`               | `12`, `14`, `16` |                   | July 2024                |
+| `5`           | `5.3`               | `8`, `10`, `12`  |                   | 2021-11-25               |
+| `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
+| `3`           | `3.8`               | `0.12`, `4`      |                   | 2016-12-05               |
+| `2`           | `2.4`               | `0.10`, `0.12`   |                   | 2016-10-16               |
+| `1`           | `1.7`               | `0.10`           |                   | 2016-06-08               |
 
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
-Copyright &copy; 2013–2024, Team Pa11y and contributors
+Copyright &copy; 2013-2024, Team Pa11y and contributors
 
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
