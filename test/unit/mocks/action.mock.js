@@ -1,4 +1,6 @@
 'use strict';
 
-module.exports = jest.fn();
-module.exports.isValidAction = jest.fn();
+const sinon = require('sinon');
+
+module.exports = sinon.stub();
+module.exports.isValidAction = sinon.stub();

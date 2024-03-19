@@ -1,22 +1,23 @@
 'use strict';
 
+const assert = require('proclaim');
 const fs = require('fs');
 const path = require('path');
 const promisify = require('util').promisify;
 const runPa11yCli = require('../helper/pa11y-cli');
 const mkdir = promisify(fs.mkdir);
+const rmdir = promisify(fs.rmdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI action "screen-capture"', () => {
+describe('CLI action "screen-capture"', function() {
 	let screenCaptureDirectory;
 	let screenCapturePath;
 
-	beforeAll(async () => {
-		// Ensure this directory is unique to this test
+	before(async function() {
 		screenCaptureDirectory = path.join(__dirname, '/../tmp');
 		screenCapturePath = path.join(screenCaptureDirectory, '/screen-capture-action-test.png');
 		try {
@@ -32,13 +33,14 @@ describe('CLI action "screen-capture"', () => {
 		});
 	});
 
-	afterAll(async () => {
+	after(async function() {
 		await unlink(screenCapturePath);
+		await rmdir(screenCaptureDirectory);
 	});
 
-	it('saves a screen capture to the expected file', async () => {
+	it('saves a screen capture to the expected file', async function() {
 		const stats = await stat(screenCapturePath);
-		expect(stats.isFile()).toEqual(true);
+		assert.isTrue(stats.isFile());
 	});
 
 });

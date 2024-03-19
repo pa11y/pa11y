@@ -1,13 +1,14 @@
 'use strict';
 
+const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI runner HTML_CodeSniffer', () => {
+describe('CLI runner HTML_CodeSniffer', function() {
 
-	it('outputs the expected issues', async () => {
+	it('outputs the expected issues', async function() {
 		const pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 			arguments: [
 				'--runner', 'htmlcs',
@@ -15,13 +16,14 @@ describe('CLI runner HTML_CodeSniffer', () => {
 			]
 		});
 
-		expect(pa11yResponse.json).toHaveLength(1);
+		assert.isArray(pa11yResponse.json);
+		assert.lengthEquals(pa11yResponse.json, 1);
 		pa11yResponse.json.forEach(issue => {
-			expect(issue.type).toEqual('error');
+			assert.equal(issue.type, 'error');
 		});
 	});
 
-	it('runs on an AMD site', async () => {
+	it('runs on an AMD site', async function() {
 		const pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/AMD`, {
 			arguments: [
 				'--runner', 'htmlcs',
@@ -30,9 +32,10 @@ describe('CLI runner HTML_CodeSniffer', () => {
 			]
 		});
 
-		expect(pa11yResponse.json).toHaveLength(1);
+		assert.isArray(pa11yResponse.json);
+		assert.lengthEquals(pa11yResponse.json, 1);
 		pa11yResponse.json.forEach(issue => {
-			expect(issue.type).toEqual('error');
+			assert.equal(issue.type, 'error');
 		});
 	});
 });

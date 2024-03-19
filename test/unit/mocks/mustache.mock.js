@@ -1,7 +1,9 @@
 'use strict';
 
+const sinon = require('sinon');
+
 const mustache = {
-	render: jest.fn()
+	render: sinon.stub()
 };
 
 module.exports = mustache;

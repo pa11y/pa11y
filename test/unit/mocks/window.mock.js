@@ -1,12 +1,14 @@
 'use strict';
 
+const sinon = require('sinon');
+
 module.exports = {
 	document: {
 		documentElement: {
 			outerHTML: '<title>Foo</title>'
 		},
-		querySelector: jest.fn().mockReturnValue(null),
-		querySelectorAll: jest.fn().mockReturnValue([]),
+		querySelector: sinon.stub().returns(null),
+		querySelectorAll: sinon.stub().returns([]),
 		title: 'mock-title'
 	},
 	location: {
@@ -14,8 +16,8 @@ module.exports = {
 	},
 	/* eslint-disable camelcase */
 	HTMLCS: {
-		getMessages: jest.fn().mockReturnValue([]),
-		process: jest.fn().mockResolvedValueOnce()
+		getMessages: sinon.stub().returns([]),
+		process: sinon.stub().yieldsAsync()
 	},
 	'HTMLCS_mock-standard': {
 		sniffs: [

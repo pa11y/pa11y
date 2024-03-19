@@ -1,24 +1,30 @@
 'use strict';
 
-const csvReporter = require('../../../../lib/reporters/csv');
+const assert = require('proclaim');
 
-describe('lib/reporters/csv', () => {
-	it('is an object', () => {
-		expect(typeof csvReporter).toBe('object');
+describe('lib/reporters/csv', function() {
+	let csvReporter;
+
+	beforeEach(function() {
+		csvReporter = require('../../../../lib/reporters/csv');
 	});
 
-	it('has a `supports` property', () => {
-		expect(csvReporter.supports).toEqual(expect.any(String));
+	it('is an object', function() {
+		assert.isObject(csvReporter);
 	});
 
-	it('has a `results` method', () => {
-		expect(csvReporter.results).toEqual(expect.any(Function));
+	it('has a `supports` property', function() {
+		assert.isString(csvReporter.supports);
 	});
 
-	describe('.results(pa11yResults)', () => {
+	it('has a `results` method', function() {
+		assert.isFunction(csvReporter.results);
+	});
+
+	describe('.results(pa11yResults)', function() {
 		let mockPa11yResults;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			mockPa11yResults = {
 				documentTitle: 'mock title',
 				pageUrl: 'http://mock-url/',
@@ -48,8 +54,8 @@ describe('lib/reporters/csv', () => {
 			};
 		});
 
-		it('returns a CSV string representing the results', () => {
-			expect(csvReporter.results(mockPa11yResults)).toEqual(`
+		it('returns a CSV string representing the results', function() {
+			assert.strictEqual(csvReporter.results(mockPa11yResults), `
 				"type","code","message","context","selector"
 				"mock-type-1","mock-code-1","mock-message-1","mock-context-1","mock-selector-1"
 				"mock-type-2","mock-code-2","mock-message-2","mock-context-2","mock-selector-2"
@@ -59,28 +65,28 @@ describe('lib/reporters/csv', () => {
 
 	});
 
-	it('has an `error` method', () => {
-		expect(csvReporter.error).toEqual(expect.any(Function));
+	it('has an `error` method', function() {
+		assert.isFunction(csvReporter.error);
 	});
 
-	describe('.error(message)', () => {
+	describe('.error(message)', function() {
 
-		it('returns the message unchanged', () => {
-			expect(csvReporter.error('mock message')).toEqual('mock message');
+		it('returns the message unchanged', function() {
+			assert.strictEqual(csvReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
-	it('does not have a `begin` method', () => {
-		expect(csvReporter.begin).toBeUndefined();
+	it('does not have a `begin` method', function() {
+		assert.isUndefined(csvReporter.begin);
 	});
 
-	it('does not have a `debug` method', () => {
-		expect(csvReporter.debug).toBeUndefined();
+	it('does not have a `debug` method', function() {
+		assert.isUndefined(csvReporter.debug);
 	});
 
-	it('does not have an `info` method', () => {
-		expect(csvReporter.info).toBeUndefined();
+	it('does not have an `info` method', function() {
+		assert.isUndefined(csvReporter.info);
 	});
 
 });

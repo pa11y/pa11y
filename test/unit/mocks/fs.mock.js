@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = {
-	readFile: jest.fn(),
-	existsSync: jest.fn(),
-	readFileSync: jest.fn()
-};
+const sinon = require('sinon');
 
-module.exports = fs;
+module.exports = {
+	existsSync: sinon.stub(),
+	readFile: sinon.stub().yieldsAsync(),
+	readFileSync: sinon.stub()
+};

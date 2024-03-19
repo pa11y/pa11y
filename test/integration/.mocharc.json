@@ -1,0 +1,8 @@
+{
+	"parallel": true,
+	"recursive": true,
+	"require": "test/integration/mocha-hooks.js",
+	"spec": "test/integration/**/*.test.js",
+	"slow": 5000,
+	"timeout": 40000
+}

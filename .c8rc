@@ -1,0 +1,9 @@
+{
+  "include": [
+	"lib/"
+  ],
+  "reporter": [
+	"text",
+	"html"
+  ]
+}

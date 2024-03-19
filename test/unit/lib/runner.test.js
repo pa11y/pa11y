@@ -1,45 +1,46 @@
 'use strict';
 
+const assert = require('proclaim');
 const {createMockElement} = require('../mocks/element.mock');
+const sinon = require('sinon');
 
-describe('lib/runner', () => {
+describe('lib/runner', function() {
 	let pa11y;
 	let runner;
 
-	beforeEach(() => {
-		jest.resetModules();
+	beforeEach(function() {
 		runner = require('../../../lib/runner');
 		/* eslint-disable no-underscore-dangle */
 		pa11y = runner.__pa11y;
 		/* eslint-enable no-underscore-dangle */
 	});
 
-	it('is an object', () => {
-		expect(typeof runner).toBe('object');
+	it('is an object', function() {
+		assert.isObject(runner);
 	});
 
-	describe('.__pa11y', () => {
+	describe('.__pa11y', function() {
 		let originalWindow;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			originalWindow = global.window;
 			global.window = require('../mocks/window.mock');
 		});
 
-		afterEach(() => {
+		afterEach(function() {
 			global.window = originalWindow;
 		});
 
-		it('is an object', () => {
-			expect(typeof pa11y).toBe('object');
+		it('is an object', function() {
+			assert.isObject(pa11y);
 		});
 
-		describe('.run(options)', () => {
+		describe('.run(options)', function() {
 			let options;
 			let resolvedValue;
 			let mockIssues;
 
-			beforeEach(async () => {
+			beforeEach(async function() {
 				options = {
 					ignore: [],
 					rootElement: null,
@@ -59,25 +60,25 @@ describe('lib/runner', () => {
 						type: 'error'
 					}
 				];
-				pa11y.runners['mock-runner'] = jest.fn().mockResolvedValue(mockIssues);
+				pa11y.runners['mock-runner'] = sinon.stub().resolves(mockIssues);
 				resolvedValue = await pa11y.run(options);
 			});
 
-			it('sets `__pa11y.version` to the `pa11yVersion` option', () => {
-				expect(pa11y.version).toEqual('1.2.3');
+			it('sets `__pa11y.version` to the `pa11yVersion` option', function() {
+				assert.strictEqual(pa11y.version, '1.2.3');
 			});
 
-			it('runs all of the specified runners with the options and runner', () => {
-				expect(pa11y.runners['mock-runner']).toHaveBeenCalledTimes(1);
-				expect(pa11y.runners['mock-runner']).toHaveBeenCalledWith(options, pa11y);
+			it('runs all of the specified runners with the options and runner', function() {
+				assert.calledOnce(pa11y.runners['mock-runner']);
+				assert.calledWithExactly(pa11y.runners['mock-runner'], options, pa11y);
 			});
 
-			it('resolves with page details and an array of issues', () => {
-				expect(typeof resolvedValue).toBe('object');
-				expect(resolvedValue.documentTitle).toEqual(window.document.title);
-				expect(resolvedValue.pageUrl).toEqual(window.location.href);
-				expect(resolvedValue.issues).toEqual(expect.any(Array));
-				expect(resolvedValue.issues).toEqual([
+			it('resolves with page details and an array of issues', function() {
+				assert.isObject(resolvedValue);
+				assert.strictEqual(resolvedValue.documentTitle, window.document.title);
+				assert.strictEqual(resolvedValue.pageUrl, window.location.href);
+				assert.isArray(resolvedValue.issues);
+				assert.deepEqual(resolvedValue.issues, [
 					{
 						code: 'mock-code',
 						context: '<element>mock-html</element>',
@@ -91,38 +92,38 @@ describe('lib/runner', () => {
 				]);
 			});
 
-			describe('when the document title is not set', () => {
+			describe('when the document title is not set', function() {
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					delete window.document.title;
-					pa11y.runners['mock-runner'].mockReturnValue([]);
+					pa11y.runners['mock-runner'].returns([]);
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('resolves with an empty `documentTitle` property', () => {
-					expect(resolvedValue.documentTitle).toEqual('');
+				it('resolves with an empty `documentTitle` property', function() {
+					assert.strictEqual(resolvedValue.documentTitle, '');
 				});
 
 			});
 
-			describe('when the location href is not set', () => {
+			describe('when the location href is not set', function() {
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					delete window.location.href;
-					pa11y.runners['mock-runner'].mockReturnValue([]);
+					pa11y.runners['mock-runner'].returns([]);
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('resolves with an empty `pageUrl` property', () => {
-					expect(resolvedValue.pageUrl).toEqual('');
+				it('resolves with an empty `pageUrl` property', function() {
+					assert.strictEqual(resolvedValue.pageUrl, '');
 				});
 
 			});
 
-			describe('when an issue type is not found', () => {
+			describe('when an issue type is not found', function() {
 
-				beforeEach(async () => {
-					pa11y.runners['mock-runner'].mockReturnValue([
+				beforeEach(async function() {
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-code',
 							element: createMockElement(),
@@ -133,19 +134,19 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('resolves with a `typeCode` of 0', () => {
-					expect(resolvedValue.issues[0].typeCode).toEqual(0);
+				it('resolves with a `typeCode` of 0', function() {
+					assert.strictEqual(resolvedValue.issues[0].typeCode, 0);
 				});
 
 			});
 
-			describe('when the runner errors', () => {
+			describe('when the runner errors', function() {
 				let rejectedError;
 				let runnerError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					runnerError = new Error('HTML CodeSniffer error');
-					pa11y.runners['mock-runner'].mockRejectedValue(runnerError);
+					pa11y.runners['mock-runner'].rejects(runnerError);
 					try {
 						await pa11y.run(options);
 					} catch (error) {
@@ -153,16 +154,16 @@ describe('lib/runner', () => {
 					}
 				});
 
-				it('rejects with that error', () => {
-					expect(rejectedError).toEqual(runnerError);
+				it('rejects with that error', function() {
+					assert.strictEqual(rejectedError, runnerError);
 				});
 
 			});
 
-			describe('when `options.ignore` includes an issue type', () => {
+			describe('when `options.ignore` includes an issue type', function() {
 
-				beforeEach(async () => {
-					pa11y.runners['mock-runner'].mockReturnValue([
+				beforeEach(async function() {
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-error',
 							element: createMockElement(),
@@ -182,8 +183,8 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('does not resolve with issues of that type', () => {
-					expect(resolvedValue.issues).toEqual([
+				it('does not resolve with issues of that type', function() {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-warning',
 							context: '<element>mock-html</element>',
@@ -199,10 +200,10 @@ describe('lib/runner', () => {
 
 			});
 
-			describe('when `options.ignore` includes an issue code', () => {
+			describe('when `options.ignore` includes an issue code', function() {
 
-				beforeEach(async () => {
-					pa11y.runners['mock-runner'].mockReturnValue([
+				beforeEach(async function() {
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-code-1',
 							context: '<element>mock-html</element>',
@@ -226,8 +227,8 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('does not resolve with issues with that code', () => {
-					expect(resolvedValue.issues).toEqual([
+				it('does not resolve with issues with that code', function() {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-code-2',
 							context: '<element>mock-html</element>',
@@ -241,10 +242,10 @@ describe('lib/runner', () => {
 					]);
 				});
 
-				describe('when the issue code case does not match', () => {
+				describe('when the issue code case does not match', function() {
 
-					beforeEach(async () => {
-						pa11y.runners['mock-runner'].mockReturnValue([
+					beforeEach(async function() {
+						pa11y.runners['mock-runner'].returns([
 							{
 								code: 'MOCK-CODE',
 								context: '<element>mock-html</element>',
@@ -260,20 +261,20 @@ describe('lib/runner', () => {
 						resolvedValue = await pa11y.run(options);
 					});
 
-					it('still does not resolve with issues with that code', () => {
-						expect(resolvedValue.issues).toEqual([]);
+					it('still does not resolve with issues with that code', function() {
+						assert.deepEqual(resolvedValue.issues, []);
 					});
 
 				});
 
 			});
 
-			describe('when `options.rootElement` is set', () => {
+			describe('when `options.rootElement` is set', function() {
 				let insideElement;
 				let outsideElement;
 				let rootElement;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					insideElement = createMockElement({
 						id: 'mock-inside-element'
 					});
@@ -284,17 +285,12 @@ describe('lib/runner', () => {
 						id: 'root-element'
 					});
 
-					global.window.document.querySelector.mockImplementation(selector => (selector === '#root-element' ? rootElement : null));
+					global.window.document.querySelector.withArgs('#root-element').returns(rootElement);
 
-					rootElement.contains.mockImplementation(element => {
-						switch (element) {
-							case insideElement: return true;
-							case outsideElement: return false;
-							default: return undefined;
-						}
-					});
+					rootElement.contains.withArgs(insideElement).returns(true);
+					rootElement.contains.withArgs(outsideElement).returns(false);
 
-					pa11y.runners['mock-runner'].mockReturnValue([
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-code-1',
 							context: '<element>mock-html</element>',
@@ -316,12 +312,12 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('selects the root element', () => {
-					expect(window.document.querySelector).toHaveBeenCalledWith('#root-element');
+				it('selects the root element', function() {
+					assert.calledWithExactly(window.document.querySelector, '#root-element');
 				});
 
-				it('does not resolve with issues outside of the root element', () => {
-					expect(resolvedValue.issues).toEqual([
+				it('does not resolve with issues outside of the root element', function() {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-code-1',
 							context: '<element>mock-html</element>',
@@ -335,15 +331,15 @@ describe('lib/runner', () => {
 					]);
 				});
 
-				describe('when `options.rootElement` cannot be found in the DOM', () => {
+				describe('when `options.rootElement` cannot be found in the DOM', function() {
 
-					beforeEach(async () => {
-						global.window.document.querySelector.mockReturnValue(null);
+					beforeEach(async function() {
+						global.window.document.querySelector.withArgs('#root-element').returns(null);
 						resolvedValue = await pa11y.run(options);
 					});
 
-					it('resolves with all issues', () => {
-						expect(resolvedValue.issues).toEqual([
+					it('resolves with all issues', function() {
+						assert.deepEqual(resolvedValue.issues, [
 							{
 								code: 'mock-code-1',
 								context: '<element>mock-html</element>',
@@ -371,12 +367,12 @@ describe('lib/runner', () => {
 
 			});
 
-			describe('when `options.hideElements` is set', () => {
+			describe('when `options.hideElements` is set', function() {
 				let childOfHiddenElement;
 				let hiddenElement;
 				let unhiddenElement;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					hiddenElement = createMockElement({
 						id: 'mock-hidden-element'
 					});
@@ -387,17 +383,14 @@ describe('lib/runner', () => {
 					unhiddenElement = createMockElement({
 						id: 'mock-unhidden-element'
 					});
-					hiddenElement.contains.mockImplementation(element => {
-						switch (element) {
-							case hiddenElement: return true;
-							case childOfHiddenElement: return true;
-							default: return false;
-						}
-					});
+					hiddenElement.contains.withArgs(hiddenElement).returns(true);
+					hiddenElement.contains.withArgs(childOfHiddenElement).returns(true);
 
-					global.window.document.querySelectorAll.mockImplementation(selector => (selector === 'hidden1, hidden2' ? [hiddenElement] : []));
+					global.window.document.querySelectorAll.withArgs('hidden1, hidden2').returns([
+						hiddenElement
+					]);
 
-					pa11y.runners['mock-runner'].mockReturnValue([
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-code-1',
 							element: unhiddenElement,
@@ -421,12 +414,12 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('selects the hidden elements', () => {
-					expect(window.document.querySelectorAll).toHaveBeenCalledWith(options.hideElements);
+				it('selects the hidden elements', function() {
+					assert.calledWithExactly(window.document.querySelectorAll, options.hideElements);
 				});
 
-				it('does not resolve with issues inside hidden elements, or that are hidden themselves', () => {
-					expect(resolvedValue.issues).toEqual([
+				it('does not resolve with issues inside hidden elements, or that are hidden themselves', function() {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-code-1',
 							context: '<element>mock-html</element>',
@@ -442,10 +435,10 @@ describe('lib/runner', () => {
 
 			});
 
-			describe('when an issue does not have an element property', () => {
+			describe('when an issue does not have an element property', function() {
 
-				beforeEach(async () => {
-					pa11y.runners['mock-runner'].mockReturnValue([
+				beforeEach(async function() {
+					pa11y.runners['mock-runner'].returns([
 						{
 							code: 'mock-code-1',
 							element: null,
@@ -456,8 +449,8 @@ describe('lib/runner', () => {
 					resolvedValue = await pa11y.run(options);
 				});
 
-				it('defaults context and selector to empty strings', () => {
-					expect(resolvedValue.issues).toEqual([
+				it('defaults context and selector to empty strings', function() {
+					assert.deepEqual(resolvedValue.issues, [
 						{
 							code: 'mock-code-1',
 							context: '',
@@ -475,27 +468,27 @@ describe('lib/runner', () => {
 
 		});
 
-		describe('.getElementContext(element)', () => {
+		describe('.getElementContext(element)', function() {
 			let returnValue;
 
-			describe('when the element HTML is short enough to not need truncating', () => {
+			describe('when the element HTML is short enough to not need truncating', function() {
 
-				beforeEach(() => {
+				beforeEach(function() {
 					const element = createMockElement({
 						outerHTML: '<element>mock-html</element>'
 					});
 					returnValue = pa11y.getElementContext(element);
 				});
 
-				it('returns the element HTML unmodified', () => {
-					expect(returnValue).toEqual('<element>mock-html</element>');
+				it('returns the element HTML unmodified', function() {
+					assert.strictEqual(returnValue, '<element>mock-html</element>');
 				});
 
 			});
 
-			describe('when the element has a long `innerHTML`', () => {
+			describe('when the element has a long `innerHTML`', function() {
 
-				beforeEach(() => {
+				beforeEach(function() {
 					const element = createMockElement({
 						innerHTML: 'mock-html-that-is-longer-than-31-characters',
 						outerHTML: '<element>mock-html-that-is-longer-than-31-characters</element>'
@@ -503,15 +496,15 @@ describe('lib/runner', () => {
 					returnValue = pa11y.getElementContext(element);
 				});
 
-				it('returns the element HTML with the inner HTML truncated', () => {
-					expect(returnValue).toEqual('<element>mock-html-that-is-longer-than-3...</element>');
+				it('returns the element HTML with the inner HTML truncated', function() {
+					assert.strictEqual(returnValue, '<element>mock-html-that-is-longer-than-3...</element>');
 				});
 
 			});
 
-			describe('when the element has a long `outerHTML`', () => {
+			describe('when the element has a long `outerHTML`', function() {
 
-				beforeEach(() => {
+				beforeEach(function() {
 					const element = createMockElement({
 						innerHTML: 'mock-html',
 						outerHTML: '<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz">mock-html</element>'
@@ -519,52 +512,52 @@ describe('lib/runner', () => {
 					returnValue = pa11y.getElementContext(element);
 				});
 
-				it('returns the element HTML with the outer HTML truncated', () => {
-					expect(returnValue).toEqual('<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst...');
+				it('returns the element HTML with the outer HTML truncated', function() {
+					assert.strictEqual(returnValue, '<element alphabetx10="abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrst...');
 				});
 
 			});
 
-			describe('when the element `outerHTML` is empty', () => {
+			describe('when the element `outerHTML` is empty', function() {
 
-				beforeEach(() => {
+				beforeEach(function() {
 					const element = createMockElement({
 						outerHTML: ''
 					});
 					returnValue = pa11y.getElementContext(element);
 				});
 
-				it('returns null', () => {
-					expect(returnValue).toBeNull();
+				it('returns null', function() {
+					assert.isNull(returnValue);
 				});
 
 			});
 
 		});
 
-		describe('.getElementSelector(element)', () => {
+		describe('.getElementSelector(element)', function() {
 			let returnValue;
 
-			describe('when the element has an ID', () => {
+			describe('when the element has an ID', function() {
 
-				beforeEach(() => {
+				beforeEach(function() {
 					const element = createMockElement({
 						id: 'mock-id'
 					});
 					returnValue = pa11y.getElementSelector(element);
 				});
 
-				it('returns an `ID` selector', () => {
-					expect(returnValue).toEqual('#mock-id');
+				it('returns an `ID` selector', function() {
+					assert.strictEqual(returnValue, '#mock-id');
 				});
 
 			});
 
-			describe('when the element does not have an ID', () => {
+			describe('when the element does not have an ID', function() {
 
-				describe('but it\'s parent node does have an ID', () => {
+				describe('but it\'s parent node does have an ID', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
 						const parent = createMockElement({
 							id: 'mock-parent',
 							tagName: 'PARENT'
@@ -576,15 +569,15 @@ describe('lib/runner', () => {
 						returnValue = pa11y.getElementSelector(element);
 					});
 
-					it('returns an `ID > TagName` selector', () => {
-						expect(returnValue).toEqual('#mock-parent > child');
+					it('returns an `ID > TagName` selector', function() {
+						assert.strictEqual(returnValue, '#mock-parent > child');
 					});
 
 				});
 
-				describe('and none of it\'s parent nodes have IDs', () => {
+				describe('and none of it\'s parent nodes have IDs', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
 						const parent = createMockElement({
 							tagName: 'PARENT'
 						});
@@ -595,15 +588,15 @@ describe('lib/runner', () => {
 						returnValue = pa11y.getElementSelector(element);
 					});
 
-					it('returns a `TagName > TagName` selector', () => {
-						expect(returnValue).toEqual('parent > child');
+					it('returns a `TagName > TagName` selector', function() {
+						assert.strictEqual(returnValue, 'parent > child');
 					});
 
 				});
 
-				describe('and it has siblings of the same type', () => {
+				describe('and it has siblings of the same type', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
 						const parent = createMockElement({
 							tagName: 'PARENT'
 						});
@@ -624,15 +617,15 @@ describe('lib/runner', () => {
 						returnValue = pa11y.getElementSelector(element);
 					});
 
-					it('returns a `TagName > TagName:nth-child` selector', () => {
-						expect(returnValue).toEqual('parent > child:nth-child(2)');
+					it('returns a `TagName > TagName:nth-child` selector', function() {
+						assert.strictEqual(returnValue, 'parent > child:nth-child(2)');
 					});
 
 				});
 
-				describe('and it is not an element node', () => {
+				describe('and it is not an element node', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
 						const element = createMockElement({
 							tagName: 'CHILD',
 							nodeType: 7
@@ -640,8 +633,8 @@ describe('lib/runner', () => {
 						returnValue = pa11y.getElementSelector(element);
 					});
 
-					it('returns an empty selector', () => {
-						expect(returnValue).toEqual('');
+					it('returns an empty selector', function() {
+						assert.strictEqual(returnValue, '');
 					});
 
 				});

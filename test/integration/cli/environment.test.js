@@ -1,11 +1,12 @@
 'use strict';
 
+const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
-describe('CLI environment', () => {
+describe('CLI environment', function() {
 	let pa11yResponse;
 
-	beforeAll(async () => {
+	before(async function() {
 		pa11yResponse = await runPa11yCli('', {
 			arguments: [
 				'--environment'
@@ -13,17 +14,17 @@ describe('CLI environment', () => {
 		});
 	});
 
-	it('exits with a code of `0`', () => {
-		expect(pa11yResponse.exitCode).toEqual(0);
+	it('exits with a code of `0`', function() {
+		assert.strictEqual(pa11yResponse.exitCode, 0);
 	});
 
-	it('responds with information about the user\'s environment', () => {
-		expect(pa11yResponse.output).toMatch(/OS/);
-		expect(pa11yResponse.output).toMatch(/CPU/);
-		expect(pa11yResponse.output).toMatch(/Memory/);
-		expect(pa11yResponse.output).toMatch(/Node/);
-		expect(pa11yResponse.output).toMatch(/npm/);
-		expect(pa11yResponse.output).toMatch(/pa11y/);
+	it('responds with information about the user\'s environment', function() {
+		assert.match(pa11yResponse.output, /OS/);
+		assert.match(pa11yResponse.output, /CPU/);
+		assert.match(pa11yResponse.output, /Memory/);
+		assert.match(pa11yResponse.output, /Node/);
+		assert.match(pa11yResponse.output, /npm/);
+		assert.match(pa11yResponse.output, /pa11y/);
 	});
 
 });
