@@ -21,8 +21,8 @@ describe('CLI timeout', () => {
 
 		it('outputs a timeout error', () => {
 			expect(pa11yResponse.output).toMatch(/timeouterror/i);
-			expect(pa11yResponse.output).toMatch(/pa11y timed out/i);
-			expect(pa11yResponse.output).toMatch(/100ms/i);
+			expect(pa11yResponse.output).toMatch(/navigation timeout/i);
+			expect(pa11yResponse.output).toMatch(/100 ms/i);
 		});
 
 	});
