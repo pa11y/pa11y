@@ -1,132 +1,132 @@
 'use strict';
 
+const assert = require('proclaim');
+const mockery = require('mockery');
+const sinon = require('sinon');
 
-describe('lib/reporters/json', () => {
+describe('lib/reporters/json', function() {
 	let bfj;
 	let jsonReporter;
-	let stdoutWriteStub;
 
-	beforeEach(() => {
-		jest.isolateModules(() => {
-			jest.doMock('bfj', () => require('../../mocks/bfj.mock'));
-			bfj = require('bfj');
-			jsonReporter = require('../../../../lib/reporters/json');
-		});
-
-		bfj.streamify.mockReturnValue(bfj.mockStream);
+	beforeEach(function() {
+		bfj = require('../../mocks/bfj.mock');
+		mockery.registerMock('bfj', bfj);
+		jsonReporter = require('../../../../lib/reporters/json');
 	});
 
-	it('is an object', () => {
-		expect(typeof jsonReporter).toBe('object');
+	it('is an object', function() {
+		assert.isObject(jsonReporter);
 	});
 
-	it('has a `supports` property', () => {
-		expect(jsonReporter.supports).toEqual(expect.any(String));
+	it('has a `supports` property', function() {
+		assert.isString(jsonReporter.supports);
 	});
 
-	it('has a `results` method', () => {
-		expect(jsonReporter.results).toEqual(expect.any(Function));
+	it('has a `results` method', function() {
+		assert.isFunction(jsonReporter.results);
 	});
 
-	describe('.results(pa11yResults)', () => {
+	describe('.results(pa11yResults)', function() {
 		let mockResults;
-		let consoleErrorStub;
-		let mockDataError;
-		let processExitStub;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			mockResults = {
 				issues: [
 					'foo',
 					'bar'
 				]
 			};
-
-			mockDataError = new Error('data error');
-			consoleErrorStub = jest.spyOn(console, 'error').mockReturnValue();
-			processExitStub = jest.spyOn(process, 'exit').mockReturnValue();
-			stdoutWriteStub = jest.spyOn(process.stdout, 'write').mockReturnValue();
-
-			bfj.mockStream.on.mockImplementation((event, callback) => {
-				switch (event) {
-					case 'dataError': return callback(mockDataError);
-					case 'end': return callback();
-					default:
-				}
-			});
 			jsonReporter.results(mockResults);
 		});
 
-		afterEach(() => {
-			consoleErrorStub.mockRestore();
-			consoleErrorStub.mockRestore();
-			stdoutWriteStub.mockRestore();
+		it('creates a BFJ stream', function() {
+			assert.calledOnce(bfj.streamify);
+			assert.calledWithExactly(bfj.streamify, mockResults.issues);
 		});
 
-		it('creates a BFJ stream', () => {
-			expect(bfj.streamify).toHaveBeenCalledTimes(1);
-			expect(bfj.streamify).toHaveBeenCalledWith(mockResults.issues);
+		it('handles the stream `dataError` event', function() {
+			assert.called(bfj.mockStream.on);
+			assert.calledWith(bfj.mockStream.on, 'dataError');
+			assert.isFunction(bfj.mockStream.on.withArgs('dataError').firstCall.args[1]);
 		});
 
-		it('handles the stream `dataError` event', () => {
-			expect(bfj.mockStream.on).toHaveBeenCalledWith('dataError', expect.any(Function));
-		});
+		describe('`dataError` handler', function() {
+			let consoleErrorStub;
+			let mockDataError;
+			let processExitStub;
 
-		describe('`dataError` handler', () => {
+			beforeEach(function() {
+				mockDataError = new Error('data error');
+				consoleErrorStub = sinon.stub(console, 'error');
+				processExitStub = sinon.stub(process, 'exit');
+				bfj.mockStream.on.withArgs('dataError').firstCall.args[1](mockDataError);
+				console.error.restore();
+				process.exit.restore();
+			});
 
-			it('outputs the error stack to the console and exits', () => {
-				expect(bfj.mockStream.on).toHaveBeenCalledWith('dataError', expect.any(Function));
-				expect(consoleErrorStub).toHaveBeenCalledTimes(1);
-				expect(consoleErrorStub).toHaveBeenCalledWith(mockDataError.stack);
+			it('outputs the error stack to the console', function() {
+				assert.calledOnce(consoleErrorStub);
+				assert.calledWithExactly(consoleErrorStub, mockDataError.stack);
+			});
 
-				expect(processExitStub).toHaveBeenCalledTimes(1);
-				expect(processExitStub).toHaveBeenCalledWith(1);
+			it('exits the process with a code of `1`', function() {
+				assert.calledOnce(processExitStub);
+				assert.calledWithExactly(processExitStub, 1);
 			});
 
 		});
 
-		it('handles the stream `end` event', () => {
-			expect(bfj.mockStream.on).toHaveBeenCalledWith('end', expect.any(Function));
+		it('handles the stream `end` event', function() {
+			assert.called(bfj.mockStream.on);
+			assert.calledWith(bfj.mockStream.on, 'end');
+			assert.isFunction(bfj.mockStream.on.withArgs('end').firstCall.args[1]);
 		});
 
-		describe('`end` handler', () => {
+		describe('`end` handler', function() {
+			let stdoutWriteStub;
 
-			it('outputs a newline to STDOUT', () => {
-				expect(stdoutWriteStub).toHaveBeenCalledTimes(1);
-				expect(stdoutWriteStub).toHaveBeenCalledWith('\n');
+			beforeEach(function() {
+				stdoutWriteStub = sinon.stub(process.stdout, 'write');
+				bfj.mockStream.on.withArgs('end').firstCall.args[1]();
+				process.stdout.write.restore();
+			});
+
+			it('outputs a newline to STDOUT', function() {
+				assert.calledOnce(stdoutWriteStub);
+				assert.calledWithExactly(stdoutWriteStub, '\n');
 			});
 
 		});
 
-		it('pipes the stream into `process.stdout`', () => {
-			expect(bfj.mockStream.pipe).toHaveBeenCalledTimes(1);
-			expect(bfj.mockStream.pipe).toHaveBeenCalledWith(process.stdout);
+		it('pipes the stream into `process.stdout`', function() {
+			assert.calledOnce(bfj.mockStream.pipe);
+			assert.calledWithExactly(bfj.mockStream.pipe, process.stdout);
 		});
 
 	});
 
-	it('has an `error` method', () => {
-		expect(jsonReporter.error).toEqual(expect.any(Function));
+	it('has an `error` method', function() {
+		assert.isFunction(jsonReporter.error);
 	});
 
-	describe('.error(message)', () => {
+	describe('.error(message)', function() {
 
-		it('returns the message unchanged', () => {
-			expect(jsonReporter.error('mock message')).toStrictEqual('mock message');
+		it('returns the message unchanged', function() {
+			assert.strictEqual(jsonReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
-	it('does not have a `begin` method', () => {
-		expect(jsonReporter.begin).toBeUndefined();
+	it('does not have a `begin` method', function() {
+		assert.isUndefined(jsonReporter.begin);
 	});
 
-	it('does not have a `debug` method', () => {
-		expect(jsonReporter.debug).toBeUndefined();
+	it('does not have a `debug` method', function() {
+		assert.isUndefined(jsonReporter.debug);
 	});
 
-	it('does not have an `info` method', () => {
-		expect(jsonReporter.info).toBeUndefined();
+	it('does not have an `info` method', function() {
+		assert.isUndefined(jsonReporter.info);
 	});
 
 });

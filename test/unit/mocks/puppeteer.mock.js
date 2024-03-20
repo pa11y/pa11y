@@ -1,33 +1,33 @@
 'use strict';
 
-const mockPage = {
-	addScriptTag: jest.fn(),
-	close: jest.fn(),
-	click: jest.fn(),
-	evaluate: jest.fn(),
-	focus: jest.fn(),
-	goto: jest.fn(),
-	on: jest.fn(),
-	off: jest.fn(),
-	screenshot: jest.fn(),
-	setExtraHTTPHeaders: jest.fn(),
-	setRequestInterception: jest.fn(),
-	setUserAgent: jest.fn(),
-	setViewport: jest.fn(),
-	type: jest.fn(),
-	waitForFunction: jest.fn()
+const sinon = require('sinon');
+
+const puppeteer = module.exports = {
+	launch: sinon.stub()
 };
 
-
-const mockBrowser = {
-	close: jest.fn(),
-	newPage: jest.fn().mockResolvedValue(mockPage)
+const mockBrowser = puppeteer.mockBrowser = {
+	close: sinon.stub(),
+	newPage: sinon.stub()
 };
 
-const mock = {
-	launch: jest.fn().mockResolvedValue(mockBrowser),
-	mockBrowser,
-	mockPage
-};
+const mockPage = (puppeteer.mockPage = {
+	addScriptTag: sinon.stub().resolves(),
+	close: sinon.stub().resolves(),
+	click: sinon.stub().resolves(),
+	evaluate: sinon.stub().resolves(),
+	focus: sinon.stub().resolves(),
+	goto: sinon.stub().resolves(),
+	on: sinon.stub(),
+	off: sinon.stub(),
+	screenshot: sinon.stub().resolves(),
+	setExtraHTTPHeaders: sinon.stub().resolves(),
+	setRequestInterception: sinon.stub().resolves(),
+	setUserAgent: sinon.stub().resolves(),
+	setViewport: sinon.stub().resolves(),
+	type: sinon.stub().resolves(),
+	waitForFunction: sinon.stub().resolves()
+});
 
-module.exports = mock;
+puppeteer.launch.resolves(mockBrowser);
+mockBrowser.newPage.resolves(mockPage);

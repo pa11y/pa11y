@@ -1,48 +1,46 @@
 'use strict';
 
-const cliReporter = require('../../../../lib/reporters/cli');
-const kleur = require('kleur');
+const mockery = require('mockery');
+const assert = require('proclaim');
 
-jest.mock('kleur', () => require('../../mocks/kleur.mock'));
+describe('lib/reporters/cli', function() {
+	let kleur;
+	let cliReporter;
 
-describe('lib/reporters/cli', () => {
-	beforeEach(() => {
-		kleur.cyan.mockImplementation(str => str);
-		kleur.green.mockImplementation(str => str);
-		kleur.grey.mockImplementation(str => str);
-		kleur.red.mockImplementation(str => str);
-		kleur.underline.mockImplementation(str => str);
-		kleur.yellow.mockImplementation(str => str);
+	beforeEach(function() {
+		kleur = require('../../mocks/kleur.mock');
+		mockery.registerMock('kleur', kleur);
+		cliReporter = require('../../../../lib/reporters/cli');
 	});
 
-	it('is an object', () => {
-		expect(typeof cliReporter).toBe('object');
+	it('is an object', function() {
+		assert.isObject(cliReporter);
 	});
 
-	it('has a `supports` property', () => {
-		expect(cliReporter.supports).toEqual(expect.any(String));
+	it('has a `supports` property', function() {
+		assert.isString(cliReporter.supports);
 	});
 
-	it('has a `begin` method', () => {
-		expect(cliReporter.begin).toEqual(expect.any(Function));
+	it('has a `begin` method', function() {
+		assert.isFunction(cliReporter.begin);
 	});
 
-	describe('.begin()', () => {
+	describe('.begin()', function() {
 
-		it('returns a welcome message decorated for CLI output', () => {
-			expect(cliReporter.begin()).toEqual('\nWelcome to Pa11y\n');
+		it('returns a welcome message decorated for CLI output', function() {
+			assert.strictEqual(cliReporter.begin(), '\nWelcome to Pa11y\n');
 		});
 
 	});
 
-	it('has a `results` method', () => {
-		expect(cliReporter.results).toEqual(expect.any(Function));
+	it('has a `results` method', function() {
+		assert.isFunction(cliReporter.results);
 	});
 
-	describe('.results(pa11yResults)', () => {
+	describe('.results(pa11yResults)', function() {
 		let mockPa11yResults;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			mockPa11yResults = {
 				documentTitle: 'mock title',
 				pageUrl: 'http://mock-url/',
@@ -72,8 +70,8 @@ describe('lib/reporters/cli', () => {
 			};
 		});
 
-		it('returns the issues decorated for CLI output', () => {
-			expect(cliReporter.results(mockPa11yResults)).toEqual(`
+		it('returns the issues decorated for CLI output', function() {
+			assert.strictEqual(cliReporter.results(mockPa11yResults), `
 				Results for URL: http://mock-url/
 
 				 • Error: mock-message-1
@@ -97,56 +95,56 @@ describe('lib/reporters/cli', () => {
 			`.replace(/\t+/g, ''));
 		});
 
-		describe('when `pa11yResults` has no errors', () => {
+		describe('when `pa11yResults` has no errors', function() {
 
-			beforeEach(() => {
+			beforeEach(function() {
 				mockPa11yResults.issues = mockPa11yResults.issues.filter(issue => {
 					return issue.type !== 'error';
 				});
 			});
 
-			it('Does not include the error summary in the output', () => {
-				expect(cliReporter.results(mockPa11yResults)).not.toMatch(/1 errors/i);
+			it('Does not include the error summary in the output', function() {
+				assert.notMatch(cliReporter.results(mockPa11yResults), /1 errors/i);
 			});
 
 		});
 
-		describe('when `pa11yResults` has no warnings', () => {
+		describe('when `pa11yResults` has no warnings', function() {
 
-			beforeEach(() => {
+			beforeEach(function() {
 				mockPa11yResults.issues = mockPa11yResults.issues.filter(issue => {
 					return issue.type !== 'warning';
 				});
 			});
 
-			it('Does not include the warning summary in the output', () => {
-				expect(cliReporter.results(mockPa11yResults)).not.toMatch(/1 warnings/i);
+			it('Does not include the warning summary in the output', function() {
+				assert.notMatch(cliReporter.results(mockPa11yResults), /1 warnings/i);
 			});
 
 		});
 
-		describe('when `pa11yResults` has no notices', () => {
+		describe('when `pa11yResults` has no notices', function() {
 
-			beforeEach(() => {
+			beforeEach(function() {
 				mockPa11yResults.issues = mockPa11yResults.issues.filter(issue => {
 					return issue.type !== 'notice';
 				});
 			});
 
-			it('Does not include the notice summary in the output', () => {
-				expect(cliReporter.results(mockPa11yResults)).not.toMatch(/1 notices/i);
+			it('Does not include the notice summary in the output', function() {
+				assert.notMatch(cliReporter.results(mockPa11yResults), /1 notices/i);
 			});
 
 		});
 
-		describe('when `pa11yResults` has no issues', () => {
+		describe('when `pa11yResults` has no issues', function() {
 
-			beforeEach(() => {
+			beforeEach(function() {
 				mockPa11yResults.issues = [];
 			});
 
-			it('returns a success message', () => {
-				expect(cliReporter.results(mockPa11yResults)).toEqual(`
+			it('returns a success message', function() {
+				assert.strictEqual(cliReporter.results(mockPa11yResults), `
 					No issues found!
 				`.replace(/\t+/g, ''));
 			});
@@ -155,46 +153,46 @@ describe('lib/reporters/cli', () => {
 
 	});
 
-	it('has an `error` method', () => {
-		expect(cliReporter.error).toEqual(expect.any(Function));
+	it('has an `error` method', function() {
+		assert.isFunction(cliReporter.error);
 	});
 
-	describe('.error(message)', () => {
+	describe('.error(message)', function() {
 
-		it('returns the message decorated for CLI output', () => {
-			expect(cliReporter.error('mock message')).toEqual('\nError: mock message\n');
+		it('returns the message decorated for CLI output', function() {
+			assert.strictEqual(cliReporter.error('mock message'), '\nError: mock message\n');
 		});
 
-		describe('when `message` already starts with the text "Error:"', () => {
+		describe('when `message` already starts with the text "Error:"', function() {
 
-			it('returns the message decorated for CLI output, not adding "Error:"', () => {
-				expect(cliReporter.error('Error: mock')).toEqual('\nError: mock\n');
+			it('returns the message decorated for CLI output, not adding "Error:"', function() {
+				assert.strictEqual(cliReporter.error('Error: mock'), '\nError: mock\n');
 			});
 
 		});
 
 	});
 
-	it('has an `info` method', () => {
-		expect(cliReporter.info).toEqual(expect.any(Function));
+	it('has an `info` method', function() {
+		assert.isFunction(cliReporter.info);
 	});
 
-	describe('.info(message)', () => {
+	describe('.info(message)', function() {
 
-		it('returns the message decorated for CLI output', () => {
-			expect(cliReporter.info('mock message')).toEqual(' > mock message');
+		it('returns the message decorated for CLI output', function() {
+			assert.strictEqual(cliReporter.info('mock message'), ' > mock message');
 		});
 
 	});
 
-	it('has a `debug` method', () => {
-		expect(cliReporter.debug).toEqual(expect.any(Function));
+	it('has a `debug` method', function() {
+		assert.isFunction(cliReporter.debug);
 	});
 
-	describe('.debug(message)', () => {
+	describe('.debug(message)', function() {
 
-		it('returns the message decorated for CLI output', () => {
-			expect(cliReporter.debug('mock message')).toEqual(' > Debug: mock message');
+		it('returns the message decorated for CLI output', function() {
+			assert.strictEqual(cliReporter.debug('mock message'), ' > Debug: mock message');
 		});
 
 	});

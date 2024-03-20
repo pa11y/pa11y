@@ -1,5 +1,7 @@
 'use strict';
 
+const sinon = require('sinon');
+
 module.exports = {
-	satisfies: jest.fn().mockReturnValue(true)
+	satisfies: sinon.stub()
 };

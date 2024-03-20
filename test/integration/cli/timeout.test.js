@@ -1,13 +1,14 @@
 'use strict';
 
+const assert = require('proclaim');
 const runPa11yCli = require('../helper/pa11y-cli');
 
-describe('CLI timeout', () => {
+describe('CLI timeout', function() {
 	let pa11yResponse;
 
-	describe('when the `--timeout` flag is set to less time than the page takes to load', () => {
+	describe('when the `--timeout` flag is set to less time than the page takes to load', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/timeout`, {
 				arguments: [
 					'--timeout', '100'
@@ -15,14 +16,14 @@ describe('CLI timeout', () => {
 			});
 		});
 
-		it('exits with a code of `1`', () => {
-			expect(pa11yResponse.exitCode).toEqual(1);
+		it('exits with a code of `1`', function() {
+			assert.strictEqual(pa11yResponse.exitCode, 1);
 		});
 
-		it('outputs a timeout error', () => {
-			expect(pa11yResponse.output).toMatch(/timeouterror/i);
-			expect(pa11yResponse.output).toMatch(/navigation timeout/i);
-			expect(pa11yResponse.output).toMatch(/100 ms/i);
+		it('outputs a timeout error', function() {
+			assert.match(pa11yResponse.output, /timeouterror/i);
+			assert.match(pa11yResponse.output, /navigation timeout/i);
+			assert.match(pa11yResponse.output, /100 ms/i);
 		});
 
 	});

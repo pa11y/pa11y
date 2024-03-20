@@ -1,17 +1,18 @@
 'use strict';
 
+const assert = require('proclaim');
 const path = require('path');
 const runPa11yCli = require('../helper/pa11y-cli');
 
 // Note: we use the JSON reporter in here to make it easier
 // to inspect the output issues. The regular CLI output is
 // tested in the reporter tests
-describe('CLI config', () => {
+describe('CLI config', function() {
 	let pa11yResponse;
 
-	describe('when the configuration specifies headers', () => {
+	describe('when the configuration specifies headers', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/headers`, {
 				arguments: [
 					'--include-notices',
@@ -24,19 +25,19 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('sets headers on the tested page', () => {
-			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+		it('sets headers on the tested page', function() {
+			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			expect(noticeH2522).toHaveLength(1);
-			expect(noticeH2522[0].context).toEqual('<title>bar baz</title>');
+			assert.lengthEquals(noticeH2522, 1);
+			assert.strictEqual(noticeH2522[0].context, '<title>bar baz</title>');
 		});
 
 	});
 
-	describe('when the configuration specifies a method', () => {
+	describe('when the configuration specifies a method', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/method`, {
 				arguments: [
 					'--include-notices',
@@ -49,19 +50,19 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('tests the page using the specified HTTP method', () => {
-			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+		it('tests the page using the specified HTTP method', function() {
+			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			expect(noticeH2522).toHaveLength(1);
-			expect(noticeH2522[0].context).toEqual('<title>POST</title>');
+			assert.lengthEquals(noticeH2522, 1);
+			assert.strictEqual(noticeH2522[0].context, '<title>POST</title>');
 		});
 
 	});
 
-	describe('when the configuration specifies POST data', () => {
+	describe('when the configuration specifies POST data', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/post-data`, {
 				arguments: [
 					'--include-notices',
@@ -74,19 +75,19 @@ describe('CLI config', () => {
 
 		// The test file ../mock/html/headers.html which we test here has request headers output in
 		// the page title, so reading the title confirms that headers were sent by Pa11y
-		it('tests the page using the specified HTTP method', () => {
-			expect(pa11yResponse.json.length).toBeGreaterThanOrEqual(0);
+		it('tests the page using the specified HTTP method', function() {
+			assert.isArray(pa11yResponse.json);
 
 			const noticeH2522 = pa11yResponse.json.filter(response => response.code === 'WCAG2AA.Principle2.Guideline2_4.2_4_2.H25.2');
-			expect(noticeH2522).toHaveLength(1);
-			expect(noticeH2522[0].context).toEqual('<title>foo=bar&amp;bar=baz</title>');
+			assert.lengthEquals(noticeH2522, 1);
+			assert.strictEqual(noticeH2522[0].context, '<title>foo=bar&amp;bar=baz</title>');
 		});
 
 	});
 
-	describe('when the configuration specifies ignore rules', () => {
+	describe('when the configuration specifies ignore rules', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/warnings`, {
 				arguments: [
 					'--include-notices',
@@ -97,15 +98,16 @@ describe('CLI config', () => {
 			});
 		});
 
-		it('ignores the specified issues', () => {
-			expect(pa11yResponse.json).toHaveLength(0);
+		it('ignores the specified issues', function() {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});
 
-	describe('when no configuration is specified but a `pa11y.json` file exists in the working directory', () => {
+	describe('when no configuration is specified but a `pa11y.json` file exists in the working directory', function() {
 
-		beforeAll(async () => {
+		before(async function() {
 			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--include-notices',
@@ -116,8 +118,9 @@ describe('CLI config', () => {
 			});
 		});
 
-		it('loads the default config', () => {
-			expect(pa11yResponse.json).toHaveLength(0);
+		it('loads the default config', function() {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 0);
 		});
 
 	});

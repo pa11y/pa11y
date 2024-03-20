@@ -1,25 +1,30 @@
 'use strict';
 
-const tsvReporter = require('../../../../lib/reporters/tsv');
+const assert = require('proclaim');
 
-describe('lib/reporters/tsv', () => {
+describe('lib/reporters/tsv', function() {
+	let tsvReporter;
 
-	it('is an object', () => {
-		expect(typeof tsvReporter).toBe('object');
+	beforeEach(function() {
+		tsvReporter = require('../../../../lib/reporters/tsv');
 	});
 
-	it('has a `supports` property', () => {
-		expect(tsvReporter.supports).toEqual(expect.any(String));
+	it('is an object', function() {
+		assert.isObject(tsvReporter);
 	});
 
-	it('has a `results` method', () => {
-		expect(tsvReporter.results).toEqual(expect.any(Function));
+	it('has a `supports` property', function() {
+		assert.isString(tsvReporter.supports);
 	});
 
-	describe('.results(pa11yResults)', () => {
+	it('has a `results` method', function() {
+		assert.isFunction(tsvReporter.results);
+	});
+
+	describe('.results(pa11yResults)', function() {
 		let mockPa11yResults;
 
-		beforeEach(() => {
+		beforeEach(function() {
 			mockPa11yResults = {
 				documentTitle: 'mock title',
 				pageUrl: 'http://mock-url/',
@@ -49,8 +54,8 @@ describe('lib/reporters/tsv', () => {
 			};
 		});
 
-		it('returns a TSV string representing the results', () => {
-			expect(tsvReporter.results(mockPa11yResults)).toEqual(`
+		it('returns a TSV string representing the results', function() {
+			assert.strictEqual(tsvReporter.results(mockPa11yResults), `
 				"type"	"code"	"message"	"context"	"selector"
 				"mock-type-1"	"mock-code-1"	"mock-message-1"	"mock-context-1"	"mock-selector-1"
 				"mock-type-2"	"mock-code-2"	"mock-message-2"	"mock-context-2"	"mock-selector-2"
@@ -60,28 +65,28 @@ describe('lib/reporters/tsv', () => {
 
 	});
 
-	it('has an `error` method', () => {
-		expect(tsvReporter.error).toEqual(expect.any(Function));
+	it('has an `error` method', function() {
+		assert.isFunction(tsvReporter.error);
 	});
 
-	describe('.error(message)', () => {
+	describe('.error(message)', function() {
 
-		it('returns the message unchanged', () => {
-			expect(tsvReporter.error('mock message')).toEqual('mock message');
+		it('returns the message unchanged', function() {
+			assert.strictEqual(tsvReporter.error('mock message'), 'mock message');
 		});
 
 	});
 
-	it('does not have a `begin` method', () => {
-		expect(tsvReporter.begin).toBeUndefined();
+	it('does not have a `begin` method', function() {
+		assert.isUndefined(tsvReporter.begin);
 	});
 
-	it('does not have a `debug` method', () => {
-		expect(tsvReporter.debug).toBeUndefined();
+	it('does not have a `debug` method', function() {
+		assert.isUndefined(tsvReporter.debug);
 	});
 
-	it('does not have an `info` method', () => {
-		expect(tsvReporter.info).toBeUndefined();
+	it('does not have an `info` method', function() {
+		assert.isUndefined(tsvReporter.info);
 	});
 
 });

@@ -1,5 +1,7 @@
 'use strict';
 
+const sinon = require('sinon');
+
 module.exports = {
-	inspect: jest.fn()
+	inspect: sinon.stub()
 };

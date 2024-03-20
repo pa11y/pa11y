@@ -1,20 +1,23 @@
 'use strict';
 
+const sinon = require('sinon');
+
 module.exports = {
 	createMockElement,
 	createMockPrototypeElement
 };
 
-const initMockElementProperties = () => {
+
+const initMockElementProperties = function() {
 	return {
-		addEventListener: jest.fn(),
+		addEventListener: sinon.stub(),
 		childNodes: [],
-		contains: jest.fn().mockReturnValue(false),
-		dispatchEvent: jest.fn(),
-		getClientRects: jest.fn().mockReturnValue([]),
+		contains: sinon.stub().returns(false),
+		dispatchEvent: sinon.stub(),
+		getClientRects: sinon.stub().returns([]),
 		id: null,
 		innerHTML: 'mock-html',
-		isEqualNode: jest.fn().mockReturnValue(false),
+		isEqualNode: sinon.stub().returns(false),
 		nodeType: 1,
 		offsetHeight: 0,
 		offsetWidth: 0,

@@ -1,146 +1,156 @@
 'use strict';
 
+const assert = require('proclaim');
 const {createMockElement, createMockPrototypeElement} = require('../mocks/element.mock');
-const puppeteer = require('puppeteer');
-const runAction = require('../../../lib/action');
+const sinon = require('sinon');
 
-jest.mock('puppeteer', () => require('../mocks/puppeteer.mock'));
-
-describe('lib/action', () => {
+describe('lib/action', function() {
 	let mockEvent;
 	let originalEvent;
-	let mockElement;
-	let originalDocument;
+	let puppeteer;
+	let runAction;
 
-	beforeEach(() => {
+	beforeEach(function() {
 		mockEvent = {event: true};
 		originalEvent = global.Event;
-		global.Event = jest.fn().mockReturnValue(mockEvent);
-
-		mockElement = createMockElement();
-		originalDocument = global.document;
-		global.document = {
-			querySelector: jest.fn()
-		};
+		global.Event = sinon.stub().returns(mockEvent);
+		puppeteer = require('../mocks/puppeteer.mock');
+		runAction = require('../../../lib/action');
 	});
 
-	afterEach(() => {
+	afterEach(function() {
 		global.Event = originalEvent;
-		global.document = originalDocument;
 	});
 
-	it('is a function', () => {
-		expect(runAction).toEqual(expect.any(Function));
+	it('is a function', function() {
+		assert.isFunction(runAction);
 	});
 
-	it('has an `actions` property', () => {
-		expect(runAction.actions).toEqual(expect.any(Array));
+	it('has an `actions` property', function() {
+		assert.isArray(runAction.actions);
 	});
 
-	it('has an `isValidAction` method', () => {
-		expect(runAction.isValidAction).toEqual(expect.any(Function));
+	it('has an `isValidAction` method', function() {
+		assert.isFunction(runAction.isValidAction);
 	});
 
-	describe('runAction(browser, page, options, actionString)', () => {
+	describe('runAction(browser, page, options, actionString)', function() {
 		let options;
-		let isolatedRunAction;
+		let resolvedValue;
 
-		const runIsolatedAction = actionStr => isolatedRunAction(puppeteer.mockBrowser, puppeteer.mockPage, options, actionStr);
-
-		beforeEach(() => {
+		beforeEach(async function() {
 			options = {
 				log: {
-					debug: jest.fn()
+					debug: sinon.spy()
 				}
 			};
-
-			jest.isolateModules(() => {
-				isolatedRunAction = require('../../../lib/action');
-			});
-
-			isolatedRunAction.actions = [
+			runAction.actions = [
 				{
 					match: /^foo/,
-					run: jest.fn().mockResolvedValue()
+					run: sinon.stub().resolves()
 				},
 				{
 					match: /^bar/,
-					run: jest.fn().mockResolvedValue()
+					run: sinon.stub().resolves()
 				}
 			];
+			resolvedValue = await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'bar 123');
 		});
 
-		it('calls the run function that matches the given `actionString`', async () => {
-			const result = await runIsolatedAction('bar 123');
-
-			expect(isolatedRunAction.actions[0].run).not.toHaveBeenCalled();
-			expect(isolatedRunAction.actions[1].run).toHaveBeenCalledTimes(1);
-			expect(isolatedRunAction.actions[1].run).toHaveBeenCalledWith(puppeteer.mockBrowser, puppeteer.mockPage, options, expect.any(Array));
-
-			const match = isolatedRunAction.actions[1].run.mock.calls[0][3];
-			expect(match.length).toEqual(1);
-			expect(match[0]).toEqual('bar');
-
-			expect(result).toBeUndefined();
+		it('calls the run function that matches the given `actionString`', function() {
+			assert.notCalled(runAction.actions[0].run);
+			assert.calledOnce(runAction.actions[1].run);
+			assert.calledWith(runAction.actions[1].run, puppeteer.mockBrowser, puppeteer.mockPage, options);
+			assert.deepEqual(runAction.actions[1].run.firstCall.args[3], [
+				'bar'
+			]);
 		});
 
-		describe('when `actionString` does not match an allowed action', () => {
+		it('resolves with nothing', function() {
+			assert.isUndefined(resolvedValue);
+		});
 
-			it('rejects with an error', async () => {
-				await expect(runIsolatedAction('baz 123')).rejects.toThrowError('Failed action: "baz 123" cannot be resolved');
+		describe('when `actionString` does not match an allowed action', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				runAction.actions[1].run.resetHistory();
+				try {
+					await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'baz 123');
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with an error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'Failed action: "baz 123" cannot be resolved');
 			});
 
 		});
 
-		describe('when the action runner rejects', () => {
+		describe('when the action runner rejects', function() {
+			let actionRunnerError;
+			let rejectedError;
 
-			it('rejects with the action runner error', async () => {
-				const actionRunnerError = new Error('action-runner-error');
-				isolatedRunAction.actions[1].run.mockRejectedValueOnce(actionRunnerError);
+			beforeEach(async function() {
+				actionRunnerError = new Error('action-runner-error');
+				runAction.actions[1].run.rejects(actionRunnerError);
+				try {
+					await runAction(puppeteer.mockBrowser, puppeteer.mockPage, options, 'bar 123');
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
 
-				await expect(runIsolatedAction('bar 123')).rejects.toThrowError(actionRunnerError);
+			it('rejects with the action runner error', function() {
+				assert.strictEqual(rejectedError, actionRunnerError);
 			});
 
 		});
 
 	});
 
-	describe('.isValidAction(actionString)', () => {
-		let isolatedRunAction;
-		beforeEach(() => {
-			jest.isolateModules(() => {
-				isolatedRunAction = require('../../../lib/action');
-			});
+	describe('.isValidAction(actionString)', function() {
 
-			isolatedRunAction.actions = [
+		beforeEach(function() {
+			runAction.actions = [
 				{
 					match: /foo/i
 				}
 			];
 		});
 
-		it('returns `true` when the actionString matches one of the allowed actions', () => {
-			expect(isolatedRunAction.isValidAction('hello foo!')).toEqual(true);
+		it('returns `true` when the actionString matches one of the allowed actions', function() {
+			assert.isTrue(runAction.isValidAction('hello foo!'));
 		});
 
-		it('returns `false` when the actionString does not match any of the allowed actions', () => {
-			expect(isolatedRunAction.isValidAction('hello bar!')).toEqual(false);
+		it('returns `false` when the actionString does not match any of the allowed actions', function() {
+			assert.isFalse(runAction.isValidAction('hello bar!'));
 		});
 
 	});
 
-	describe('navigate-url action', () => {
-		let navigateUrlAction;
+	describe('navigate-url action', function() {
+		let action;
 
-		beforeEach(() => {
-			navigateUrlAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'navigate-url';
 			});
 		});
 
-		describe('.match', () => {
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('navigate to http://pa11y.org'.match(navigateUrlAction.match))).toEqual([
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'navigate-url');
+		});
+
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('navigate to http://pa11y.org'.match(action.match), [
 					'navigate to http://pa11y.org',
 					undefined,
 					'http://pa11y.org'
@@ -148,71 +158,82 @@ describe('lib/action', () => {
 			});
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let navigateUrlMatches;
-			let navigateUrlResolvedValue;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				global.document.querySelector.mockReturnValue(mockElement);
-				navigateUrlMatches = 'navigate to http://pa11y.org'.match(navigateUrlAction.match);
-				navigateUrlResolvedValue = await navigateUrlAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, navigateUrlMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'navigate to http://pa11y.org'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('clicks the specified element on the page', () => {
-				expect(puppeteer.mockPage.goto).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.goto).toHaveBeenCalledWith(navigateUrlMatches[2]);
+			it('clicks the specified element on the page', function() {
+				assert.calledOnce(puppeteer.mockPage.goto);
+				assert.calledWithExactly(puppeteer.mockPage.goto, matches[2]);
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(navigateUrlResolvedValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the click fails', () => {
+			describe('when the click fails', function() {
 				let navigateError;
-				let navigateRejectedError;
+				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					navigateError = new Error('navigate to error');
-					puppeteer.mockPage.goto.mockRejectedValueOnce(navigateError);
+					puppeteer.mockPage.goto.rejects(navigateError);
 					try {
-						await navigateUrlAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, navigateUrlMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
-						navigateRejectedError = error;
+						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(navigateRejectedError).not.toEqual(navigateError);
-					expect(navigateRejectedError).toEqual(expect.any(Error));
-					expect(navigateRejectedError.message).toEqual('Failed action: Could not navigate to "http://pa11y.org"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, navigateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: Could not navigate to "http://pa11y.org"');
 				});
 			});
 		});
 	});
 
-	describe('click-element action', () => {
-		let clickElementAction;
+	describe('click-element action', function() {
+		let action;
 
-		beforeEach(() => {
-			clickElementAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'click-element';
 			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'click-element');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('click .foo'.match(clickElementAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('click .foo'.match(action.match), [
 					'click .foo',
 					undefined,
 					'.foo'
 				]);
-				expect(Array.from('click element .foo'.match(clickElementAction.match))).toEqual([
+				assert.deepEqual('click element .foo'.match(action.match), [
 					'click element .foo',
 					' element',
 					'.foo'
 				]);
-				expect(Array.from('click element .foo .bar .baz'.match(clickElementAction.match))).toEqual([
+				assert.deepEqual('click element .foo .bar .baz'.match(action.match), [
 					'click element .foo .bar .baz',
 					' element',
 					'.foo .bar .baz'
@@ -221,43 +242,46 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let clickElementMatches;
-			let clickElementResolvedValue;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				global.document.querySelector.mockReturnValue(mockElement);
-				clickElementMatches = 'click element foo'.match(clickElementAction.match);
-				clickElementResolvedValue = await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'click element foo'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('clicks the specified element on the page', () => {
-				expect(puppeteer.mockPage.click).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.click).toHaveBeenCalledWith(clickElementMatches[2]);
+			it('clicks the specified element on the page', function() {
+				assert.calledOnce(puppeteer.mockPage.click);
+				assert.calledWithExactly(puppeteer.mockPage.click, matches[2]);
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(clickElementResolvedValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the click fails', () => {
+			describe('when the click fails', function() {
 				let clickError;
-				let clickElementRejectedError;
+				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					clickError = new Error('click error');
-					puppeteer.mockPage.click.mockRejectedValueOnce(clickError);
+					puppeteer.mockPage.click.rejects(clickError);
 					try {
-						await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
-						clickElementRejectedError = error;
+						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(clickElementRejectedError).not.toEqual(clickError);
-					expect(clickElementRejectedError).toEqual(expect.any(Error));
-					expect(clickElementRejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, clickError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 				});
 
 			});
@@ -266,37 +290,45 @@ describe('lib/action', () => {
 
 	});
 
-	describe('set-field-value action', () => {
-		let setFieldAction;
+	describe('set-field-value action', function() {
+		let action;
 
-		beforeEach(() => {
-			setFieldAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'set-field-value';
 			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'set-field-value');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('set .foo to bar'.match(setFieldAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('set .foo to bar'.match(action.match), [
 					'set .foo to bar',
 					undefined,
 					'.foo',
 					'bar'
 				]);
-				expect(Array.from('set field .foo to bar'.match(setFieldAction.match))).toEqual([
+				assert.deepEqual('set field .foo to bar'.match(action.match), [
 					'set field .foo to bar',
 					' field',
 					'.foo',
 					'bar'
 				]);
-				expect(Array.from('set field .foo .bar .baz to hello world'.match(setFieldAction.match))).toEqual([
+				assert.deepEqual('set field .foo .bar .baz to hello world'.match(action.match), [
 					'set field .foo .bar .baz to hello world',
 					' field',
 					'.foo .bar .baz',
 					'hello world'
 				]);
-				expect(Array.from('set field .foo to hello to the world'.match(setFieldAction.match))).toEqual([
+				assert.deepEqual('set field .foo to hello to the world'.match(action.match), [
 					'set field .foo to hello to the world',
 					' field',
 					'.foo',
@@ -306,126 +338,141 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let setFieldMatches;
-			let setFieldResolvedValue;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				global.document.querySelector.mockReturnValue(mockElement);
-				setFieldMatches = 'set field foo to bar'.match(setFieldAction.match);
-				await setFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, setFieldMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'set field foo to bar'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('evaluates some JavaScript in the context of the page', () => {
-				expect(puppeteer.mockPage.evaluate).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][1]).toEqual(setFieldMatches[2]);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][2]).toEqual(setFieldMatches[3]);
+			it('evaluates some JavaScript in the context of the page', function() {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[3]);
 			});
 
-			describe('evaluated JavaScript', () => {
-				beforeEach(async () => {
-					setFieldResolvedValue = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+			describe('evaluated JavaScript', function() {
+				let mockElement;
+				let originalDocument;
+
+				beforeEach(async function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 				});
 
-				it('calls `document.querySelector` with the passed in selector', () => {
-					expect(global.document.querySelector).toHaveBeenCalledTimes(1);
-					expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+				afterEach(function() {
+					global.document = originalDocument;
 				});
 
-				it('sets the element `value` property to the passed in value', () => {
-					expect(mockElement.value).toEqual('mock-value');
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 				});
 
-				it('triggers an input event on the element', () => {
-					expect(Event).toHaveBeenCalledTimes(1);
-					expect(Event).toHaveBeenCalledWith('input', {
+				it('sets the element `value` property to the passed in value', function() {
+					assert.strictEqual(mockElement.value, 'mock-value');
+				});
+
+				it('triggers an input event on the element', function() {
+					assert.calledOnce(Event);
+					assert.calledWithExactly(Event, 'input', {
 						bubbles: true
 					});
-					expect(mockElement.dispatchEvent).toHaveBeenCalledTimes(1);
-					expect(mockElement.dispatchEvent).toHaveBeenCalledWith(mockEvent);
+					assert.calledOnce(mockElement.dispatchEvent);
+					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 				});
 
-				it('resolves with `undefined`', () => {
-					expect(setFieldResolvedValue).toBeUndefined();
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
 				});
 
-				describe('with an element created from a prototype', () => {
-					beforeEach(async () => {
+				describe('with an element created from a prototype', function() {
+					beforeEach(async function() {
 						const mockPrototypeElement = createMockPrototypeElement();
-						global.document.querySelector.mockReturnValue(mockPrototypeElement);
-						setFieldResolvedValue = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+						global.document.querySelector.returns(mockPrototypeElement);
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 					});
 
-					afterEach(() => {
+					afterEach(function() {
 						global.document = originalDocument;
 					});
 
-					it('calls `document.querySelector` with the passed in selector', () => {
-						expect(global.document.querySelector).toHaveBeenCalledTimes(2);
-						expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+					it('calls `document.querySelector` with the passed in selector', function() {
+						assert.calledTwice(global.document.querySelector);
+						assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 					});
 
-					it('sets the element `value` property to the passed in value', () => {
-						expect(mockElement.value).toEqual('mock-value');
+					it('sets the element `value` property to the passed in value', function() {
+						assert.strictEqual(mockElement.value, 'mock-value');
 					});
 
-					it('triggers an input event on the element', () => {
-						expect(Event).toHaveBeenCalledTimes(2);
-						expect(Event).toHaveBeenCalledWith('input', {
+					it('triggers an input event on the element', function() {
+						assert.calledTwice(Event);
+						assert.calledWithExactly(Event, 'input', {
 							bubbles: true
 						});
-						expect(mockElement.dispatchEvent).toHaveBeenCalledTimes(1);
-						expect(mockElement.dispatchEvent).toHaveBeenCalledWith(mockEvent);
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 					});
 
-					it('resolves with `undefined`', () => {
-						expect(setFieldResolvedValue).toBeUndefined();
+					it('resolves with `undefined`', function() {
+						assert.isUndefined(resolvedValue);
 					});
 				});
 
-				describe('when an element with the given selector cannot be found', () => {
+				describe('when an element with the given selector cannot be found', function() {
 					let rejectedError;
 
-					beforeEach(async () => {
-						global.document.querySelector.mockReturnValue(null);
+					beforeEach(async function() {
+						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 						} catch (error) {
 							rejectedError = error;
 						}
 					});
 
-					it('rejects with an error', () => {
-						expect(rejectedError).toEqual(expect.any(Error));
+					it('rejects with an error', function() {
+						assert.instanceOf(rejectedError, Error);
 					});
 
 				});
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(setFieldResolvedValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the evaluate fails', () => {
+			describe('when the evaluate fails', function() {
 				let evaluateError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.mockRejectedValueOnce(evaluateError);
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await setFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, setFieldMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(rejectedError).not.toEqual(evaluateError);
-					expect(rejectedError).toEqual(expect.any(Error));
-					expect(rejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 				});
 
 			});
@@ -435,29 +482,37 @@ describe('lib/action', () => {
 	});
 
 
-	describe('clear-field-value action', () => {
-		let clearFieldAction;
+	describe('clear-field-value action', function() {
+		let action;
 
-		beforeEach(() => {
-			clearFieldAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'clear-field-value';
 			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'clear-field-value');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('clear .foo'.match(clearFieldAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('clear .foo'.match(action.match), [
 					'clear .foo',
 					undefined,
 					'.foo'
 				]);
-				expect(Array.from('clear field .foo'.match(clearFieldAction.match))).toEqual([
+				assert.deepEqual('clear field .foo'.match(action.match), [
 					'clear field .foo',
 					' field',
 					'.foo'
 				]);
-				expect(Array.from('clear field .foo .bar .baz'.match(clearFieldAction.match))).toEqual([
+				assert.deepEqual('clear field .foo .bar .baz'.match(action.match), [
 					'clear field .foo .bar .baz',
 					' field',
 					'.foo .bar .baz'
@@ -466,127 +521,140 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let clearFieldActionMatches;
-			let clearFieldActionResult;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				global.document.querySelector.mockReturnValue(mockElement);
-				clearFieldActionMatches = 'clear field foo'.match(clearFieldAction.match);
-				await clearFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clearFieldActionMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'clear field foo'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('evaluates some JavaScript in the context of the page', () => {
-				expect(puppeteer.mockPage.evaluate).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][1]).toEqual(clearFieldActionMatches[2]);
+			it('evaluates some JavaScript in the context of the page', function() {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
 			});
 
-			describe('evaluated JavaScript', () => {
-				let clearFieldResult;
+			describe('evaluated JavaScript', function() {
+				let mockElement;
+				let originalDocument;
 
-				beforeEach(async () => {
-					clearFieldResult = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+				beforeEach(async function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 				});
 
-				it('calls `document.querySelector` with the passed in selector', () => {
-					expect(global.document.querySelector).toHaveBeenCalledTimes(1);
-					expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+				afterEach(function() {
+					global.document = originalDocument;
 				});
 
-				it('sets the element `value` property to empty', () => {
-					expect(mockElement.value).toEqual('');
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 				});
 
-				it('triggers a change event on the element', () => {
-					expect(Event).toHaveBeenCalledTimes(1);
-					expect(Event).toHaveBeenCalledWith('input', {
+				it('sets the element `value` property to empty', function() {
+					assert.strictEqual(mockElement.value, '');
+				});
+
+				it('triggers a change event on the element', function() {
+					assert.calledOnce(Event);
+					assert.calledWithExactly(Event, 'input', {
 						bubbles: true
 					});
-					expect(mockElement.dispatchEvent).toHaveBeenCalledTimes(1);
-					expect(mockElement.dispatchEvent).toHaveBeenCalledWith(mockEvent);
+					assert.calledOnce(mockElement.dispatchEvent);
+					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 				});
 
-				it('resolves with `undefined`', () => {
-					expect(clearFieldResult).toBeUndefined();
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
 				});
 
-				describe('with an element created from a prototype', () => {
-					beforeEach(async () => {
+				describe('with an element created from a prototype', function() {
+					beforeEach(async function() {
 						const mockPrototypeElement = createMockPrototypeElement();
-						global.document.querySelector.mockReturnValue(mockPrototypeElement);
-						clearFieldResult = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+						global.document.querySelector.returns(mockPrototypeElement);
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 					});
 
-					afterEach(() => {
+					afterEach(function() {
 						global.document = originalDocument;
 					});
 
-					it('calls `document.querySelector` with the passed in selector', () => {
-						expect(global.document.querySelector).toHaveBeenCalledTimes(2);
-						expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+					it('calls `document.querySelector` with the passed in selector', function() {
+						assert.calledTwice(global.document.querySelector);
+						assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 					});
 
-					it('clears the element `value` property to the passed in value', () => {
-						expect(mockElement.value).toEqual('');
+					it('clears the element `value` property to the passed in value', function() {
+						assert.strictEqual(mockElement.value, '');
 					});
 
-					it('triggers an input event on the element', () => {
-						expect(Event).toHaveBeenCalledTimes(2);
-						expect(Event).toHaveBeenCalledWith('input', {
+					it('triggers an input event on the element', function() {
+						assert.calledTwice(Event);
+						assert.calledWithExactly(Event, 'input', {
 							bubbles: true
 						});
-						expect(mockElement.dispatchEvent).toHaveBeenCalledTimes(1);
-						expect(mockElement.dispatchEvent).toHaveBeenCalledWith(mockEvent);
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 					});
 
-					it('resolves with `undefined`', () => {
-						expect(clearFieldResult).toBeUndefined();
+					it('resolves with `undefined`', function() {
+						assert.isUndefined(resolvedValue);
 					});
 				});
 
-				describe('when an element with the given selector cannot be found', () => {
+				describe('when an element with the given selector cannot be found', function() {
 					let rejectedError;
 
-					beforeEach(async () => {
-						global.document.querySelector.mockReturnValue(null);
+					beforeEach(async function() {
+						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-value');
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
 						} catch (error) {
 							rejectedError = error;
 						}
 					});
 
-					it('rejects with an error', () => {
-						expect(rejectedError).toEqual(expect.any(Error));
+					it('rejects with an error', function() {
+						assert.instanceOf(rejectedError, Error);
 					});
 
 				});
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(clearFieldActionResult).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the evaluate fails', () => {
+			describe('when the evaluate fails', function() {
 				let evaluateError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.mockRejectedValueOnce(evaluateError);
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await clearFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clearFieldActionMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(rejectedError).not.toEqual(evaluateError);
-					expect(rejectedError).toEqual(expect.any(Error));
-					expect(rejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 				});
 
 			});
@@ -594,31 +662,39 @@ describe('lib/action', () => {
 		});
 	});
 
-	describe('check-field action', () => {
-		let checkFieldAction;
+	describe('check-field action', function() {
+		let action;
 
-		beforeEach(() => {
-			checkFieldAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'check-field';
 			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'check-field');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('check .foo'.match(checkFieldAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('check .foo'.match(action.match), [
 					'check .foo',
 					'check',
 					undefined,
 					'.foo'
 				]);
-				expect(Array.from('check field .foo'.match(checkFieldAction.match))).toEqual([
+				assert.deepEqual('check field .foo'.match(action.match), [
 					'check field .foo',
 					'check',
 					' field',
 					'.foo'
 				]);
-				expect(Array.from('uncheck field .foo .bar .baz'.match(checkFieldAction.match))).toEqual([
+				assert.deepEqual('uncheck field .foo .bar .baz'.match(action.match), [
 					'uncheck field .foo .bar .baz',
 					'uncheck',
 					' field',
@@ -628,108 +704,121 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let checkFieldMatches;
-			let checkFieldActionResult;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				checkFieldMatches = 'check field foo'.match(checkFieldAction.match);
-				checkFieldActionResult = await checkFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, checkFieldMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'check field foo'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('evaluates some JavaScript in the context of the page', () => {
-				expect(puppeteer.mockPage.evaluate).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][1]).toEqual(checkFieldMatches[3]);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][2]).toEqual(true);
+			it('evaluates some JavaScript in the context of the page', function() {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[3]);
+				assert.isTrue(puppeteer.mockPage.evaluate.firstCall.args[2]);
 			});
 
-			describe('evaluated JavaScript', () => {
-				let checkFieldResult;
+			describe('evaluated JavaScript', function() {
+				let mockElement;
+				let originalDocument;
 
-				beforeEach(async () => {
-					global.document.querySelector.mockReturnValue(mockElement);
-					checkFieldResult = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-checked');
+				beforeEach(async function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-checked');
 				});
 
-				it('calls `document.querySelector` with the passed in selector', () => {
-					expect(global.document.querySelector).toHaveBeenCalledTimes(1);
-					expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+				afterEach(function() {
+					global.document = originalDocument;
 				});
 
-				it('sets the element `checked` property to the passed in checked value', () => {
-					expect(mockElement.checked).toEqual('mock-checked');
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 				});
 
-				it('triggers a change event on the element', () => {
-					expect(Event).toHaveBeenCalledTimes(1);
-					expect(Event).toHaveBeenCalledWith('change', {
+				it('sets the element `checked` property to the passed in checked value', function() {
+					assert.strictEqual(mockElement.checked, 'mock-checked');
+				});
+
+				it('triggers a change event on the element', function() {
+					assert.calledOnce(Event);
+					assert.calledWithExactly(Event, 'change', {
 						bubbles: true
 					});
-					expect(mockElement.dispatchEvent).toHaveBeenCalledTimes(1);
-					expect(mockElement.dispatchEvent).toHaveBeenCalledWith(mockEvent);
+					assert.calledOnce(mockElement.dispatchEvent);
+					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 				});
 
-				it('resolves with `undefined`', () => {
-					expect(checkFieldResult).toBeUndefined();
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
 				});
 
-				describe('when an element with the given selector cannot be found', () => {
+				describe('when an element with the given selector cannot be found', function() {
 					let rejectedError;
 
-					beforeEach(async () => {
-						global.document.querySelector.mockReturnValue(null);
+					beforeEach(async function() {
+						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-checked');
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-checked');
 						} catch (error) {
 							rejectedError = error;
 						}
 					});
 
-					it('rejects with an error', () => {
-						expect(rejectedError).toEqual(expect.any(Error));
+					it('rejects with an error', function() {
+						assert.instanceOf(rejectedError, Error);
 					});
 
 				});
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(checkFieldActionResult).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when `matches` indicates that the field should be unchecked', () => {
-				beforeEach(async () => {
-					puppeteer.mockPage.evaluate.mockReset();
-					checkFieldMatches = 'uncheck field foo'.match(checkFieldAction.match);
-					await checkFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, checkFieldMatches);
+			describe('when `matches` indicates that the field should be unchecked', function() {
+
+				beforeEach(async function() {
+					puppeteer.mockPage.evaluate.resetHistory();
+					matches = 'uncheck field foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes a `false` negation parameter into the evaluate', () => {
-					expect(puppeteer.mockPage.evaluate).toHaveBeenCalledTimes(1);
-					expect(puppeteer.mockPage.evaluate.mock.calls[0][2]).toEqual(false);
+				it('passes a `false` negation parameter into the evaluate', function() {
+					assert.isFalse(puppeteer.mockPage.evaluate.firstCall.args[2]);
 				});
 
 			});
 
-			describe('when the evaluate fails', () => {
+			describe('when the evaluate fails', function() {
 				let evaluateError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.mockRejectedValueOnce(evaluateError);
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await checkFieldAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, checkFieldMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(rejectedError).not.toEqual(evaluateError);
-					expect(rejectedError).toEqual(expect.any(Error));
-					expect(rejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 				});
 
 			});
@@ -738,31 +827,39 @@ describe('lib/action', () => {
 
 	});
 
-	describe('screen-capture action', () => {
-		let screenCaptureAction;
+	describe('screen-capture action', function() {
+		let action;
 
-		beforeEach(() => {
-			screenCaptureAction = runAction.actions.find(foundAction => {
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
 				return foundAction.name === 'screen-capture';
 			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'screen-capture');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('screen capture foo.png'.match(screenCaptureAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('screen capture foo.png'.match(action.match), [
 					'screen capture foo.png',
 					'screen capture',
 					undefined,
 					'foo.png'
 				]);
-				expect(Array.from('screen-capture foo.png'.match(screenCaptureAction.match))).toEqual([
+				assert.deepEqual('screen-capture foo.png'.match(action.match), [
 					'screen-capture foo.png',
 					'screen-capture',
 					undefined,
 					'foo.png'
 				]);
-				expect(Array.from('capture screen to foo.png'.match(screenCaptureAction.match))).toEqual([
+				assert.deepEqual('capture screen to foo.png'.match(action.match), [
 					'capture screen to foo.png',
 					'capture screen',
 					' to',
@@ -772,43 +869,47 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let screenCaptureMatches;
-			let screenCaptureResult;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				screenCaptureMatches = 'screen capture foo.png'.match(screenCaptureAction.match);
-				screenCaptureResult = await screenCaptureAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, screenCaptureMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'screen capture foo.png'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('captures the full screen', () => {
-				expect(puppeteer.mockPage.screenshot).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.screenshot).toHaveBeenCalledWith({
-					path: screenCaptureMatches[3],
+			it('captures the full screen', function() {
+				assert.calledOnce(puppeteer.mockPage.screenshot);
+				assert.calledWith(puppeteer.mockPage.screenshot, {
+					path: matches[3],
 					fullPage: true
 				});
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(screenCaptureResult).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the screen capture fails', () => {
+			describe('when the screen capture fails', function() {
 				let screenCaptureError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					screenCaptureError = new Error('screen capture error');
-					puppeteer.mockPage.screenshot.mockRejectedValueOnce(screenCaptureError);
+					puppeteer.mockPage.screenshot.rejects(screenCaptureError);
 					try {
-						await screenCaptureAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, screenCaptureMatches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
 				});
 
-				it('rejects with the error', () => {
-					expect(rejectedError).toEqual(screenCaptureError);
+				it('rejects with the error', function() {
+					assert.strictEqual(rejectedError, screenCaptureError);
 				});
 
 			});
@@ -817,256 +918,266 @@ describe('lib/action', () => {
 
 	});
 
-	describe('wait-for-url action', () => {
+	describe('wait-for-url action', function() {
 		let action;
 
-		beforeEach(() => {
-			action = runAction.actions.find(foundAction => foundAction.name === 'wait-for-url');
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'wait-for-url';
+			});
 		});
 
-		it('has a name property', () => {
-			expect(action.name).toEqual('wait-for-url');
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'wait-for-url');
 		});
 
-		it('has a match property', () => {
-			expect(action.match).toEqual(expect.any(RegExp));
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
 		});
 
-		describe('.match', () => {
+		describe('.match', function() {
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('wait for fragment #foo'.match(action.match))).toEqual([
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('wait for fragment #foo'.match(action.match), [
 					'wait for fragment #foo',
 					'fragment',
 					undefined,
 					undefined,
 					'#foo'
 				]);
-				expect(Array.from('wait for fragment to be #foo'.match(action.match))).toEqual([
+				assert.deepEqual('wait for fragment to be #foo'.match(action.match), [
 					'wait for fragment to be #foo',
 					'fragment',
 					' to be',
 					undefined,
 					'#foo'
 				]);
-				expect(Array.from('wait for hash to be #foo'.match(action.match))).toEqual([
+				assert.deepEqual('wait for hash to be #foo'.match(action.match), [
 					'wait for hash to be #foo',
 					'hash',
 					' to be',
 					undefined,
 					'#foo'
 				]);
-				expect(Array.from('wait for path to be /foo'.match(action.match))).toEqual([
+				assert.deepEqual('wait for path to be /foo'.match(action.match), [
 					'wait for path to be /foo',
 					'path',
 					' to be',
 					undefined,
 					'/foo'
 				]);
-				expect(Array.from('wait for host to be example.com'.match(action.match))).toEqual([
+				assert.deepEqual('wait for host to be example.com'.match(action.match), [
 					'wait for host to be example.com',
 					'host',
 					' to be',
 					undefined,
 					'example.com'
 				]);
-				expect(Array.from('wait for url to be https://example.com/'.match(action.match))).toEqual([
+				assert.deepEqual('wait for url to be https://example.com/'.match(action.match), [
 					'wait for url to be https://example.com/',
 					'url',
 					' to be',
 					undefined,
 					'https://example.com/'
 				]);
-				expect(Array.from('wait for fragment to not be #bar'.match(action.match))).toEqual([
+				assert.deepEqual('wait for fragment to not be #bar'.match(action.match), [
 					'wait for fragment to not be #bar',
 					'fragment',
 					' to not be',
 					'not ',
 					'#bar'
 				]);
-				expect(Array.from('wait for hash to not be #bar'.match(action.match))).toEqual([
+				assert.deepEqual('wait for hash to not be #bar'.match(action.match), [
 					'wait for hash to not be #bar',
 					'hash',
 					' to not be',
 					'not ',
 					'#bar'
 				]);
-				expect(Array.from('wait for path to not be /sso/login'.match(action.match))).toEqual([
+				assert.deepEqual('wait for path to not be /sso/login'.match(action.match), [
 					'wait for path to not be /sso/login',
 					'path',
 					' to not be',
 					'not ',
 					'/sso/login'
 				]);
-				expect(Array.from('wait for path to not be /oam/server/auth_cred_submit'.match(action.match))).toEqual([
-					'wait for path to not be /oam/server/auth_cred_submit',
-					'path',
+				assert.deepEqual('wait for url to not be https://example.com/login'.match(action.match), [
+					'wait for url to not be https://example.com/login',
+					'url',
 					' to not be',
 					'not ',
-					'/oam/server/auth_cred_submit'
+					'https://example.com/login'
 				]);
-				expect(Array.from('wait for host to not be example.com'.match(action.match))).toEqual([
+				assert.deepEqual('wait for host to not be example.com'.match(action.match), [
 					'wait for host to not be example.com',
 					'host',
 					' to not be',
 					'not ',
 					'example.com'
 				]);
-				expect('wait for path not to be /account/signin/'.match(action.match)).toEqual(null);
+				assert.notDeepEqual('wait for path not to be /account/signin/'.match(action.match), [
+					'wait for path not to be /account/signin/',
+					'path',
+					undefined,
+					undefined,
+					'not to be /account/signin/'
+				]);
 			});
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
-			let waitForUrlMatches;
-			let waitForUrlValue;
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
 
-			beforeEach(async () => {
-				waitForUrlMatches = 'wait for path to be foo'.match(action.match);
-				waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			beforeEach(async function() {
+				matches = 'wait for path to be foo'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('waits for a function to evaluate to `true`', () => {
-				expect(puppeteer.mockPage.waitForFunction).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][1]).toEqual({});
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual('pathname');
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][3]).toEqual(waitForUrlMatches[4]);
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][4]).toEqual(false);
+			it('waits for a function to evaluate to `true`', function() {
+				assert.calledOnce(puppeteer.mockPage.waitForFunction);
+				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {});
+				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'pathname');
+				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], matches[4]);
+				assert.isFalse(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
 			});
 
-			describe('evaluated JavaScript', () => {
+			describe('evaluated JavaScript', function() {
 				let originalWindow;
 				let returnValue;
 
-				beforeEach(() => {
+				beforeEach(function() {
 					originalWindow = global.window;
 					global.window = {
 						location: {
 							'mock-property': 'value'
 						}
 					};
-					global.document.querySelector.mockReturnValue(mockElement);
-					returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-property', 'value', false);
+					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', false);
 				});
 
-				afterEach(() => {
+				afterEach(function() {
 					global.window = originalWindow;
 				});
 
-				it('returns `true`', () => {
-					expect(returnValue).toEqual(true);
+				it('returns `true`', function() {
+					assert.isTrue(returnValue);
 				});
 
-				describe('when the location property does not match the expected value', () => {
+				describe('when the location property does not match the expected value', function() {
 
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-property', 'incorrect-value', false);
+					beforeEach(function() {
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', false);
 					});
 
-					it('returns `false`', () => {
-						expect(returnValue).toEqual(false);
-					});
-
-				});
-
-				describe('when the negated property is `true`', () => {
-
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-property', 'value', true);
-					});
-
-					it('returns `false`', () => {
-						expect(returnValue).toEqual(false);
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
 					});
 
 				});
 
-				describe('when the negated property is `true` and the location property does not match the expected value', () => {
+				describe('when the negated property is `true`', function() {
 
-					beforeEach(() => {
-						returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-property', 'incorrect-value', true);
+					beforeEach(function() {
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'value', true);
 					});
 
-					it('returns `true`', () => {
-						expect(returnValue).toEqual(true);
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
+					});
+
+				});
+
+				describe('when the negated property is `true` and the location property does not match the expected value', function() {
+
+					beforeEach(function() {
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-property', 'incorrect-value', true);
+					});
+
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
 					});
 
 				});
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(waitForUrlValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when `matches` indicates that the subject is "fragment"', () => {
+			describe('when `matches` indicates that the subject is "fragment"', function() {
 
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					waitForUrlMatches = 'wait for fragment to be foo'.match(action.match);
-					waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for fragment to be foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction).toHaveBeenCalledTimes(1);
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual('hash');
-				});
-
-			});
-
-			describe('when `matches` indicates that the subject is "hash"', () => {
-
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					waitForUrlMatches = 'wait for hash to be foo'.match(action.match);
-					waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
-				});
-
-				it('passes the expected property name into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual('hash');
+				it('passes the expected property name into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
 				});
 
 			});
 
-			describe('when `matches` indicates that the subject is "host"', () => {
+			describe('when `matches` indicates that the subject is "hash"', function() {
 
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					waitForUrlMatches = 'wait for host to be foo'.match(action.match);
-					waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for hash to be foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected property name into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual('host');
-				});
-
-			});
-
-			describe('when `matches` indicates that the subject is "url"', () => {
-
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					waitForUrlMatches = 'wait for url to be foo'.match(action.match);
-					waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
-				});
-
-				it('passes the expected property name into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual('href');
+				it('passes the expected property name into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'hash');
 				});
 
 			});
 
-			describe('when `matches` includes a negation like "to not be"', () => {
+			describe('when `matches` indicates that the subject is "host"', function() {
 
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					waitForUrlMatches = 'wait for path to not be foo'.match(action.match);
-					waitForUrlValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, waitForUrlMatches);
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for host to be foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes a `true` negation parameter into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][4]).toEqual(true);
+				it('passes the expected property name into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'host');
+				});
+
+			});
+
+			describe('when `matches` indicates that the subject is "url"', function() {
+
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for url to be foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				});
+
+				it('passes the expected property name into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], 'href');
+				});
+
+			});
+
+			describe('when `matches` includes a negation like "to not be"', function() {
+
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for path to not be foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				});
+
+				it('passes a `true` negation parameter into the wait function', function() {
+					assert.isTrue(puppeteer.mockPage.waitForFunction.firstCall.args[4]);
 				});
 
 			});
@@ -1075,94 +1186,104 @@ describe('lib/action', () => {
 
 	});
 
-	describe('wait-for-element-state action', () => {
-		let waitForElementAction;
+	describe('wait-for-element-state action', function() {
+		let action;
 
-		beforeEach(() => {
-			waitForElementAction = runAction.actions.find(foundAction => foundAction.name === 'wait-for-element-state');
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'wait-for-element-state';
+			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'wait-for-element-state');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('wait for .foo to be added'.match(waitForElementAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('wait for .foo to be added'.match(action.match), [
 					'wait for .foo to be added',
 					undefined,
 					'.foo',
 					' to be',
 					'added'
 				]);
-				expect(Array.from('wait for element .foo to be added'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo to be added'.match(action.match), [
 					'wait for element .foo to be added',
 					' element',
 					'.foo',
 					' to be',
 					'added'
 				]);
-				expect(Array.from('wait for element .foo .bar to be added'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo .bar to be added'.match(action.match), [
 					'wait for element .foo .bar to be added',
 					' element',
 					'.foo .bar',
 					' to be',
 					'added'
 				]);
-				expect(Array.from('wait for .foo to be removed'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for .foo to be removed'.match(action.match), [
 					'wait for .foo to be removed',
 					undefined,
 					'.foo',
 					' to be',
 					'removed'
 				]);
-				expect(Array.from('wait for element .foo to be removed'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo to be removed'.match(action.match), [
 					'wait for element .foo to be removed',
 					' element',
 					'.foo',
 					' to be',
 					'removed'
 				]);
-				expect(Array.from('wait for element .foo .bar to be removed'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo .bar to be removed'.match(action.match), [
 					'wait for element .foo .bar to be removed',
 					' element',
 					'.foo .bar',
 					' to be',
 					'removed'
 				]);
-				expect(Array.from('wait for .foo to be visible'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for .foo to be visible'.match(action.match), [
 					'wait for .foo to be visible',
 					undefined,
 					'.foo',
 					' to be',
 					'visible'
 				]);
-				expect(Array.from('wait for element .foo to be visible'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo to be visible'.match(action.match), [
 					'wait for element .foo to be visible',
 					' element',
 					'.foo',
 					' to be',
 					'visible'
 				]);
-				expect(Array.from('wait for element .foo .bar to be visible'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo .bar to be visible'.match(action.match), [
 					'wait for element .foo .bar to be visible',
 					' element',
 					'.foo .bar',
 					' to be',
 					'visible'
 				]);
-				expect(Array.from('wait for .foo to be hidden'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for .foo to be hidden'.match(action.match), [
 					'wait for .foo to be hidden',
 					undefined,
 					'.foo',
 					' to be',
 					'hidden'
 				]);
-				expect(Array.from('wait for element .foo to be hidden'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo to be hidden'.match(action.match), [
 					'wait for element .foo to be hidden',
 					' element',
 					'.foo',
 					' to be',
 					'hidden'
 				]);
-				expect(Array.from('wait for element .foo .bar to be hidden'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo .bar to be hidden'.match(action.match), [
 					'wait for element .foo .bar to be hidden',
 					' element',
 					'.foo .bar',
@@ -1173,191 +1294,204 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', function() {
 			let matches;
 			let resolvedValue;
 
-			beforeEach(async () => {
-				matches = 'wait for element .foo to be added'.match(waitForElementAction.match);
-				resolvedValue = await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			beforeEach(async function() {
+				matches = 'wait for element .foo to be added'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('waits for a function to evaluate to `true`', () => {
-				expect(puppeteer.mockPage.waitForFunction).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][1]).toEqual({
+			it('waits for a function to evaluate to `true`', function() {
+				assert.calledOnce(puppeteer.mockPage.waitForFunction);
+				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {
 					polling: 200
 				});
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][2]).toEqual(matches[2]);
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][3]).toEqual(matches[4]);
+				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[2], matches[2]);
+				assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], matches[4]);
 			});
 
-			describe('evaluated JavaScript', () => {
-				let waitForReturnValue;
+			describe('evaluated JavaScript', function() {
+				let mockElement;
+				let originalDocument;
+				let returnValue;
 
-				beforeEach(() => {
-					global.document.querySelector.mockReturnValue(null);
-					waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'mock-state');
+				beforeEach(function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(null)
+					};
+					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'mock-state');
 				});
 
-				it('calls `document.querySelector` with the passed in selector', () => {
-					expect(global.document.querySelector).toHaveBeenCalledTimes(1);
-					expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+				afterEach(function() {
+					global.document = originalDocument;
 				});
 
-				it('returns `false`', () => {
-					expect(waitForReturnValue).toEqual(false);
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
 				});
 
-				describe('when the selector returns an element and the state is "added"', () => {
-
-					beforeEach(() => {
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'added');
-					});
-
-					it('returns `true`', () => {
-						expect(waitForReturnValue).toEqual(true);
-					});
-
+				it('returns `false`', function() {
+					assert.isFalse(returnValue);
 				});
 
-				describe('when the selector does not return an element and the state is "added"', () => {
+				describe('when the selector returns an element and the state is "added"', function() {
 
-					beforeEach(() => {
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'added');
+					beforeEach(function() {
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'added');
 					});
 
-					it('returns `false`', () => {
-						expect(waitForReturnValue).toEqual(false);
-					});
-
-				});
-
-				describe('when the selector does not return an element and the state is "removed"', () => {
-
-					beforeEach(() => {
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'removed');
-					});
-
-					it('returns `true`', () => {
-						expect(waitForReturnValue).toEqual(true);
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
 					});
 
 				});
 
-				describe('when the selector returns an element and the state is "removed"', () => {
+				describe('when the selector does not return an element and the state is "added"', function() {
 
-					beforeEach(() => {
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'removed');
+					beforeEach(function() {
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'added');
 					});
 
-					it('returns `false`', () => {
-						expect(waitForReturnValue).toEqual(false);
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
 					});
 
 				});
 
-				describe('when the selector returns a visible element and the state is "visible"', () => {
+				describe('when the selector does not return an element and the state is "removed"', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'removed');
+					});
+
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
+					});
+
+				});
+
+				describe('when the selector returns an element and the state is "removed"', function() {
+
+					beforeEach(function() {
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'removed');
+					});
+
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
+					});
+
+				});
+
+				describe('when the selector returns a visible element and the state is "visible"', function() {
+
+					beforeEach(function() {
 						mockElement.offsetWidth = 100;
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'visible');
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'visible');
 					});
 
-					it('returns `true`', () => {
-						expect(waitForReturnValue).toEqual(true);
-					});
-
-				});
-
-				describe('when the selector returns a hidden element and the state is "visible"', () => {
-
-					beforeEach(() => {
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'visible');
-					});
-
-					it('returns `false`', () => {
-						expect(waitForReturnValue).toEqual(false);
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
 					});
 
 				});
 
-				describe('when the selector returns a hidden element and the state is "hidden"', () => {
+				describe('when the selector returns a hidden element and the state is "visible"', function() {
 
-					beforeEach(() => {
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'hidden');
+					beforeEach(function() {
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'visible');
 					});
 
-					it('returns `true`', () => {
-						expect(waitForReturnValue).toEqual(true);
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
 					});
 
 				});
 
-				describe('when the selector returns a visible element and the state is "hidden"', () => {
+				describe('when the selector returns a hidden element and the state is "hidden"', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'hidden');
+					});
+
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
+					});
+
+				});
+
+				describe('when the selector returns a visible element and the state is "hidden"', function() {
+
+					beforeEach(function() {
 						mockElement.offsetWidth = 100;
-						global.document.querySelector.mockReturnValue(mockElement);
-						waitForReturnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]('mock-selector', 'hidden');
+						global.document.querySelector.returns(mockElement);
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]('mock-selector', 'hidden');
 					});
 
-					it('returns `false`', () => {
-						expect(waitForReturnValue).toEqual(false);
+					it('returns `false`', function() {
+						assert.isFalse(returnValue);
 					});
 
 				});
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(resolvedValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when `matches` indicates that the state is "removed"', () => {
+			describe('when `matches` indicates that the state is "removed"', function() {
 
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					matches = 'wait for element .foo to be removed'.match(waitForElementAction.match);
-					resolvedValue = await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for element .foo to be removed'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected state into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction).toHaveBeenCalledTimes(1);
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][3]).toEqual('removed');
-				});
-
-			});
-
-			describe('when `matches` indicates that the state is "visible"', () => {
-
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					matches = 'wait for element .foo to be visible'.match(waitForElementAction.match);
-					resolvedValue = await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
-				});
-
-				it('passes the expected state into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][3]).toEqual('visible');
+				it('passes the expected state into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'removed');
 				});
 
 			});
 
-			describe('when `matches` indicates that the state is "hidden"', () => {
+			describe('when `matches` indicates that the state is "visible"', function() {
 
-				beforeEach(async () => {
-					puppeteer.mockPage.waitForFunction.mockReset();
-					matches = 'wait for element .foo to be hidden'.match(waitForElementAction.match);
-					resolvedValue = await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for element .foo to be visible'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('passes the expected state into the wait function', () => {
-					expect(puppeteer.mockPage.waitForFunction.mock.calls[0][3]).toEqual('hidden');
+				it('passes the expected state into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'visible');
+				});
+
+			});
+
+			describe('when `matches` indicates that the state is "hidden"', function() {
+
+				beforeEach(async function() {
+					puppeteer.mockPage.waitForFunction.resetHistory();
+					matches = 'wait for element .foo to be hidden'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				});
+
+				it('passes the expected state into the wait function', function() {
+					assert.strictEqual(puppeteer.mockPage.waitForFunction.firstCall.args[3], 'hidden');
 				});
 
 			});
@@ -1366,29 +1500,39 @@ describe('lib/action', () => {
 
 	});
 
-	describe('wait-for-element-event action', () => {
-		let waitForElementAction;
+	describe('wait-for-element-event action', function() {
+		let action;
 
-		beforeEach(() => {
-			waitForElementAction = runAction.actions.find(foundAction => foundAction.name === 'wait-for-element-event');
+		beforeEach(function() {
+			action = runAction.actions.find(foundAction => {
+				return foundAction.name === 'wait-for-element-event';
+			});
 		});
 
-		describe('.match', () => {
+		it('has a name property', function() {
+			assert.strictEqual(action.name, 'wait-for-element-event');
+		});
 
-			it('matches all of the expected action strings', () => {
-				expect(Array.from('wait for element .foo to emit bar'.match(waitForElementAction.match))).toEqual([
+		it('has a match property', function() {
+			assert.instanceOf(action.match, RegExp);
+		});
+
+		describe('.match', function() {
+
+			it('matches all of the expected action strings', function() {
+				assert.deepEqual('wait for element .foo to emit bar'.match(action.match), [
 					'wait for element .foo to emit bar',
 					' element',
 					'.foo',
 					'bar'
 				]);
-				expect(Array.from('wait for element .foo .bar to emit baz-qux'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for element .foo .bar to emit baz-qux'.match(action.match), [
 					'wait for element .foo .bar to emit baz-qux',
 					' element',
 					'.foo .bar',
 					'baz-qux'
 				]);
-				expect(Array.from('wait for .foo to emit bar'.match(waitForElementAction.match))).toEqual([
+				assert.deepEqual('wait for .foo to emit bar'.match(action.match), [
 					'wait for .foo to emit bar',
 					undefined,
 					'.foo',
@@ -1398,129 +1542,144 @@ describe('lib/action', () => {
 
 		});
 
-		describe('.run(browser, page, options, matches)', () => {
+		it('has a `run` method', function() {
+			assert.isFunction(action.run);
+		});
+
+		describe('.run(browser, page, options, matches)', function() {
 			let matches;
 			let resolvedValue;
 
-			beforeEach(async () => {
-				global.document.querySelector.mockReturnValue(mockElement);
-				matches = 'wait for element foo to emit bar'.match(waitForElementAction.match);
-				resolvedValue = await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+			beforeEach(async function() {
+				matches = 'wait for element foo to emit bar'.match(action.match);
+				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 			});
 
-			it('evaluates some JavaScript in the context of the page', () => {
-				expect(puppeteer.mockPage.evaluate).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][1]).toEqual(matches[2]);
-				expect(puppeteer.mockPage.evaluate.mock.calls[0][2]).toEqual(matches[3]);
+			it('evaluates some JavaScript in the context of the page', function() {
+				assert.calledOnce(puppeteer.mockPage.evaluate);
+				assert.isFunction(puppeteer.mockPage.evaluate.firstCall.args[0]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[1], matches[2]);
+				assert.strictEqual(puppeteer.mockPage.evaluate.firstCall.args[2], matches[3]);
 			});
 
-			describe('evaluated JavaScript (evaluate)', () => {
-				beforeEach(async () => {
-					resolvedValue = await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-event-type');
+			describe('evaluated JavaScript (evaluate)', function() {
+				let mockElement;
+				let originalDocument;
+
+				beforeEach(async function() {
+					mockElement = createMockElement();
+					originalDocument = global.document;
+					global.document = {
+						querySelector: sinon.stub().returns(mockElement)
+					};
+					resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
 				});
 
-				it('calls `document.querySelector` with the passed in selector', () => {
-					expect(global.document.querySelector).toHaveBeenCalledTimes(1);
-					expect(global.document.querySelector).toHaveBeenCalledWith('mock-selector');
+				afterEach(function() {
+					global.document = originalDocument;
 				});
 
-				it('adds a one-time event handler to the element for the passed in event type', () => {
-					expect(mockElement.addEventListener).toHaveBeenCalledTimes(1);
-					expect(mockElement.addEventListener.mock.calls[0][0]).toEqual('mock-event-type');
-					expect(mockElement.addEventListener.mock.calls[0][1]).toEqual(expect.any(Function));
-					expect(mockElement.addEventListener.mock.calls[0][2]).toEqual({
+				it('calls `document.querySelector` with the passed in selector', function() {
+					assert.calledOnce(global.document.querySelector);
+					assert.calledWithExactly(global.document.querySelector, 'mock-selector');
+				});
+
+				it('adds a one-time event handler to the element for the passed in event type', function() {
+					assert.calledOnce(mockElement.addEventListener);
+					assert.strictEqual(mockElement.addEventListener.firstCall.args[0], 'mock-event-type');
+					assert.isFunction(mockElement.addEventListener.firstCall.args[1]);
+					assert.deepEqual(mockElement.addEventListener.firstCall.args[2], {
 						once: true
 					});
 				});
 
-				describe('event handler', () => {
+				describe('event handler', function() {
 					let originalWindow;
 
-					beforeEach(() => {
+					beforeEach(function() {
 						originalWindow = global.window;
 						global.window = {};
-						mockElement.addEventListener.mock.calls[0][1]();
+						mockElement.addEventListener.firstCall.args[1]();
 					});
 
-					afterEach(() => {
+					afterEach(function() {
 						global.window = originalWindow;
 					});
 
-					it('sets `window._pa11yWaitForElementEventFired` to `true`', () => {
+					it('sets `window._pa11yWaitForElementEventFired` to `true`', function() {
 						/* eslint-disable no-underscore-dangle */
-						expect(window._pa11yWaitForElementEventFired).toEqual(true);
+						assert.isTrue(window._pa11yWaitForElementEventFired);
 						/* eslint-enable no-underscore-dangle */
 					});
 
 				});
 
-				it('resolves with `undefined`', () => {
-					expect(resolvedValue).toBeUndefined();
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
 				});
 
-				describe('when an element with the given selector cannot be found', () => {
+				describe('when an element with the given selector cannot be found', function() {
 					let rejectedError;
 
-					beforeEach(async () => {
-						global.document.querySelector.mockReturnValue(null);
+					beforeEach(async function() {
+						global.document.querySelector.returns(null);
 						try {
-							await puppeteer.mockPage.evaluate.mock.calls[0][0]('mock-selector', 'mock-event-type');
+							await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-event-type');
 						} catch (error) {
 							rejectedError = error;
 						}
 					});
 
-					it('rejects with an error', () => {
-						expect(rejectedError).toEqual(expect.any(Error));
+					it('rejects with an error', function() {
+						assert.instanceOf(rejectedError, Error);
 					});
 
 				});
 
 			});
 
-			it('waits for a function to evaluate to `true`', () => {
-				expect(puppeteer.mockPage.waitForFunction).toHaveBeenCalledTimes(1);
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][0]).toEqual(expect.any(Function));
-				expect(puppeteer.mockPage.waitForFunction.mock.calls[0][1]).toEqual({
+			it('waits for a function to evaluate to `true`', function() {
+				assert.calledOnce(puppeteer.mockPage.waitForFunction);
+				assert.isFunction(puppeteer.mockPage.waitForFunction.firstCall.args[0]);
+				assert.deepEqual(puppeteer.mockPage.waitForFunction.firstCall.args[1], {
 					polling: 200
 				});
 			});
 
-			describe('evaluated JavaScript (wait for function)', () => {
+			describe('evaluated JavaScript (wait for function)', function() {
 				let originalWindow;
 				let returnValue;
 
-				beforeEach(() => {
+				beforeEach(function() {
 					originalWindow = global.window;
 					global.window = {};
-					returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]();
+					returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
 				});
 
-				afterEach(() => {
+				afterEach(function() {
 					global.window = originalWindow;
 				});
 
-				it('returns `false`', () => {
-					expect(returnValue).toEqual(false);
+				it('returns `false`', function() {
+					assert.isFalse(returnValue);
 				});
 
-				describe('when `window._pa11yWaitForElementEventFired` is `true`', () => {
+				describe('when `window._pa11yWaitForElementEventFired` is `true`', function() {
 
-					beforeEach(() => {
+					beforeEach(function() {
 						/* eslint-disable no-underscore-dangle */
 						global.window._pa11yWaitForElementEventFired = true;
 						/* eslint-enable no-underscore-dangle */
-						returnValue = puppeteer.mockPage.waitForFunction.mock.calls[0][0]();
+						returnValue = puppeteer.mockPage.waitForFunction.firstCall.args[0]();
 					});
 
-					it('returns `true`', () => {
-						expect(returnValue).toEqual(true);
+					it('returns `true`', function() {
+						assert.isTrue(returnValue);
 					});
 
-					it('deletes the `window._pa11yWaitForElementEventFired` variable', () => {
+					it('deletes the `window._pa11yWaitForElementEventFired` variable', function() {
 						/* eslint-disable no-underscore-dangle */
-						expect(global.window._pa11yWaitForElementEventFired).toBeUndefined();
+						assert.isUndefined(global.window._pa11yWaitForElementEventFired);
 						/* eslint-enable no-underscore-dangle */
 					});
 
@@ -1528,28 +1687,28 @@ describe('lib/action', () => {
 
 			});
 
-			it('resolves with `undefined`', () => {
-				expect(resolvedValue).toBeUndefined();
+			it('resolves with `undefined`', function() {
+				assert.isUndefined(resolvedValue);
 			});
 
-			describe('when the evaluate fails', () => {
+			describe('when the evaluate fails', function() {
 				let evaluateError;
 				let rejectedError;
 
-				beforeEach(async () => {
+				beforeEach(async function() {
 					evaluateError = new Error('evaluate error');
-					puppeteer.mockPage.evaluate.mockRejectedValueOnce(evaluateError);
+					puppeteer.mockPage.evaluate.rejects(evaluateError);
 					try {
-						await waitForElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 					} catch (error) {
 						rejectedError = error;
 					}
 				});
 
-				it('rejects with a new error', () => {
-					expect(rejectedError).not.toEqual(evaluateError);
-					expect(rejectedError).toEqual(expect.any(Error));
-					expect(rejectedError.message).toEqual('Failed action: no element matching selector "foo"');
+				it('rejects with a new error', function() {
+					assert.notStrictEqual(rejectedError, evaluateError);
+					assert.instanceOf(rejectedError, Error);
+					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 				});
 
 			});

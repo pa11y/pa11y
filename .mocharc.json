@@ -1,0 +1,6 @@
+{
+	"parallel": true,
+	"recursive": true,
+	"require": "test/unit/mocha-hooks.js",
+	"spec": "test/unit/**/*.test.js"
+}
