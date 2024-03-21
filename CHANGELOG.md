@@ -23,7 +23,7 @@ Many thanks to @aarongoldenthal for contributing these dependency upgrades to Pa
 
 ## 7.0.0 (2024-01-16)
 
-### Changes
+### Changes in `pa11y@7`
 
 * **Breaking**: Upgrade Node.js support: Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
 * **Breaking**: Upgrade dependency `puppeteer` to `20` from `9`: this may affect Pa11y's operating system support and the behaviour of Pa11y's browser automation
@@ -36,12 +36,12 @@ Many thanks to @aarongoldenthal for contributing these dependency upgrades to Pa
 * Update stale links in documentation (thanks @gavinr)
 * Update support policy
 
-### New contributors
+### New contributors in `pa11y@7`
 
 * @gavinr [made their first contribution](https://github.com/pa11y/pa11y/pull/657)
 * @danyalaytekin [made their first contribution](https://github.com/pa11y/pa11y/pull/678)
 
-### Full diff
+### Full diff for `pa11y@7`
 
 * [6.2.3...7.0.0](https://github.com/pa11y/pa11y/compare/6.2.3...7.0.0)
 
