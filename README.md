@@ -25,7 +25,7 @@ pa11y('https://example.com').then((results) => {
 
 ## Requirements
 
-Pa11y 8 requires [Node.js][node] 18 or 20 to run. An older version of Node.js can be used with [Pa11y 6 or below](#support-and-migration).
+Pa11y 8 requires [Node.js][node] 18 or 20. An older version of Node.js can be used with [Pa11y 6 or below](#support-and-migration).
 
 ### Linux and macOS
 
@@ -37,7 +37,7 @@ nvm install node
 nvm install-latest-npm
 ```
 
-Alternatively, you can also download pre-built packages from the [Node.js][node] website for your operating system.
+Alternatively, download a pre-built package from the [Node.js][node] website for your operating system.
 
 ### Windows
 
@@ -249,7 +249,7 @@ Pa11y resolves with a `results` object, containing details about the page, and a
 
 ### Transforming the results
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
+If you wish to transform these results with a command-line reporter, `require` it into your code. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
 
 ```js
 // Assuming you've already run tests, and the results
@@ -260,7 +260,7 @@ const html = await htmlReporter.results(results);
 
 ### `async`/`await`
 
-Pa11y uses promises,  so you can use `async` functions and the `await` keyword:
+Pa11y uses promises, so you can use `async` functions and the `await` keyword:
 
 ```js
 async function runPa11y() {
@@ -288,9 +288,7 @@ pa11y(url, (error, results) => {
 
 ### Validating actions
 
-Pa11y exposes a function which allows you to validate [action](#actions) strings before attempting to use them.
-
-This function accepts an action string and returns a boolean indicating whether it matches one of the actions that Pa11y supports:
+Pa11y's `isValidAction` function can be used to validate an [action](#actions) string ahead of its use:
 
 ```js
 pa11y.isValidAction('click element #submit');  // true
