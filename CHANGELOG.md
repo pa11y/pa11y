@@ -2,7 +2,7 @@
 
 ## 8.0.0 (2024-03-25)
 
-Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y, and also upgrades several other dependencies.
+Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y and updates several other dependencies.
 
 ### Changes in `pa11y@8`
 
