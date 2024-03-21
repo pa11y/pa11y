@@ -51,9 +51,9 @@ Install Pa11y globally with [npm][npm]:
 npm install -g pa11y
 ```
 
-This installs the `pa11y` command-line tool:
+```console
+$ pa11y --help
 
-```sh
 Usage: pa11y [options] <url>
 
   Options:
