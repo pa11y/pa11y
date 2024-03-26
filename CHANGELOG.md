@@ -1,8 +1,29 @@
 # Changelog
 
+## 8.0.0 (2024-03-25)
+
+Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y and updates several other dependencies.
+
+### Changes in `pa11y@8`
+
+* **Major dependency changes**
+  * Upgrade `puppeteer` to `22` from `20`
+    * This may affect Pa11y's operating system support and the behaviour of Pa11y's browser automation.
+  * Upgrade `commander` to `12` from `11`
+  * Remove dependency `p-timeout`
+    * This will only affect users who had depended on `p-timeout`'s presence as a side effect of installing Pa11y.
+* Minor dependency changes:
+  * Upgrade `semver` to `7.6` from `7.5`
+
+Many thanks to @aarongoldenthal for contributing these dependency upgrades to Pa11y.
+
+### Full diff for `pa11y@8`
+
+* [7.0.0...8.0.0](https://github.com/pa11y/pa11y/compare/7.0.0...8.0.0)
+
 ## 7.0.0 (2024-01-16)
 
-### Changes
+### Changes in `pa11y@7`
 
 * **Breaking**: Upgrade Node.js support: Pa11y 7 requires a stable (even-numbered) Node.js version of `18` or above
 * **Breaking**: Upgrade dependency `puppeteer` to `20` from `9`: this may affect Pa11y's operating system support and the behaviour of Pa11y's browser automation
@@ -15,12 +36,12 @@
 * Update stale links in documentation (thanks @gavinr)
 * Update support policy
 
-### New contributors
+### New contributors in `pa11y@7`
 
 * @gavinr [made their first contribution](https://github.com/pa11y/pa11y/pull/657)
 * @danyalaytekin [made their first contribution](https://github.com/pa11y/pa11y/pull/678)
 
-### Full diff
+### Full diff for `pa11y@7`
 
 * [6.2.3...7.0.0](https://github.com/pa11y/pa11y/compare/6.2.3...7.0.0)
 

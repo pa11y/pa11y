@@ -228,7 +228,7 @@ function loadReporter(name) {
 /**
  * Check if the reporter supports this version of pa11y
  * @param {String} reporterName - Name of the reporter
- * @param {String} reporterSupportString - List of supported versions, e.g. '^7.0.0'
+ * @param {String} reporterSupportString - List of supported versions, e.g. '^8.0.0'
  * @param {String} pa11yVersion - This version of pa11y
  * @returns {void}
  */

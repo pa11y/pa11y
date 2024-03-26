@@ -25,7 +25,7 @@ pa11y('https://example.com').then((results) => {
 
 ## Requirements
 
-Pa11y 7 requires [Node.js][node] 18 or 20 to run. An older version of Node.js can be used with a [previous major version](#support-and-migration) of Pa11y.
+Pa11y 8 requires [Node.js][node] 18 or 20. An older version of Node.js can be used with [Pa11y 6 or below](#support-and-migration).
 
 ### Linux and macOS
 
@@ -37,7 +37,7 @@ nvm install node
 nvm install-latest-npm
 ```
 
-Alternatively, you can also download pre-built packages from the [Node.js][node] website for your operating system.
+Alternatively, download a pre-built package from the [Node.js][node] website for your operating system.
 
 ### Windows
 
@@ -51,9 +51,9 @@ Install Pa11y globally with [npm][npm]:
 npm install -g pa11y
 ```
 
-This installs the `pa11y` command-line tool:
+```console
+$ pa11y --help
 
-```sh
 Usage: pa11y [options] <url>
 
   Options:
@@ -184,7 +184,7 @@ The following locations will be checked:
 A Pa11y reporter _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the reporter supports:
 
 ```js
-exports.supports = '^7.0.0';
+exports.supports = '^8.0.0';
 ```
 
 A reporter should export the following methods, each returning one string. If your reporter needs to perform asynchronous operations, then it may return a promise which resolves to a string:
@@ -249,7 +249,7 @@ Pa11y resolves with a `results` object, containing details about the page, and a
 
 ### Transforming the results
 
-If you wish to transform these results with the command-line reporters, then you can do so in your code by requiring them in. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
+If you wish to transform these results with a command-line reporter, `require` it into your code. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
 
 ```js
 // Assuming you've already run tests, and the results
@@ -260,7 +260,7 @@ const html = await htmlReporter.results(results);
 
 ### `async`/`await`
 
-Pa11y uses promises,  so you can use `async` functions and the `await` keyword:
+Pa11y uses promises, so you can use `async` functions and the `await` keyword:
 
 ```js
 async function runPa11y() {
@@ -288,9 +288,7 @@ pa11y(url, (error, results) => {
 
 ### Validating actions
 
-Pa11y exposes a function which allows you to validate [action](#actions) strings before attempting to use them.
-
-This function accepts an action string and returns a boolean indicating whether it matches one of the actions that Pa11y supports:
+Pa11y's `isValidAction` function can be used to validate an [action](#actions) string ahead of its use:
 
 ```js
 pa11y.isValidAction('click element #submit');  // true
@@ -853,7 +851,7 @@ The following locations will be checked:
 A Pa11y runner _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the runner supports:
 
 ```js
-exports.supports = '^7.0.0';
+exports.supports = '^8.0.0';
 ```
 
 A Pa11y runner _must_ export a property named `scripts`. This is an array of strings which are paths to scripts which need to load before the tests can be run. This may be empty:
@@ -931,7 +929,7 @@ You can also run test suites individually:
 ```sh
 npm run test-unit           # Run the unit tests alone
 npm run test-integration    # Run the integration tests alone
-npm run coverage            # Run the unit tests alone, reporting coverage
+npm run test-coverage       # Run the unit tests alone, reporting coverage
 ```
 
 ## Support and migration
@@ -943,20 +941,21 @@ When we release a new major version we will continue to support the previous maj
 
 The following table lists the major versions available and, for each previous major version, its end-of-support date, and its final minor version released.
 
-| Major version | Final minor version   | Node.js support  | Support end date |
-| :------------ | :-------------------- | :--------------- | :--------------- |
-| `7`           |                       | `18`, `20`       | ✅ Current major version |
-| `6`           | `6.2`                 | `12`, `14`, `16` | July 2024        |
-| `5`           | `5.3`                 | `8`, `10`, `12`  | 2021-11-25       |
-| `4`           | `4.13`                | `4`, `6`, `8`    | 2018-08-15       |
-| `3`           | `3.8`                 | `0.12`, `4`      | 2016-12-05       |
-| `2`           | `2.4`                 | `0.10`, `0.12`   | 2016-10-16       |
-| `1`           | `1.7`                 | `0.10`           | 2016-06-08       |
+| Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
+| :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
+| `8`           |                     | `18`, `20`       | `^22`             | ✅ Current major version |
+| `7`           | `7.0`               | `18`, `20`       | `^20`             | October 2024             |
+| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | July 2024                |
+| `5`           | `5.3`               | `8`, `10`, `12`  | `^1`              | 2021-11-25               |
+| `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
+| `3`           | `3.8`               | `0.12`, `4`      |                   | 2016-12-05               |
+| `2`           | `2.4`               | `0.10`, `0.12`   |                   | 2016-10-16               |
+| `1`           | `1.7`               | `0.10`           |                   | 2016-06-08               |
 
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
-Copyright &copy; 2013–2024, Team Pa11y and contributors
+Copyright &copy; 2013-2024, Team Pa11y and contributors
 
 [axe]: https://www.axe-core.org/
 [brew]: https://mxcl.github.com/homebrew/
