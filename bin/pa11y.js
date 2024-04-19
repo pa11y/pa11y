@@ -199,7 +199,7 @@ function loadReporter(name) {
 	let reporterMethods;
 
 	try {
-		if (['json', 'cli', 'csv', 'tsv', 'html'].includes(name)) {
+		if (['json', 'cli', 'csv', 'tsv', 'html', 'md'].includes(name)) {
 			reporterMethods = require(`../lib/reporters/${name}`);
 		} else {
 			reporterMethods = requireFirst([
