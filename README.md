@@ -167,6 +167,7 @@ The command-line tool can provide test results in a few different ways using the
 - `html`: output test results as an HTML page
 - `json`: output test results as a JSON array
 - `tsv`: output test results as tab-separated values
+- `md`: output test results as markdown
 
 You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
 
