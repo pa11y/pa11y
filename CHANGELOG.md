@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+* Add change events to action `set-field-value` and `clear-field-value`
+
 ## 8.0.0 (2024-03-25)
 
 Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y and updates several other dependencies.
