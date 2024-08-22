@@ -41,7 +41,7 @@
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
     "puppeteer": "^22.3.0",
-    "semver": "~7.6.0"
+    "semver": "~7.6.3"
   },
   "devDependencies": {
     "c8": "^9.1.0",
