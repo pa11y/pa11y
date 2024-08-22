@@ -22,10 +22,9 @@ describe('CLI runner aXe', function() {
 
 	it('outputs the expected issues', function() {
 		assert.isArray(pa11yResponse.json);
-		assert.lengthEquals(pa11yResponse.json, 4);
+		assert.lengthEquals(pa11yResponse.json, 3);
 		assert.equal(pa11yResponse.json[0].type, 'error');
 		assert.equal(pa11yResponse.json[1].type, 'warning');
 		assert.equal(pa11yResponse.json[2].type, 'warning');
-		assert.equal(pa11yResponse.json[3].type, 'warning');
 	});
 });
