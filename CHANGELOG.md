@@ -1,5 +1,22 @@
 # Changelog
 
+## 8.1.0 (2024-09-02)
+
+### Changes in `@aarongoldenthal/pa11y@8.1.0`
+
+* Initial release of the `@aarongoldenthal/pa11y` fork, intended to actively maintain dependency updates.
+* Updated from `puppeteer@22.3.0` to `puppeteer@23.2.1`, which includes updating to Chrome 128.
+* Updated from `axe-core@4.8.4` to `axe-core@4.10.0`, which includes several rule fixes that may change `pa11y` results with the `axe` runner. See the [release notes](https://github.com/dequelabs/axe-core/releases) for details.
+* Updated all other `dependencies` (`envinfo@7.13.0`, `semver@7.6.3`).
+* Updated all `devDependencies` (`c8@10.1.2`, `eslint-plugin-mocha@10.5.0`, `mocha@10.7.3`, `sinon@18.0.0`), except `eslint@9` which requires an update to `pa11y-lint-config`.
+* Expanded all dependency ranges to the default allowing patch and minor releases.
+* Added Node 22 to test matrix and updated `lint` job to use Node 20.
+* Configured [Renovate](https://docs.renovatebot.com/) to manage dependency updates.
+
+### Full diff for `@aarongoldenthal/pa11y@8.1.0`
+
+* [8.0.0...8.1.0](https://github.com/aarongoldenthal/pa11y/compare/8.0.0...8.1.0)
+
 ## 8.0.0 (2024-03-25)
 
 Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y and updates several other dependencies.
