@@ -1,5 +1,5 @@
 {
-  "name": "pa11y",
+  "name": "@aarongoldenthal/pa11y",
   "version": "8.0.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
@@ -19,14 +19,15 @@
     "Adam Tavener (http://www.tavvy.co.uk/)",
     "Glynn Phillips (http://www.glynnphillips.co.uk/)",
     "José Bolos (https://github.com/josebolos)",
-    "Joey Ciechanowicz (https://github.com/joeyciechanowicz)"
+    "Joey Ciechanowicz (https://github.com/joeyciechanowicz)",
+    "Aaron Goldenthal (https://github.com/aarongoldenthal)"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pa11y/pa11y.git"
+    "url": "https://github.com/aarongoldenthal/pa11y.git"
   },
-  "homepage": "https://github.com/pa11y/pa11y",
-  "bugs": "https://github.com/pa11y/pa11y/issues",
+  "homepage": "https://github.com/aarongoldenthal/pa11y",
+  "bugs": "https://github.com/aarongoldenthal/pa11y/issues",
   "license": "LGPL-3.0-only",
   "engines": {
     "node": ">=18"
