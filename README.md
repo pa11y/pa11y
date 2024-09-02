@@ -2,7 +2,6 @@
 
 Pa11y is your automated accessibility testing pal. It runs accessibility tests on your pages via the command line or Node.js, so you can automate your testing process.
 
-[![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0-only licensed][shield-license]][info-license]
@@ -943,14 +942,16 @@ The following table lists the major versions available and, for each previous ma
 
 | Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
 | :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
-| `8`           |                     | `18`, `20`       | `^22`             | ✅ Current major version |
-| `7`           | `7.0`               | `18`, `20`       | `^20`             | October 2024             |
-| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | July 2024                |
+| `8`           |                     | `18`, `20`, `22` | `^23`             | ✅ Current major version |
+| `7`           | `7.0`               | `18`, `20`       | `^20`             | 2024-09-02               |
+| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | 2024-07-16               |
 | `5`           | `5.3`               | `8`, `10`, `12`  | `^1`              | 2021-11-25               |
 | `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
 | `3`           | `3.8`               | `0.12`, `4`      |                   | 2016-12-05               |
 | `2`           | `2.4`               | `0.10`, `0.12`   |                   | 2016-10-16               |
 | `1`           | `1.7`               | `0.10`           |                   | 2016-06-08               |
+
+> Note the `fork` branch of this repository is the default branch and has changes from the upstream `pa11y` repository and all tagged releases. The upstream `pa11y` repository's `main` branch is mirrored here.
 
 ## License
 
@@ -962,10 +963,9 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
-[info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
+[info-build]: https://github.com/aarongoldenthal/pa11y/actions/workflows/tests.yml
 [info-license]: LICENSE
 [info-node]: package.json
-[info-npm]: https://www.npmjs.com/package/pa11y
 [node]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/nvm-sh/nvm
@@ -978,4 +978,3 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [shield-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml/badge.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg
-[shield-npm]: https://img.shields.io/npm/v/pa11y.svg
