@@ -1,14 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+	"config:recommended",
+	":disableRateLimiting"
+  ],
+  "ignorePresets": [":dependencyDashboard"],
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+	"enabled": true,
+	"schedule": ["before 8:00pm on the first day of the month"]
+  },
+  "osvVulnerabilityAlerts": true,
   "packageRules": [
-    {
-      "matchPackagePatterns": ["*"],
-      "enabled": false
+	{
+      "description": "Group minor/patch npm devDependencies into a single MR",
+      "matchDepTypes": ["devDependencies"],
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "devDependencies (non-major)"
     },
     {
-      "matchPackageNames": ["axe-core", "html_codesniffer", "puppeteer"],
-      "enabled": true
-    }
-  ]
+      "description": "Ignore Node engines, will update manually if required",
+      "matchDepTypes": ["engines"],
+	  "matchManagers": ["npm"],
+      "enabled": false
+	}
+  ],
+  "rangeStrategy": "bump",
+  "rebaseWhen": "behind-base-branch",
+  "timezone": "America/Chicago"
 }
