@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.2 (2024-09-08)
+
+### Fixes
+
+- Fixed package issues with v8.1.1.
+
 ## 8.1.1 (2024-09-08)
 
 ### Fixes
