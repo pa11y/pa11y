@@ -24,9 +24,13 @@
       "matchDepTypes": ["engines"],
 	  "matchManagers": ["npm"],
       "enabled": false
+	},
+    {
+      "description": "Set range strategy for npm dependencies",
+	  "matchManagers": ["npm"],
+	  "rangeStrategy": "bump"
 	}
   ],
-  "rangeStrategy": "bump",
   "rebaseWhen": "behind-base-branch",
   "timezone": "America/Chicago"
 }
