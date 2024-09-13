@@ -52,7 +52,7 @@
     "mockery": "^2.1.0",
     "pa11y-lint-config": "^3.0.0",
     "proclaim": "^3.6.0",
-    "sinon": "^19.0.0"
+    "sinon": "^19.0.1"
   },
   "main": "./lib/pa11y.js",
   "bin": {
