@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "c8": "^10.1.2",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57.1",
     "eslint-plugin-mocha": "^10.5.0",
     "mocha": "^10.7.3",
     "mockery": "^2.1.0",
