@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.3 (2024-09-22)
+
+### Fixes
+
+- Updated to latest dependencies (`puppeteer@23.4.0`, `envinfo@7.14.0`). This includes updating `puppeteer` to Chrome 129.
+
 ## 8.1.2 (2024-09-08)
 
 ### Fixes
