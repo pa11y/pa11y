@@ -957,7 +957,7 @@ The following table lists the major versions available and, for each previous ma
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
 Copyright &copy; 2013-2024, Team Pa11y and contributors
 
-[axe]: https://www.axe-core.org/
+[axe]: https://www.deque.com/axe/
 [brew]: https://mxcl.github.com/homebrew/
 [fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
