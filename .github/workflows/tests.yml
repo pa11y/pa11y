@@ -30,6 +30,10 @@ jobs:
         run: |
           git config --global core.autocrlf false
         if: runner.os == 'Windows'
+      - name: Disable AppArmor User Namespace Restrictions
+          (required to open Chrome on Ubuntu 23.10+ without --no-sandbox)
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+        if: runner.os == 'Linux'
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
