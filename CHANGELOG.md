@@ -6,7 +6,7 @@
 
 - Updated to `puppeteer@23.5.3`. This includes security patches to Chrome 129 and upgrading to Firefox 131.
 
-### Miscellaenous
+### Miscellaneous
 
 - Updated `tests` workflow with [changes required to open Chrome for Testing in Ubuntu 24.04](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md), which is [transitioning to `ubuntu-latest`](https://github.blog/changelog/2024-09-25-actions-new-images-and-ubuntu-latest-changes/).
 - Updated `publish` workflow to publish this fork to [npm](https://www.npmjs.com/package/@aarongoldenthal/pa11y).
