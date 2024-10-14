@@ -1,37 +1,22 @@
+name: Publish Package to npmjs with provenance
+
 on:
   release:
-    types: [created, edited, published]
-  workflow_dispatch:
-    inputs:
-      dryRun:
-        description: Dry run only
-        required: true
-        default: true
-        type: boolean
+    types: [published]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-
-      - name: Publish package
+      - run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
-        if: >
-          (github.event_name == 'release' && github.event.action == 'published') ||
-          (github.event_name == 'workflow_dispatch' && !inputs.dryRun)
-        run: npm publish
-
-      - name: Publish package (dry run)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
-        if: >
-          (github.event_name == 'release' && github.event.action != 'published') ||
-          (github.event_name == 'workflow_dispatch' && inputs.dryRun)
-        run: npm publish --dry-run
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
