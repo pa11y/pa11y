@@ -1,6 +1,6 @@
 {
   "name": "@aarongoldenthal/pa11y",
-  "version": "8.1.4",
+  "version": "8.1.5",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
