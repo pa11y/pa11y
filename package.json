@@ -33,7 +33,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "axe-core": "^4.10.0",
+    "axe-core": "^4.10.1",
     "bfj": "^8.0.0",
     "commander": "^12.1.0",
     "envinfo": "^7.14.0",
