@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "axe-core": "^4.10.1",
-    "bfj": "^8.0.0",
+    "bfj": "^9.1.1",
     "commander": "^12.1.0",
     "envinfo": "^7.14.0",
     "html_codesniffer": "^2.5.1",
