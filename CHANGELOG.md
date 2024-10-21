@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.2.0 (2024-10-20)
+
+### Changes
+
+- Updated to `puppeteer@23.6.0`, which includes updating to Chrome 130.
+- Updated to `axe-core@4.10.1`, which fixed several false positives.
+- Updated other `dependencies`, including `bfj@9.1.1` (no functional changes).
+
 ## 8.1.5 (2024-10-13)
 
 ### Fixes
