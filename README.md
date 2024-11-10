@@ -975,6 +975,6 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [puppeteer-page]: https://pptr.dev/api/puppeteer.page
 [puppeteer-viewport]: https://pptr.dev/api/puppeteer.page.setviewport
 [semver range]: https://github.com/npm/node-semver#ranges
-[shield-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml/badge.svg
+[shield-build]: https://github.com/@aarongoldenthal/pa11y/actions/workflows/tests.yml/badge.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg
