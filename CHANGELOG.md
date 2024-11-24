@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.1 (2024-11-24)
+
+### Fixes
+
+- Updated to `puppeteer@23.9.0`, which includes security updates to Chrome 131.
+
 ## 8.4.0 (2024-11-17)
 
 ### Changes
