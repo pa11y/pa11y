@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.3 (2024-12-15)
+
+### Fixes
+
+- Updated to `puppeteer@23.10.4`, which includes security updates to Chrome 131 and Firefox 133.
+
 ## 8.4.2 (2024-12-08)
 
 ### Changes
