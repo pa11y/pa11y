@@ -41,7 +41,7 @@
     "kleur": "^4.1.5",
     "mustache": "^4.2.0",
     "node.extend": "^2.0.3",
-    "puppeteer": "^23.10.1",
+    "puppeteer": "^23.10.4",
     "semver": "^7.6.3"
   },
   "devDependencies": {
