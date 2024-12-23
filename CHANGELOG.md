@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.4 (2024-12-23)
+
+### Fixes
+
+- Updated to `puppeteer@23.11.1`, which includes security updates to Chrome 131.
+
 ## 8.4.3 (2024-12-15)
 
 ### Fixes
