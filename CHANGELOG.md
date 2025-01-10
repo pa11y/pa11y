@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.5.0 (2025-01-10)
+
+### Changes
+
+- Updated to `puppeteer@24.0.0`.
+  - Includes security updates to Chrome 131 and updates to Firefox 134.
+  - Removes deprecated launch option interface, which should not be breaking as the new interface only adds capabilities. See [the `puppeteer` documentation](https://pptr.dev/api/puppeteer.launchoptions) for complete details.
+
+### Fixes
+
+- Updated to `commander@13.0.0`, which has no functional changes for pa11y.
+
 ## 8.4.4 (2024-12-23)
 
 ### Fixes

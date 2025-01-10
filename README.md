@@ -970,8 +970,8 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[puppeteer-browser]: https://pptr.dev/next/api/puppeteer.browser
-[puppeteer-launch]: https://pptr.dev/next/api/puppeteer.puppeteerlaunchoptions
+[puppeteer-browser]: https://pptr.dev/api/puppeteer.browser
+[puppeteer-launch]: https://pptr.dev/api/puppeteer.launchoptions
 [puppeteer-page]: https://pptr.dev/api/puppeteer.page
 [puppeteer-viewport]: https://pptr.dev/api/puppeteer.page.setviewport
 [semver range]: https://github.com/npm/node-semver#ranges
