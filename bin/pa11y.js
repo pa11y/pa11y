@@ -104,6 +104,7 @@ function configureProgram() {
 			collectOptions,
 			[]
 		)
+		.allowExcessArguments()
 		.parse(process.argv);
 	program.url = program.args[0];
 }
