@@ -4,7 +4,6 @@
 	"config:recommended",
 	":disableRateLimiting"
   ],
-  "ignorePresets": [":dependencyDashboard"],
   "labels": ["dependencies"],
   "lockFileMaintenance": {
 	"enabled": true,
