@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.1 (2025-01-19)
+
+### Fixes
+
+- Updated to `puppeteer@24.1.0`, which includes updating to Chrome 132.
+
 ## 8.5.0 (2025-01-10)
 
 ### Changes
