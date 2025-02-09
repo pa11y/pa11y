@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.5.3 (2025-02-09)
+
+### Fixes
+
+- Updated to `puppeteer@24.2.0`, which includes updating to Chrome 133 and Firefox 135.
+- Updated to `semver@7.7.1`.
+
 ## 8.5.2 (2025-01-26)
 
 ### Fixes
