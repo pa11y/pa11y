@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.4 (2025-03-02)
+
+### Fixes
+
+- Updated to `puppeteer@24.3.0`, which includes fixes and security updates to Chrome 133 and Firefox 135.
+
 ## 8.5.3 (2025-02-09)
 
 ### Fixes
