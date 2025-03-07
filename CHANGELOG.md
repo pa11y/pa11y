@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.6.0 (2025-03-07)
+
+### Changes
+
+- Updated to [`puppeteer@24.4.0`](https://github.com/puppeteer/puppeteer/releases), which includes updating to Chrome 134 and Firefox 136.
+
+### Fixes
+
+- Updated to [`axe-core@4.10.3`](https://github.com/dequelabs/axe-core/releases/tag/v4.10.3) with numerous rule fixes.
+
 ## 8.5.4 (2025-03-02)
 
 ### Fixes
