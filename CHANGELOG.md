@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.7.1 (2025-04-19)
+
+### Changes
+
+- Updated to [`puppeteer@24.6.1`](https://github.com/puppeteer/puppeteer/releases), which includes fixes and security updates to Chrome 135 and Firefox 137.
+
 ## 8.7.0 (2025-04-03)
 
 ### Changes
