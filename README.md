@@ -2,6 +2,7 @@
 
 Pa11y is your automated accessibility testing pal. It runs accessibility tests on your pages via the command line or Node.js, so you can automate your testing process.
 
+[![NPM version][shield-npm]][info-npm]
 [![Node.js version support][shield-node]][info-node]
 [![Build status][shield-build]][info-build]
 [![LGPL-3.0-only licensed][shield-license]][info-license]
@@ -951,8 +952,6 @@ The following table lists the major versions available and, for each previous ma
 | `2`           | `2.4`               | `0.10`, `0.12`   |                   | 2016-10-16               |
 | `1`           | `1.7`               | `0.10`           |                   | 2016-06-08               |
 
-> Note the `fork` branch of this repository is the default branch and has changes from the upstream `pa11y` repository and all tagged releases. The upstream `pa11y` repository's `main` branch is mirrored here.
-
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
@@ -963,7 +962,7 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
-[info-build]: https://github.com/aarongoldenthal/pa11y/actions/workflows/tests.yml
+[info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
 [info-license]: LICENSE
 [info-node]: package.json
 [node]: https://nodejs.org/
@@ -975,6 +974,7 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [puppeteer-page]: https://pptr.dev/api/puppeteer.page
 [puppeteer-viewport]: https://pptr.dev/api/puppeteer.page.setviewport
 [semver range]: https://github.com/npm/node-semver#ranges
-[shield-build]: https://github.com/@aarongoldenthal/pa11y/actions/workflows/tests.yml/badge.svg
+[shield-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml/badge.svg
 [shield-license]: https://img.shields.io/badge/license-LGPL%203.0-blue.svg
 [shield-node]: https://img.shields.io/node/v/pa11y.svg
+[shield-npm]: https://img.shields.io/npm/v/pa11y.svg

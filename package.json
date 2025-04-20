@@ -1,6 +1,6 @@
 {
-  "name": "@aarongoldenthal/pa11y",
-  "version": "8.7.1",
+  "name": "pa11y",
+  "version": "8.0.0",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
     "accessibility",
@@ -24,10 +24,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aarongoldenthal/pa11y.git"
+    "url": "https://github.com/pa11y/pa11y.git"
   },
-  "homepage": "https://github.com/aarongoldenthal/pa11y",
-  "bugs": "https://github.com/aarongoldenthal/pa11y/issues",
+  "homepage": "https://github.com/pa11y/pa11y",
+  "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0-only",
   "engines": {
     "node": ">=18"
@@ -56,7 +56,7 @@
   },
   "main": "./lib/pa11y.js",
   "bin": {
-    "pa11y": "bin/pa11y.js"
+    "pa11y": "./bin/pa11y.js"
   },
   "scripts": {
     "lint": "eslint .",
