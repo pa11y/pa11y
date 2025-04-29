@@ -944,7 +944,7 @@ The following table lists the major versions available and, for each previous ma
 | Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
 | :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
 | `8`           |                     | `18`, `20`, `22` | `^24`             | ✅ Current major version |
-| `7`           | `7.0`               | `18`, `20`       | `^20`             | 2024-09-02               |
+| `7`           | `7.0`               | `18`, `20`       | `^20`             | 2024-10-02               |
 | `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | 2024-07-16               |
 | `5`           | `5.3`               | `8`, `10`, `12`  | `^1`              | 2021-11-25               |
 | `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
