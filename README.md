@@ -965,6 +965,7 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
 [info-license]: LICENSE
 [info-node]: package.json
+[info-npm]: https://www.npmjs.com/package/pa11y
 [node]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/nvm-sh/nvm
