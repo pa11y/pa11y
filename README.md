@@ -943,9 +943,9 @@ The following table lists the major versions available and, for each previous ma
 
 | Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
 | :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
-| `8`           |                     | `18`, `20`       | `^22`             | ✅ Current major version |
-| `7`           | `7.0`               | `18`, `20`       | `^20`             | October 2024             |
-| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | July 2024                |
+| `8`           |                     | `18`, `20`, `22` | `^24`             | ✅ Current major version |
+| `7`           | `7.0`               | `18`, `20`       | `^20`             | 2024-10-02               |
+| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | 2024-07-16               |
 | `5`           | `5.3`               | `8`, `10`, `12`  | `^1`              | 2021-11-25               |
 | `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
 | `3`           | `3.8`               | `0.12`, `4`      |                   | 2016-12-05               |
@@ -970,8 +970,8 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[puppeteer-browser]: https://pptr.dev/next/api/puppeteer.browser
-[puppeteer-launch]: https://pptr.dev/next/api/puppeteer.puppeteerlaunchoptions
+[puppeteer-browser]: https://pptr.dev/api/puppeteer.browser
+[puppeteer-launch]: https://pptr.dev/api/puppeteer.launchoptions
 [puppeteer-page]: https://pptr.dev/api/puppeteer.page
 [puppeteer-viewport]: https://pptr.dev/api/puppeteer.page.setviewport
 [semver range]: https://github.com/npm/node-semver#ranges
