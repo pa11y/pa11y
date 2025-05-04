@@ -1,5 +1,30 @@
 # Changelog
 
+## 8.1.0 (2025-05-04)
+
+Pa11y 8.1 updates to the latest version of Puppeteer (`24`) and Axe (`4.10`), updates several other dependencies, and includes some GitHub actions and documentation cleanup.
+
+### Changes in `pa11y@8.1`
+
+* **Significant dependency changes (potentially impacting Pa11y results)**:
+  * Upgrade `puppeteer` to `24` from `22`. This updates the underlying Chrome version (to `135`).
+  * Upgrade `axe-core` to `4.10` from `4.8`. This includes rule fixes that may change results when using the `axe` runner. See `axe-core` [releases](https://github.com/dequelabs/axe-core/releases) for complete details.
+* Other dependency changes:
+  * Upgrade `bfj` to `9.1` from `8.0`.
+  * Upgrade `commander` to `13.1` from `12.0`.
+  * Upgrade `envinfo` to `7.14` from `7.11`.
+  * Upgrade `semver` to `7.7` from `7.6`.
+* GitHub Actions changes: Update workflows for Node 22, Ubuntu 24.04 compatibility, and [publishing package with provenance](https://github.blog/security/supply-chain-security/introducing-npm-package-provenance/).
+* Other changes: Refactor code and tests for dependency compatibility, update support table and fix some links in the README.
+
+### New contributors in `pa11y@8.1`
+
+* @kaitlinnewson [made their first contribution](https://github.com/pa11y/pa11y/pull/712)
+
+### Full diff for `pa11y@8.1`
+
+* [8.0.0...8.1.0](https://github.com/pa11y/pa11y/compare/8.0.0...8.1.0)
+
 ## 8.0.0 (2024-03-25)
 
 Pa11y 8 makes the latest version of Puppeteer (`22`) available to Pa11y and updates several other dependencies.
