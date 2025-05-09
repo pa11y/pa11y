@@ -4,6 +4,7 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 
 ## Table of contents
 
+* [Migrating from 8.0 to 9.0](#migrating-from-80-to-90)
 * [Migrating from 7.0 to 8.0](#migrating-from-70-to-80)
 * [Migrating from 6.0 to 7.0](#migrating-from-60-to-70)
 * [Migrating from 5.0 to 6.0](#migrating-from-50-to-60)
@@ -11,6 +12,12 @@ Pa11y's API changes between major versions. This is a guide to help you make the
 * [Migrating from 3.0 to 4.0](#migrating-from-30-to-40)
 * [Migrating from 2.0 to 3.0](#migrating-from-20-to-30)
 * [Migrating from 1.0 to 2.0](#migrating-from-10-to-20)
+
+## Migrating from 8.0 to 9.0
+
+Pa11y 9 requires a stable (even-numbered) Node.js version of `20` or above.
+
+We've also upgraded to Puppeteer `24` (from `20`), Axe `4.10` (from `4.8`), and to more recent major versions of several other dependencies - see [Pa11y's changelog](CHANGELOG.md) for the list. Those changes should not affect most users of Pa11y.
 
 ## Migrating from 7.0 to 8.0
 
