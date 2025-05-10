@@ -221,7 +221,6 @@ describe('lib/action', function() {
 		});
 
 		describe('.match', function() {
-
 			it('matches all of the expected action strings', function() {
 				assert.deepEqual('click .foo'.match(action.match), [
 					'click .foo',
@@ -241,75 +240,34 @@ describe('lib/action', function() {
 					' element',
 					'.foo .bar .baz'
 				]);
-				expect(Array.from('double click element .foo .bar .baz'.match(clickElementAction.match))).toEqual([
+				assert.deepEqual('double click element .foo .bar .baz'.match(action.match), [
 					'double click element .foo .bar .baz',
 					'double ',
 					' element',
 					'.foo .bar .baz'
 				]);
 			});
-
 		});
 
 		it('has a `run` method', function() {
 			assert.isFunction(action.run);
 		});
 
-			describe('click', () => {
 
-				beforeEach(async () => {
-					global.document.querySelector.mockReturnValue(mockElement);
-					clickElementMatches = 'click element foo'.match(clickElementAction.match);
-					clickElementResolvedValue = await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
+		describe('.run(browser, page, options, matches)', function() {
+			let matches;
+			let resolvedValue;
+
+			describe('click', function() {
+				beforeEach(async function() {
+					matches = 'click element foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('clicks the specified element on the page', () => {
-					expect(puppeteer.mockPage.click).toHaveBeenCalledTimes(1);
-					expect(puppeteer.mockPage.click).toHaveBeenCalledWith(clickElementMatches[3], {
+				it('clicks the specified element on the page', function() {
+					assert.calledOnce(puppeteer.mockPage.click);
+					assert.calledWithExactly(puppeteer.mockPage.click, matches[3], {
 						clickCount: 1
-					});
-				});
-
-				it('resolves with `undefined`', () => {
-					expect(clickElementResolvedValue).toBeUndefined();
-				});
-
-				describe('when the click fails', () => {
-					let clickError;
-					let clickElementRejectedError;
-
-					beforeEach(async () => {
-						clickError = new Error('click error');
-						puppeteer.mockPage.click.mockRejectedValueOnce(clickError);
-						try {
-							await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
-						} catch (error) {
-							clickElementRejectedError = error;
-						}
-					});
-
-					it('rejects with a new error', () => {
-						expect(clickElementRejectedError).not.toEqual(clickError);
-						expect(clickElementRejectedError).toEqual(expect.any(Error));
-						expect(clickElementRejectedError.message).toEqual('Failed action: no element matching selector "foo"');
-					});
-
-				});
-			});
-
-			describe('double click', () => {
-
-				beforeEach(async () => {
-					global.document.querySelector.mockReturnValue(mockElement);
-					clickElementMatches = 'double click element foo'.match(clickElementAction.match);
-					clickElementResolvedValue = await clickElementAction.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, clickElementMatches);
-				});
-
-
-				it('double clicks the specified element on the page', () => {
-					expect(puppeteer.mockPage.click).toHaveBeenCalledTimes(1);
-					expect(puppeteer.mockPage.click).toHaveBeenCalledWith(clickElementMatches[3], {
-						clickCount: 2
 					});
 				});
 
@@ -336,13 +294,49 @@ describe('lib/action', function() {
 						assert.instanceOf(rejectedError, Error);
 						assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
 					});
+				});
+			});
 
+			describe('double click', function() {
+				beforeEach(async function() {
+					matches = 'double click element foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-			})
 
+				it('double clicks the specified element on the page', function() {
+					assert.calledOnce(puppeteer.mockPage.click);
+					assert.calledWithExactly(puppeteer.mockPage.click, matches[3], {
+						clickCount: 2
+					});
+				});
+
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
+				});
+
+				describe('when the double click fails', function() {
+					let clickError;
+					let rejectedError;
+
+					beforeEach(async function() {
+						clickError = new Error('click error');
+						puppeteer.mockPage.click.rejects(clickError);
+						try {
+							await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						} catch (error) {
+							rejectedError = error;
+						}
+					});
+
+					it('rejects with a new error', function() {
+						assert.notStrictEqual(rejectedError, clickError);
+						assert.instanceOf(rejectedError, Error);
+						assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+					});
+				});
+			});
 		});
-
 	});
 
 	describe('set-field-value action', function() {
