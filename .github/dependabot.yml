@@ -1,6 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: 'npm'
+    dependency-type: 'production'
     directory: '/'
     schedule:
       interval: 'weekly'
