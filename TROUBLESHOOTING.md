@@ -28,6 +28,13 @@ Pa11y doesn't currently support testing against iframe content from a parent pag
 
 If you do need to test the contents of an iframe, run Pa11y against the iframe source URL directly.
 
+### Pa11y shows an error on Ubuntu 23.10+: `No usable sandbox!`
+
+Ubuntu 23.10+ versions include a security feature called AppArmor which by default restrict user namespaces, and as a result may cause a Chrome exception through this project.
+We suggest using the steps outlined on Chromium's documentation to help alleviate this challenge: [AppArmor User Namespace Restrictions vs. Chromium Developer Builds](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md).
+For example, when leveraging Pa11y through automated testing such as GitHub Actions consider using [option 1](https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md#option-1_the-easiest-way) to disable AppArmor user namespacing to help circumvent this issue.
+Please use workarounds at your own risk based on your security and platform requirements.
+
 ## Common Questions
 
 Common questions about Pa11y are answered here.
