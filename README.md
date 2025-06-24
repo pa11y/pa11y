@@ -25,7 +25,7 @@ pa11y('https://example.com').then((results) => {
 
 ## Requirements
 
-Pa11y 8 requires [Node.js][node] 18 or 20. An older version of Node.js can be used with [Pa11y 6 or below](#support-and-migration).
+Pa11y 9 requires [Node.js][node] 20, 22, or 24. An older version of Node.js can be used with [Pa11y 8 or below](#support-and-migration).
 
 ### Linux and macOS
 
