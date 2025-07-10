@@ -104,6 +104,11 @@ function configureProgram() {
 			collectOptions,
 			[]
 		)
+		.option(
+			'--language <language>',
+			'Language in which provide reporter messages, e.g. "en" (default) or "fr", ' +
+			'"it", "pl", "nl", "cn", "ja" – only used by htmlcs runner'
+		)
 		.allowExcessArguments()
 		.parse(process.argv);
 	program.url = program.args[0];
@@ -172,7 +177,8 @@ function processOptions() {
 		standard: programOptions.standard,
 		threshold: programOptions.threshold,
 		timeout: programOptions.timeout,
-		wait: programOptions.wait
+		wait: programOptions.wait,
+		language: programOptions.language
 	});
 	return options;
 }
