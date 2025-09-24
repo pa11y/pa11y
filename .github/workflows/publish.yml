@@ -9,31 +9,34 @@ on:
         default: true
         type: boolean
 
+permissions:
+  contents: read
+  # Required for trusted publishing with OIDC
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v5
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
       - run: npm ci
 
+      # NPM 11.5.1+ (released with Node 24.5.0) is required for OIDC trusted publishing
+      - name: Update npm
+        run: npm install -g npm@11.5.1
+
       - name: Publish package
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
         if: >
           (github.event_name == 'release' && github.event.action == 'published') ||
           (github.event_name == 'workflow_dispatch' && !inputs.dryRun)
         run: npm publish --provenance --access public
 
       - name: Publish package (dry run)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.REGISTRY_PUBLISH_TOKEN }}
         if: >
           (github.event_name == 'release' && github.event.action != 'published') ||
           (github.event_name == 'workflow_dispatch' && inputs.dryRun)
