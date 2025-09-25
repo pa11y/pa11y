@@ -1,5 +1,12 @@
 # Changelog
 
+## 9.0.1 (2025-09-25)
+
+* Upgrade dependencies
+* AppArmor-related documentation updates (thanks @d33bs)
+* Requirements documentation updates (thanks @WilliamCollishaw)
+* Improve security posture
+
 ## 9.0.0 (2025-05-07)
 
 Pa11y 9 requires a stable (even-numbered) Node.js version of `20` or above, updates to the latest version of Puppeteer (`24`) and Axe (`4.10`), updates several other dependencies, and includes some GitHub actions and documentation cleanup.
