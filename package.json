@@ -3,10 +3,27 @@
   "version": "9.0.1",
   "description": "Pa11y is your automated accessibility testing pal",
   "keywords": [
+    "a11y",
     "accessibility",
     "analysis",
+    "aria",
+    "audit",
+    "automation",
+    "axe",
+    "axe-core",
+    "checker",
     "cli",
-    "report"
+    "compliance",
+    "headless",
+    "htmlcs",
+    "open-source",
+    "pa11y",
+    "puppeteer",
+    "report",
+    "standards",
+    "testing",
+    "validator",
+    "WCAG"
   ],
   "author": "Team Pa11y",
   "contributors": [
