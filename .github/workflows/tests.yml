@@ -11,7 +11,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
       - uses: actions/setup-node@v5
         with:
           node-version: 22
@@ -32,14 +33,19 @@ jobs:
         run: |
           git config --global core.autocrlf false
         if: runner.os == 'Windows'
+
       - name: Disable AppArmor User Namespace Restrictions, required to open
           Chrome on Ubuntu 23.10+ without --no-sandbox). See
           https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md.
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
         if: runner.os == 'Linux'
-      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v5
+
       - uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
+
       - run: npm ci
+
       - run: npm test
