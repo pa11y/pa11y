@@ -1,6 +1,7 @@
 on:
   release:
     types: [created, edited, published]
+    branches: [main]
   workflow_dispatch:
     inputs:
       dryRun:
