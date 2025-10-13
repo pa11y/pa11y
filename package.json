@@ -50,7 +50,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "axe-core": "~4.10.3",
+    "axe-core": "~4.11.0",
     "bfj": "~9.1.2",
     "commander": "~14.0.1",
     "envinfo": "~7.14.0",
