@@ -10,7 +10,6 @@ describe('lib/runners/axe', function() {
 	let runner;
 
 	beforeEach(function() {
-
 		result = {
 			violations: [
 				{
