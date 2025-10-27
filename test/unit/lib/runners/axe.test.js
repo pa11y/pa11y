@@ -228,7 +228,7 @@ describe('lib/runners/axe', function() {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'error',
+					type: 'warning',
 					element: 'mock-element-4a',
 					runnerExtras: {
 						description: 'mock description 4',
@@ -240,7 +240,7 @@ describe('lib/runners/axe', function() {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'error',
+					type: 'warning',
 					element: 'mock-element-4b',
 					runnerExtras: {
 						description: 'mock description 4',
