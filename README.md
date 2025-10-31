@@ -66,8 +66,8 @@ Usage: pa11y [options] <url>
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
-    --include-notices              Include notices in the report
-    --include-warnings             Include warnings in the report
+    --include-notices              include notices in the report
+    --include-warnings             include warnings in the report
     --level-cap-for-review-required <level> cap severity of any issue requiring manual review to: error (default), warning, notice
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated

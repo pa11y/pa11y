@@ -61,11 +61,11 @@ function configureProgram() {
 		)
 		.option(
 			'--include-notices',
-			'Include notices in the report'
+			'include notices in the report'
 		)
 		.option(
 			'--include-warnings',
-			'Include warnings in the report'
+			'include warnings in the report'
 		)
 		.option(
 			'--level-cap-for-review-required <level>',
