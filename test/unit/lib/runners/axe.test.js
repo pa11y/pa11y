@@ -372,15 +372,12 @@ describe('lib/runners/axe', function() {
 
 			describe('levelCapForReviewRequired', function() {
 				describe('when set to "warning"', function() {
-					let resolvedValue;
-
 					beforeEach(async function() {
 						options.levelCapForReviewRequired = 'warning';
 						resolvedValue = await runner.run(options, pa11y);
 					});
 
 					it('caps incomplete issues with error-level impact at warning', function() {
-						// Find the incomplete issues (mock-id-4) which have error-level impact
 						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
 						assert.strictEqual(incompleteIssues.length, 2);
 						assert.strictEqual(incompleteIssues[0].type, 'warning');
@@ -388,21 +385,17 @@ describe('lib/runners/axe', function() {
 					});
 
 					it('does not affect incomplete issues already at warning level', function() {
-						// mock-id-5 has impact 'moderate' which maps to 'warning'
 						const warningIssue = resolvedValue.find(issue => issue.code === 'mock-id-5');
 						assert.strictEqual(warningIssue.type, 'warning');
 					});
 
 					it('does not affect incomplete issues already at notice level', function() {
-						// mock-id-3 has impact 'minor' which maps to 'notice'
 						const noticeIssue = resolvedValue.find(issue => issue.code === 'mock-id-3');
 						assert.strictEqual(noticeIssue.type, 'notice');
 					});
 				});
 
 				describe('when set to "notice"', function() {
-					let resolvedValue;
-
 					beforeEach(async function() {
 						options.levelCapForReviewRequired = 'notice';
 						resolvedValue = await runner.run(options, pa11y);
@@ -427,8 +420,6 @@ describe('lib/runners/axe', function() {
 				});
 
 				describe('when set to "error" (explicit)', function() {
-					let resolvedValue;
-
 					beforeEach(async function() {
 						options.levelCapForReviewRequired = 'error';
 						resolvedValue = await runner.run(options, pa11y);
@@ -443,8 +434,6 @@ describe('lib/runners/axe', function() {
 				});
 
 				describe('when left unset, defaults to error', function() {
-					let resolvedValue;
-
 					beforeEach(async function() {
 						resolvedValue = await runner.run(options, pa11y);
 					});
@@ -455,7 +444,7 @@ describe('lib/runners/axe', function() {
 						assert.strictEqual(incompleteIssues[0].type, 'error');
 						assert.strictEqual(incompleteIssues[1].type, 'error');
 					});
-				})
+				});
 			});
 		});
 
