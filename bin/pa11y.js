@@ -68,6 +68,11 @@ function configureProgram() {
 			'Include warnings in the report'
 		)
 		.option(
+			'--level-cap-for-review-required <level>',
+			'cap severity of any issue requiring manual review to: error (default), warning, notice',
+			'error'
+		)
+		.option(
 			'-R, --root-element <selector>',
 			'a CSS selector used to limit which part of a page is tested'
 		)
@@ -164,6 +169,7 @@ function processOptions() {
 		includeNotices: programOptions.includeNotices,
 		includeWarnings: programOptions.includeWarnings,
 		level: programOptions.level,
+		levelCapForReviewRequired: programOptions.levelCapForReviewRequired,
 		reporter: programOptions.reporter,
 		runners: (programOptions.runner.length ? programOptions.runner : undefined),
 		rootElement: programOptions.rootElement,

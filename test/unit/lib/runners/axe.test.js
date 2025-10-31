@@ -88,6 +88,20 @@ describe('lib/runners/axe', function() {
 							]
 						}
 					]
+				},
+				{
+					id: 'mock-id-5',
+					description: 'mock description 5',
+					impact: 'moderate',
+					help: 'mock help 5',
+					helpUrl: 'mock-help-url-5',
+					nodes: [
+						{
+							target: [
+								'mock-selector-5'
+							]
+						}
+					]
 				}
 			]
 		};
@@ -115,6 +129,8 @@ describe('lib/runners/axe', function() {
 			.withArgs('iframe-selector-1 mock-selector-4a').returns('mock-element-4a');
 		global.window.document.querySelector
 			.withArgs('mock-selector-4b').returns('mock-element-4b');
+		global.window.document.querySelector
+			.withArgs('mock-selector-5').returns('mock-element-5');
 
 		runner = require('../../../../lib/runners/axe');
 	});
@@ -228,7 +244,7 @@ describe('lib/runners/axe', function() {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'warning',
+					type: 'error',
 					element: 'mock-element-4a',
 					runnerExtras: {
 						description: 'mock description 4',
@@ -240,13 +256,25 @@ describe('lib/runners/axe', function() {
 				{
 					code: 'mock-id-4',
 					message: 'mock help 4 (mock-help-url-4)',
-					type: 'warning',
+					type: 'error',
 					element: 'mock-element-4b',
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'not a supported impact level',
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
+					}
+				},
+				{
+					code: 'mock-id-5',
+					message: 'mock help 5 (mock-help-url-5)',
+					type: 'warning',
+					element: 'mock-element-5',
+					runnerExtras: {
+						description: 'mock description 5',
+						impact: 'moderate',
+						help: 'mock help 5',
+						helpUrl: 'mock-help-url-5'
 					}
 				}
 			]);
@@ -340,6 +368,94 @@ describe('lib/runners/axe', function() {
 						})
 					);
 				});
+			});
+
+			describe('levelCapForReviewRequired', function() {
+				describe('when set to "warning"', function() {
+					let resolvedValue;
+
+					beforeEach(async function() {
+						options.levelCapForReviewRequired = 'warning';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('caps incomplete issues with error-level impact at warning', function() {
+						// Find the incomplete issues (mock-id-4) which have error-level impact
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'warning');
+						assert.strictEqual(incompleteIssues[1].type, 'warning');
+					});
+
+					it('does not affect incomplete issues already at warning level', function() {
+						// mock-id-5 has impact 'moderate' which maps to 'warning'
+						const warningIssue = resolvedValue.find(issue => issue.code === 'mock-id-5');
+						assert.strictEqual(warningIssue.type, 'warning');
+					});
+
+					it('does not affect incomplete issues already at notice level', function() {
+						// mock-id-3 has impact 'minor' which maps to 'notice'
+						const noticeIssue = resolvedValue.find(issue => issue.code === 'mock-id-3');
+						assert.strictEqual(noticeIssue.type, 'notice');
+					});
+				});
+
+				describe('when set to "notice"', function() {
+					let resolvedValue;
+
+					beforeEach(async function() {
+						options.levelCapForReviewRequired = 'notice';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('caps incomplete issues with error-level impact at notice', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'notice');
+						assert.strictEqual(incompleteIssues[1].type, 'notice');
+					});
+
+					it('caps incomplete issues with warning-level impact at notice', function() {
+						const warningIssue = resolvedValue.find(issue => issue.code === 'mock-id-5');
+						assert.strictEqual(warningIssue.type, 'notice');
+					});
+
+					it('does not affect incomplete issues already at notice level', function() {
+						const noticeIssue = resolvedValue.find(issue => issue.code === 'mock-id-3');
+						assert.strictEqual(noticeIssue.type, 'notice');
+					});
+				});
+
+				describe('when set to "error" (explicit)', function() {
+					let resolvedValue;
+
+					beforeEach(async function() {
+						options.levelCapForReviewRequired = 'error';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('does not cap incomplete issues, leaving them at error level', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'error');
+						assert.strictEqual(incompleteIssues[1].type, 'error');
+					});
+				});
+
+				describe('when left unset, defaults to error', function() {
+					let resolvedValue;
+
+					beforeEach(async function() {
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('does not cap incomplete issues, leaving them at error level', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'error');
+						assert.strictEqual(incompleteIssues[1].type, 'error');
+					});
+				})
 			});
 		});
 

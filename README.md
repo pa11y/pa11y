@@ -68,6 +68,7 @@ Usage: pa11y [options] <url>
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
     --include-notices              Include notices in the report
     --include-warnings             Include warnings in the report
+    --level-cap-for-review-required <level> cap severity of any issue requiring manual review to: error (default), warning, notice
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
