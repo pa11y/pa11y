@@ -14,7 +14,7 @@ module.exports = {
 		beforeEach() {
 			// Clear the require cache before each test so quibble can intercept fresh requires
 			Object.keys(require.cache).forEach(key => {
-				if (!key.includes('/node_modules/') || key.includes('/pa11y/lib/')) {
+				if (!key.includes('node_modules')) {
 					delete require.cache[key];
 				}
 			});
