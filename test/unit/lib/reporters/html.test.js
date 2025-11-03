@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const mockery = require('mockery');
+const quibble = require('quibble');
 const path = require('path');
 
 describe('lib/reporters/html', function() {
@@ -11,9 +11,9 @@ describe('lib/reporters/html', function() {
 
 	beforeEach(function() {
 		fs = require('../../mocks/fs.mock');
-		mockery.registerMock('fs', fs);
+		quibble('fs', fs);
 		mustache = require('../../mocks/mustache.mock');
-		mockery.registerMock('mustache', mustache);
+		quibble('mustache', mustache);
 		reporter = require('../../../../lib/reporters/html');
 	});
 

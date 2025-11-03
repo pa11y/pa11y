@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const mockery = require('mockery');
+const quibble = require('quibble');
 const sinon = require('sinon');
 
 sinon.assert.expose(assert, {
@@ -12,15 +12,15 @@ sinon.assert.expose(assert, {
 module.exports = {
 	mochaHooks: {
 		beforeEach() {
-			mockery.enable({
-				useCleanCache: true,
-				warnOnUnregistered: false,
-				warnOnReplace: false
+			// Clear the require cache before each test so quibble can intercept fresh requires
+			Object.keys(require.cache).forEach(key => {
+				if (!key.includes('node_modules')) {
+					delete require.cache[key];
+				}
 			});
 		},
 		afterEach() {
-			mockery.deregisterAll();
-			mockery.disable();
+			quibble.reset();
 		}
 	}
 };

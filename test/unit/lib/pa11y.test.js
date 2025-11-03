@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const mockery = require('mockery');
+const quibble = require('quibble');
 const path = require('path');
 const sinon = require('sinon');
 
@@ -31,10 +31,11 @@ describe('lib/pa11y', function() {
 		/* eslint-enable no-underscore-dangle */
 
 		runAction = require('../mocks/action.mock');
-		mockery.registerMock('./action', runAction);
+		quibble('../../../lib/action', runAction);
 
-		extend = sinon.spy(require('node.extend'));
-		mockery.registerMock('node.extend', extend);
+		const realExtend = require('node.extend');
+		extend = sinon.spy(realExtend);
+		quibble('node.extend', extend);
 
 		pkg = require('../../../package.json');
 
@@ -42,7 +43,7 @@ describe('lib/pa11y', function() {
 		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
 
 		fs = require('../mocks/fs.mock');
-		mockery.registerMock('fs', fs);
+		quibble('fs', fs);
 
 		fs.readFileSync.withArgs(htmlCodeSnifferPath).returns('mock-html-codesniffer-js');
 		fs.readFileSync.withArgs(pa11yRunnerPath).returns('mock-pa11y-runner-js');
@@ -50,12 +51,12 @@ describe('lib/pa11y', function() {
 		pkg = require('../../../package.json');
 
 		puppeteer = require('../mocks/puppeteer.mock');
-		mockery.registerMock('puppeteer', puppeteer);
+		quibble('puppeteer', puppeteer);
 
 		puppeteer.mockPage.evaluate.resolves(pa11yResults);
 
 		semver = require('../mocks/semver.mock');
-		mockery.registerMock('semver', semver);
+		quibble('semver', semver);
 		semver.satisfies.returns(true);
 
 		pa11y = require('../../../lib/pa11y');
@@ -786,7 +787,7 @@ describe('lib/pa11y', function() {
 					],
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
 				};
-				mockery.registerMock('node-module-1', mockRunnerNodeModule1);
+				quibble('node-module-1', mockRunnerNodeModule1);
 
 				mockRunnerNodeModule2 = {
 					supports: 'mock-support-string',
@@ -795,7 +796,7 @@ describe('lib/pa11y', function() {
 					],
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
 				};
-				mockery.registerMock('node-module-2', mockRunnerNodeModule2);
+				quibble('node-module-2', mockRunnerNodeModule2);
 
 				fs.readFileSync.withArgs('/mock-runner-node-module-1/vendor.js').returns('mock-runner-node-module-1-js');
 				fs.readFileSync.withArgs('/mock-runner-node-module-2/vendor.js').returns('mock-runner-node-module-2-js');
@@ -840,7 +841,7 @@ describe('lib/pa11y', function() {
 					],
 					run: () => 'mock-runner-node-module'
 				};
-				mockery.registerMock('node-module', mockRunnerNodeModule);
+				quibble('node-module', mockRunnerNodeModule);
 
 				semver.satisfies.returns(false);
 

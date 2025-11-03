@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
-const mockery = require('mockery');
+const quibble = require('quibble');
 const sinon = require('sinon');
 
 describe('lib/reporters/json', function() {
@@ -10,7 +10,7 @@ describe('lib/reporters/json', function() {
 
 	beforeEach(function() {
 		bfj = require('../../mocks/bfj.mock');
-		mockery.registerMock('bfj', bfj);
+		quibble('bfj', bfj);
 		jsonReporter = require('../../../../lib/reporters/json');
 	});
 

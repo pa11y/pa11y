@@ -1,6 +1,6 @@
 'use strict';
 
-const mockery = require('mockery');
+const quibble = require('quibble');
 const assert = require('proclaim');
 
 describe('lib/reporters/cli', function() {
@@ -9,7 +9,7 @@ describe('lib/reporters/cli', function() {
 
 	beforeEach(function() {
 		kleur = require('../../mocks/kleur.mock');
-		mockery.registerMock('kleur', kleur);
+		quibble('kleur', kleur);
 		cliReporter = require('../../../../lib/reporters/cli');
 	});
 
