@@ -1,0 +1,6 @@
+{
+	"headers": {
+		"Cookie": "foo=bar"
+	},
+	"includeWarnings": true
+}

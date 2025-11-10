@@ -297,9 +297,9 @@ pa11y.isValidAction('open the pod bay doors'); // false
 
 ## Configuration
 
-Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a [JSON configuration file](#command-line-configuration). Some are also available directly as [command-line options](#command-line-interface).
+Pa11y has lots of options you can use to change the way Headless Chrome runs, or the way your page is loaded. Options can be set either as a parameter on the `pa11y` function or in a [JSON or JavaScript configuration file](#command-line-configuration). Some are also available directly as [command-line options](#command-line-interface).
 
-Below is a reference of all the options that are available:
+Below is a reference of all the options that are available. Example [JSON](example/configs/pa11y.json) and [JavaScript](example/configs/pa11y.js) configuration files are available in `example/configs/`. Note that unlike [`pa11y-ci` configuration](https://github.com/pa11y/pa11y-ci?tab=readme-ov-file#default-configuration), there is no `defaults` property.
 
 ### `actions` (array)
 
