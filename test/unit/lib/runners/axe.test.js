@@ -189,6 +189,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'critical',
+						needsFurtherReview: false,
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -201,6 +202,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'critical',
+						needsFurtherReview: false,
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -213,6 +215,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 2',
 						impact: 'serious',
+						needsFurtherReview: false,
 						help: 'mock help 2',
 						helpUrl: 'mock-help-url-2'
 					}
@@ -225,6 +228,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description no-nodes',
 						impact: 'moderate',
+						needsFurtherReview: false,
 						help: 'mock help no-nodes',
 						helpUrl: 'mock-help-url-no-nodes'
 					}
@@ -237,6 +241,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 3',
 						impact: 'minor',
+						needsFurtherReview: true,
 						help: 'mock help 3',
 						helpUrl: 'mock-help-url-3'
 					}
@@ -249,6 +254,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'not a supported impact level',
+						needsFurtherReview: true,
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
 					}
@@ -261,6 +267,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'not a supported impact level',
+						needsFurtherReview: true,
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
 					}
@@ -273,6 +280,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 5',
 						impact: 'moderate',
+						needsFurtherReview: true,
 						help: 'mock help 5',
 						helpUrl: 'mock-help-url-5'
 					}
