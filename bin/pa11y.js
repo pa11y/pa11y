@@ -33,7 +33,7 @@ function configureProgram() {
 		.option(
 			'-s, --standard <name>',
 			'the accessibility standard to use: WCAG2AAA (only used by htmlcs), ' +
-			'WCAG2AA (default), or WCAG2A'
+				'WCAG2AA (default), or WCAG2A'
 		)
 		.option(
 			'-r, --reporter <reporter>',
@@ -69,7 +69,8 @@ function configureProgram() {
 		)
 		.option(
 			'--level-cap-for-review-required <level>',
-			'cap severity of any issue requiring manual review to: error (default), warning, notice',
+			'(axe-only) cap severity of any issue requiring manual review to: ' +
+				'error (default), warning, notice',
 			'error'
 		)
 		.option(
@@ -105,7 +106,7 @@ function configureProgram() {
 		.option(
 			'-A, --add-rule <rule>',
 			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons ' +
-			'– only used by htmlcs runner',
+				'– only used by htmlcs runner',
 			collectOptions,
 			[]
 		)
