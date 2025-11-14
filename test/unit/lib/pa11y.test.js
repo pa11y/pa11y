@@ -781,6 +781,7 @@ describe('lib/pa11y', function() {
 					scripts: [
 						'/mock-runner-node-module-1/vendor.js'
 					],
+					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
 				};
 				quibble('node-module-1', mockRunnerNodeModule1);
@@ -790,6 +791,7 @@ describe('lib/pa11y', function() {
 					scripts: [
 						'/mock-runner-node-module-2/vendor.js'
 					],
+					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
 				};
 				quibble('node-module-2', mockRunnerNodeModule2);
