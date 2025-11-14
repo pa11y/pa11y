@@ -3,7 +3,6 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const parseUrl = require('url').parse;
 
 module.exports = startMockWebsite;
 
@@ -28,7 +27,7 @@ function createMockWebsite() {
 			request.body += data;
 		});
 		request.on('end', () => {
-			const url = parseUrl(request.url).pathname;
+			const url = new URL(request.url, 'http://localhost').pathname;
 			try {
 				const viewPath = path.join(__dirname, 'html', `${url}.html`);
 				let html = fs.readFileSync(viewPath, 'utf-8');
