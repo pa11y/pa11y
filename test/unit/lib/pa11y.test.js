@@ -22,13 +22,11 @@ describe('lib/pa11y', function() {
 		pa11yResults = {
 			mockResults: true
 		};
-		/* eslint-disable no-underscore-dangle */
 		global.window = {
 			__pa11y: {
 				run: sinon.stub().returns(pa11yResults)
 			}
 		};
-		/* eslint-enable no-underscore-dangle */
 
 		runAction = require('../mocks/action.mock');
 		quibble('../../../lib/action', runAction);
@@ -63,9 +61,7 @@ describe('lib/pa11y', function() {
 	});
 
 	afterEach(function() {
-		/* eslint-disable no-underscore-dangle */
 		delete global.window;
-		/* eslint-enable no-underscore-dangle */
 	});
 
 	it('is a function', function() {

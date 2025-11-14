@@ -14,7 +14,6 @@ module.exports = {
 	location: {
 		href: 'mock-location-href'
 	},
-	/* eslint-disable camelcase */
 	HTMLCS: {
 		getMessages: sinon.stub().returns([]),
 		process: sinon.stub().yieldsAsync()
@@ -35,5 +34,5 @@ module.exports = {
 	Node: {
 		ELEMENT_NODE: 1
 	}
-	/* eslint-enable camelcase */
+
 };
