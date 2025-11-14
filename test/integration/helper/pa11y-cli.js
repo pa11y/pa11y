@@ -14,7 +14,7 @@ function runPa11yCli(url, options = {}) {
 		environment: {
 			PATH: process.env.PATH
 		},
-		workingDirectory: path.resolve(`${__dirname}/..`)
+		workingDirectory: path.join(__dirname, '..')
 	}, options);
 
 	options.arguments.push(url);
