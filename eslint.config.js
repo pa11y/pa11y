@@ -13,7 +13,7 @@ module.exports = defineConfig([
 			'prefer-arrow-callback': 'off',
 			'max-statements': 'off',
 			'func-style': 'off'
-		},
-	},
+		}
+	}
 ]);
 
