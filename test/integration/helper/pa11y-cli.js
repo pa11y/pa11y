@@ -47,7 +47,7 @@ module.exports = function runPa11yCli(url, options = {}) {
 			response.exitCode = code;
 			try {
 				response.json = JSON.parse(response.stdout);
-			} catch (error) {}
+			} catch {}
 			resolve(response);
 		});
 

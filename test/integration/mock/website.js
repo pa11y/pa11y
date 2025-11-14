@@ -40,7 +40,7 @@ function createMockWebsite() {
 					'Content-Type': 'text/html'
 				});
 				response.end(html);
-			} catch (error) {
+			} catch {
 				response.writeHead(404);
 				response.end('Not found');
 			}

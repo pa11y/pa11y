@@ -643,7 +643,7 @@ describe('lib/pa11y', function() {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {
+					} catch {
 					}
 				});
 
@@ -693,7 +693,7 @@ describe('lib/pa11y', function() {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {
+					} catch {
 					}
 				});
 

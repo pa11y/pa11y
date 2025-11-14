@@ -22,7 +22,7 @@ describe('CLI action "screen-capture"', function() {
 		screenCapturePath = path.join(screenCaptureDirectory, '/screen-capture-action-test.png');
 		try {
 			await mkdir(screenCaptureDirectory);
-		} catch (error) {}
+		} catch {}
 		await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 			arguments: [
 				// Config path is relative to working directory

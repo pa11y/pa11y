@@ -21,7 +21,7 @@ describe('CLI screen-capture', function() {
 			screenCapturePath = path.join(screenCaptureDirectory, '/screen-capture-flag-test.png');
 			try {
 				await mkdir(screenCaptureDirectory);
-			} catch (error) {}
+			} catch {}
 			await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 				arguments: [
 					'--screen-capture', screenCapturePath
