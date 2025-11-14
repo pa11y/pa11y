@@ -170,10 +170,10 @@ describe('lib/pa11y', function() {
 			});
 
 			it('calls `__pa11y.run` with the passed in options', function() {
-				/* eslint-disable no-underscore-dangle */
+				// eslint-disable-next-line no-underscore-dangle
 				assert.calledOnce(global.window.__pa11y.run);
+				// eslint-disable-next-line no-underscore-dangle
 				assert.calledWithExactly(global.window.__pa11y.run, options);
-				/* eslint-enable no-underscore-dangle */
 			});
 
 			it('returns the return value of `__pa11y.run`', function() {
