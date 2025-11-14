@@ -25,8 +25,10 @@ async function runExample() {
 		]);
 
 		// Output the raw result objects
-		console.log(results[0]); // Results for the first URL
-		console.log(results[1]); // Results for the second URL
+		// Results for the first URL
+		console.log(results[0]);
+		// Results for the second URL
+		console.log(results[1]);
 
 	} catch (error) {
 

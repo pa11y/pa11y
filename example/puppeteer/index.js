@@ -8,6 +8,7 @@ const puppeteer = require('puppeteer');
 runExample();
 
 // Async function required for us to use await
+// eslint-disable-next-line max-statements
 async function runExample() {
 	let browser;
 	let pages;
@@ -52,6 +53,7 @@ async function runExample() {
 
 		// Close the browser instance and pages if theys exist
 		if (pages) {
+			// eslint-disable-next-line max-depth
 			for (const page of pages) {
 				await page.close();
 			}

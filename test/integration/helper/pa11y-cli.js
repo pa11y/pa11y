@@ -1,7 +1,7 @@
 'use strict';
 
 const extend = require('node.extend');
-const spawn = require('child_process').spawn;
+const {spawn} = require('child_process');
 const path = require('path');
 
 module.exports = runPa11yCli;
@@ -14,7 +14,7 @@ function runPa11yCli(url, options = {}) {
 		environment: {
 			PATH: process.env.PATH
 		},
-		workingDirectory: path.resolve(`${__dirname}/..`)
+		workingDirectory: path.join(__dirname, '..')
 	}, options);
 
 	options.arguments.push(url);
@@ -49,7 +49,7 @@ function runPa11yCli(url, options = {}) {
 			response.exitCode = code;
 			try {
 				response.json = JSON.parse(response.stdout);
-			} catch (error) {}
+			} catch {}
 			resolve(response);
 		});
 

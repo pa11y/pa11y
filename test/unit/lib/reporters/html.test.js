@@ -50,7 +50,7 @@ describe('lib/reporters/html', function() {
 
 		it('reads the report HTML template', function() {
 			assert.calledOnce(fs.readFile);
-			assert.calledWith(fs.readFile, path.resolve(`${__dirname}/../../../../lib/reporters/report.html`), 'utf-8');
+			assert.calledWith(fs.readFile, path.join(__dirname, '..', '..', '..', '..', 'lib', 'reporters', 'report.html'), 'utf-8');
 		});
 
 		it('renders the template with a context object that uses the Pa11y results', function() {
