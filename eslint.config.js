@@ -1,23 +1,19 @@
 'use strict';
 
-const rules = require('pa11y-lint-config/eslint/es2017');
-const extending =
-	typeof rules.extends === 'string' ?
-		[rules.extends] :
-		rules.extends ?? [];
+const {defineConfig} = require('eslint/config');
 
-module.exports = {
-	...rules,
-	parserOptions: {
-		...(rules.parserOptions ?? {}),
-		ecmaVersion: 2020
+const configPa11y = require('eslint-config-pa11y');
+
+module.exports = defineConfig([
+	configPa11y,
+	{
+		files: ['test/**/*.js', 'test/**/*.cjs'],
+		rules: {
+			'max-len': 'off',
+			'prefer-arrow-callback': 'off',
+			'max-statements': 'off',
+			'func-style': 'off'
+		},
 	},
-	plugins: [
-		...(rules.plugins ?? []),
-		'mocha'
-	],
-	extends: [
-		...(extending),
-		'plugin:mocha/recommended'
-	]
-};
+]);
+
