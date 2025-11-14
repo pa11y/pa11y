@@ -1,7 +1,7 @@
 'use strict';
 
 const extend = require('node.extend');
-const spawn = require('child_process').spawn;
+const {spawn} = require('child_process');
 const path = require('path');
 
 module.exports = runPa11yCli;
