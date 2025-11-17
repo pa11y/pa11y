@@ -68,7 +68,7 @@ function configureProgram() {
 			'include warnings in the report'
 		)
 		.option(
-			'--level-cap-for-review-required <level>',
+			'--level-cap-when-needs-review <level>',
 			'(axe-only) cap severity of any issue requiring manual review to: ' +
 				'error (default), warning, notice',
 			'error'
@@ -170,7 +170,7 @@ function processOptions() {
 		includeNotices: programOptions.includeNotices,
 		includeWarnings: programOptions.includeWarnings,
 		level: programOptions.level,
-		levelCapForReviewRequired: programOptions.levelCapForReviewRequired,
+		levelCapWhenNeedsReview: programOptions.levelCapWhenNeedsReview,
 		reporter: programOptions.reporter,
 		runners: (programOptions.runner.length ? programOptions.runner : undefined),
 		rootElement: programOptions.rootElement,

@@ -11,7 +11,7 @@ async function runWithAxe(levelCap, includeWarningsFlag = true) {
 			'--reporter', 'json',
 			'--include-notices',
 			...includeWarningsFlag ? ['--include-warnings'] : [],
-			...levelCap ? ['--level-cap-for-review-required', levelCap] : []
+			...levelCap ? ['--level-cap-when-needs-review', levelCap] : []
 		]
 	});
 	return json;
@@ -21,7 +21,7 @@ function pa11yLevelForProblem(issues, problem) {
 	return issues.find(({code}) => code === problem)?.type;
 }
 
-describe('CLI level cap for review required (axe-only)', function() {
+describe('CLI level cap when needs review (axe-only)', function() {
 	describe('with cap absent', function() {
 		before(async function() {
 			this.json = await runWithAxe();

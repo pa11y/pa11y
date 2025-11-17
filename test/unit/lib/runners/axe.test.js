@@ -378,10 +378,10 @@ describe('lib/runners/axe', function() {
 				});
 			});
 
-			describe('levelCapForReviewRequired', function() {
+			describe('levelCapWhenNeedsReview', function() {
 				describe('when set to "warning"', function() {
 					beforeEach(async function() {
-						options.levelCapForReviewRequired = 'warning';
+						options.levelCapWhenNeedsReview = 'warning';
 						resolvedValue = await runner.run(options, pa11y);
 					});
 
@@ -405,7 +405,7 @@ describe('lib/runners/axe', function() {
 
 				describe('when set to "notice"', function() {
 					beforeEach(async function() {
-						options.levelCapForReviewRequired = 'notice';
+						options.levelCapWhenNeedsReview = 'notice';
 						resolvedValue = await runner.run(options, pa11y);
 					});
 
@@ -429,7 +429,7 @@ describe('lib/runners/axe', function() {
 
 				describe('when set to "error" (explicit)', function() {
 					beforeEach(async function() {
-						options.levelCapForReviewRequired = 'error';
+						options.levelCapWhenNeedsReview = 'error';
 						resolvedValue = await runner.run(options, pa11y);
 					});
 
