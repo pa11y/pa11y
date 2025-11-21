@@ -32,8 +32,8 @@ function configureProgram() {
 		)
 		.option(
 			'-s, --standard <name>',
-			'the accessibility standard to use: WCAG2A, WCAG2AA (default), ' +
-			'WCAG2AAA – only used by htmlcs runner'
+			'the accessibility standard to use: WCAG2AAA (only used by htmlcs), ' +
+				'WCAG2AA (default), or WCAG2A'
 		)
 		.option(
 			'-r, --reporter <reporter>',
@@ -61,11 +61,16 @@ function configureProgram() {
 		)
 		.option(
 			'--include-notices',
-			'Include notices in the report'
+			'include notices in the report'
 		)
 		.option(
 			'--include-warnings',
-			'Include warnings in the report'
+			'include warnings in the report'
+		)
+		.option(
+			'--level-cap-when-needs-review <level>',
+			'(axe-only) cap severity of any issue requiring manual review to: ' +
+				'error (default), warning, notice'
 		)
 		.option(
 			'-R, --root-element <selector>',
@@ -100,7 +105,7 @@ function configureProgram() {
 		.option(
 			'-A, --add-rule <rule>',
 			'WCAG 2.0 rules to include, a repeatable value or separated by semi-colons ' +
-			'– only used by htmlcs runner',
+				'– only used by htmlcs runner',
 			collectOptions,
 			[]
 		)
@@ -164,6 +169,7 @@ function processOptions() {
 		includeNotices: programOptions.includeNotices,
 		includeWarnings: programOptions.includeWarnings,
 		level: programOptions.level,
+		levelCapWhenNeedsReview: programOptions.levelCapWhenNeedsReview,
 		reporter: programOptions.reporter,
 		runners: (programOptions.runner.length ? programOptions.runner : undefined),
 		rootElement: programOptions.rootElement,

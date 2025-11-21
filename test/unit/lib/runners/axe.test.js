@@ -10,7 +10,6 @@ describe('lib/runners/axe', function() {
 	let runner;
 
 	beforeEach(function() {
-
 		result = {
 			violations: [
 				{
@@ -89,6 +88,20 @@ describe('lib/runners/axe', function() {
 							]
 						}
 					]
+				},
+				{
+					id: 'mock-id-5',
+					description: 'mock description 5',
+					impact: 'moderate',
+					help: 'mock help 5',
+					helpUrl: 'mock-help-url-5',
+					nodes: [
+						{
+							target: [
+								'mock-selector-5'
+							]
+						}
+					]
 				}
 			]
 		};
@@ -116,6 +129,8 @@ describe('lib/runners/axe', function() {
 			.withArgs('iframe-selector-1 mock-selector-4a').returns('mock-element-4a');
 		global.window.document.querySelector
 			.withArgs('mock-selector-4b').returns('mock-element-4b');
+		global.window.document.querySelector
+			.withArgs('mock-selector-5').returns('mock-element-5');
 
 		runner = require('../../../../lib/runners/axe');
 	});
@@ -155,7 +170,7 @@ describe('lib/runners/axe', function() {
 			resolvedValue = await runner.run(options, pa11y);
 		});
 
-		it('runs aXe', function() {
+		it('runs axe', function() {
 			assert.calledOnce(global.window.axe.run);
 			assert.calledWithExactly(
 				global.window.axe.run,
@@ -174,6 +189,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'critical',
+						needsFurtherReview: false,
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -186,6 +202,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 1',
 						impact: 'critical',
+						needsFurtherReview: false,
 						help: 'mock help 1',
 						helpUrl: 'mock-help-url-1'
 					}
@@ -198,6 +215,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 2',
 						impact: 'serious',
+						needsFurtherReview: false,
 						help: 'mock help 2',
 						helpUrl: 'mock-help-url-2'
 					}
@@ -210,6 +228,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description no-nodes',
 						impact: 'moderate',
+						needsFurtherReview: false,
 						help: 'mock help no-nodes',
 						helpUrl: 'mock-help-url-no-nodes'
 					}
@@ -222,6 +241,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 3',
 						impact: 'minor',
+						needsFurtherReview: true,
 						help: 'mock help 3',
 						helpUrl: 'mock-help-url-3'
 					}
@@ -234,6 +254,7 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'not a supported impact level',
+						needsFurtherReview: true,
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
 					}
@@ -246,8 +267,22 @@ describe('lib/runners/axe', function() {
 					runnerExtras: {
 						description: 'mock description 4',
 						impact: 'not a supported impact level',
+						needsFurtherReview: true,
 						help: 'mock help 4',
 						helpUrl: 'mock-help-url-4'
+					}
+				},
+				{
+					code: 'mock-id-5',
+					message: 'mock help 5 (mock-help-url-5)',
+					type: 'warning',
+					element: 'mock-element-5',
+					runnerExtras: {
+						description: 'mock description 5',
+						impact: 'moderate',
+						needsFurtherReview: true,
+						help: 'mock help 5',
+						helpUrl: 'mock-help-url-5'
 					}
 				}
 			]);
@@ -262,7 +297,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe context', function() {
+				it('sets the axe context', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						cssSelector,
@@ -309,7 +344,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe rules', function() {
+				it('sets the axe rules', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						sinon.match.any,
@@ -331,7 +366,7 @@ describe('lib/runners/axe', function() {
 					await runner.run(options, pa11y);
 				});
 
-				it('sets the aXe ignore rules', function() {
+				it('sets the axe ignore rules', function() {
 					assert.calledWithExactly(
 						global.window.axe.run,
 						sinon.match.any,
@@ -342,9 +377,86 @@ describe('lib/runners/axe', function() {
 					);
 				});
 			});
+
+			describe('levelCapWhenNeedsReview', function() {
+				describe('when set to "warning"', function() {
+					beforeEach(async function() {
+						options.levelCapWhenNeedsReview = 'warning';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('caps incomplete issues with error-level impact at warning', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'warning');
+						assert.strictEqual(incompleteIssues[1].type, 'warning');
+					});
+
+					it('does not affect incomplete issues already at warning level', function() {
+						const warningIssue = resolvedValue.find(issue => issue.code === 'mock-id-5');
+						assert.strictEqual(warningIssue.type, 'warning');
+					});
+
+					it('does not affect incomplete issues already at notice level', function() {
+						const noticeIssue = resolvedValue.find(issue => issue.code === 'mock-id-3');
+						assert.strictEqual(noticeIssue.type, 'notice');
+					});
+				});
+
+				describe('when set to "notice"', function() {
+					beforeEach(async function() {
+						options.levelCapWhenNeedsReview = 'notice';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('caps incomplete issues with error-level impact at notice', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'notice');
+						assert.strictEqual(incompleteIssues[1].type, 'notice');
+					});
+
+					it('caps incomplete issues with warning-level impact at notice', function() {
+						const warningIssue = resolvedValue.find(issue => issue.code === 'mock-id-5');
+						assert.strictEqual(warningIssue.type, 'notice');
+					});
+
+					it('does not affect incomplete issues already at notice level', function() {
+						const noticeIssue = resolvedValue.find(issue => issue.code === 'mock-id-3');
+						assert.strictEqual(noticeIssue.type, 'notice');
+					});
+				});
+
+				describe('when set to "error" (explicit)', function() {
+					beforeEach(async function() {
+						options.levelCapWhenNeedsReview = 'error';
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('does not cap incomplete issues, leaving them at error level', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'error');
+						assert.strictEqual(incompleteIssues[1].type, 'error');
+					});
+				});
+
+				describe('when left unset, defaults to error', function() {
+					beforeEach(async function() {
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('does not cap incomplete issues, leaving them at error level', function() {
+						const incompleteIssues = resolvedValue.filter(issue => issue.code === 'mock-id-4');
+						assert.strictEqual(incompleteIssues.length, 2);
+						assert.strictEqual(incompleteIssues[0].type, 'error');
+						assert.strictEqual(incompleteIssues[1].type, 'error');
+					});
+				});
+			});
 		});
 
-		describe('when aXe errors', function() {
+		describe('when axe errors', function() {
 			let axeError;
 			let rejectedError;
 
@@ -359,7 +471,7 @@ describe('lib/runners/axe', function() {
 				}
 			});
 
-			it('rejects with the aXe error', function() {
+			it('rejects with the axe error', function() {
 				assert.strictEqual(rejectedError, axeError);
 			});
 

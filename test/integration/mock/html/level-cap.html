@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Axe Test Page - Multiple Severity Levels</title>
+	</head>
+	<body>
+		<main>
+			<h1>Axe Accessibility Test Page</h1>
+
+			<!-- CRITICAL VIOLATION: image-alt - Images must have alternative text -->
+			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="100" height="100" />
+
+			<!-- SERIOUS INCOMPLETE: color-contrast - Elements must meet minimum color contrast ratio thresholds -->
+			<div style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');padding: 20px;">
+				<p>Text over a background image - axe cannot automatically determine contrast</p>
+			</div>
+
+			<!-- SERIOUS VIOLATION: frame-title - Frames must have an accessible name -->
+			<!-- CRITICAL INCOMPLETE: frame-tested - Frames should be tested with axe-core -->
+			<iframe src="about:blank" width="300" height="200"></iframe>
+
+			<!-- MODERATE VIOLATION: heading-order - Heading levels should only increase by one -->
+			<h2>Heading Structure</h2>
+			<h4>This H4 skips H3 level</h4>
+
+			<!-- MINOR VIOLATION: table-duplicate-name - Tables should not have the same summary and caption -->
+			<table summary="Sales Data">
+				<caption>Sales Data</caption>
+				<tr>
+					<th>Month</th>
+					<th>Sales</th>
+				</tr>
+				<tr>
+					<td>January</td>
+					<td>$1000</td>
+				</tr>
+			</table>
+		</main>
+	</body>
+</html>
