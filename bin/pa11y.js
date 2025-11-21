@@ -70,8 +70,7 @@ function configureProgram() {
 		.option(
 			'--level-cap-when-needs-review <level>',
 			'(axe-only) cap severity of any issue requiring manual review to: ' +
-				'error (default), warning, notice',
-			'error'
+				'error (default), warning, notice'
 		)
 		.option(
 			'-R, --root-element <selector>',
