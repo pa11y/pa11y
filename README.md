@@ -460,6 +460,16 @@ The level of issue which can fail the test (and cause it to exit with code 2) wh
 
 Defaults to `error`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
+### `levelCapWhenNeedsReview` (string)
+
+Cap any issue requiring manual review to this level. This should be one of `error` (the default), `warning`, or `notice`. Only used by the axe runner.
+
+```json
+{
+    "levelCapWhenNeedsReview": "warning"
+}
+```
+
 ### `log` (object)
 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
