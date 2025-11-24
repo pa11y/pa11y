@@ -221,73 +221,122 @@ describe('lib/action', function() {
 		});
 
 		describe('.match', function() {
-
 			it('matches all of the expected action strings', function() {
 				assert.deepEqual('click .foo'.match(action.match), [
 					'click .foo',
+					undefined,
 					undefined,
 					'.foo'
 				]);
 				assert.deepEqual('click element .foo'.match(action.match), [
 					'click element .foo',
+					undefined,
 					' element',
 					'.foo'
 				]);
 				assert.deepEqual('click element .foo .bar .baz'.match(action.match), [
 					'click element .foo .bar .baz',
+					undefined,
+					' element',
+					'.foo .bar .baz'
+				]);
+				assert.deepEqual('double click element .foo .bar .baz'.match(action.match), [
+					'double click element .foo .bar .baz',
+					'double ',
 					' element',
 					'.foo .bar .baz'
 				]);
 			});
-
 		});
 
 		it('has a `run` method', function() {
 			assert.isFunction(action.run);
 		});
 
+
 		describe('.run(browser, page, options, matches)', function() {
 			let matches;
 			let resolvedValue;
 
-			beforeEach(async function() {
-				matches = 'click element foo'.match(action.match);
-				resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
-			});
-
-			it('clicks the specified element on the page', function() {
-				assert.calledOnce(puppeteer.mockPage.click);
-				assert.calledWithExactly(puppeteer.mockPage.click, matches[2]);
-			});
-
-			it('resolves with `undefined`', function() {
-				assert.isUndefined(resolvedValue);
-			});
-
-			describe('when the click fails', function() {
-				let clickError;
-				let rejectedError;
-
+			describe('click', function() {
 				beforeEach(async function() {
-					clickError = new Error('click error');
-					puppeteer.mockPage.click.rejects(clickError);
-					try {
-						await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
-					} catch (error) {
-						rejectedError = error;
-					}
+					matches = 'click element foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
 				});
 
-				it('rejects with a new error', function() {
-					assert.notStrictEqual(rejectedError, clickError);
-					assert.instanceOf(rejectedError, Error);
-					assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+				it('clicks the specified element on the page', function() {
+					assert.calledOnce(puppeteer.mockPage.click);
+					assert.calledWithExactly(puppeteer.mockPage.click, matches[3], {
+						clickCount: 1
+					});
 				});
 
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
+				});
+
+				describe('when the click fails', function() {
+					let clickError;
+					let rejectedError;
+
+					beforeEach(async function() {
+						clickError = new Error('click error');
+						puppeteer.mockPage.click.rejects(clickError);
+						try {
+							await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						} catch (error) {
+							rejectedError = error;
+						}
+					});
+
+					it('rejects with a new error', function() {
+						assert.notStrictEqual(rejectedError, clickError);
+						assert.instanceOf(rejectedError, Error);
+						assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+					});
+				});
 			});
 
-		});
+			describe('double click', function() {
+				beforeEach(async function() {
+					matches = 'double click element foo'.match(action.match);
+					resolvedValue = await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+				});
 
+
+				it('double clicks the specified element on the page', function() {
+					assert.calledOnce(puppeteer.mockPage.click);
+					assert.calledWithExactly(puppeteer.mockPage.click, matches[3], {
+						clickCount: 2
+					});
+				});
+
+				it('resolves with `undefined`', function() {
+					assert.isUndefined(resolvedValue);
+				});
+
+				describe('when the double click fails', function() {
+					let clickError;
+					let rejectedError;
+
+					beforeEach(async function() {
+						clickError = new Error('click error');
+						puppeteer.mockPage.click.rejects(clickError);
+						try {
+							await action.run(puppeteer.mockBrowser, puppeteer.mockPage, {}, matches);
+						} catch (error) {
+							rejectedError = error;
+						}
+					});
+
+					it('rejects with a new error', function() {
+						assert.notStrictEqual(rejectedError, clickError);
+						assert.instanceOf(rejectedError, Error);
+						assert.strictEqual(rejectedError.message, 'Failed action: no element matching selector "foo"');
+					});
+				});
+			});
+		});
 	});
 
 	describe('set-field-value action', function() {
