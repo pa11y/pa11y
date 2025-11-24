@@ -1,12 +1,10 @@
 'use strict';
 
 const extend = require('node.extend');
-const spawn = require('child_process').spawn;
+const {spawn} = require('child_process');
 const path = require('path');
 
-module.exports = runPa11yCli;
-
-function runPa11yCli(url, options = {}) {
+module.exports = function runPa11yCli(url, options = {}) {
 
 	// Default the options
 	options = extend(true, {}, {
@@ -54,6 +52,5 @@ function runPa11yCli(url, options = {}) {
 		});
 
 		pa11yProcess.on('error', reject);
-
 	});
-}
+};

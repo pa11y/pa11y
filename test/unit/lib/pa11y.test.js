@@ -150,6 +150,7 @@ describe('lib/pa11y', function() {
 					'notice',
 					'warning'
 				],
+				levelCapWhenNeedsReview: 'error',
 				pa11yVersion: pkg.version,
 				rootElement: pa11y.defaults.rootElement,
 				rules: pa11y.defaults.rules,

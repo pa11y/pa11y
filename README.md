@@ -60,14 +60,15 @@ Usage: pa11y [options] <url>
 
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
-    -s, --standard <name>          the accessibility standard to use: WCAG2A, WCAG2AA (default), WCAG2AAA – only used by htmlcs runner
+    -s, --standard <name>          the accessibility standard to use: WCAG2AAA (only used by htmlcs), WCAG2AA (default), or WCAG2A
     -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
     -e, --runner <runner>          the test runners to use: htmlcs (default), axe
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
-    --include-notices              Include notices in the report
-    --include-warnings             Include warnings in the report
+    --include-notices              include notices in the report
+    --include-warnings             include warnings in the report
+    --level-cap-when-needs-review <level>   (axe-only) cap severity of any issue requiring manual review to: error (default), warning, notice'
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
@@ -459,6 +460,16 @@ The level of issue which can fail the test (and cause it to exit with code 2) wh
 
 Defaults to `error`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
+### `levelCapWhenNeedsReview` (string)
+
+Cap any issue requiring manual review to this level. This should be one of `error` (the default), `warning`, or `notice`. Only used by the axe runner.
+
+```json
+{
+    "levelCapWhenNeedsReview": "warning"
+}
+```
+
 ### `log` (object)
 
 An object which implements the methods `debug`, `error`, and `info` which will be used to report errors and test information.
@@ -586,7 +597,11 @@ Defaults to `null`, meaning the screen will not be captured. Note the directory 
 
 ### `standard` (string)
 
-The accessibility standard to use when testing pages. This should be one of `WCAG2A`, `WCAG2AA`, or `WCAG2AAA`. **Note:** only used by htmlcs runner.
+The accessibility standard to use when testing pages. This should be one of:
+
+- `WCAG2A`
+- `WCAG2AA`
+- `WCAG2AAA` (this level is currently used only by Pa11y's runner for HTML_CodeSniffer)
 
 ```js
 pa11y(url, {
