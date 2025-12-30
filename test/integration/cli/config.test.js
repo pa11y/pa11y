@@ -114,7 +114,7 @@ describe('CLI config', function() {
 					'--include-warnings',
 					'--reporter', 'json'
 				],
-				workingDirectory: path.resolve(`${__dirname}/../mock/config`)
+				workingDirectory: path.join(__dirname, '..', 'mock', 'config')
 			});
 		});
 

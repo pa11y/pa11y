@@ -5,7 +5,8 @@ const path = require('path');
 const {parseArguments, verifyOptions} = require('../../../lib/option');
 
 describe('lib/option', function() {
-	const noop = function() { /* No-op */ };
+	// eslint-disable-next-line no-empty-function
+	const noop = function() {};
 
 	let defaults;
 
