@@ -22,13 +22,11 @@ describe('lib/pa11y', function() {
 		pa11yResults = {
 			mockResults: true
 		};
-		/* eslint-disable no-underscore-dangle */
 		global.window = {
 			__pa11y: {
 				run: sinon.stub().returns(pa11yResults)
 			}
 		};
-		/* eslint-enable no-underscore-dangle */
 
 		runAction = require('../mocks/action.mock');
 		quibble('../../../lib/action', runAction);
@@ -39,8 +37,8 @@ describe('lib/pa11y', function() {
 
 		pkg = require('../../../package.json');
 
-		htmlCodeSnifferPath = path.resolve(`${__dirname}/../../../node_modules/html_codesniffer/build/HTMLCS.js`);
-		pa11yRunnerPath = path.resolve(`${__dirname}/../../../lib/runner.js`);
+		htmlCodeSnifferPath = path.join(__dirname, '..', '..', '..', 'node_modules', 'html_codesniffer', 'build', 'HTMLCS.js');
+		pa11yRunnerPath = path.join(__dirname, '..', '..', '..', 'lib', 'runner.js');
 
 		fs = require('../mocks/fs.mock');
 		quibble('fs', fs);
@@ -63,9 +61,7 @@ describe('lib/pa11y', function() {
 	});
 
 	afterEach(function() {
-		/* eslint-disable no-underscore-dangle */
 		delete global.window;
-		/* eslint-enable no-underscore-dangle */
 	});
 
 	it('is a function', function() {
@@ -127,7 +123,7 @@ describe('lib/pa11y', function() {
 
 		it('loads the Pa11y runner JavaScript', function() {
 			assert.called(fs.readFileSync);
-			assert.calledWith(fs.readFileSync, path.resolve(`${__dirname}/../../../lib/runner.js`), 'utf-8');
+			assert.calledWith(fs.readFileSync, path.join(__dirname, '..', '..', '..', 'lib', 'runner.js'), 'utf-8');
 		});
 
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
@@ -174,10 +170,10 @@ describe('lib/pa11y', function() {
 			});
 
 			it('calls `__pa11y.run` with the passed in options', function() {
-				/* eslint-disable no-underscore-dangle */
+				// eslint-disable-next-line no-underscore-dangle
 				assert.calledOnce(global.window.__pa11y.run);
+				// eslint-disable-next-line no-underscore-dangle
 				assert.calledWithExactly(global.window.__pa11y.run, options);
-				/* eslint-enable no-underscore-dangle */
 			});
 
 			it('returns the return value of `__pa11y.run`', function() {
@@ -647,7 +643,7 @@ describe('lib/pa11y', function() {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {
+					} catch {
 					}
 				});
 
@@ -697,7 +693,7 @@ describe('lib/pa11y', function() {
 					puppeteer.mockPage.goto.rejects(headlessChromeError);
 					try {
 						await pa11y(options);
-					} catch (error) {
+					} catch {
 					}
 				});
 
@@ -786,6 +782,7 @@ describe('lib/pa11y', function() {
 					scripts: [
 						'/mock-runner-node-module-1/vendor.js'
 					],
+					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
 				};
 				quibble('node-module-1', mockRunnerNodeModule1);
@@ -795,6 +792,7 @@ describe('lib/pa11y', function() {
 					scripts: [
 						'/mock-runner-node-module-2/vendor.js'
 					],
+					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
 				};
 				quibble('node-module-2', mockRunnerNodeModule2);

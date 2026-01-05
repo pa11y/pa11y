@@ -134,7 +134,8 @@ async function runProgram() {
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
 	if (!programOptions.debug) {
-		options.log.debug = () => { /* NoOp */ };
+		// eslint-disable-next-line no-empty-function
+		options.log.debug = () => {};
 	}
 	await report.begin(program.url);
 	try {

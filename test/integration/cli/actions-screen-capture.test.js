@@ -3,7 +3,7 @@
 const assert = require('proclaim');
 const fs = require('fs');
 const path = require('path');
-const promisify = require('util').promisify;
+const {promisify} = require('util');
 const runPa11yCli = require('../helper/pa11y-cli');
 const mkdir = promisify(fs.mkdir);
 const rmdir = promisify(fs.rmdir);
@@ -22,7 +22,7 @@ describe('CLI action "screen-capture"', function() {
 		screenCapturePath = path.join(screenCaptureDirectory, '/screen-capture-action-test.png');
 		try {
 			await mkdir(screenCaptureDirectory);
-		} catch (error) {}
+		} catch {}
 		await runPa11yCli(`${global.mockWebsiteAddress}/errors`, {
 			arguments: [
 				// Config path is relative to working directory
