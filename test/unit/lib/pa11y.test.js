@@ -37,7 +37,7 @@ describe('lib/pa11y', function() {
 
 		pkg = require('../../../package.json');
 
-		htmlCodeSnifferPath = path.join(__dirname, '..', '..', '..', 'node_modules', 'html_codesniffer', 'build', 'HTMLCS.js');
+		htmlCodeSnifferPath = path.join(__dirname, '..', '..', '..', 'node_modules', '@pa11y', 'html_codesniffer', 'build', 'HTMLCS.js');
 		pa11yRunnerPath = path.join(__dirname, '..', '..', '..', 'lib', 'runner.js');
 
 		fs = require('../mocks/fs.mock');
