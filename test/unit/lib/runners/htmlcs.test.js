@@ -65,7 +65,7 @@ describe('lib/runners/htmlcs', function() {
 	it('has a `scripts` property set to an array of scripts the runner is dependent on', function() {
 		assert.isArray(runner.scripts);
 		assert.lengthEquals(runner.scripts, 1);
-		assert.isTrue(runner.scripts[0].endsWith(path.join('node_modules', 'html_codesniffer', 'build', 'HTMLCS.js')));
+		assert.isTrue(runner.scripts[0].endsWith(path.join('node_modules', '@pa11y', 'html_codesniffer', 'build', 'HTMLCS.js')));
 	});
 
 	it('has a `run` method', function() {

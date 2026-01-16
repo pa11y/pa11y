@@ -50,11 +50,11 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@pa11y/html_codesniffer": "^2.6.0",
     "axe-core": "~4.10.3",
     "bfj": "~9.1.2",
     "commander": "~14.0.1",
     "envinfo": "~7.14.0",
-    "html_codesniffer": "~2.5.1",
     "kleur": "~4.1.5",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
