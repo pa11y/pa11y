@@ -54,7 +54,7 @@
     "axe-core": "~4.10.3",
     "bfj": "~9.1.2",
     "commander": "~14.0.1",
-    "envinfo": "~7.14.0",
+    "envinfo": "~7.21.0",
     "kleur": "~4.1.5",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
