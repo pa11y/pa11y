@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@pa11y/html_codesniffer": "^2.6.0",
-    "axe-core": "~4.10.3",
+    "axe-core": "~4.11.1",
     "bfj": "~9.1.2",
     "commander": "~14.0.1",
     "envinfo": "~7.21.0",
