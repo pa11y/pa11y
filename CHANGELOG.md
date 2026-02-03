@@ -2,7 +2,7 @@
 
 ## 9.1.0 (2026-02-03)
 
-Pa11y 9.1 includes updates and improvements to both `html_codesniffer` and `axe` runners, replacement of `mockery` with `quibble` in the test suite to resolve security issues, an upgrade to ESLint v9 with flat config, and various other updates.
+Pa11y 9.1 includes updates and improvements to both `htmlcs` and `axe` runners, replacement of `mockery` with `quibble` in the test suite to resolve security issues, an upgrade to ESLint v9 with flat config, and various other updates.
 
 ### Changes in `pa11y@9.1.0`
 
@@ -12,6 +12,7 @@ Pa11y 9.1 includes updates and improvements to both `html_codesniffer` and `axe`
   * Update the `axe` runner with a user-specified option to control how issues requiring manual review are handled, which resolves several issues. Added CLI arg `--level-cap-when-needs-review <level>` (default: `error`), which caps the severity of any issue that `axe` reports as requiring manual review. This is not a breaking change as the default behavior remains unchanged. ([#685](https://github.com/pa11y/pa11y/pull/685))
 * Replace `mockery` with `quibble` for mocking in the test suite, removing the deprecated `mockery` dependency and resolving critical vulnerability [CVE-2022-37614](https://nvd.nist.gov/vuln/detail/CVE-2022-37614) / [GHSA-gmwp-3pwc-3j3g](https://github.com/advisories/GHSA-gmwp-3pwc-3j3g). ([#772](https://github.com/pa11y/pa11y/pull/772))
 * Update to ESLint v9 and flat config using `eslint-config-pa11y`, refactored for ESLint and flat config changes. ([#778](https://github.com/pa11y/pa11y/pull/778))
+* Add example [JSON](./example/configs/pa11y.json) and [JavaScript](./example/configs/pa11y.js) config files.
 * Update other dependencies (no functional changes)
 
 ### Full diff for `pa11y@9.1.0`
