@@ -4,7 +4,7 @@
 
 Pa11y 9.1 includes updates and improvements to both `htmlcs` and `axe` runners, replacement of `mockery` with `quibble` in the test suite to resolve security issues, an upgrade to ESLint v9 with flat config, and various other updates.
 
-### Changes in `pa11y@9.1.0`
+### Changes
 
 * Update to the new `@pa11y/html_codesniffer` fork, which incorporates the latest unreleased updates from `html_codesniffer` and resolves several issues ([#698](https://github.com/pa11y/pa11y/pull/698)).
 * Incorporate several updates and improvements to the `axe` runner:
