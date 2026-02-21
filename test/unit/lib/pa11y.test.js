@@ -129,7 +129,7 @@ describe('lib/pa11y', function() {
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options\s*=>.*/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\["htmlcs"\] = async options\s*=>.*/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', function() {
@@ -815,8 +815,8 @@ describe('lib/pa11y', function() {
 			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
 
-				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-1'\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/);
-				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-2'\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/);
+				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\["node-module-1"\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/);
+				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\["node-module-2"\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/);
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
