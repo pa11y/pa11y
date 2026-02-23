@@ -783,7 +783,7 @@ describe('lib/pa11y', function() {
 						'/mock-runner-node-module-1/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1-run'
 				};
 				quibble('node-module-1', mockRunnerNodeModule1);
 
@@ -793,7 +793,7 @@ describe('lib/pa11y', function() {
 						'/mock-runner-node-module-2/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2-run'
 				};
 				quibble('node-module-2', mockRunnerNodeModule2);
 
@@ -815,14 +815,15 @@ describe('lib/pa11y', function() {
 			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
 
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(1).args[0],
-					/^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\["node-module-1"\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/
-				);
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(2).args[0],
-					/^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\["node-module-2"\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/
-				);
+				const evaluateCall1 = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				assert.include(evaluateCall1, 'mock-runner-node-module-1-js');
+				assert.include(evaluateCall1, 'window.__pa11y.runners["node-module-1"]');
+				assert.include(evaluateCall1, 'mock-runner-node-module-1-run');
+
+				const evaluateCall2 = puppeteer.mockPage.evaluate.getCall(2).args[0];
+				assert.include(evaluateCall2, 'mock-runner-node-module-2-js');
+				assert.include(evaluateCall2, 'window.__pa11y.runners["node-module-2"]');
+				assert.include(evaluateCall2, 'mock-runner-node-module-2-run');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -886,7 +887,7 @@ describe('lib/pa11y', function() {
 						'/mock-pa11y-runner/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-pa11y-runner'
+					run: /* istanbul ignore next */ () => 'mock-pa11y-runner-run'
 				};
 				// Quibble the prefixed module name
 				quibble('pa11y-runner-custom', mockRunnerModule);
@@ -903,11 +904,11 @@ describe('lib/pa11y', function() {
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(1).args[0],
-					/^\s*;\s*mock-pa11y-runner-js\s*;\s*;\s*window\.__pa11y\.runners\["custom"\] = \(\)\s*=>\s*'mock-pa11y-runner'\s*;\s*$/
-				);
+				assert.include(evaluateScript, 'mock-pa11y-runner-js');
+				assert.include(evaluateScript, 'window.__pa11y.runners["custom"]');
+				assert.include(evaluateScript, 'mock-pa11y-runner-run');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -926,14 +927,14 @@ describe('lib/pa11y', function() {
 				mockRunnerModule = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-full-module/vendor.js'
+						'/mock-full-module-runner/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-full-module'
+					run: /* istanbul ignore next */ () => 'mock-full-module-runner'
 				};
 				quibble('pa11y-runner-fullname', mockRunnerModule);
 
-				fs.readFileSync.withArgs('/mock-full-module/vendor.js').returns('mock-full-module-js');
+				fs.readFileSync.withArgs('/mock-full-module-runner/vendor.js').returns('mock-full-module-runner-js');
 
 				options.runners = ['pa11y-runner-fullname'];
 
@@ -945,11 +946,11 @@ describe('lib/pa11y', function() {
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(1).args[0],
-					/^\s*;\s*mock-full-module-js\s*;\s*;\s*window\.__pa11y\.runners\["pa11y-runner-fullname"\] = \(\)\s*=>\s*'mock-full-module'\s*;\s*$/
-				);
+				assert.include(evaluateScript, 'mock-full-module-runner-js');
+				assert.include(evaluateScript, 'window.__pa11y.runners["pa11y-runner-fullname"]');
+				assert.include(evaluateScript, 'mock-full-module-runner');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -972,14 +973,14 @@ describe('lib/pa11y', function() {
 				mockRunnerModule = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-relative-runner/vendor.js'
+						'/mock-relative-file-runner/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-relative-runner'
+					run: /* istanbul ignore next */ () => 'mock-relative-file-runner-run'
 				};
 				quibble(resolvedPath, mockRunnerModule);
 
-				fs.readFileSync.withArgs('/mock-relative-runner/vendor.js').returns('mock-relative-runner-js');
+				fs.readFileSync.withArgs('/mock-relative-file-runner/vendor.js').returns('mock-relative-file-runner-js');
 
 				options.runners = [relativePath];
 
@@ -991,15 +992,11 @@ describe('lib/pa11y', function() {
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
-				// Path separators are platform-specific (backslashes on Windows), so a dynamic
-				// RegExp is require. With that, must escape the file name to insert into the string,
-				// and the RegExp special characters to ensure they are treated as literals.
-				const escapedKey = JSON.stringify(relativePath).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(1).args[0],
-					new RegExp(`^\\s*;\\s*mock-relative-runner-js\\s*;\\s*;\\s*window\\.__pa11y\\.runners\\[${escapedKey}\\] = \\(\\)\\s*=>\\s*'mock-relative-runner'\\s*;\\s*$`)
-				);
+				assert.include(evaluateScript, 'mock-relative-file-runner-js');
+				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(relativePath)}]`);
+				assert.include(evaluateScript, 'mock-relative-file-runner-run');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -1021,14 +1018,14 @@ describe('lib/pa11y', function() {
 				mockRunnerFileModule = {
 					supports: 'mock-support-string',
 					scripts: [
-						'/mock-runner-file-module/vendor.js'
+						'/mock-absolute-file-runner/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-runner-file-module'
+					run: /* istanbul ignore next */ () => 'mock-absolute-file-runner-run'
 				};
 				quibble(runnerFilePath, mockRunnerFileModule);
 
-				fs.readFileSync.withArgs('/mock-runner-file-module/vendor.js').returns('mock-runner-file-module-js');
+				fs.readFileSync.withArgs('/mock-absolute-file-runner/vendor.js').returns('mock-absolute-file-runner-js');
 
 				options.runners = [
 					runnerFilePath
@@ -1042,15 +1039,11 @@ describe('lib/pa11y', function() {
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
-				// Path separators are platform-specific (backslashes on Windows), so a dynamic
-				// RegExp is require. With that, must escape the file name to insert into the string,
-				// and the RegExp special characters to ensure they are treated as literals.
-				const escapedKey = JSON.stringify(runnerFilePath).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				assert.match(
-					puppeteer.mockPage.evaluate.getCall(1).args[0],
-					new RegExp(`^\\s*;\\s*mock-runner-file-module-js\\s*;\\s*;\\s*window\\.__pa11y\\.runners\\[${escapedKey}\\] = \\(\\)\\s*=>\\s*'mock-runner-file-module'\\s*;\\s*$`)
-				);
+				assert.include(evaluateScript, 'mock-absolute-file-runner-js');
+				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(runnerFilePath)}]`);
+				assert.include(evaluateScript, 'mock-absolute-file-runner-run');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
