@@ -808,22 +808,25 @@ describe('lib/pa11y', function() {
 				await pa11y(options);
 			});
 
-			it('loads all runner scripts', function() {
-				assert.calledThrice(fs.readFileSync);
+			it('loads all the runner scripts from the `script` paths', function() {
+				assert.calledWith(fs.readFileSync, '/mock-runner-node-module-1/vendor.js');
+				assert.calledWith(fs.readFileSync, '/mock-runner-node-module-2/vendor.js');
 			});
 
 			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
 
 				const evaluateCall1 = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateCall1, 'mock-runner-node-module-1-js');
 				assert.include(evaluateCall1, 'window.__pa11y.runners["node-module-1"]');
-				assert.include(evaluateCall1, 'mock-runner-node-module-1-run');
+				assert.include(evaluateCall1, '() => \'mock-runner-node-module-1-run\'');
 
 				const evaluateCall2 = puppeteer.mockPage.evaluate.getCall(2).args[0];
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateCall2, 'mock-runner-node-module-2-js');
 				assert.include(evaluateCall2, 'window.__pa11y.runners["node-module-2"]');
-				assert.include(evaluateCall2, 'mock-runner-node-module-2-run');
+				assert.include(evaluateCall2, '() => \'mock-runner-node-module-2-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -899,16 +902,17 @@ describe('lib/pa11y', function() {
 				await pa11y(options);
 			});
 
-			it('loads the runner from the pa11y-runner-<name> module', function() {
-				assert.calledTwice(fs.readFileSync);
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-pa11y-runner/vendor.js');
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
 				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateScript, 'mock-pa11y-runner-js');
 				assert.include(evaluateScript, 'window.__pa11y.runners["custom"]');
-				assert.include(evaluateScript, 'mock-pa11y-runner-run');
+				assert.include(evaluateScript, '() => \'mock-pa11y-runner-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -930,27 +934,28 @@ describe('lib/pa11y', function() {
 						'/mock-full-module-runner/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-full-module-runner'
+					run: /* istanbul ignore next */ () => 'mock-full-module-runner-run'
 				};
-				quibble('pa11y-runner-fullname', mockRunnerModule);
+				quibble('runner-fullname', mockRunnerModule);
 
 				fs.readFileSync.withArgs('/mock-full-module-runner/vendor.js').returns('mock-full-module-runner-js');
 
-				options.runners = ['pa11y-runner-fullname'];
+				options.runners = ['runner-fullname'];
 
 				await pa11y(options);
 			});
 
-			it('loads the runner from the full module name', function() {
-				assert.calledTwice(fs.readFileSync);
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-full-module-runner/vendor.js');
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
 				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateScript, 'mock-full-module-runner-js');
-				assert.include(evaluateScript, 'window.__pa11y.runners["pa11y-runner-fullname"]');
-				assert.include(evaluateScript, 'mock-full-module-runner');
+				assert.include(evaluateScript, 'window.__pa11y.runners["runner-fullname"]');
+				assert.include(evaluateScript, '() => \'mock-full-module-runner-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -986,16 +991,17 @@ describe('lib/pa11y', function() {
 				await pa11y(options);
 			});
 
-			it('loads the runner from the relative path', function() {
-				assert.calledTwice(fs.readFileSync);
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-relative-file-runner/vendor.js');
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
 				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateScript, 'mock-relative-file-runner-js');
 				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(relativePath)}]`);
-				assert.include(evaluateScript, 'mock-relative-file-runner-run');
+				assert.include(evaluateScript, '() => \'mock-relative-file-runner-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -1033,16 +1039,17 @@ describe('lib/pa11y', function() {
 				await pa11y(options);
 			});
 
-			it('loads the runner script from the absolute file path', function() {
-				assert.calledTwice(fs.readFileSync);
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-absolute-file-runner/vendor.js');
 			});
 
 			it('evaluates the vendor script and runner JavaScript', function() {
 				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
 				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
 				assert.include(evaluateScript, 'mock-absolute-file-runner-js');
 				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(runnerFilePath)}]`);
-				assert.include(evaluateScript, 'mock-absolute-file-runner-run');
+				assert.include(evaluateScript, '() => \'mock-absolute-file-runner-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
