@@ -967,8 +967,7 @@ describe('lib/pa11y', function() {
 				puppeteer.mockPage.evaluate.resetHistory();
 				fs.readFileSync.resetHistory();
 
-				relativePath = './custom-runner.js';
-				const resolvedPath = path.join(process.cwd(), relativePath);
+				relativePath = path.join('.', 'foo', 'custom-runner.js');
 
 				mockRunnerModule = {
 					supports: 'mock-support-string',
@@ -978,7 +977,7 @@ describe('lib/pa11y', function() {
 					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-relative-file-runner-run'
 				};
-				quibble(resolvedPath, mockRunnerModule);
+				quibble(relativePath, mockRunnerModule);
 
 				fs.readFileSync.withArgs('/mock-relative-file-runner/vendor.js').returns('mock-relative-file-runner-js');
 
