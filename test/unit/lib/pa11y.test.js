@@ -982,7 +982,7 @@ describe('lib/pa11y', function() {
 					// eslint-disable-next-line no-inline-comments
 					run: /* istanbul ignore next */ () => 'mock-relative-file-runner-run'
 				};
-				quibble(relativePath, mockRunnerModule);
+				quibble(path.join(process.cwd(), relativePath), mockRunnerModule);
 
 				fs.readFileSync.withArgs('/mock-relative-file-runner/vendor.js').returns('mock-relative-file-runner-js');
 
