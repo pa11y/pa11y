@@ -169,18 +169,18 @@ The command-line tool can provide test results in a few different ways using the
 - `json`: output test results as a JSON array
 - `tsv`: output test results as tab-separated values
 
-You can also write and publish your own reporters. Pa11y looks for reporters in your `node_modules` folder (with a naming pattern), and the current working directory. The first reporter found will be loaded. So with this command:
+You can also write and publish your own reporters, which must be [CommonJS modules](https://nodejs.org/api/modules.html#modules-commonjs-modules), and may be installed packages or local files. Pa11y checks for reporter modules in a specific order, and the first reporter found will be loaded. So with this command:
 
 ```sh
 pa11y https://example.com --reporter rainbows 
 ```
 
-The following locations will be checked:
+The following locations will be checked, in order:
 
-```sh
-<cwd>/node_modules/pa11y-reporter-rainbows
-<cwd>/rainbows
-```
+- An installed package named `pa11y-reporter-rainbows`
+- A module file located at `<cwd>/rainbows`
+
+For each of these, Pa11y will use the standard Node.js `require` function to attempt to load the module, so the module must be resolvable by `require`, and follows the standard [CommonJS module resolution order](https://nodejs.org/api/modules.html#modules-commonjs-modules). If no runner is found then Pa11y will error.
 
 A Pa11y reporter _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the reporter supports:
 
@@ -849,19 +849,19 @@ Pa11y supports multiple test runners which return different results. The built-i
 - `axe`: run tests using [axe-core][axe].
 - `htmlcs` (default): run tests using [HTML_CodeSniffer][htmlcs]
 
-You can also write and publish your own runners. Pa11y looks for runners in your `node_modules` folder (with a naming pattern), and the current working directory. The first runner found will be loaded. So with this command:
+You can also write and publish your own runners, which must be [CommonJS modules](https://nodejs.org/api/modules.html#modules-commonjs-modules), and may be installed packages or local files. Pa11y checks for runner modules in a specific order, and the first runner found will be loaded. So with this command:
 
 ```sh
 pa11y https://example.com --runner custom-tool
 ```
 
-The following locations will be checked:
+The following locations will be checked, in order:
 
-```sh
-<cwd>/node_modules/pa11y-runner-custom-tool
-<cwd>/node_modules/custom-tool
-<cwd>/custom-tool
-```
+- An installed package named `pa11y-runner-custom-tool`
+- An installed package named `custom-tool` or a module file located at absolute path `custom-tool` (in this case it would most likely be something like `/path/to/custom-tool`)
+- A module file located at `<cwd>/custom-tool`
+
+For each of these, Pa11y will use the standard Node.js `require` function to attempt to load the module, so the module must be resolvable by `require`, and follows the standard [CommonJS module resolution order](https://nodejs.org/api/modules.html#modules-commonjs-modules). If no runner is found then Pa11y will error.
 
 A Pa11y runner _must_ export a string property named `supports`. This is a [semver range] which indicates which versions of Pa11y the runner supports:
 

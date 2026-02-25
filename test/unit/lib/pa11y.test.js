@@ -129,7 +129,7 @@ describe('lib/pa11y', function() {
 		it('evaluates the HTML CodeSniffer vendor and runner JavaScript', function() {
 			assert.called(puppeteer.mockPage.evaluate);
 			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /^\s*;\s*mock-html-codesniffer-js\s*;/);
-			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\['htmlcs'\] = async options\s*=>.*/);
+			assert.match(puppeteer.mockPage.evaluate.secondCall.args[0], /;\s*window\.__pa11y\.runners\["htmlcs"\] = async options\s*=>.*/);
 		});
 
 		it('evaluates the the Pa11y runner JavaScript', function() {
@@ -769,7 +769,7 @@ describe('lib/pa11y', function() {
 
 		});
 
-		describe('when `options.runners` is set', function() {
+		describe('when `options.runners` is set with multiple runners', function() {
 			let mockRunnerNodeModule1;
 			let mockRunnerNodeModule2;
 
@@ -783,7 +783,7 @@ describe('lib/pa11y', function() {
 						'/mock-runner-node-module-1/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-1-run'
 				};
 				quibble('node-module-1', mockRunnerNodeModule1);
 
@@ -793,7 +793,7 @@ describe('lib/pa11y', function() {
 						'/mock-runner-node-module-2/vendor.js'
 					],
 					// eslint-disable-next-line no-inline-comments
-					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2'
+					run: /* istanbul ignore next */ () => 'mock-runner-node-module-2-run'
 				};
 				quibble('node-module-2', mockRunnerNodeModule2);
 
@@ -808,15 +808,25 @@ describe('lib/pa11y', function() {
 				await pa11y(options);
 			});
 
-			it('loads all runner scripts', function() {
-				assert.calledThrice(fs.readFileSync);
+			it('loads all the runner scripts from the `script` paths', function() {
+				assert.calledWith(fs.readFileSync, '/mock-runner-node-module-1/vendor.js');
+				assert.calledWith(fs.readFileSync, '/mock-runner-node-module-2/vendor.js');
 			});
 
 			it('evaluates all vendor script and runner JavaScript', function() {
 				assert.called(puppeteer.mockPage.evaluate);
 
-				assert.match(puppeteer.mockPage.evaluate.getCall(1).args[0], /^\s*;\s*mock-runner-node-module-1-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-1'\] = \(\)\s*=>\s*'mock-runner-node-module-1'\s*;\s*$/);
-				assert.match(puppeteer.mockPage.evaluate.getCall(2).args[0], /^\s*;\s*mock-runner-node-module-2-js\s*;\s*;\s*window\.__pa11y\.runners\['node-module-2'\] = \(\)\s*=>\s*'mock-runner-node-module-2'\s*;\s*$/);
+				const evaluateCall1 = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateCall1, 'mock-runner-node-module-1-js');
+				assert.include(evaluateCall1, 'window.__pa11y.runners["node-module-1"]');
+				assert.include(evaluateCall1, '() => \'mock-runner-node-module-1-run\'');
+
+				const evaluateCall2 = puppeteer.mockPage.evaluate.getCall(2).args[0];
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateCall2, 'mock-runner-node-module-2-js');
+				assert.include(evaluateCall2, 'window.__pa11y.runners["node-module-2"]');
+				assert.include(evaluateCall2, '() => \'mock-runner-node-module-2-run\'');
 			});
 
 			it('verifies that the runner supports the current version of Pa11y', function() {
@@ -865,6 +875,208 @@ describe('lib/pa11y', function() {
 				].join('\n'));
 			});
 
+		});
+
+		describe('when `options.runners` is set with a runner name (pa11y-runner-<name> format)', function() {
+			let mockRunnerModule;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFileSync.resetHistory();
+
+				mockRunnerModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-pa11y-runner/vendor.js'
+					],
+					// eslint-disable-next-line no-inline-comments
+					run: /* istanbul ignore next */ () => 'mock-pa11y-runner-run'
+				};
+				// Quibble the prefixed module name
+				quibble('pa11y-runner-custom', mockRunnerModule);
+
+				fs.readFileSync.withArgs('/mock-pa11y-runner/vendor.js').returns('mock-pa11y-runner-js');
+
+				options.runners = ['custom'];
+
+				await pa11y(options);
+			});
+
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-pa11y-runner/vendor.js');
+			});
+
+			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateScript, 'mock-pa11y-runner-js');
+				assert.include(evaluateScript, 'window.__pa11y.runners["custom"]');
+				assert.include(evaluateScript, '() => \'mock-pa11y-runner-run\'');
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledOnce(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+			});
+		});
+
+		describe('when `options.runners` is set with a full module name', function() {
+			let mockRunnerModule;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFileSync.resetHistory();
+
+				mockRunnerModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-full-module-runner/vendor.js'
+					],
+					// eslint-disable-next-line no-inline-comments
+					run: /* istanbul ignore next */ () => 'mock-full-module-runner-run'
+				};
+				quibble('runner-fullname', mockRunnerModule);
+
+				fs.readFileSync.withArgs('/mock-full-module-runner/vendor.js').returns('mock-full-module-runner-js');
+
+				options.runners = ['runner-fullname'];
+
+				await pa11y(options);
+			});
+
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-full-module-runner/vendor.js');
+			});
+
+			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateScript, 'mock-full-module-runner-js');
+				assert.include(evaluateScript, 'window.__pa11y.runners["runner-fullname"]');
+				assert.include(evaluateScript, '() => \'mock-full-module-runner-run\'');
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledOnce(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+			});
+		});
+
+		describe('when `options.runners` is set with a relative path to cwd', function() {
+			let mockRunnerModule;
+			let relativePath;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFileSync.resetHistory();
+
+				relativePath = path.join('.', 'foo', 'custom-runner.js');
+
+				mockRunnerModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-relative-file-runner/vendor.js'
+					],
+					// eslint-disable-next-line no-inline-comments
+					run: /* istanbul ignore next */ () => 'mock-relative-file-runner-run'
+				};
+				quibble(path.join(process.cwd(), relativePath), mockRunnerModule);
+
+				fs.readFileSync.withArgs('/mock-relative-file-runner/vendor.js').returns('mock-relative-file-runner-js');
+
+				options.runners = [relativePath];
+
+				await pa11y(options);
+			});
+
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-relative-file-runner/vendor.js');
+			});
+
+			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateScript, 'mock-relative-file-runner-js');
+				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(relativePath)}]`);
+				assert.include(evaluateScript, '() => \'mock-relative-file-runner-run\'');
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledOnce(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+			});
+		});
+
+		describe('when `options.runners` is set with an absolute path', function() {
+			let mockRunnerFileModule;
+			let runnerFilePath;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.evaluate.resetHistory();
+				fs.readFileSync.resetHistory();
+
+				runnerFilePath = path.join(__dirname, '..', '..', '..', 'lib', 'runners', 'mock-runner.js');
+
+				mockRunnerFileModule = {
+					supports: 'mock-support-string',
+					scripts: [
+						'/mock-absolute-file-runner/vendor.js'
+					],
+					// eslint-disable-next-line no-inline-comments
+					run: /* istanbul ignore next */ () => 'mock-absolute-file-runner-run'
+				};
+				quibble(runnerFilePath, mockRunnerFileModule);
+
+				fs.readFileSync.withArgs('/mock-absolute-file-runner/vendor.js').returns('mock-absolute-file-runner-js');
+
+				options.runners = [
+					runnerFilePath
+				];
+
+				await pa11y(options);
+			});
+
+			it('loads the runner script from the `script` path', function() {
+				assert.calledWith(fs.readFileSync, '/mock-absolute-file-runner/vendor.js');
+			});
+
+			it('evaluates the vendor script and runner JavaScript', function() {
+				const evaluateScript = puppeteer.mockPage.evaluate.getCall(1).args[0];
+				assert.called(puppeteer.mockPage.evaluate);
+				// Includes runner script, registers runner, and includes runner run function
+				assert.include(evaluateScript, 'mock-absolute-file-runner-js');
+				assert.include(evaluateScript, `window.__pa11y.runners[${JSON.stringify(runnerFilePath)}]`);
+				assert.include(evaluateScript, '() => \'mock-absolute-file-runner-run\'');
+			});
+
+			it('verifies that the runner supports the current version of Pa11y', function() {
+				assert.calledOnce(semver.satisfies);
+				assert.calledWithExactly(semver.satisfies, pkg.version, 'mock-support-string');
+			});
+		});
+
+		describe('when `options.runners` is set with a non-existent runner', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				options.runners = [
+					'non-existent-runner-that-does-not-exist'
+				];
+
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'Runner "non-existent-runner-that-does-not-exist" could not be found');
+			});
 		});
 
 	});
