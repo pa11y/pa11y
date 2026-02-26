@@ -1,5 +1,15 @@
 # Changelog
 
+## 9.1.1 (2026-02-26)
+
+* Fix several issues with loading custom runners, including errors when loading any custom runner on Windows. (#798)
+* Update `debug` messages related to opening the page and navigating to the target URL. (#701)
+* Update dependencies (no functional changes)
+
+### Full diff for `pa11y@9.1.1`
+
+* [9.1.0...9.1.1](https://github.com/pa11y/pa11y/compare/9.1.0...9.1.1)
+
 ## 9.1.0 (2026-02-03)
 
 Pa11y 9.1 includes updates and improvements to both `htmlcs` and `axe` runners, replacement of `mockery` with `quibble` in the test suite to resolve security issues, an upgrade to ESLint v9 with flat config, and various other updates.
