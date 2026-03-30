@@ -129,6 +129,58 @@ describe('lib/runners/htmlcs', function() {
 			]);
 		});
 
+		describe('when the standard is WCAG22A (axe-only)', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				global.window.HTMLCS.process.reset();
+				options.standard = 'WCAG22A';
+				try {
+					await runner.run(options, pa11y);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(
+					rejectedError.message,
+					'The WCAG22A standard is only supported by the axe runner'
+				);
+			});
+
+			it('does not run HTML CodeSniffer', function() {
+				assert.notCalled(global.window.HTMLCS.process);
+			});
+		});
+
+		describe('when the standard is WCAG22AA (axe-only)', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				global.window.HTMLCS.process.reset();
+				options.standard = 'WCAG22AA';
+				try {
+					await runner.run(options, pa11y);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(
+					rejectedError.message,
+					'The WCAG22AA standard is only supported by the axe runner'
+				);
+			});
+
+			it('does not run HTML CodeSniffer', function() {
+				assert.notCalled(global.window.HTMLCS.process);
+			});
+		});
+
 		describe('when HTML CodeSniffer errors', function() {
 			let htmlcsError;
 			let rejectedError;

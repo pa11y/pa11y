@@ -244,7 +244,9 @@ describe('lib/option', function() {
 		const allowedStandards = [
 			'WCAG2A',
 			'WCAG2AA',
-			'WCAG2AAA'
+			'WCAG2AAA',
+			'WCAG22A',
+			'WCAG22AA'
 		];
 
 		it('is a function', function() {

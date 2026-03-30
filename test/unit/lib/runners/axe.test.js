@@ -332,6 +332,32 @@ describe('lib/runners/axe', function() {
 						)
 					);
 				});
+
+				it('supports WCAG 2.2 level A', async function() {
+					options.standard = 'WCAG22A';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['wcag2a', 'wcag21a', 'wcag22a', 'best-practice']
+						)
+					);
+				});
+
+				it('supports WCAG 2.2 level AA', async function() {
+					options.standard = 'WCAG22AA';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['wcag2a', 'wcag21a', 'wcag22a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice']
+						)
+					);
+				});
 			});
 
 			describe('rules', function() {
