@@ -69,6 +69,10 @@ function configureProgram() {
 			'include warnings in the report'
 		)
 		.option(
+			'--no-include-incomplete',
+			'(axe-only) exclude incomplete results that require manual review'
+		)
+		.option(
 			'--level-cap-when-needs-review <level>',
 			'(axe-only) cap severity of any issue requiring manual review to: ' +
 				'error (default), warning, notice'
@@ -168,6 +172,7 @@ function processOptions() {
 	}, loadConfig(programOptions.config), {
 		hideElements: programOptions.hideElements,
 		ignore: (programOptions.ignore.length ? programOptions.ignore : undefined),
+		includeIncomplete: programOptions.includeIncomplete,
 		includeNotices: programOptions.includeNotices,
 		includeWarnings: programOptions.includeWarnings,
 		level: programOptions.level,
