@@ -48,4 +48,12 @@ jobs:
 
       - run: npm ci
 
-      - run: npm test
+      # Specify bash shell here to provide compatibility with Windows runners.
+      - shell: bash
+        run: |
+          if [ "${{ matrix.node-version }}" = "26" ]; then
+            npm run test-unit
+            npm run test-integration
+          else
+            npm test
+          fi
