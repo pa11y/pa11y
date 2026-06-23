@@ -47,7 +47,7 @@
   "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0-only",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@pa11y/html_codesniffer": "^2.6.0",
