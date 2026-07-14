@@ -47,7 +47,7 @@
   "bugs": "https://github.com/pa11y/pa11y/issues",
   "license": "LGPL-3.0-only",
   "engines": {
-    "node": ">=22.12.0"
+    "node": "^22.13.0 || >=24"
   },
   "dependencies": {
     "@pa11y/html_codesniffer": "^2.6.0",
@@ -55,7 +55,6 @@
     "bfj": "~9.1.3",
     "commander": "~15.0.0",
     "envinfo": "~7.21.0",
-    "kleur": "~4.1.5",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
     "puppeteer": "^25.2.1",

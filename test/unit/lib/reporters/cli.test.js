@@ -2,14 +2,17 @@
 
 const quibble = require('quibble');
 const assert = require('proclaim');
+const sinon = require('sinon');
 
 describe('lib/reporters/cli', function() {
-	let kleur;
+	let util;
 	let cliReporter;
 
 	beforeEach(function() {
-		kleur = require('../../mocks/kleur.mock');
-		quibble('kleur', kleur);
+		util = {
+			styleText: sinon.stub().returnsArg(1)
+		};
+		quibble('node:util', util);
 		cliReporter = require('../../../../lib/reporters/cli');
 	});
 
