@@ -68,7 +68,7 @@ Usage: pa11y [options] <url>
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
     --include-notices              include notices in the report
     --include-warnings             include warnings in the report
-    --level-cap-when-needs-review <level>   (axe-only) cap severity of any issue requiring manual review to: error (default), warning, notice'
+    --level-cap-when-needs-review <level>   (axe-only) cap severity of any issue requiring manual review to: error (default), warning, notice
     -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
@@ -975,7 +975,7 @@ Copyright &copy; 2013-2024, Team Pa11y and contributors
 
 [axe]: https://www.deque.com/axe/
 [brew]: https://mxcl.github.com/homebrew/
-[fork-pa11y]: (https://github.com/pa11y/pa11y/fork)
+[fork-pa11y]: https://github.com/pa11y/pa11y/fork
 [htmlcs-wcag2aaa-ruleset]: https://squizlabs.github.io/HTML_CodeSniffer/Standards/WCAG2/
 [htmlcs]: https://squizlabs.github.io/HTML_CodeSniffer/
 [info-build]: https://github.com/pa11y/pa11y/actions/workflows/tests.yml
