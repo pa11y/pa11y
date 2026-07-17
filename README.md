@@ -460,6 +460,16 @@ The level of issue which can fail the test (and cause it to exit with code 2) wh
 
 Defaults to `error`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
+### `includeIncomplete` (boolean)
+
+Whether to include axe-core's "incomplete" results (items that require manual review) alongside definitive violations. Defaults to `true` for backward compatibility. Set to `false` to exclude incomplete results, which can produce false positives on pages with rich content (math symbols, pseudo-elements, SVG foreignObject, etc.). Only used by the axe runner.
+
+```json
+{
+    "includeIncomplete": false
+}
+```
+
 ### `levelCapWhenNeedsReview` (string)
 
 Cap any issue requiring manual review to this level. This should be one of `error` (the default), `warning`, or `notice`. Only used by the axe runner.

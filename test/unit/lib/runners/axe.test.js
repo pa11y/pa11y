@@ -378,6 +378,56 @@ describe('lib/runners/axe', function() {
 				});
 			});
 
+			describe('includeIncomplete', function() {
+				describe('when set to false', function() {
+					beforeEach(async function() {
+						options.includeIncomplete = false;
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('excludes incomplete issues from the results', function() {
+						const incompleteIssues = resolvedValue.filter(
+							issue => issue.runnerExtras.needsFurtherReview === true
+						);
+						assert.strictEqual(incompleteIssues.length, 0);
+					});
+
+					it('still includes violation issues', function() {
+						const violationIssues = resolvedValue.filter(
+							issue => issue.runnerExtras.needsFurtherReview === false
+						);
+						assert.greaterThan(violationIssues.length, 0);
+					});
+				});
+
+				describe('when set to true (explicit)', function() {
+					beforeEach(async function() {
+						options.includeIncomplete = true;
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('includes incomplete issues in the results', function() {
+						const incompleteIssues = resolvedValue.filter(
+							issue => issue.runnerExtras.needsFurtherReview === true
+						);
+						assert.greaterThan(incompleteIssues.length, 0);
+					});
+				});
+
+				describe('when left unset, defaults to including incomplete', function() {
+					beforeEach(async function() {
+						resolvedValue = await runner.run(options, pa11y);
+					});
+
+					it('includes incomplete issues in the results', function() {
+						const incompleteIssues = resolvedValue.filter(
+							issue => issue.runnerExtras.needsFurtherReview === true
+						);
+						assert.greaterThan(incompleteIssues.length, 0);
+					});
+				});
+			});
+
 			describe('levelCapWhenNeedsReview', function() {
 				describe('when set to "warning"', function() {
 					beforeEach(async function() {
