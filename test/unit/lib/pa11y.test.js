@@ -1172,7 +1172,10 @@ describe('lib/pa11y', function() {
 
 		it('has a `chromeLaunchConfig` property', function() {
 			assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
-				ignoreHTTPSErrors: true
+				ignoreHTTPSErrors: true,
+				args: [
+					'--disable-local-network-access-protection'
+				]
 			});
 		});
 
