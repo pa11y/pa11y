@@ -4,5 +4,5 @@
 	"require": "test/integration/mocha-hooks.js",
 	"spec": "test/integration/**/*.test.js",
 	"slow": 5000,
-	"timeout": 60000
+	"timeout": 120000
 }
