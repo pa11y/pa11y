@@ -23,15 +23,16 @@ function createMockWebsite() {
 		// Set CORS headers to allow Private Network Access (PNA) preflights
 		// Required for Chrome 104+ on Windows which enforces PNA security
 		const corsHeaders = {
-			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Origin': request.headers.origin || '*',
 			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 			'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Request-Private-Network',
-			'Access-Control-Allow-Private-Network': 'true'
+			'Access-Control-Allow-Private-Network': 'true',
+			'Access-Control-Max-Age': '3600'
 		};
 
 		// Handle CORS preflight requests (OPTIONS)
 		if (request.method === 'OPTIONS') {
-			response.writeHead(204, corsHeaders);
+			response.writeHead(200, corsHeaders);
 			response.end();
 			return;
 		}
