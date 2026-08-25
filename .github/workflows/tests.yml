@@ -49,3 +49,4 @@ jobs:
       - run: npm ci
 
       - run: npm test
+        shell: bash

@@ -24,10 +24,10 @@ function createMockWebsite() {
 		// Required for Chrome 104+ on Windows which enforces PNA security
 		const corsHeaders = {
 			'Access-Control-Allow-Origin': request.headers.origin || '*',
-			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-			'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Request-Private-Network',
+			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
+			'Access-Control-Allow-Headers': request.headers['access-control-request-headers'] || 'Content-Type, Access-Control-Request-Private-Network',
 			'Access-Control-Allow-Private-Network': 'true',
-			'Access-Control-Max-Age': '3600'
+			'Access-Control-Max-Age': '86400'
 		};
 
 		// Handle CORS preflight requests (OPTIONS)
