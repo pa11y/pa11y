@@ -9,9 +9,9 @@ module.exports = function runPa11yCli(url, options = {}) {
 	// Default the options
 	options = extend(true, {}, {
 		arguments: [],
-		environment: {
+		environment: Object.assign({}, process.env, {
 			PATH: process.env.PATH
-		},
+		}),
 		workingDirectory: path.join(__dirname, '..')
 	}, options);
 
@@ -46,8 +46,11 @@ module.exports = function runPa11yCli(url, options = {}) {
 		pa11yProcess.on('close', code => {
 			response.exitCode = code;
 			try {
-				response.json = JSON.parse(response.stdout);
-			} catch {}
+				const cleanStdout = response.stdout.replace(/\r\n/g, '\n').trim();
+				response.json = JSON.parse(cleanStdout);
+			} catch {
+				response.json = null; 
+			}
 			resolve(response);
 		});
 
