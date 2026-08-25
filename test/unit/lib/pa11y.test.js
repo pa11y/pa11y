@@ -1170,14 +1170,11 @@ describe('lib/pa11y', function() {
 			assert.isNull(pa11y.defaults.browser);
 		});
 
-		it('has a `chromeLaunchConfig` property', function() {
-			assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
-				ignoreHTTPSErrors: true,
-				args: [
-					'--unsafely-treat-insecure-origin-as-secure=http://localhost'
-				]
-			});
+	it('has a `chromeLaunchConfig` property', function() {
+		assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
+			ignoreHTTPSErrors: true
 		});
+	});
 
 		it('has a `headers` property', function() {
 			assert.deepEqual(pa11y.defaults.headers, {});
