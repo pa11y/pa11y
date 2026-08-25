@@ -20,23 +20,6 @@ function startMockWebsite(port) {
 
 function createMockWebsite() {
 	return http.createServer((request, response) => {
-		// Set CORS headers to allow Private Network Access (PNA) preflights
-		// Required for Chrome 104+ on Windows which enforces PNA security
-		const corsHeaders = {
-			'Access-Control-Allow-Origin': request.headers.origin || '*',
-			'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, HEAD',
-			'Access-Control-Allow-Headers': request.headers['access-control-request-headers'] || 'Content-Type, Access-Control-Request-Private-Network',
-			'Access-Control-Allow-Private-Network': 'true',
-			'Access-Control-Max-Age': '86400'
-		};
-
-		// Handle CORS preflight requests (OPTIONS)
-		if (request.method === 'OPTIONS') {
-			response.writeHead(200, corsHeaders);
-			response.end();
-			return;
-		}
-
 		request.body = '';
 
 		// Grab POST data if there is any
@@ -53,8 +36,7 @@ function createMockWebsite() {
 				html = html.replace('{method}', request.method);
 				html = html.replace('{post-data}', request.body);
 				response.writeHead(200, {
-					'Content-Type': 'text/html',
-					...corsHeaders
+					'Content-Type': 'text/html'
 				});
 				response.end(html);
 			} catch {
