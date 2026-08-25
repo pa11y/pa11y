@@ -49,7 +49,7 @@ module.exports = function runPa11yCli(url, options = {}) {
 				const cleanStdout = response.stdout.replace(/\r\n/g, '\n').trim();
 				response.json = JSON.parse(cleanStdout);
 			} catch {
-				response.json = null; 
+				response.json = null;
 			}
 			resolve(response);
 		});
