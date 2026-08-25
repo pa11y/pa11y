@@ -44,7 +44,7 @@ function createMockWebsite() {
 			request.body += data;
 		});
 		request.on('end', () => {
-			const url = new URL(request.url, 'http://localhost').pathname;
+			const url = new URL(request.url, 'http://127.0.0.1').pathname;
 			try {
 				const viewPath = path.join(__dirname, 'html', `${url}.html`);
 				let html = fs.readFileSync(viewPath, 'utf-8');

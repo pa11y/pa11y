@@ -6,7 +6,7 @@ module.exports = {
 	mochaHooks: {
 		async beforeAll() {
 			global.mockWebsite = await startMockWebsite();
-			global.mockWebsiteAddress = `http://localhost:${global.mockWebsite.address().port}`;
+			global.mockWebsiteAddress = `http://127.0.0.1:${global.mockWebsite.address().port}`;
 		},
 		afterAll() {
 			global.mockWebsite.close();
