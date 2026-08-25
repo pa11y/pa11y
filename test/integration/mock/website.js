@@ -40,7 +40,7 @@ function createMockWebsite() {
 				});
 				response.end(html);
 			} catch {
-				response.writeHead(404, corsHeaders);
+				response.writeHead(404);
 				response.end('Not found');
 			}
 		});
