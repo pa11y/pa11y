@@ -15,13 +15,7 @@ describe('lib/option', function() {
 			actions: [],
 			browser: null,
 			chromeLaunchConfig: {
-				ignoreHTTPSErrors: true,
-				args: [
-					'--no-sandbox',
-					'--disable-setuid-sandbox',
-					'--disable-gpu',
-					'--disable-dev-shm-usage'
-				]
+				ignoreHTTPSErrors: true
 			},
 			headers: {},
 			hideElements: null,
