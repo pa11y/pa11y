@@ -1174,7 +1174,7 @@ describe('lib/pa11y', function() {
 			assert.deepEqual(pa11y.defaults.chromeLaunchConfig, {
 				ignoreHTTPSErrors: true,
 				args: [
-					'--disable-local-network-access-protection'
+					'--unsafely-treat-insecure-origin-as-secure=http://localhost'
 				]
 			});
 		});
