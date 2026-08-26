@@ -57,7 +57,7 @@
     "envinfo": "~7.21.0",
     "mustache": "~4.2.0",
     "node.extend": "~2.0.3",
-    "puppeteer": "^25.8.0",
+    "puppeteer": "^25.9.0",
     "semver": "~7.8.0"
   },
   "devDependencies": {
