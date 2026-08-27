@@ -2,7 +2,7 @@
 
 ## 10.0.0 (2026-08-27)
 
-Pa11y 10 requires a stable (even-numbered) Node.js version of `22` or above, updates to the latest version of Puppeteer (`24`) and Axe (`4.10`), updates several other dependencies, and includes some GitHub actions and documentation cleanup.
+Pa11y 10 requires a stable (even-numbered) Node.js version of `22` or above, updates to the latest version of Puppeteer (`25`) and Axe (`4.13`), updates several other dependencies, and includes some GitHub actions and documentation cleanup.
 
 ### Changes in `pa11y@10`
 
