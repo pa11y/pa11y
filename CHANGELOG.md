@@ -1,5 +1,21 @@
 # Changelog
 
+## 10.0.0 (2026-08-27)
+
+Pa11y 10 requires a stable (even-numbered) Node.js version of `22` or above, updates to the latest version of Puppeteer (`24`) and Axe (`4.10`), updates several other dependencies, and includes some GitHub actions and documentation cleanup.
+
+### Changes in `pa11y@10`
+
+* **Breaking**: Upgrade Node.js support: Pa11y 10 requires a stable (even-numbered) Node.js version of `22.13.0` or above
+* **Breaking**: Upgrade `puppeteer` to `25` from `24`. This resolves an issue with installing browsers, but requires platform-specific tools to unzip the browser files. See the [system requirements](https://github.com/puppeteer/puppeteer/blob/main/docs/guides/system-requirements.md) for details (this should not cause an issue in most cases).
+* **Significant dependency changes (potentially impacting Pa11y results)**:
+  * Remove `kleur` dependency in favor of the built-in `util.styleText` function, which is available in Node.js `22.13.0` and above (#834).
+  * Upgrade `axe-core` to `4.13` from `4.11`. This includes rule fixes that may change results when using the `axe` runner. See `axe-core` [releases](https://github.com/dequelabs/axe-core/releases) for complete details.
+* Other dependency changes:
+  * Upgrade `commander` to `15.0` from `14.0`.
+  * Upgrade `semver` to `7.8` from `7.7`.
+* Other changes: Refactor code and tests for dependency compatibility, update support table, update actions, and fix some links in the README (#825, thanks @TejasAmle).
+
 ## 9.1.1 (2026-02-26)
 
 * Fix several issues with loading custom runners, including errors when loading any custom runner on Windows. (#798)

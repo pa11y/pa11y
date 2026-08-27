@@ -25,7 +25,7 @@ pa11y('https://example.com').then((results) => {
 
 ## Requirements
 
-Pa11y 9 requires [Node.js][node] 20, 22, or 24. An older version of Node.js can be used with [Pa11y 8 or below](#support-and-migration).
+Pa11y 10 requires an even numbered version of [Node.js][node] 22.13.0 or above. An older version of Node.js can be used with [Pa11y 9 or below](#support-and-migration).
 
 ### Linux and macOS
 
@@ -41,7 +41,7 @@ Alternatively, download a pre-built package from the [Node.js][node] website for
 
 ### Windows
 
-On Windows 10, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
+On Windows 11, download a pre-built package from the [Node.js][node] website. Pa11y will be usable via the bundled Node.js application as well as the Windows command prompt.
 
 ## Command-line interface
 
@@ -956,22 +956,23 @@ When we release a new major version we will continue to support the previous maj
 
 The following table lists the major versions available and, for each previous major version, its end-of-support date, and its final minor version released.
 
-| Major version | Final minor version | Node.js support  | Puppeteer version | Support end date         |
-| :------------ | :------------------ | :--------------- | :---------------- | :----------------------- |
-| `9`           |                     | `20`, `22`, `24` | `^24`             | ✅ Current major version |
-| `8`           | `8.0`               | `18`, `20`, `22` | `^22`             | 2025-11-07               |
-| `7`           | `7.0`               | `18`, `20`       | `^20`             | 2024-10-02               |
-| `6`           | `6.2`               | `12`, `14`, `16` | `~9.1`            | 2024-07-16               |
-| `5`           | `5.3`               | `8`, `10`, `12`  | `^1`              | 2021-11-25               |
-| `4`           | `4.13`              | `4`, `6`, `8`    |                   | 2018-08-15               |
-| `3`           | `3.8`               | `0.12`, `4`      |                   | 2016-12-05               |
-| `2`           | `2.4`               | `0.10`, `0.12`   |                   | 2016-10-16               |
-| `1`           | `1.7`               | `0.10`           |                   | 2016-06-08               |
+| Major version | Final minor version | Node.js support       | Puppeteer version | Support end date         |
+| :------------ | :------------------ | :-------------------- | :---------------- | :----------------------- |
+| `10`          |                     | `22.13.0`, `24`, `26` | `^25`             | ✅ Current major version |
+| `9`           | `9.1.1`             | `20`, `22`, `24`      | `^24`             | 2026-02-27               |
+| `8`           | `8.0`               | `18`, `20`, `22`      | `^22`             | 2025-11-07               |
+| `7`           | `7.0`               | `18`, `20`            | `^20`             | 2024-10-02               |
+| `6`           | `6.2`               | `12`, `14`, `16`      | `~9.1`            | 2024-07-16               |
+| `5`           | `5.3`               | `8`, `10`, `12`       | `^1`              | 2021-11-25               |
+| `4`           | `4.13`              | `4`, `6`, `8`         |                   | 2018-08-15               |
+| `3`           | `3.8`               | `0.12`, `4`           |                   | 2016-12-05               |
+| `2`           | `2.4`               | `0.10`, `0.12`        |                   | 2016-10-16               |
+| `1`           | `1.7`               | `0.10`                |                   | 2016-06-08               |
 
 ## License
 
 Pa11y is licensed under the [Lesser General Public License (LGPL-3.0-only)][info-license].  
-Copyright &copy; 2013-2024, Team Pa11y and contributors
+Copyright &copy; 2013-2026, Team Pa11y and contributors
 
 [axe]: https://www.deque.com/axe/
 [brew]: https://mxcl.github.com/homebrew/
