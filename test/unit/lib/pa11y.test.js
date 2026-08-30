@@ -146,6 +146,7 @@ describe('lib/pa11y', function() {
 					'notice',
 					'warning'
 				],
+				includeIncomplete: true,
 				levelCapWhenNeedsReview: 'error',
 				pa11yVersion: pkg.version,
 				rootElement: pa11y.defaults.rootElement,
@@ -1190,6 +1191,10 @@ describe('lib/pa11y', function() {
 
 		it('has an `ignoreUrl` property', function() {
 			assert.isFalse(pa11y.defaults.ignoreUrl);
+		});
+
+		it('has an `includeIncomplete` property', function() {
+			assert.isTrue(pa11y.defaults.includeIncomplete);
 		});
 
 		it('has an `includeNotices` property', function() {
