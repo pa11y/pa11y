@@ -232,6 +232,35 @@ describe('lib/pa11y', function() {
 
 		});
 
+		describe('when the test run takes longer than `options.timeout`', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				// Navigation succeeds, so the only thing that can end this run
+				// is the whole-run timeout.
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.evaluate.returns(new Promise(() => {
+					// Never settles.
+				}));
+				try {
+					await pa11y('https://mock-url/', {timeout: 20});
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a timeout error naming the timeout', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.name, 'TimeoutError');
+				assert.strictEqual(rejectedError.message, 'Pa11y timed out (20ms)');
+			});
+
+			it('closes the browser', function() {
+				assert.calledOnce(puppeteer.mockBrowser.close);
+			});
+
+		});
+
 		describe('when Headless Chrome errors', function() {
 			let headlessChromeError;
 			let rejectedError;

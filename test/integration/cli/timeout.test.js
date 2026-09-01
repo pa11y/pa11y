@@ -22,8 +22,8 @@ describe('CLI timeout', function() {
 
 		it('outputs a timeout error', function() {
 			assert.match(pa11yResponse.output, /timeouterror/i);
-			assert.match(pa11yResponse.output, /navigation timeout/i);
-			assert.match(pa11yResponse.output, /100 ms/i);
+			assert.match(pa11yResponse.output, /pa11y timed out/i);
+			assert.match(pa11yResponse.output, /100ms/i);
 		});
 
 	});
