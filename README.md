@@ -611,7 +611,7 @@ pa11y(url, {
 
 Defaults to `WCAG2AA`.
 
-### `threshold` (number)
+### `threshold` (number, count)
 
 The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2) when running via the CLI.
 
@@ -623,7 +623,7 @@ The number of errors, warnings, or notices to permit before the test is consider
 
 Defaults to `0`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
-### `timeout` (number)
+### `timeout` (number, milliseconds)
 
 The time in milliseconds that a test should be allowed to run before calling back with a timeout error.
 
@@ -673,7 +673,7 @@ Defaults to:
 }
 ```
 
-### `wait` (number)
+### `wait` (number, milliseconds)
 
 The time in milliseconds to wait before running HTML_CodeSniffer on the page.
 
