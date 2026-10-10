@@ -11,7 +11,7 @@ const pa11y = require('../lib/pa11y');
 const {requireFirst} = require('../lib/helpers');
 const semver = require('semver');
 
-const programOptions = program.opts();
+let programOptions = {};
 
 /**
  * Option schema defining all CLI options with metadata.
@@ -217,6 +217,8 @@ function validateCliOptions(options) {
  */
 function configureProgram() {
   buildCommanderProgram();
+  // Update programOptions after parsing
+  programOptions = program.opts();
   handleHelp();
   
   // Validate options early
@@ -310,7 +312,7 @@ function processOptions() {
 function loadConfig(filePath) {
   return requireFirst([
     filePath,
-    filePath.replace(/^\\.\\//, `${process.cwd()}/`),
+    filePath.replace(/^\.\//, `${process.cwd()}/`),
     `${process.cwd()}/${filePath}`
   ], {});
 }
