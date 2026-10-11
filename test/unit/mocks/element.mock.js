@@ -65,11 +65,9 @@ function createMockElement(data = {}) {
 }
 
 function createMockSelectElement(data = {}) {
-	const element = Object.assign(initMockElementProperties(), {nodeName: 'SELECT', ...data});
-	return connectToDOM(element);
-}
-
-function createMockSelectElement(data = {}) {
-	const element = Object.assign(initMockElementProperties(), {nodeName: 'SELECT', ...data});
+	const element = Object.assign(initMockElementProperties(), {
+		nodeName: 'SELECT',
+		...data
+	});
 	return connectToDOM(element);
 }

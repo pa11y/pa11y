@@ -1,7 +1,11 @@
 'use strict';
 
 const assert = require('proclaim');
-const {createMockElement, createMockPrototypeElement} = require('../mocks/element.mock');
+const {
+	createMockElement,
+	createMockPrototypeElement,
+	createMockSelectElement
+} = require('../mocks/element.mock');
 const sinon = require('sinon');
 
 describe('lib/action', function() {
@@ -393,6 +397,24 @@ describe('lib/action', function() {
 					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
 				});
 
+				describe('with a select element', function() {
+					beforeEach(async function() {
+						mockElement = createMockSelectElement();
+						global.document.querySelector.returns(mockElement);
+						Event.resetHistory();
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					});
+
+					it('triggers a change event on the element', function() {
+						assert.calledOnce(Event);
+						assert.calledWithExactly(Event, 'change', {
+							bubbles: true
+						});
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+					});
+				});
+
 				it('resolves with `undefined`', function() {
 					assert.isUndefined(resolvedValue);
 				});
@@ -566,13 +588,31 @@ describe('lib/action', function() {
 					assert.strictEqual(mockElement.value, '');
 				});
 
-				it('triggers a change event on the element', function() {
+				it('triggers an input event on the element', function() {
 					assert.calledOnce(Event);
 					assert.calledWithExactly(Event, 'input', {
 						bubbles: true
 					});
 					assert.calledOnce(mockElement.dispatchEvent);
 					assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+				});
+
+				describe('with a select element', function() {
+					beforeEach(async function() {
+						mockElement = createMockSelectElement();
+						global.document.querySelector.returns(mockElement);
+						Event.resetHistory();
+						resolvedValue = await puppeteer.mockPage.evaluate.firstCall.args[0]('mock-selector', 'mock-value');
+					});
+
+					it('triggers a change event on the element', function() {
+						assert.calledOnce(Event);
+						assert.calledWithExactly(Event, 'change', {
+							bubbles: true
+						});
+						assert.calledOnce(mockElement.dispatchEvent);
+						assert.calledWithExactly(mockElement.dispatchEvent, mockEvent);
+					});
 				});
 
 				it('resolves with `undefined`', function() {
