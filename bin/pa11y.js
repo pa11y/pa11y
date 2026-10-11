@@ -56,7 +56,8 @@ function configureProgram() {
 		)
 		.option(
 			'--threshold-count <number>',
-			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2 (alias for --threshold)'
+			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2 ' +
+				'(alias for --threshold)'
 		)
 		.option(
 			'-i, --ignore <ignore>',
@@ -102,11 +103,11 @@ function configureProgram() {
 		)
 		.option(
 			'-w, --wait <ms>',
-			'the time to wait before running tests in milliseconds',
+			'the time to wait before running tests in milliseconds'
 		)
 		.option(
 			'--wait-ms <ms>',
-			'the time to wait before running tests in milliseconds (alias for --wait)',
+			'the time to wait before running tests in milliseconds (alias for --wait)'
 		)
 		.option(
 			'-d, --debug',
@@ -191,11 +192,15 @@ function processOptions() {
 		rules: (programOptions.addRule.length ? programOptions.addRule : undefined),
 		screenCapture: programOptions.screenCapture,
 		standard: programOptions.standard,
-		threshold: programOptions.threshold,
-		timeout: programOptions.timeout,
-		wait: programOptions.wait
+		threshold: getOptionValue(programOptions.thresholdCount, programOptions.threshold),
+		timeout: getOptionValue(programOptions.timeoutMs, programOptions.timeout),
+		wait: getOptionValue(programOptions.waitMs, programOptions.wait)
 	});
 	return options;
+}
+
+function getOptionValue(alias, legacyOption) {
+	return alias ?? legacyOption;
 }
 
 /**
@@ -318,4 +323,3 @@ async function outputEnvironmentInfo() {
 	console.log(`${envData}  pa11y: ${pkg.version}\n`);
 	process.exit(0);
 }
-
