@@ -58,26 +58,32 @@ Usage: pa11y [options] <url>
 
   Options:
 
-    -V, --version                  output the version number
-    -n, --environment              output details about the environment Pa11y will run in
-    -s, --standard <name>          the accessibility standard to use: WCAG2AAA (only used by htmlcs), WCAG2AA (default), or WCAG2A
-    -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
-    -e, --runner <runner>          the test runners to use: htmlcs (default), axe
-    -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
-    -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
-    -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
-    --include-notices              include notices in the report
-    --include-warnings             include warnings in the report
-    --level-cap-when-needs-review <level>   (axe-only) cap severity of any issue requiring manual review to: error (default), warning, notice
-    -R, --root-element <selector>  a CSS selector used to limit which part of a page is tested
-    -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
-    -c, --config <path>            a JSON or JavaScript config file
-    -t, --timeout <ms>             the timeout in milliseconds
-    -w, --wait <ms>                the time to wait before running tests in milliseconds
-    -d, --debug                    output debug messages
-    -S, --screen-capture <path>    a path to save a screen capture of the page to
-    -A, --add-rule <rule>          WCAG 2.1 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
-    -h, --help                     output usage information
+    -V, --version                          output the version number
+    -h, --help                             display help for command
+
+  Common options (all runners):
+    -e, --runner <runner>                  test runner(s): htmlcs (default), axe
+    -c, --config <path>                    a JSON or JavaScript config file (default: "./pa11y.json")
+    -t, --timeout <ms>                     the timeout in milliseconds
+    -w, --wait <ms>                        the time to wait before running tests in milliseconds
+    -d, --debug                            output debug messages
+    -R, --root-element <selector>          a CSS selector used to limit which part of a page is tested
+    -E, --hide-elements <hide>             a CSS selector to hide elements from testing, selectors can be comma separated
+    -S, --screen-capture <path>            a path to save a screen capture of the page to
+    -l, --level <level>                    the level of issue to fail on (exit with code 2): error, warning, notice
+    -T, --threshold <number>               permit this number of errors, warnings, or notices, otherwise fail with exit code 2
+    -i, --ignore <ignore>                  types and codes of issues to ignore, a repeatable value or separated by semi-colons
+    --include-notices                      include notices in the report
+    --include-warnings                     include warnings in the report
+    -r, --reporter <reporter>              the reporter to use: cli (default), csv, json
+    -n, --environment                      output details about the environment Pa11y will run in
+
+  htmlcs runner options:
+    -s, --standard <name>                  the accessibility standard to use: WCAG2AAA (only used by htmlcs), WCAG2AA (default), or WCAG2A
+    -A, --add-rule <rule>                  WCAG 2.0 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
+
+  axe runner options:
+    --level-cap-when-needs-review <level>  (axe-only) cap severity of any issue requiring manual review to: error (default), warning, notice
 ```
 
 ### Testing with `pa11y`
