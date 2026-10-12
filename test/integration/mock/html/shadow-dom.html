@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Shadow DOM label regression</title>
+</head>
+<body>
+	<main>
+		<section id="single-area"><div id="single-host"></div></section>
+		<section id="nested-area"><div id="outer-host"></div></section>
+		<section id="light-area"><input id="light-leaf" type="text"></section>
+	</main>
+	<script>
+		const query = new URLSearchParams(location.search);
+		const wrapped = query.has('wrapped');
+		const singleInput = query.has('no-id') ? '<input type="text">' : '<input id="single-leaf" type="text">';
+		const nestedInput = query.has('no-id') ? '<input type="text">' : '<input id="nested-leaf" type="text">';
+		const single = document.querySelector('#single-host').attachShadow({mode: 'open'});
+		single.innerHTML = wrapped ? `<div>${singleInput}</div>` : singleInput;
+		const outer = document.querySelector('#outer-host').attachShadow({mode: 'open'});
+		outer.innerHTML = query.has('wrapped-host') ? '<div><div id="inner-host"></div></div>' : '<div id="inner-host"></div>';
+		const inner = outer.querySelector('#inner-host').attachShadow({mode: 'open'});
+		inner.innerHTML = wrapped ? `<div>${nestedInput}</div>` : nestedInput;
+	</script>
+</body>
+</html>
