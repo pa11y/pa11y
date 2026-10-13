@@ -332,6 +332,19 @@ describe('lib/runners/axe', function() {
 						)
 					);
 				});
+
+				it('supports level AAA', async function() {
+					options.standard = 'WCAG2AAA';
+					await runner.run(options, pa11y);
+					assert.calledWithExactly(
+						global.window.axe.run,
+						sinon.match.any,
+						sinon.match.hasNested(
+							'runOnly.values',
+							['wcag2a', 'wcag21a', 'wcag2aa', 'wcag21aa', 'wcag2aaa', 'best-practice']
+						)
+					);
+				});
 			});
 
 			describe('rules', function() {
