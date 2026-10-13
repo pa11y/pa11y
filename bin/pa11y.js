@@ -55,6 +55,11 @@ function configureProgram() {
 			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2'
 		)
 		.option(
+			'--threshold-count <number>',
+			'permit this number of errors, warnings, or notices, otherwise fail with exit code 2 ' +
+				'(alias for --threshold)'
+		)
+		.option(
 			'-i, --ignore <ignore>',
 			'types and codes of issues to ignore, a repeatable value or separated by semi-colons',
 			collectOptions,
@@ -92,8 +97,17 @@ function configureProgram() {
 			Number
 		)
 		.option(
+			'--timeout-ms <ms>',
+			'the timeout in milliseconds (alias for --timeout)',
+			Number
+		)
+		.option(
 			'-w, --wait <ms>',
 			'the time to wait before running tests in milliseconds'
+		)
+		.option(
+			'--wait-ms <ms>',
+			'the time to wait before running tests in milliseconds (alias for --wait)'
 		)
 		.option(
 			'-d, --debug',
@@ -178,11 +192,15 @@ function processOptions() {
 		rules: (programOptions.addRule.length ? programOptions.addRule : undefined),
 		screenCapture: programOptions.screenCapture,
 		standard: programOptions.standard,
-		threshold: programOptions.threshold,
-		timeout: programOptions.timeout,
-		wait: programOptions.wait
+		threshold: getOptionValue(programOptions.thresholdCount, programOptions.threshold),
+		timeout: getOptionValue(programOptions.timeoutMs, programOptions.timeout),
+		wait: getOptionValue(programOptions.waitMs, programOptions.wait)
 	});
 	return options;
+}
+
+function getOptionValue(alias, legacyOption) {
+	return alias ?? legacyOption;
 }
 
 /**
@@ -305,4 +323,3 @@ async function outputEnvironmentInfo() {
 	console.log(`${envData}  pa11y: ${pkg.version}\n`);
 	process.exit(0);
 }
-

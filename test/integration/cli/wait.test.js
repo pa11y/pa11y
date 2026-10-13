@@ -27,4 +27,22 @@ describe('CLI wait', function() {
 
 	});
 
+	describe('when the `--wait-ms` flag is set', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/wait`, {
+				arguments: [
+					'--wait-ms', '2500',
+					'--reporter', 'json'
+				]
+			});
+		});
+
+		it('waits for the specified amount of time before running tests', function() {
+			assert.isArray(pa11yResponse.json);
+			assert.lengthEquals(pa11yResponse.json, 0);
+		});
+
+	});
+
 });

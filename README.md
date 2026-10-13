@@ -65,6 +65,7 @@ Usage: pa11y [options] <url>
     -e, --runner <runner>          the test runners to use: htmlcs (default), axe
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
     -T, --threshold <number>       permit this number of errors, warnings, or notices, otherwise fail with exit code 2
+    --threshold-count <number>     permit this number of errors, warnings, or notices, otherwise fail with exit code 2 (alias for --threshold)
     -i, --ignore <ignore>          types and codes of issues to ignore, a repeatable value or separated by semi-colons
     --include-notices              include notices in the report
     --include-warnings             include warnings in the report
@@ -73,7 +74,9 @@ Usage: pa11y [options] <url>
     -E, --hide-elements <hide>     a CSS selector to hide elements from testing, selectors can be comma separated
     -c, --config <path>            a JSON or JavaScript config file
     -t, --timeout <ms>             the timeout in milliseconds
+    --timeout-ms <ms>              the timeout in milliseconds (alias for --timeout)
     -w, --wait <ms>                the time to wait before running tests in milliseconds
+    --wait-ms <ms>                 the time to wait before running tests in milliseconds (alias for --wait)
     -d, --debug                    output debug messages
     -S, --screen-capture <path>    a path to save a screen capture of the page to
     -A, --add-rule <rule>          WCAG 2.1 rules to include, a repeatable value or separated by semi-colons – only used by htmlcs runner
@@ -611,7 +614,7 @@ pa11y(url, {
 
 Defaults to `WCAG2AA`.
 
-### `threshold` (number)
+### `threshold` (number, count)
 
 The number of errors, warnings, or notices to permit before the test is considered to have failed (with exit code 2) when running via the CLI.
 
@@ -623,7 +626,7 @@ The number of errors, warnings, or notices to permit before the test is consider
 
 Defaults to `0`. Note this configuration is only available when using Pa11y on the command line, not via the JavaScript Interface.
 
-### `timeout` (number)
+### `timeout` (number, milliseconds)
 
 The time in milliseconds that a test should be allowed to run before calling back with a timeout error.
 
@@ -673,7 +676,7 @@ Defaults to:
 }
 ```
 
-### `wait` (number)
+### `wait` (number, milliseconds)
 
 The time in milliseconds to wait before running HTML_CodeSniffer on the page.
 
