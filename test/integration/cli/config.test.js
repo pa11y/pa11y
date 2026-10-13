@@ -125,4 +125,41 @@ describe('CLI config', function() {
 
 	});
 
+	describe('when the specified configuration file does not exist', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
+				arguments: [
+					'--config', './mock/config/does-not-exist.json'
+				]
+			});
+		});
+
+		it('exits with a code of `1`', function() {
+			assert.strictEqual(pa11yResponse.exitCode, 1);
+		});
+
+		it('outputs an error saying the config file could not be found', function() {
+			assert.include(pa11yResponse.stderr, 'Config file "./mock/config/does-not-exist.json" could not be found');
+		});
+
+	});
+
+	describe('when the specified configuration file exists', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/notices`, {
+				arguments: [
+					'--config', './mock/config/pa11y.json'
+				]
+			});
+		});
+
+		it('outputs the path of the loaded config file', function() {
+			const configPath = path.join(__dirname, '..', 'mock', 'config', 'pa11y.json');
+			assert.include(pa11yResponse.stdout, `Loading config file: ${configPath}`);
+		});
+
+	});
+
 });

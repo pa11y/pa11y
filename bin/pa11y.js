@@ -131,14 +131,14 @@ function handleHelp() {
  */
 async function runProgram() {
 	handleHelp();
-	const options = processOptions();
+	const {options, configPath} = processOptions();
 	const report = loadReporter(options.reporter);
 	options.log = report.log;
 	if (!programOptions.debug) {
 		// eslint-disable-next-line no-empty-function
 		options.log.debug = () => {};
 	}
-	await report.begin(program.url);
+	await beginReport(report, configPath);
 	try {
 		const results = await pa11y(program.url, options);
 		if (reportShouldFail(options.level, results.issues, options.threshold)) {
@@ -154,18 +154,32 @@ async function runProgram() {
 }
 
 /**
+ * Output the report's welcome message, and which config file was loaded if any
+ * @param {Object} report - The reporter being used
+ * @param {String} [configPath] - The path of the loaded config file
+ * @returns {Promise} A promise which resolves once the messages have been output
+ */
+async function beginReport(report, configPath) {
+	await report.begin(program.url);
+	if (configPath) {
+		await report.log.info(`Loading config file: ${configPath}`);
+	}
+}
+
+/**
  * Process options based on precedence rules.
  * CLI options take precedence over config options (which take precedence over defaults)
- * @returns {Object} An object containing all the options that have been specified
+ * @returns {Object} The options that have been specified, and the path of the loaded config file
  */
 function processOptions() {
+	const config = loadConfig(programOptions.config);
 	// The 'level', 'reporter', and 'threshold' defaults are given here
 	//  as they are not relevant when using lib/pa11y via JavaScript
 	const options = extend({
 		level: 'error',
 		reporter: 'cli',
 		threshold: 0
-	}, loadConfig(programOptions.config), {
+	}, config.options, {
 		hideElements: programOptions.hideElements,
 		ignore: (programOptions.ignore.length ? programOptions.ignore : undefined),
 		includeNotices: programOptions.includeNotices,
@@ -182,20 +196,54 @@ function processOptions() {
 		timeout: programOptions.timeout,
 		wait: programOptions.wait
 	});
-	return options;
+	return {
+		options,
+		configPath: config.path
+	};
 }
 
 /**
- * Tries to loads a JSON config file from disk from a list of potential locations
+ * Tries to loads a JSON config file from disk from a list of potential locations.
+ * Exits if a config file was passed explicitly but could not be found
  * @param {String} filePath - Path for the config file passed to the CLI
- * @returns {Object} A config object
+ * @returns {Object} The loaded config options, and the path they were loaded from
  */
 function loadConfig(filePath) {
-	return requireFirst([
+	const configPath = resolveFirst([
 		filePath,
 		filePath.replace(/^\.\//, `${process.cwd()}/`),
 		`${process.cwd()}/${filePath}`
-	], {});
+	]);
+	if (configPath) {
+		return {
+			options: require(configPath),
+			path: configPath
+		};
+	}
+	if (program.getOptionValueSource('config') !== 'default') {
+		console.error(`Config file "${filePath}" could not be found`);
+		process.exit(1);
+	}
+	return {options: {}};
+}
+
+/**
+ * Resolves the first module path in a list which exists
+ * @param {Array} stack - The module paths to try, in order
+ * @returns {String|undefined} The resolved path, if any of them exist
+ */
+function resolveFirst(stack) {
+	if (!stack.length) {
+		return undefined;
+	}
+	try {
+		return require.resolve(stack[0]);
+	} catch (error) {
+		if (error.code !== 'MODULE_NOT_FOUND') {
+			throw error;
+		}
+		return resolveFirst(stack.slice(1));
+	}
 }
 
 /**
