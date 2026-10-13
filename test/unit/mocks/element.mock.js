@@ -4,7 +4,8 @@ const sinon = require('sinon');
 
 module.exports = {
 	createMockElement,
-	createMockPrototypeElement
+	createMockPrototypeElement,
+	createMockSelectElement
 };
 
 
@@ -19,6 +20,7 @@ const initMockElementProperties = function() {
 		innerHTML: 'mock-html',
 		isEqualNode: sinon.stub().returns(false),
 		nodeType: 1,
+		nodeName: 'ELEMENT',
 		offsetHeight: 0,
 		offsetWidth: 0,
 		outerHTML: '<element>mock-html</element>',
@@ -59,5 +61,13 @@ function createMockPrototypeElement(data = {}) {
 
 function createMockElement(data = {}) {
 	const element = Object.assign(initMockElementProperties(), data);
+	return connectToDOM(element);
+}
+
+function createMockSelectElement(data = {}) {
+	const element = Object.assign(initMockElementProperties(), {
+		nodeName: 'SELECT',
+		...data
+	});
 	return connectToDOM(element);
 }
