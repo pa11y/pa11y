@@ -548,6 +548,113 @@ describe('lib/pa11y', function() {
 
 			});
 
+			describe('later requests', function() {
+				let handler;
+
+				beforeEach(function() {
+					handler = puppeteer.mockPage.on.withArgs('request').firstCall.args[1];
+					handler({
+						continue: sinon.stub(),
+						url: () => 'https://example.com/page'
+					});
+				});
+
+				it('merges custom headers into a later same-origin request', function() {
+					const laterRequest = {
+						continue: sinon.stub(),
+						url: () => 'https://example.com/app.js',
+						headers: () => {
+							return {
+								accept: '*/*',
+								cookie: 'existing=1'
+							};
+						}
+					};
+					handler(laterRequest);
+					assert.calledOnce(laterRequest.continue);
+					assert.calledWithExactly(laterRequest.continue, {
+						headers: {
+							accept: '*/*',
+							cookie: 'existing=1',
+							foo: 'bar',
+							bar: 'baz',
+							'foo-bar-baz': 'qux'
+						}
+					});
+				});
+
+				it('does not duplicate existing headers with different casing', function() {
+					const laterRequest = {
+						continue: sinon.stub(),
+						url: () => 'https://example.com/app.js',
+						headers: () => ({
+							Foo: 'browser-value',
+							accept: '*/*'
+						})
+					};
+					handler(laterRequest);
+					assert.calledWithExactly(laterRequest.continue, {
+						headers: {
+							accept: '*/*',
+							foo: 'bar',
+							bar: 'baz',
+							'foo-bar-baz': 'qux'
+						}
+					});
+				});
+
+				it('leaves a later cross-origin request unchanged', function() {
+					const laterRequest = {
+						continue: sinon.stub(),
+						url: () => 'https://cdn.example/lib.js',
+						headers: () => {
+							return {accept: '*/*'};
+						}
+					};
+					handler(laterRequest);
+					assert.calledOnce(laterRequest.continue);
+					assert.calledWithExactly(laterRequest.continue, {});
+				});
+
+				it('does not treat opaque origins as same-origin', function() {
+					const opaqueOriginHandler = puppeteer.mockPage.on.withArgs('request').firstCall.args[1];
+					opaqueOriginHandler({
+						continue: sinon.stub(),
+						url: () => 'data:text/html,first'
+					});
+					const laterRequest = {
+						continue: sinon.stub(),
+						url: () => 'data:text/javascript,later',
+						headers: () => ({accept: '*/*'})
+					};
+					opaqueOriginHandler(laterRequest);
+					assert.calledWithExactly(laterRequest.continue, {});
+				});
+
+			});
+
+			describe('when the first request URL cannot be parsed', function() {
+
+				it('does not copy headers onto a later request', function() {
+					const handler = puppeteer.mockPage.on.withArgs('request').firstCall.args[1];
+					handler({
+						continue: sinon.stub(),
+						url: () => 'not a url'
+					});
+					const laterRequest = {
+						continue: sinon.stub(),
+						url: () => 'https://example.com/app.js',
+						headers: () => {
+							return {accept: '*/*'};
+						}
+					};
+					handler(laterRequest);
+					assert.calledOnce(laterRequest.continue);
+					assert.calledWithExactly(laterRequest.continue, {});
+				});
+
+			});
+
 		});
 
 		describe('when `options.userAgent` is `false`', function() {

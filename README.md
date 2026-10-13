@@ -371,7 +371,7 @@ Defaults to:
 
 ### `headers` (object)
 
-A key-value map of request headers to send when testing a web page.
+A key-value map of request headers to send when testing a web page. Pa11y sends them on the first request and on later requests to the same origin. The HTTP method and POST body are sent only on the first request.
 
 ```js
 pa11y(url, {
