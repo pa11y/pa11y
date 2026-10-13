@@ -32,7 +32,8 @@ module.exports = {
 		]
 	},
 	Node: {
-		ELEMENT_NODE: 1
+		ELEMENT_NODE: 1,
+		DOCUMENT_FRAGMENT_NODE: 11
 	}
 
 };

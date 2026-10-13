@@ -367,6 +367,47 @@ describe('lib/runner', function() {
 
 			});
 
+			describe('when `options.rootElement` contains the shadow host', function() {
+
+				beforeEach(async function() {
+					const rootElement = createMockElement({
+						id: 'root-element'
+					});
+					const host = createMockElement({
+						id: 'host'
+					});
+					const shadowRoot = {
+						nodeType: 11,
+						host,
+						childNodes: []
+					};
+					const inner = createMockElement({
+						id: 'inner',
+						parentNode: shadowRoot
+					});
+					inner.getRootNode = () => shadowRoot;
+					global.window.document.querySelector.withArgs('#root-element').returns(rootElement);
+					rootElement.contains.withArgs(inner).returns(false);
+					rootElement.contains.withArgs(host).returns(true);
+					pa11y.runners['mock-runner'].returns([
+						{
+							code: 'mock-code',
+							element: inner,
+							message: 'mock issue',
+							type: 'error'
+						}
+					]);
+					options.rootElement = '#root-element';
+					resolvedValue = await pa11y.run(options);
+				});
+
+				it('keeps the issue inside the shadow root', function() {
+					assert.strictEqual(resolvedValue.issues.length, 1);
+					assert.strictEqual(resolvedValue.issues[0].selector, '#host → #shadow-root → #inner');
+				});
+
+			});
+
 			describe('when `options.hideElements` is set', function() {
 				let childOfHiddenElement;
 				let hiddenElement;
@@ -518,6 +559,37 @@ describe('lib/runner', function() {
 
 			});
 
+			describe('when the element is inside a shadow root', function() {
+
+				beforeEach(function() {
+					const host = createMockElement({
+						id: 'host',
+						outerHTML: '<div id="host"></div>',
+						innerHTML: ''
+					});
+					const shadowRoot = {
+						nodeType: 11,
+						host,
+						childNodes: []
+					};
+					const element = createMockElement({
+						tagName: 'INPUT',
+						outerHTML: '<input>',
+						innerHTML: '',
+						parentNode: shadowRoot
+					});
+					returnValue = pa11y.getElementContext(element);
+				});
+
+				it('includes the host, the shadow boundary, and the element', function() {
+					assert.strictEqual(
+						returnValue,
+						'<div id="host"></div> → #shadow-root → <input>'
+					);
+				});
+
+			});
+
 			describe('when the element `outerHTML` is empty', function() {
 
 				beforeEach(function() {
@@ -619,6 +691,31 @@ describe('lib/runner', function() {
 
 					it('returns a `TagName > TagName:nth-child` selector', function() {
 						assert.strictEqual(returnValue, 'parent > child:nth-child(2)');
+					});
+
+				});
+
+				describe('and it is inside a shadow root', function() {
+
+					beforeEach(function() {
+						const host = createMockElement({
+							id: 'host',
+							tagName: 'DIV'
+						});
+						const shadowRoot = {
+							nodeType: 11,
+							host,
+							childNodes: []
+						};
+						const element = createMockElement({
+							tagName: 'INPUT',
+							parentNode: shadowRoot
+						});
+						returnValue = pa11y.getElementSelector(element);
+					});
+
+					it('keeps the host path and the shadow boundary', function() {
+						assert.strictEqual(returnValue, '#host → #shadow-root → input');
 					});
 
 				});
