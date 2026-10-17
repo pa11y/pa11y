@@ -18,6 +18,7 @@ describe('lib/runners/axe', function() {
 					impact: 'critical',
 					help: 'mock help 1',
 					helpUrl: 'mock-help-url-1',
+					tags: ['wcag2a', 'cat.name-role-value', 'wcag412'],
 					nodes: [
 						{
 							target: [
@@ -37,6 +38,7 @@ describe('lib/runners/axe', function() {
 					impact: 'serious',
 					help: 'mock help 2',
 					helpUrl: 'mock-help-url-2',
+					tags: ['cat.aria', 'wcag2a', 'wcag111'],
 					nodes: [
 						{
 							target: [
@@ -51,6 +53,7 @@ describe('lib/runners/axe', function() {
 					impact: 'moderate',
 					help: 'mock help no-nodes',
 					helpUrl: 'mock-help-url-no-nodes',
+					tags: ['best-practice', 'cat.structure'],
 					nodes: []
 				}
 			],
@@ -61,6 +64,7 @@ describe('lib/runners/axe', function() {
 					impact: 'minor',
 					help: 'mock help 3',
 					helpUrl: 'mock-help-url-3',
+					tags: [],
 					nodes: [
 						{
 							target: [
@@ -75,6 +79,7 @@ describe('lib/runners/axe', function() {
 					impact: 'not a supported impact level',
 					help: 'mock help 4',
 					helpUrl: 'mock-help-url-4',
+					tags: ['wcag2aa', 'cat.color', 'wcag143'],
 					nodes: [
 						{
 							target: [
@@ -95,6 +100,7 @@ describe('lib/runners/axe', function() {
 					impact: 'moderate',
 					help: 'mock help 5',
 					helpUrl: 'mock-help-url-5',
+					tags: ['cat.forms', 'wcag2a', 'wcag332'],
 					nodes: [
 						{
 							target: [
@@ -191,7 +197,8 @@ describe('lib/runners/axe', function() {
 						impact: 'critical',
 						needsFurtherReview: false,
 						help: 'mock help 1',
-						helpUrl: 'mock-help-url-1'
+						helpUrl: 'mock-help-url-1',
+						tags: ['wcag2a', 'cat.name-role-value', 'wcag412']
 					}
 				},
 				{
@@ -204,7 +211,8 @@ describe('lib/runners/axe', function() {
 						impact: 'critical',
 						needsFurtherReview: false,
 						help: 'mock help 1',
-						helpUrl: 'mock-help-url-1'
+						helpUrl: 'mock-help-url-1',
+						tags: ['wcag2a', 'cat.name-role-value', 'wcag412']
 					}
 				},
 				{
@@ -217,7 +225,8 @@ describe('lib/runners/axe', function() {
 						impact: 'serious',
 						needsFurtherReview: false,
 						help: 'mock help 2',
-						helpUrl: 'mock-help-url-2'
+						helpUrl: 'mock-help-url-2',
+						tags: ['cat.aria', 'wcag2a', 'wcag111']
 					}
 				},
 				{
@@ -230,7 +239,8 @@ describe('lib/runners/axe', function() {
 						impact: 'moderate',
 						needsFurtherReview: false,
 						help: 'mock help no-nodes',
-						helpUrl: 'mock-help-url-no-nodes'
+						helpUrl: 'mock-help-url-no-nodes',
+						tags: ['best-practice', 'cat.structure']
 					}
 				},
 				{
@@ -243,7 +253,8 @@ describe('lib/runners/axe', function() {
 						impact: 'minor',
 						needsFurtherReview: true,
 						help: 'mock help 3',
-						helpUrl: 'mock-help-url-3'
+						helpUrl: 'mock-help-url-3',
+						tags: []
 					}
 				},
 				{
@@ -256,7 +267,8 @@ describe('lib/runners/axe', function() {
 						impact: 'not a supported impact level',
 						needsFurtherReview: true,
 						help: 'mock help 4',
-						helpUrl: 'mock-help-url-4'
+						helpUrl: 'mock-help-url-4',
+						tags: ['wcag2aa', 'cat.color', 'wcag143']
 					}
 				},
 				{
@@ -269,7 +281,8 @@ describe('lib/runners/axe', function() {
 						impact: 'not a supported impact level',
 						needsFurtherReview: true,
 						help: 'mock help 4',
-						helpUrl: 'mock-help-url-4'
+						helpUrl: 'mock-help-url-4',
+						tags: ['wcag2aa', 'cat.color', 'wcag143']
 					}
 				},
 				{
@@ -282,10 +295,34 @@ describe('lib/runners/axe', function() {
 						impact: 'moderate',
 						needsFurtherReview: true,
 						help: 'mock help 5',
-						helpUrl: 'mock-help-url-5'
+						helpUrl: 'mock-help-url-5',
+						tags: ['cat.forms', 'wcag2a', 'wcag332']
 					}
 				}
 			]);
+		});
+
+		it('preserves tags for incomplete issues without nodes', async function() {
+			result.violations = [];
+			result.incomplete = [{
+				...result.incomplete[1],
+				nodes: []
+			}];
+
+			assert.deepEqual(await runner.run(options, pa11y), [{
+				code: 'mock-id-4',
+				message: 'mock help 4 (mock-help-url-4)',
+				type: 'error',
+				element: null,
+				runnerExtras: {
+					description: 'mock description 4',
+					impact: 'not a supported impact level',
+					needsFurtherReview: true,
+					help: 'mock help 4',
+					helpUrl: 'mock-help-url-4',
+					tags: ['wcag2aa', 'cat.color', 'wcag143']
+				}
+			}]);
 		});
 
 		describe('when passing the Pa11y option', function() {
