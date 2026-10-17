@@ -51,6 +51,15 @@ Install Pa11y globally with [npm][npm]:
 npm install -g pa11y
 ```
 
+With npm 12, allow Puppeteer's installation script so it can download Chrome:
+
+```sh
+npm install --global pa11y --allow-scripts=puppeteer
+```
+
+See [npm 12 installation troubleshooting][npm12-installation] for project and CI setup,
+recovery after a skipped download, and other browser options.
+
 ```console
 $ pa11y --help
 
@@ -985,6 +994,7 @@ Copyright &copy; 2013-2026, Team Pa11y and contributors
 [info-npm]: https://www.npmjs.com/package/pa11y
 [node]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
+[npm12-installation]: TROUBLESHOOTING.md#missing-chrome-after-installation-with-npm-12
 [nvm]: https://github.com/nvm-sh/nvm
 [promise]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [puppeteer-browser]: https://pptr.dev/api/puppeteer.browser
