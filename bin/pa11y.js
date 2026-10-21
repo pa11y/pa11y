@@ -215,10 +215,16 @@ function loadConfig(filePath) {
 		`${process.cwd()}/${filePath}`
 	]);
 	if (configPath) {
-		return {
-			options: require(configPath),
-			path: configPath
-		};
+		try {
+			return {
+				options: require(configPath),
+				path: configPath
+			};
+		} catch (error) {
+			console.error(`Config file "${filePath}" could not be loaded`);
+			console.error(error.message);
+			process.exit(1);
+		}
 	}
 	if (program.getOptionValueSource('config') !== 'default') {
 		console.error(`Config file "${filePath}" could not be found`);
