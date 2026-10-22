@@ -422,6 +422,8 @@ pa11y(url, {
 });
 ```
 
+When `ignoreUrl` is set, the `url` can be left out, for example `pa11y({ignoreUrl: true, page, browser})`.
+
 Defaults to `false`.
 
 ### `includeNotices` (boolean)
