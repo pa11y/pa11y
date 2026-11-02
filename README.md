@@ -60,7 +60,7 @@ Usage: pa11y [options] <url>
 
     -V, --version                  output the version number
     -n, --environment              output details about the environment Pa11y will run in
-    -s, --standard <name>          the accessibility standard to use: WCAG2AAA (only used by htmlcs), WCAG2AA (default), or WCAG2A
+    -s, --standard <name>          the accessibility standard to use: WCAG2AAA, WCAG2AA (default), or WCAG2A
     -r, --reporter <reporter>      the reporter to use: cli (default), csv, json
     -e, --runner <runner>          the test runners to use: htmlcs (default), axe
     -l, --level <level>            the level of issue to fail on (exit with code 2): error, warning, notice
@@ -601,7 +601,7 @@ The accessibility standard to use when testing pages. This should be one of:
 
 - `WCAG2A`
 - `WCAG2AA`
-- `WCAG2AAA` (this level is currently used only by Pa11y's runner for HTML_CodeSniffer)
+- `WCAG2AAA`
 
 ```js
 pa11y(url, {
