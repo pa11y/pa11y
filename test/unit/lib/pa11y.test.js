@@ -730,6 +730,47 @@ describe('lib/pa11y', function() {
 			});
 		});
 
+		describe('when `options.page` and `options.ignoreUrl` are set without `options.url`', function() {
+			let resolvedValue;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.goto.resetHistory();
+				delete options.url;
+				options.browser = puppeteer.mockBrowser;
+				options.page = puppeteer.mockPage;
+				options.ignoreUrl = true;
+
+				resolvedValue = await pa11y(options);
+			});
+
+			it('does not call page.goto', function() {
+				assert.notCalled(options.page.goto);
+			});
+
+			it('resolves with the Pa11y results', function() {
+				assert.strictEqual(resolvedValue, pa11yResults);
+			});
+		});
+
+		describe('when neither `options.url` nor `options.ignoreUrl` is set', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				delete options.url;
+				try {
+					await pa11y(options);
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'A url must be provided unless the ignoreUrl option is set');
+			});
+
+		});
+
 		describe('when `options.page` is set without `options.browser`', function() {
 			let rejectedError;
 
@@ -1077,6 +1118,50 @@ describe('lib/pa11y', function() {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, 'Runner "non-existent-runner-that-does-not-exist" could not be found');
 			});
+		});
+
+	});
+
+	describe('pa11y()', function() {
+
+		describe('when `pa11y.defaults` sets `page`, `browser` and `ignoreUrl`', function() {
+			let resolvedValue;
+
+			beforeEach(async function() {
+				puppeteer.mockPage.goto.resetHistory();
+				pa11y.defaults.browser = puppeteer.mockBrowser;
+				pa11y.defaults.page = puppeteer.mockPage;
+				pa11y.defaults.ignoreUrl = true;
+
+				resolvedValue = await pa11y();
+			});
+
+			it('does not call page.goto', function() {
+				assert.notCalled(puppeteer.mockPage.goto);
+			});
+
+			it('resolves with the Pa11y results', function() {
+				assert.strictEqual(resolvedValue, pa11yResults);
+			});
+
+		});
+
+		describe('when no url is provided and `ignoreUrl` is not set', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				try {
+					await pa11y();
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a descriptive error', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.message, 'A url must be provided unless the ignoreUrl option is set');
+			});
+
 		});
 
 	});

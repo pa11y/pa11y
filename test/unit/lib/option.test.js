@@ -2,7 +2,7 @@
 
 const assert = require('proclaim');
 const path = require('path');
-const {parseArguments, verifyOptions} = require('../../../lib/option');
+const {parseArguments, verifyOptions, verifyUrl} = require('../../../lib/option');
 
 describe('lib/option', function() {
 	// eslint-disable-next-line no-empty-function
@@ -238,6 +238,36 @@ describe('lib/option', function() {
 
 		});
 
+		describe('when `url` is not provided', function() {
+			beforeEach(function() {
+				[url, options, callback] = parseArguments(undefined, {ignoreUrl: true}, {});
+			});
+
+			it('returns an undefined `url`', function() {
+				assert.isUndefined(url);
+			});
+
+			it('keeps the options', function() {
+				assert.deepEqual(options, {ignoreUrl: true});
+			});
+
+		});
+
+		describe('when `url` is an options object without a `url` property', function() {
+			beforeEach(function() {
+				[url, options, callback] = parseArguments({ignoreUrl: true}, {}, {});
+			});
+
+			it('returns an undefined `url`', function() {
+				assert.isUndefined(url);
+			});
+
+			it('uses the object as the options', function() {
+				assert.deepEqual(options, {ignoreUrl: true});
+			});
+
+		});
+
 	});
 
 	describe('verifyOptions(options, allowedStandards)', function() {
@@ -310,6 +340,25 @@ describe('lib/option', function() {
 				assert.instanceOf(rejectedError, Error);
 				assert.strictEqual(rejectedError.message, 'The ignoreUrl option must only be set alongside the page option');
 			});
+		});
+	});
+
+	describe('verifyUrl(url, options)', function() {
+
+		it('is a function', function() {
+			assert.isFunction(verifyUrl);
+		});
+
+		it('does not throw when a `url` is provided', function() {
+			assert.doesNotThrow(() => verifyUrl('https://mock-url/', {}));
+		});
+
+		it('does not throw when `url` is missing but `options.ignoreUrl` is set', function() {
+			assert.doesNotThrow(() => verifyUrl(undefined, {ignoreUrl: true}));
+		});
+
+		it('throws a descriptive error when `url` is missing and `options.ignoreUrl` is not set', function() {
+			assert.throws(() => verifyUrl(undefined, {}), 'A url must be provided unless the ignoreUrl option is set');
 		});
 	});
 });
