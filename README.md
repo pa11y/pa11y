@@ -635,7 +635,7 @@ pa11y(url, {
 });
 ```
 
-Defaults to `30000`.
+Defaults to `60000`.
 
 ### `userAgent` (string)
 

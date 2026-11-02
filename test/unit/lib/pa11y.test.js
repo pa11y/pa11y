@@ -232,6 +232,68 @@ describe('lib/pa11y', function() {
 
 		});
 
+		describe('when the test run takes longer than `options.timeout`', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				// Navigation succeeds, so the only thing that can end this run
+				// is the whole-run timeout.
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.mockPage.evaluate.returns(new Promise(() => {
+					// Never settles.
+				}));
+				try {
+					await pa11y('https://mock-url/', {timeout: 20});
+				} catch (error) {
+					rejectedError = error;
+				}
+			});
+
+			it('rejects with a timeout error naming the timeout', function() {
+				assert.instanceOf(rejectedError, Error);
+				assert.strictEqual(rejectedError.name, 'TimeoutError');
+				assert.strictEqual(rejectedError.message, 'Pa11y timed out (20ms)');
+			});
+
+			it('closes the browser', function() {
+				assert.calledOnce(puppeteer.mockBrowser.close);
+			});
+
+		});
+
+		describe('when the timeout fires before the browser has launched', function() {
+			let rejectedError;
+
+			beforeEach(async function() {
+				// The run is abandoned, not stopped, so the browser arrives
+				// after pa11y has already rejected and cleaned up once.
+				puppeteer.mockBrowser.close.resetHistory();
+				puppeteer.launch.returns(new Promise(resolve => {
+					setTimeout(() => resolve(puppeteer.mockBrowser), 40);
+				}));
+				try {
+					await pa11y('https://mock-url/', {timeout: 10});
+				} catch (error) {
+					rejectedError = error;
+				}
+				// Let the late launch finish and the run settle.
+				await new Promise(resolve => setTimeout(resolve, 100));
+			});
+
+			afterEach(function() {
+				puppeteer.launch.resolves(puppeteer.mockBrowser);
+			});
+
+			it('rejects with a timeout error', function() {
+				assert.strictEqual(rejectedError.name, 'TimeoutError');
+			});
+
+			it('still closes the browser once it has launched', function() {
+				assert.calledOnce(puppeteer.mockBrowser.close);
+			});
+
+		});
+
 		describe('when Headless Chrome errors', function() {
 			let headlessChromeError;
 			let rejectedError;
