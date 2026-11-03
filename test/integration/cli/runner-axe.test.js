@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('proclaim');
+const axe = require('axe-core');
 const runPa11yCli = require('../helper/pa11y-cli');
 
 describe('CLI runner axe', function() {
@@ -19,5 +20,10 @@ describe('CLI runner axe', function() {
 		assert.equal(pa11yResponse.json[0].type, 'error');
 		assert.equal(pa11yResponse.json[1].type, 'warning');
 		assert.equal(pa11yResponse.json[2].type, 'warning');
+
+		for (const issue of pa11yResponse.json) {
+			const rule = axe.getRules().find(axeRule => axeRule.ruleId === issue.code);
+			assert.deepEqual(issue.runnerExtras.tags, rule.tags);
+		}
 	});
 });

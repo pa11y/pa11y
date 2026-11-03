@@ -900,6 +900,8 @@ The `run` method _must_ resolve with an array of Pa11y issues. These follow the 
 }
 ```
 
+The axe runner includes the original rule tags in `runnerExtras.tags`.
+
 ## Examples
 
 ### Basic example
