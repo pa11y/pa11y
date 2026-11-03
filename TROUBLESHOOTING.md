@@ -2,6 +2,88 @@
 
 ## Common Issues
 
+### Missing Chrome after installation with npm 12
+
+[npm 12 blocks dependency installation scripts by default][npm-allow-scripts]. This includes
+Puppeteer's Chrome download, so Pa11y can install successfully but then fail with
+`Could not find Chrome`. Choose one of the following ways to provide a browser.
+
+The script-based downloads below require npm's `ignore-scripts` setting to be `false`.
+
+#### Global installation
+
+Allow Puppeteer's script when installing Pa11y:
+
+```sh
+npm install --global pa11y --allow-scripts=puppeteer
+```
+
+If Pa11y is already installed and its browser download was skipped, run:
+
+```sh
+npm rebuild --global puppeteer --allow-scripts=puppeteer
+```
+
+The global commands above allow Puppeteer's script for that invocation. For local projects and CI,
+save approval in `package.json` as shown below.
+
+#### Project and CI installation
+
+For a local project, save approval for Puppeteer's script in `package.json`. From the project
+directory, run:
+
+```sh
+npm install --save-dev pa11y
+npm approve-scripts puppeteer
+npm rebuild puppeteer
+```
+
+[`npm approve-scripts`][npm-approve-scripts] records permission for the installed Puppeteer version
+in your `package.json`. It does not run the script; `npm rebuild puppeteer` performs the skipped
+download.
+Commit the resulting `package.json` and `package-lock.json`. Review and renew the approval when
+Puppeteer's version changes.
+
+CI can then use the committed policy with:
+
+```sh
+npm ci
+```
+
+#### Install the browser separately
+
+To manage the browser download separately from installation scripts, run this from a project where
+Pa11y is installed:
+
+```sh
+npm explore pa11y -- npm exec --no -- puppeteer browsers install
+```
+
+This runs from Pa11y's package directory and uses its Puppeteer dependency to download the matching
+browser. `--no` prevents npm from fetching another package if the executable is missing. See
+[Puppeteer's configuration guide][puppeteer-configuration] for browser download options.
+
+Download the browser as the user who will run Pa11y. If you set `PUPPETEER_CACHE_DIR`, use the same
+value for the download and the Pa11y run. In CI, restoring `node_modules` does not restore
+Puppeteer's browser cache; download the browser or restore that cache before running Pa11y.
+
+#### Use an existing browser
+
+You can instead configure Pa11y to use an existing compatible Chrome executable. Save a `pa11y.json`
+file in the directory where you run Pa11y:
+
+```json
+{
+    "chromeLaunchConfig": {
+        "executablePath": "/absolute/path/to/chrome"
+    }
+}
+```
+
+Replace the example path with your browser's executable path. It must be compatible with the
+Puppeteer version installed by Pa11y. See [Pa11y's browser launch options][chromeLaunchConfig] and
+[command-line configuration][cli-configuration] for other configuration-file options.
+
 ### AngularJS
 
 If you're testing against an AngularJS app, you may have trouble testing against the correct page when you make use of ngView to render templates. We recommend using [`actions`][actions] to wait until a particular URL fragment has loaded, or for an element to become available on the page.
@@ -115,7 +197,11 @@ Please include your Node.js and Pa11y version numbers, as well as your operating
 
 [actions]: https://github.com/pa11y/pa11y#actions
 [chromeLaunchConfig]: https://github.com/pa11y/pa11y#chromelaunchconfig-object
+[cli-configuration]: https://github.com/pa11y/pa11y#command-line-configuration
 [issues]: https://github.com/pa11y/pa11y/issues?utf8=%E2%9C%93&q=is%3Aissue
 [new-issue]: https://github.com/pa11y/pa11y/issues/new
 [ngViewLoaded]: https://github.com/angular-ui/ui-router/wiki#view-load-events
 [sniff-issue]: https://github.com/squizlabs/HTML_CodeSniffer/issues/109
+[npm-allow-scripts]: https://docs.npmjs.com/cli/v12/using-npm/config/#allow-scripts
+[npm-approve-scripts]: https://docs.npmjs.com/cli/v12/commands/npm-approve-scripts/
+[puppeteer-configuration]: https://pptr.dev/guides/configuration
