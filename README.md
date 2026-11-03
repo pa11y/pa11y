@@ -250,13 +250,13 @@ Pa11y resolves with a `results` object, containing details about the page, and a
 
 ### Transforming the results
 
-If you wish to transform these results with a command-line reporter, `require` it into your code. The `csv`, `tsv`, `html`, `json`, and `markdown` reporters each expose a method `process`:
+The built-in `cli`, `csv`, `html`, `json`, and `tsv` reporters are available through `pa11y.reporters`. Use a reporter's `results` method to format results from the JavaScript interface:
 
 ```js
 // Assuming you've already run tests, and the results
 // are available in a `results` variable:
-const htmlReporter = require('pa11y/lib/reporters/html');
-const html = await htmlReporter.results(results);
+const {reporters} = require('pa11y');
+const html = await reporters.html.results(results);
 ```
 
 ### `async`/`await`

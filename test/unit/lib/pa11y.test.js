@@ -68,6 +68,15 @@ describe('lib/pa11y', function() {
 		assert.isFunction(pa11y);
 	});
 
+	describe('.reporters', function() {
+		['cli', 'csv', 'html', 'json', 'tsv'].forEach(name => {
+			it(`exports the built-in ${name} reporter`, function() {
+				assert.isFunction(pa11y.reporters[name].results);
+				assert.isString(pa11y.reporters[name].supports);
+			});
+		});
+	});
+
 	describe('pa11y(url)', function() {
 		let resolvedValue;
 
