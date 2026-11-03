@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Color scheme fixture</title>
+	<style>
+		body { background: #fff; color: #000; }
+		@media (prefers-color-scheme: dark) {
+			body { background: #000; color: #555; }
+		}
+	</style>
+	<script>
+		document.title = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+	</script>
+</head>
+<body>
+	<main><h1>Color scheme</h1><p id="contrast">Theme-dependent text contrast.</p></main>
+</body>
+</html>

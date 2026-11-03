@@ -100,6 +100,12 @@ Use both axe and HTML_CodeSniffer in the same run:
 pa11y https://example.com --runner axe --runner htmlcs
 ```
 
+Test the site's dark color scheme:
+
+```sh
+pa11y https://example.com --color-scheme dark
+```
+
 Generate results in CSV format, and output to a file, `report.csv`:
 
 ```sh
@@ -368,6 +374,20 @@ Defaults to:
     ignoreHTTPSErrors: true
 }
 ```
+
+### `colorScheme` (string)
+
+Emulate the CSS `prefers-color-scheme` media feature as `light` or `dark` before the page loads. This selects the site's own theme; it does not force Chrome to darken the page.
+
+```js
+pa11y(url, {
+    colorScheme: 'dark'
+});
+```
+
+Defaults to `null`, leaving the browser's color scheme unchanged. The CLI equivalent is `--color-scheme light` or `--color-scheme dark`, which overrides configuration-file settings.
+
+When supplying a pre-configured `page`, omit this option to preserve its existing media-feature overrides. An explicit value uses Puppeteer's `emulateMediaFeatures` method, replacing those overrides.
 
 ### `headers` (object)
 

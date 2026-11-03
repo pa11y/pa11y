@@ -17,6 +17,7 @@ const mockPage = {
 	addScriptTag: sinon.stub().resolves(),
 	close: sinon.stub().resolves(),
 	click: sinon.stub().resolves(),
+	emulateMediaFeatures: sinon.stub().resolves(),
 	evaluate: sinon.stub().resolves(),
 	focus: sinon.stub().resolves(),
 	goto: sinon.stub().resolves(),

@@ -251,6 +251,19 @@ describe('lib/option', function() {
 			assert.isFunction(verifyOptions);
 		});
 
+		['light', 'dark', null, undefined].forEach(colorScheme => {
+			it(`accepts colorScheme ${colorScheme}`, function() {
+				assert.doesNotThrow(() => verifyOptions({standard: 'WCAG2AA', colorScheme}, allowedStandards));
+			});
+		});
+
+		['', 'auto', 'Dark', false, 0, {}, ['dark']].forEach(colorScheme => {
+			it(`rejects invalid colorScheme ${JSON.stringify(colorScheme)}`, function() {
+				assert.throws(() => verifyOptions({standard: 'WCAG2AA', colorScheme}, allowedStandards),
+					'colorScheme must be one of light, dark');
+			});
+		});
+
 		describe('when `options.standard` is invalid', function() {
 			const options = {};
 			let rejectedError;
