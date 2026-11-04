@@ -73,7 +73,8 @@ describe('lib/pa11y', function() {
 			it(`emulates ${colorScheme} before navigation`, async function() {
 				await pa11y('https://mock-url/', {colorScheme});
 				assert.calledWithExactly(puppeteer.mockPage.emulateMediaFeatures, [
-					{name: 'prefers-color-scheme', value: colorScheme}
+					{name: 'prefers-color-scheme',
+						value: colorScheme}
 				]);
 				assert.callOrder(puppeteer.mockPage.emulateMediaFeatures, puppeteer.mockPage.goto);
 			});

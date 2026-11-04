@@ -5,10 +5,14 @@ const runPa11yCli = require('../helper/pa11y-cli');
 
 describe('CLI color scheme', function() {
 	[
-		{arguments: ['--color-scheme', 'light'], dark: false},
-		{arguments: ['--color-scheme', 'dark'], dark: true},
-		{arguments: ['--config', './mock/config/color-scheme.json'], dark: true},
-		{arguments: ['--config', './mock/config/color-scheme.json', '--color-scheme', 'light'], dark: false}
+		{arguments: ['--color-scheme', 'light'],
+			dark: false},
+		{arguments: ['--color-scheme', 'dark'],
+			dark: true},
+		{arguments: ['--config', './mock/config/color-scheme.json'],
+			dark: true},
+		{arguments: ['--config', './mock/config/color-scheme.json', '--color-scheme', 'light'],
+			dark: false}
 	].forEach(testCase => {
 		it(`applies ${testCase.arguments.join(' ')}`, async function() {
 			const response = await runPa11yCli(`${global.mockWebsiteAddress}/color-scheme`, {
