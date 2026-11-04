@@ -68,6 +68,60 @@ describe('lib/pa11y', function() {
 		assert.isFunction(pa11y);
 	});
 
+	describe('colorScheme', function() {
+		['light', 'dark'].forEach(colorScheme => {
+			it(`emulates ${colorScheme} before navigation`, async function() {
+				await pa11y('https://mock-url/', {colorScheme});
+				assert.calledWithExactly(puppeteer.mockPage.emulateMediaFeatures, [
+					{name: 'prefers-color-scheme',
+						value: colorScheme}
+				]);
+				assert.callOrder(puppeteer.mockPage.emulateMediaFeatures, puppeteer.mockPage.goto);
+			});
+		});
+
+		it('leaves media emulation unchanged when the option is omitted', async function() {
+			await pa11y('https://mock-url/');
+			assert.notCalled(puppeteer.mockPage.emulateMediaFeatures);
+		});
+
+		it('leaves a provided page unchanged when the option is null', async function() {
+			await pa11y('https://mock-url/', {
+				browser: puppeteer.mockBrowser,
+				page: puppeteer.mockPage,
+				colorScheme: null
+			});
+			assert.notCalled(puppeteer.mockPage.emulateMediaFeatures);
+		});
+
+		it('waits for emulation to finish before navigating', async function() {
+			let finishEmulation;
+			puppeteer.mockPage.emulateMediaFeatures.returns(new Promise(resolve => {
+				finishEmulation = resolve;
+			}));
+			const result = pa11y('https://mock-url/', {colorScheme: 'dark'});
+			await new Promise(resolve => setImmediate(resolve));
+			assert.notCalled(puppeteer.mockPage.goto);
+			finishEmulation();
+			await result;
+			assert.calledOnce(puppeteer.mockPage.goto);
+		});
+
+		it('propagates an emulation error and closes its browser', async function() {
+			const error = new Error('Media emulation failed');
+			puppeteer.mockPage.emulateMediaFeatures.rejects(error);
+			let rejectedError;
+			try {
+				await pa11y('https://mock-url/', {colorScheme: 'dark'});
+			} catch (caughtError) {
+				rejectedError = caughtError;
+			}
+			assert.strictEqual(rejectedError, error);
+			assert.notCalled(puppeteer.mockPage.goto);
+			assert.calledOnce(puppeteer.mockBrowser.close);
+		});
+	});
+
 	describe('pa11y(url)', function() {
 		let resolvedValue;
 

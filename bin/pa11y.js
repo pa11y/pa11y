@@ -41,6 +41,10 @@ function configureProgram() {
 			'the reporter to use: cli (default), csv, json'
 		)
 		.option(
+			'--color-scheme <scheme>',
+			'the preferred color scheme to emulate: light or dark'
+		)
+		.option(
 			'-e, --runner <runner>',
 			'the test runners to use: htmlcs (default), axe',
 			collectOptions,
@@ -166,6 +170,7 @@ function processOptions() {
 		reporter: 'cli',
 		threshold: 0
 	}, loadConfig(programOptions.config), {
+		colorScheme: programOptions.colorScheme,
 		hideElements: programOptions.hideElements,
 		ignore: (programOptions.ignore.length ? programOptions.ignore : undefined),
 		includeNotices: programOptions.includeNotices,
