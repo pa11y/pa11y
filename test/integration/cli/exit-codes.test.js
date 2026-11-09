@@ -333,4 +333,23 @@ describe('CLI exit codes', function() {
 
 	});
 
+	describe('when the `--threshold-count` flag is set to more than the number of errors present', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/many-errors`, {
+				arguments: [
+					'--config', './mock/config/threshold-small.json',
+					'--include-notices',
+					'--include-warnings',
+					'--threshold-count', '5'
+				]
+			});
+		});
+
+		it('exits with a code of `0`', function() {
+			assert.strictEqual(pa11yResponse.exitCode, 0);
+		});
+
+	});
+
 });

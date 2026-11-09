@@ -28,4 +28,26 @@ describe('CLI timeout', function() {
 
 	});
 
+	describe('when the `--timeout-ms` flag is set to less time than the page takes to load', function() {
+
+		before(async function() {
+			pa11yResponse = await runPa11yCli(`${global.mockWebsiteAddress}/timeout`, {
+				arguments: [
+					'--timeout-ms', '100'
+				]
+			});
+		});
+
+		it('exits with a code of `1`', function() {
+			assert.strictEqual(pa11yResponse.exitCode, 1);
+		});
+
+		it('outputs a timeout error', function() {
+			assert.match(pa11yResponse.output, /timeouterror/i);
+			assert.match(pa11yResponse.output, /navigation timeout/i);
+			assert.match(pa11yResponse.output, /100 ms/i);
+		});
+
+	});
+
 });
